@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iread_flutter/themes/border_radius.dart';
 
 class StoryCard extends StatelessWidget {
-  final int _progress;
+  final double _progress;
   final String _title;
   final String _imageUrl;
   final Color _color;
@@ -59,5 +59,10 @@ class StoryCard extends StatelessWidget {
         height: 0,
       );
     }
+
+    return LinearProgressIndicator(
+      backgroundColor: Theme.of(context).colorScheme.background,
+      value: _progress,
+    );
   }
 }
