@@ -47,9 +47,32 @@ class StoryCard extends StatelessWidget {
               ]),
           child: ClipRRect(
             borderRadius: BorderRadius.all(Radius.circular(storyBorderRadius)),
-            child: Image.network(
-              _imageUrl,
-              fit: BoxFit.cover,
+            child: Row(
+              children: [
+                Expanded(
+                  child: Image.network(
+                    _imageUrl,
+                    fit: BoxFit.fitWidth,
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) {
+                        return child;
+                      }
+                      return SizedBox(
+                        width: 100,
+                        height: 150,
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            value: loadingProgress.expectedTotalBytes != null
+                                ? loadingProgress.cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes
+                                : null,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
           ),
         ),
