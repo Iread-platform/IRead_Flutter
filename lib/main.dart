@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
             title: 'Wood, Wire, Wings',
             imageUrl:
                 'https://i.pinimg.com/236x/20/3b/53/203b533756c2a5efe9bafb39960b4fcb.jpg',
-            progress: 30,
+            progress: 0.3,
           ),
         ),
       ),

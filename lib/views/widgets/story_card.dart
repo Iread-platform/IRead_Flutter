@@ -21,7 +21,11 @@ class StoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
-      children: [_storyCardImage(context)],
+      children: [
+        _storyCardImage(context),
+        _studentProgress(context),
+        _storyTitle(context)
+      ],
     );
   }
 
@@ -60,9 +64,26 @@ class StoryCard extends StatelessWidget {
       );
     }
 
-    return LinearProgressIndicator(
-      backgroundColor: Theme.of(context).colorScheme.background,
-      value: _progress,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
+      child: Container(
+        padding: EdgeInsets.all(2),
+        decoration: BoxDecoration(
+            border: Border.all(color: _color, width: 1),
+            borderRadius: BorderRadius.circular(storyBorderRadius)),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(storyBorderRadius),
+          child: LinearProgressIndicator(
+            backgroundColor: Theme.of(context).colorScheme.surface,
+            value: _progress,
+            valueColor: AlwaysStoppedAnimation<Color>(_color),
+            minHeight: 8,
+          ),
+        ),
+      ),
     );
   }
+
+  Widget _storyTitle(BuildContext context) => Text(_title,
+      style: Theme.of(context).textTheme.headline4.copyWith(color: _color));
 }
