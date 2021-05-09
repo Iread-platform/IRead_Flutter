@@ -22,9 +22,13 @@ class StoryCard extends StatelessWidget {
     return Container(
       width: 100,
       height: 150,
+      padding: EdgeInsets.only(left: 12, top: 8),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(storyBorderRadius),
           color: _color),
+      child: Container(
+        child: Image.network(_imageUrl),
+      ),
     );
   }
 }
