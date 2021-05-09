@@ -23,12 +23,18 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: StoryCard(
-        color: Colors.redAccent,
-        title: 'The Bremen Town Musicians',
-        imageUrl:
-            'https://assets.americanliterature.com/al/images/fairytale/bremen-town-musicians.jpg',
-        progress: 30,
+      home: Scaffold(
+        appBar: AppBar(),
+        body: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: StoryCard(
+            color: Colors.redAccent,
+            title: 'Wood, Wire, Wings',
+            imageUrl:
+                'https://i.pinimg.com/236x/20/3b/53/203b533756c2a5efe9bafb39960b4fcb.jpg',
+            progress: 30,
+          ),
+        ),
       ),
     );
   }
