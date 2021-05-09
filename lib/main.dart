@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iread_flutter/views/widgets/story_card.dart';
+import 'package:iread_flutter/views/widgets/story/story_card.dart';
 
 void main() {
   runApp(MyApp());
