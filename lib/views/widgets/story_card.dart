@@ -85,5 +85,5 @@ class StoryCard extends StatelessWidget {
   }
 
   Widget _storyTitle(BuildContext context) => Text(_title,
-      style: Theme.of(context).textTheme.headline4.copyWith(color: _color));
+      style: Theme.of(context).textTheme.subtitle1.copyWith(color: _color));
 }
