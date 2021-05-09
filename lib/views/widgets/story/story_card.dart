@@ -2,6 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:iread_flutter/themes/border_radius.dart';
 import 'package:iread_flutter/views/widgets/story/story_image.dart';
 
+/// [progress] determines progress bar value, if progress is not exist
+///  progress bar do not show.
+/// [title] refer to story title that show below, it is 'required'.
+/// [imageUrl] refer to network image url, It is 'required'.
+/// [color] refer to the color of background, progressbar, and title,
+/// It's required.
+
 class StoryCard extends StatelessWidget {
   final double _progress;
   final String _title;
