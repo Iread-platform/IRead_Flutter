@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
         body: Padding(
           padding: const EdgeInsets.all(20.0),
           child: StoryCard(
-            color: Colors.redAccent,
+            color: Colors.blue[300],
             title: 'Wood, Wire, Wings',
             imageUrl:
                 'https://i.pinimg.com/236x/20/3b/53/203b533756c2a5efe9bafb39960b4fcb.jpg',
