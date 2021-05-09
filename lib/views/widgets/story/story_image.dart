@@ -2,6 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:iread_flutter/themes/border_radius.dart';
 
+/// [imageUrl] refer to the network url og the image, 'do not use asset path',
+/// It is 'required'.
+/// [color] refer to the image background color, It is 'required'.
 class StoryImage extends StatelessWidget {
   final String _imageUrl;
   final Color _color;
