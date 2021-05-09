@@ -12,12 +12,11 @@ class LoginScreen extends StatelessWidget {
           Container(
             height: h * 0.35,
             width: w,
-            color: Colors.white,
             child: Stack(
               children: [
                 Container(
                   height: h * 0.35 * 0.8,
-                  width: w * 0.60,
+                  width: w * 0.6,
                   decoration: BoxDecoration(
                     color: Colors.orangeAccent,
                     borderRadius: BorderRadius.only(
@@ -25,12 +24,12 @@ class LoginScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                Container(
-                  height: h * 0.9,
-                  padding: EdgeInsets.all(50),
-                  child: Center(
+                Center(
+                  child: Container(
+                    alignment: Alignment.bottomCenter,
                     child: CircleAvatar(
-                      radius: 70.0,
+                      backgroundColor: Colors.orangeAccent,
+                      radius: 75,
                       backgroundImage: NetworkImage(
                           'https://thumbs.dreamstime.com/b/man-hipster-avatar-cartoon-guy-black-hair-flat-icon-blue-background-user-person-character-vector-illustration-185480506.jpg'),
                     ),
@@ -76,7 +75,7 @@ class LoginScreen extends StatelessWidget {
                     child: Text("Login"),
                     onPressed: () {},
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -89,7 +88,6 @@ class LoginScreen extends StatelessWidget {
                 alignment: Alignment.bottomRight,
                 children: [
                   Container(
-                    
                     width: w * 0.6,
                     decoration: BoxDecoration(
                       color: Colors.orangeAccent,
@@ -104,7 +102,7 @@ class LoginScreen extends StatelessWidget {
                     // ),
                   ),
                 ],
-              ))
+              )),
         ],
       ),
     );
