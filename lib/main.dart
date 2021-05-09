@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iread_flutter/views/widgets/story_card.dart';
 
 void main() {
   runApp(MyApp());
@@ -22,7 +23,13 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: StoryCard(
+        color: Colors.redAccent,
+        title: 'The Bremen Town Musicians',
+        imageUrl:
+            'https://assets.americanliterature.com/al/images/fairytale/bremen-town-musicians.jpg',
+        progress: 30,
+      ),
     );
   }
 }
