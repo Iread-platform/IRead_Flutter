@@ -52,7 +52,7 @@ class StoryCard extends StatelessWidget {
                 Expanded(
                   child: Image.network(
                     _imageUrl,
-                    fit: BoxFit.fitWidth,
+                    fit: BoxFit.cover,
                     loadingBuilder: (context, child, loadingProgress) {
                       if (loadingProgress == null) {
                         return child;
