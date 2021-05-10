@@ -1,0 +1,1 @@
+double storyBorderRadius = 50;
