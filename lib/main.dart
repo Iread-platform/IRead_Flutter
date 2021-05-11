@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iread_flutter/views/widgets/story/story_card.dart';
+import 'package:iread_flutter/views/widgets/shared/progress_bar.dart';
 
 void main() {
   runApp(MyApp());
@@ -26,15 +26,11 @@ class MyApp extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(),
         body: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: StoryCard(
-            color: Colors.blue[300],
-            title: 'Wood, Wire, Wings',
-            imageUrl:
-                'https://i.pinimg.com/236x/20/3b/53/203b533756c2a5efe9bafb39960b4fcb.jpg',
-            progress: 0.3,
-          ),
-        ),
+            padding: const EdgeInsets.all(20.0),
+            child: ProgressBar(
+              borderWidth: 2,
+              progress: 0.3,
+            )),
       ),
     );
   }
