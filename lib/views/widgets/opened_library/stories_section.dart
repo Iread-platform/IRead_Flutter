@@ -26,7 +26,7 @@ class StoriesSection extends StatelessWidget {
           ),
           Wrap(
             alignment: WrapAlignment.start,
-            runSpacing: 24,
+            runSpacing: 32,
             spacing: 24,
             children: _storiesWidgets(context),
           )
