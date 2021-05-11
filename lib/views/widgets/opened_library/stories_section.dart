@@ -24,7 +24,10 @@ class StoriesSection extends StatelessWidget {
           SizedBox(
             height: 24,
           ),
-          Row(
+          Wrap(
+            alignment: WrapAlignment.start,
+            runSpacing: 24,
+            spacing: 24,
             children: _storiesWidgets(context),
           )
         ],
@@ -32,21 +35,24 @@ class StoriesSection extends StatelessWidget {
     );
   }
 
-  List<Expanded> _storiesWidgets(BuildContext context) {
+  List<Widget> _storiesWidgets(BuildContext context) {
     if (_stories == null) {
       return [];
     }
 
-    List<Expanded> stories = [];
+    List<Widget> stories = [];
     _stories.forEach((element) {
-      final story = StoryCard(
-        title: element.title,
-        imageUrl: element.imageUrl,
-        color: element.color,
-        progress: element.progress,
+      final story = Container(
+        width: 150,
+        child: StoryCard(
+          title: element.title,
+          imageUrl: element.imageUrl,
+          color: element.color,
+          progress: element.progress,
+        ),
       );
-      stories.add(Expanded(flex: 4, child: story));
-      stories.add(Expanded(flex: 1, child: Container()));
+
+      stories.add(story);
     });
 
     return stories;

@@ -29,7 +29,8 @@ class MyApp extends StatelessWidget {
         body: Padding(
             padding: const EdgeInsets.all(20.0),
             child: StoriesSection(
-                title: 'Continue Reading', storiesList: [story, story, story])),
+                title: 'Continue Reading',
+                storiesList: [story, story, story, story, story, story])),
       ),
     );
   }
