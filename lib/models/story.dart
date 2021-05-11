@@ -16,13 +16,15 @@ class Story extends Model {
       imageUrl,
       progress,
       flippedPages,
-      readingTime})
+      readingTime,
+      id})
       : _title = title,
         _color = color,
         _imageUrl = imageUrl,
         _flippedPages = flippedPages,
         _readingTime = readingTime,
-        _progress = progress;
+        _progress = progress,
+        super(id: id);
 
   get title => _title;
   get progress => _progress;
