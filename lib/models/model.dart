@@ -3,5 +3,5 @@ class Model {
 
   Model({id}) : _id = id;
 
-  get id => id;
+  get id => _id;
 }
