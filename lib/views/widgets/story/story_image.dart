@@ -15,7 +15,7 @@ class StoryImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container(
         alignment: Alignment.bottomRight,
-        padding: EdgeInsets.only(left: 24, top: 8),
+        padding: EdgeInsets.only(left: 12, top: 8),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(storyBorderRadius),
             color: _color,
