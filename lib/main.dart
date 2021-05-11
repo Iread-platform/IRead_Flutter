@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iread_flutter/models/story.dart';
+import 'package:iread_flutter/views/widgets/opened_library/stories_section.dart';
 import 'package:iread_flutter/views/widgets/story/story_card.dart';
 
 void main() {
@@ -27,21 +28,23 @@ class MyApp extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(),
         body: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: StoryCard(
-            color: Colors.blue[300],
-            title: 'Wood, Wire, Wings',
-            imageUrl:
-                'https://i.pinimg.com/236x/20/3b/53/203b533756c2a5efe9bafb39960b4fcb.jpg',
-            progress: 0.3,
-          ),
-        ),
+            padding: const EdgeInsets.all(20.0),
+            child: StoriesSection(
+                title: 'Continue Reading',
+                storiesList: [story, story, story, story])),
       ),
     );
   }
 }
 
-Story story = Story(title: 'Wood, Wire, Wings', color: Colors.teal);
+Story story = Story(
+    title: 'Wood, Wire, Wings',
+    color: Colors.teal,
+    imageUrl:
+        'https://i.pinimg.com/236x/20/3b/53/203b533756c2a5efe9bafb39960b4fcb.jpg',
+    progress: 0.45,
+    flippedPages: 53,
+    readingTime: 127.25);
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);

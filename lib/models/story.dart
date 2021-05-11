@@ -27,6 +27,7 @@ class Story extends Model {
   get title => _title;
   get progress => _progress;
   get color => _color;
+  get imageUrl => _imageUrl;
   get flippedPages => _flippedPages;
   get readingTime => _readingTime;
 }

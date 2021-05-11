@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iread_flutter/models/story.dart';
+import 'package:iread_flutter/views/widgets/story/story_card.dart';
 
 class StoriesSection extends StatelessWidget {
   final List<Story> _stories;
@@ -11,6 +12,35 @@ class StoriesSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Container(
+      child: Column(
+        children: [
+          Text(
+            _title,
+            style: Theme.of(context).textTheme.headline2,
+          ),
+          Row(
+            children: _storiesWidgets(context),
+          )
+        ],
+      ),
+    );
+  }
+
+  List<Expanded> _storiesWidgets(BuildContext context) {
+    if (_stories == null) {
+      return [];
+    }
+
+    List<Expanded> stories = [];
+    _stories.forEach((element) {
+      final story = StoryCard(
+          title: element.title,
+          imageUrl: element.imageUrl,
+          color: element.color);
+      stories.add(Expanded(child: story));
+    });
+
+    return stories;
   }
 }
