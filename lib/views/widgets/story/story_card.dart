@@ -56,6 +56,9 @@ class StoryCard extends StatelessWidget {
           progress: _progress,
           borderWidth: 2,
           padding: 1,
+          dropShadow: true,
+          shadowOffset: Offset(1, 1),
+          shadowBlurRadius: 10,
         ));
   }
 
