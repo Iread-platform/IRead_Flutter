@@ -30,8 +30,7 @@ class MyApp extends StatelessWidget {
         body: Padding(
             padding: const EdgeInsets.all(20.0),
             child: StoriesSection(
-                title: 'Continue Reading',
-                storiesList: [story, story, story, story])),
+                title: 'Continue Reading', storiesList: [story, story, story])),
       ),
     );
   }
@@ -40,8 +39,7 @@ class MyApp extends StatelessWidget {
 Story story = Story(
     title: 'Wood, Wire, Wings',
     color: Colors.teal,
-    imageUrl:
-        'https://i.pinimg.com/236x/20/3b/53/203b533756c2a5efe9bafb39960b4fcb.jpg',
+    imageUrl: 'https://blog-cdn.reedsy.com/uploads/2019/12/another.jpg',
     progress: 0.45,
     flippedPages: 53,
     readingTime: 127.25);

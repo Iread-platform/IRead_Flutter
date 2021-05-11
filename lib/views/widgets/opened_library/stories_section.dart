@@ -14,10 +14,15 @@ class StoriesSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Text(
             _title,
-            style: Theme.of(context).textTheme.headline2,
+            style: Theme.of(context).textTheme.headline4,
+          ),
+          SizedBox(
+            height: 24,
           ),
           Row(
             children: _storiesWidgets(context),
@@ -35,10 +40,13 @@ class StoriesSection extends StatelessWidget {
     List<Expanded> stories = [];
     _stories.forEach((element) {
       final story = StoryCard(
-          title: element.title,
-          imageUrl: element.imageUrl,
-          color: element.color);
-      stories.add(Expanded(child: story));
+        title: element.title,
+        imageUrl: element.imageUrl,
+        color: element.color,
+        progress: element.progress,
+      );
+      stories.add(Expanded(flex: 4, child: story));
+      stories.add(Expanded(flex: 1, child: Container()));
     });
 
     return stories;
