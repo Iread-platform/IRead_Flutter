@@ -5,6 +5,7 @@ import 'package:iread_flutter/views/widgets/story/story_card.dart';
 class StoriesSection extends StatelessWidget {
   final List<Story> _stories;
   final String _title;
+  final double _titleBottomSpacing;
   final double _storyWidth;
   final double _horizontalSpace;
   final double _verticalSpace;
@@ -14,12 +15,14 @@ class StoriesSection extends StatelessWidget {
       @required title,
       storyWidth,
       horizontalSpace,
-      verticalSpace})
+      verticalSpace,
+      titleBottomSpacing})
       : _stories = storiesList,
         _title = title,
         _storyWidth = storyWidth ?? 150,
         _horizontalSpace = horizontalSpace ?? 24,
-        _verticalSpace = verticalSpace ?? 24;
+        _verticalSpace = verticalSpace ?? 24,
+        _titleBottomSpacing = titleBottomSpacing ?? 32;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +36,7 @@ class StoriesSection extends StatelessWidget {
             style: Theme.of(context).textTheme.headline4,
           ),
           SizedBox(
-            height: 32,
+            height: _titleBottomSpacing,
           ),
           Wrap(
             alignment: WrapAlignment.center,
