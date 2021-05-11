@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iread_flutter/models/story.dart';
 import 'package:iread_flutter/views/widgets/story/story_card.dart';
 
 void main() {
@@ -39,6 +40,8 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+Story story = Story(title: 'Wood, Wire, Wings', color: Colors.teal);
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
