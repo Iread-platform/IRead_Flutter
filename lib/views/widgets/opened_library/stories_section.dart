@@ -14,7 +14,7 @@ class StoriesSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
@@ -25,7 +25,7 @@ class StoriesSection extends StatelessWidget {
             height: 24,
           ),
           Wrap(
-            alignment: WrapAlignment.start,
+            alignment: WrapAlignment.center,
             runSpacing: 32,
             spacing: 24,
             children: _storiesWidgets(context),
