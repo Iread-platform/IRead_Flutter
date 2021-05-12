@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iread_flutter/models/stories_section_model.dart';
 import 'package:iread_flutter/views/widgets/opened_library/stories_section.dart';
-import 'package:iread_flutter/views/widgets/story/story_card.dart';
 
 class OpenLibrary extends StatelessWidget {
   final _storyWidth;
