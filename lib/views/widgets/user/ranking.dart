@@ -52,7 +52,7 @@ class Ranking extends StatelessWidget {
               alignment: Alignment.center,
               children: [
                 Positioned(
-                  top: 0,
+                  top: 4,
                   left: 0,
                   child: Text(
                     _name,
@@ -60,7 +60,7 @@ class Ranking extends StatelessWidget {
                   ),
                 ),
                 Positioned(
-                  top: 0,
+                  top: 4,
                   left: progressBarWidth - 10.0,
                   child: Container(
                       width: 50,
@@ -77,7 +77,7 @@ class Ranking extends StatelessWidget {
                               style: Theme.of(context).textTheme.subtitle2))),
                 ),
                 Positioned(
-                  top: 25,
+                  top: 29,
                   left: 0,
                   child: Container(
                     width: progressBarWidth,

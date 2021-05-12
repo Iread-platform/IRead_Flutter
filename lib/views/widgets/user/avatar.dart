@@ -31,23 +31,28 @@ class AvatarClipper extends CustomClipper<Path> {
     final y = size.height;
     final x = size.width;
 
-    path.moveTo(x * 0.3, y / 5);
-    path.cubicTo(x * 0.3, y / 5, x * 0.7, y * 0.01, x * 0.8, y / 4);
+    path.addOval(
+        Rect.fromCenter(center: Offset(x / 1.8, y / 1.5), width: x, height: y));
+    // path.moveTo(x / 4, y / 2);
+    // path.quadraticBezierTo(0, y / 1.5, x, 0);
 
-    path.addPolygon([
-      Offset(x * 0.3, y / 5),
-      Offset(x * 0.25, y / 4.5),
-      Offset(x * 0.2, y / 4),
-      Offset(x * 0.15, y / 3.5),
-      Offset(x * 0.1, y / 3),
-      Offset(0, y / 2),
-      Offset(0, y),
-      Offset(x, y),
-      Offset(x * 0.95, y / 2),
-      Offset(x * 0.90, y / 3),
-      Offset(x * 0.85, y / 3.5),
-      Offset(x * 0.8, y / 4),
-    ], false);
+    // path.moveTo(x * 0.3, y / 5);
+    // path.cubicTo(x * 0.3, y / 5, x * 0.7, y * 0.01, x * 0.8, y / 4);
+
+    // path.addPolygon([
+    //   Offset(x * 0.3, y / 5),
+    //   Offset(x * 0.25, y / 4.5),
+    //   Offset(x * 0.2, y / 4),
+    //   Offset(x * 0.15, y / 3.5),
+    //   Offset(x * 0.1, y / 3),
+    //   Offset(0, y / 2),
+    //   Offset(0, y),
+    //   Offset(x, y),
+    //   Offset(x * 0.95, y / 2),
+    //   Offset(x * 0.90, y / 3),
+    //   Offset(x * 0.85, y / 3.5),
+    //   Offset(x * 0.8, y / 4),
+    // ], false);
 
     /* path.addPolygon([
       Offset(0, y),
