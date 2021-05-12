@@ -32,7 +32,9 @@ class AvatarClipper extends CustomClipper<Path> {
     final x = size.width;
 
     path.addOval(
-        Rect.fromCenter(center: Offset(x / 1.8, y / 1.5), width: x, height: y));
+        Rect.fromCenter(center: Offset(x / 2.2, y / 1.5), width: x, height: y));
+    path.addOval(
+        Rect.fromCircle(center: Offset(x / 2, y / 2), radius: x * 0.4));
     // path.moveTo(x / 4, y / 2);
     // path.quadraticBezierTo(0, y / 1.5, x, 0);
 
