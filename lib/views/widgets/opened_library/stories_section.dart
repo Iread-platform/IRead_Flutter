@@ -38,11 +38,14 @@ class StoriesSection extends StatelessWidget {
           SizedBox(
             height: _titleBottomSpacing,
           ),
-          Wrap(
-            alignment: WrapAlignment.center,
-            runSpacing: _verticalSpace,
-            spacing: _horizontalSpace,
-            children: _storiesWidgets(context),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Wrap(
+              alignment: WrapAlignment.spaceEvenly,
+              runSpacing: _verticalSpace,
+              spacing: _horizontalSpace,
+              children: _storiesWidgets(context),
+            ),
           )
         ],
       ),
