@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iread_flutter/views/widgets/story/story_card.dart';
+import 'package:iread_flutter/views/widgets/user/avatar.dart';
 
 void main() {
   runApp(MyApp());
@@ -26,18 +26,12 @@ class MyApp extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(),
         body: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Container(
-            width: 200,
-            child: StoryCard(
-              color: Colors.blue[300],
-              title: 'Wood, Wire, Wings',
+            padding: const EdgeInsets.all(20.0),
+            child: UserAvatar(
+              radius: 25.0,
               imageUrl:
-                  'https://i.pinimg.com/236x/20/3b/53/203b533756c2a5efe9bafb39960b4fcb.jpg',
-              progress: 0.3,
-            ),
-          ),
-        ),
+                  'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlcnxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
+            )),
       ),
     );
   }
