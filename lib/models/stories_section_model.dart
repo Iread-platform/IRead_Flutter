@@ -2,9 +2,9 @@ import 'package:iread_flutter/models/story.dart';
 
 import 'model.dart';
 
-class StoriesSection extends Model {
+class StoriesSectionModel extends Model {
   String title;
   List<Story> stories;
 
-  StoriesSection(this.title, this.stories);
+  StoriesSectionModel(this.title, this.stories);
 }

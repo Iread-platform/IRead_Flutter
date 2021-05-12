@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:iread_flutter/models/story.dart';
+import 'package:iread_flutter/models/stories_section_model.dart';
 import 'package:iread_flutter/views/widgets/opened_library/stories_section.dart';
+import 'package:iread_flutter/views/widgets/story/story_card.dart';
 
 class OpenLibrary extends StatelessWidget {
   final _storyWidth;
   final _verticalSpacing;
-  final Map<String, List<Story>> _sections;
+  final List<StoriesSectionModel> _sections;
 
   OpenLibrary({storyWidth, @required sections, verticalSpacing})
       : _storyWidth = storyWidth ?? 100,
@@ -26,23 +27,18 @@ class OpenLibrary extends StatelessWidget {
   List<Widget> _sectionsBuilder(BuildContext context) {
     List<Widget> columnChildren = [];
 
-    _sections.forEach((title, list) {
-      StoriesSection storiesSection = StoriesSection(
-        title: title,
-        storiesList: list,
+    _sections.forEach((e) {
+      columnChildren.add(StoriesSection(
+        title: e.title,
+        storiesList: e.stories,
         storyWidth: _storyWidth,
-      );
-      columnChildren.add(storiesSection);
+      ));
+      columnChildren.add(SizedBox(
+        height: _verticalSpacing,
+      ));
     });
+    columnChildren.removeLast();
 
     return columnChildren;
   }
 }
-
-Story story = Story(
-    title: 'Wood, Wire, Wings',
-    color: Colors.teal,
-    imageUrl: 'https://blog-cdn.reedsy.com/uploads/2019/12/another.jpg',
-    progress: 0.45,
-    flippedPages: 53,
-    readingTime: 127.25);

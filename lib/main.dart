@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iread_flutter/models/stories_section_model.dart';
 import 'package:iread_flutter/models/story.dart';
 import 'package:iread_flutter/views/open_library.dart';
 import 'package:iread_flutter/views/widgets/opened_library/stories_section.dart';
@@ -27,16 +28,34 @@ class MyApp extends StatelessWidget {
       ),
       home: Scaffold(
         appBar: AppBar(),
-        body:
-            Padding(padding: const EdgeInsets.all(20.0), child: OpenLibrary(
-              sections: ,
+        body: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: OpenLibrary(
+              sections: storiesSection,
             )),
       ),
     );
   }
 }
 
-Map<String, Story> storiesSections
+// TODO clear static stories
+List<StoriesSectionModel> storiesSection = [
+  StoriesSectionModel('Continue Reading', [story, story, story, story]),
+  StoriesSectionModel('Continue Reading', [story, story, story, story]),
+  StoriesSectionModel('Continue Reading', [story, story, story, story]),
+  StoriesSectionModel('Continue Reading', [story, story, story, story]),
+  StoriesSectionModel('Continue Reading', [story, story, story, story]),
+  StoriesSectionModel('Continue Reading', [story, story, story, story]),
+  StoriesSectionModel('Continue Reading', [story, story, story, story]),
+];
+
+Story story = Story(
+    title: 'Wood, Wire, Wings',
+    color: Colors.teal,
+    imageUrl: 'https://blog-cdn.reedsy.com/uploads/2019/12/another.jpg',
+    progress: 0.45,
+    flippedPages: 53,
+    readingTime: 127.25);
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
