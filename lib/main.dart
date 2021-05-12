@@ -28,11 +28,15 @@ class MyApp extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(),
         body:
-            Padding(padding: const EdgeInsets.all(20.0), child: OpenLibrary()),
+            Padding(padding: const EdgeInsets.all(20.0), child: OpenLibrary(
+              sections: ,
+            )),
       ),
     );
   }
 }
+
+Map<String, Story> storiesSections
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);

@@ -3,39 +3,39 @@ import 'package:iread_flutter/models/story.dart';
 import 'package:iread_flutter/views/widgets/opened_library/stories_section.dart';
 
 class OpenLibrary extends StatelessWidget {
-  final _storyWidth = 100;
+  final _storyWidth;
+  final _verticalSpacing;
+  final Map<String, List<Story>> _sections;
+
+  OpenLibrary({storyWidth, @required sections, verticalSpacing})
+      : _storyWidth = storyWidth ?? 100,
+        _sections = sections,
+        _verticalSpacing = verticalSpacing ?? 32;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       child: SingleChildScrollView(
         child: Column(
-          children: [
-            StoriesSection(
-              title: 'Continue Reading',
-              storiesList: [
-                story,
-                story,
-                story,
-                story,
-                story,
-                story,
-                story,
-              ],
-              storyWidth: _storyWidth,
-            ),
-            SizedBox(
-              height: 32,
-            ),
-            StoriesSection(
-              title: 'Continue Reading',
-              storiesList: [story, story, story],
-              storyWidth: _storyWidth,
-            ),
-          ],
+          children: _sectionsBuilder(context),
         ),
       ),
     );
+  }
+
+  List<Widget> _sectionsBuilder(BuildContext context) {
+    List<Widget> columnChildren = [];
+
+    _sections.forEach((title, list) {
+      StoriesSection storiesSection = StoriesSection(
+        title: title,
+        storiesList: list,
+        storyWidth: _storyWidth,
+      );
+      columnChildren.add(storiesSection);
+    });
+
+    return columnChildren;
   }
 }
 
