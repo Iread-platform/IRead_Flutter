@@ -31,20 +31,22 @@ class AvatarClipper extends CustomClipper<Path> {
     final y = size.height;
     final x = size.width;
 
-    path.moveTo(x * 0.2, y / 2.5);
-    path.cubicTo(x * 0.1, y / 2.5, x * 0.8, -2, x * 0.98, y / 2);
+    path.moveTo(x * 0.3, y / 5);
+    path.cubicTo(x * 0.3, y / 5, x * 0.7, y * 0.01, x * 0.8, y / 4);
 
     path.addPolygon([
-      Offset(x * 0.2, y / 2.5),
-      Offset(x * 0.18, y / 2.4),
-      Offset(x * 0.16, y / 2.3),
-      Offset(x * 0.14, y / 2.2),
-      Offset(x * 0.12, y / 2.1),
+      Offset(x * 0.3, y / 5),
+      Offset(x * 0.25, y / 4.5),
+      Offset(x * 0.2, y / 4),
+      Offset(x * 0.15, y / 3.5),
+      Offset(x * 0.1, y / 3),
+      Offset(0, y / 2),
       Offset(0, y),
       Offset(x, y),
-      Offset(x, y / 1.8),
-      Offset(x * 0.99, y / 1.9),
-      Offset(x * 0.98, y / 2),
+      Offset(x * 0.95, y / 2),
+      Offset(x * 0.90, y / 3),
+      Offset(x * 0.85, y / 3.5),
+      Offset(x * 0.8, y / 4),
     ], false);
 
     /* path.addPolygon([
