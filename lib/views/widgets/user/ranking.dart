@@ -14,48 +14,69 @@ class Ranking extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          _name,
-          style: Theme.of(context).textTheme.headline6,
-        ),
-        Expanded(child: _rankingBar(context))
-      ],
+    return Container(
+      height: 200,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [Expanded(child: _rankingBar(context))],
+      ),
     );
   }
 
   Widget _rankingBar(BuildContext context) {
     return Container(
       width: 250,
-      child: Stack(
-        alignment: Alignment.centerRight,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Container(
-            width: 200,
-            child: ProgressBar(
-              borderRadius: storyBorderRadius,
-              borderWidth: 1,
-              height: 12,
-              progress: _progress,
-              padding: 2,
+          Expanded(
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  child: Text(
+                    _name,
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                ),
+                Positioned(
+                  top: 0,
+                  left: 190,
+                  child: Container(
+                      width: 50,
+                      height: 50,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50),
+                          image: DecorationImage(
+                            alignment: Alignment.center,
+                            fit: BoxFit.fill,
+                            image: AssetImage('images/shared/star.png'),
+                          )),
+                      child: Center(
+                          child: Text(_rank.toString(),
+                              style: Theme.of(context).textTheme.subtitle2))),
+                ),
+                Positioned(
+                  top: 25,
+                  left: 0,
+                  child: Container(
+                    width: 200,
+                    child: ProgressBar(
+                      borderRadius: storyBorderRadius,
+                      borderWidth: 1,
+                      height: 12,
+                      progress: _progress,
+                      padding: 2,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-          Positioned(
-            right: 0,
-            child: Container(
-                width: 100,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50),
-                    image: DecorationImage(
-                      alignment: Alignment.center,
-                      image: AssetImage('images/shared/star.png'),
-                    )),
-                child: Center(
-                    child: Text(_rank.toString(),
-                        style: Theme.of(context).textTheme.subtitle2))),
-          )
         ],
       ),
     );
