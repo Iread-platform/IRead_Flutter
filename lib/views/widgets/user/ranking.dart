@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iread_flutter/themes/border_radius.dart';
 import 'package:iread_flutter/views/widgets/shared/progress_bar.dart';
+import 'package:iread_flutter/views/widgets/user/avatar.dart';
 
 class Ranking extends StatelessWidget {
   final String _name;
@@ -15,18 +16,33 @@ class Ranking extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 200,
-      child: Column(
+      height: 50,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [Expanded(child: _rankingBar(context))],
+        children: [
+          UserAvatar(
+            imageUrl:
+                'https://images.unsplash.com/flagged/photo-1573740144655-bbb6e88fb18a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=375&q=80',
+            radius: 25,
+          ),
+          SizedBox(
+            width: 8,
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [Expanded(child: _rankingBar(context))],
+          ),
+        ],
       ),
     );
   }
 
   Widget _rankingBar(BuildContext context) {
+    final progressBarWidth = 100.0;
     return Container(
-      width: 250,
+      width: progressBarWidth + 50,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -45,7 +61,7 @@ class Ranking extends StatelessWidget {
                 ),
                 Positioned(
                   top: 0,
-                  left: 190,
+                  left: progressBarWidth - 10.0,
                   child: Container(
                       width: 50,
                       height: 50,
@@ -64,7 +80,7 @@ class Ranking extends StatelessWidget {
                   top: 25,
                   left: 0,
                   child: Container(
-                    width: 200,
+                    width: progressBarWidth,
                     child: ProgressBar(
                       borderRadius: storyBorderRadius,
                       borderWidth: 1,
