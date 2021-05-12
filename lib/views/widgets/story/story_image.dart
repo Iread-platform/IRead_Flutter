@@ -56,6 +56,18 @@ class StoryImage extends StatelessWidget {
                         (BuildContext context, exception, stackTrace) {
                       return Image.asset('images/shared/error.jpg');
                     },
+                    frameBuilder: (BuildContext context, child, frame,
+                        bool wasSynchronoslyLoaded) {
+                      if (wasSynchronoslyLoaded) {
+                        return child;
+                      } else
+                        return AnimatedOpacity(
+                          child: child,
+                          opacity: frame == null ? 0 : 1,
+                          curve: Curves.easeIn,
+                          duration: Duration(milliseconds: 300),
+                        );
+                    },
                   ),
                 ),
               ],

@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
             padding: const EdgeInsets.all(20.0),
             child: ProfileStoryCard(
               imageUrl:
-                  'https://i.pinimg.com/236x/20/3b/53/203b533756c2a5efe9bafb39960b4fcb.jpg',
+                  'https://i.pinimg.com/564x/aa/47/06/aa4706077339fb1bd6d4952eab8feb79.jpg',
               color: Colors.amber,
               title: 'Title',
               readingTime: 24.0,
