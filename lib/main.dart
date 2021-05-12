@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:iread_flutter/views/widgets/user/avatar.dart';
 import 'package:iread_flutter/views/widgets/user/ranking.dart';
 
 void main() {
