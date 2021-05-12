@@ -27,7 +27,7 @@ class Ranking extends StatelessWidget {
             radius: 25,
           ),
           SizedBox(
-            width: 8,
+            width: 2,
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -74,7 +74,13 @@ class Ranking extends StatelessWidget {
                           )),
                       child: Center(
                           child: Text(_rank.toString(),
-                              style: Theme.of(context).textTheme.subtitle2))),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle2
+                                  .copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimary)))),
                 ),
                 Positioned(
                   top: 29,
@@ -96,32 +102,5 @@ class Ranking extends StatelessWidget {
         ],
       ),
     );
-  }
-}
-
-class StarClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    final x = size.width;
-    final y = size.height;
-
-    return Path()
-      ..addPolygon([
-        Offset(x * 0.5, y * 0),
-        Offset(x * 0.61, y * 0.35),
-        Offset(x * 0.98, y * 0.35),
-        Offset(x * 0.68, y * 0.57),
-        Offset(x * 0.79, y * 0.91),
-        Offset(x * 0.5, y * 0.7),
-        Offset(x * 0.21, y * 0.91),
-        Offset(x * 0.32, y * 0.57),
-        Offset(x * 0.02, y * 0.35),
-        Offset(x * 0.39, y * 0.35),
-      ], true);
-  }
-
-  @override
-  bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
-    return true;
   }
 }
