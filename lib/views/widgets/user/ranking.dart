@@ -45,12 +45,12 @@ class Ranking extends StatelessWidget {
           Positioned(
             right: 0,
             child: Container(
-                width: 50,
+                width: 100,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(50),
                     image: DecorationImage(
                       alignment: Alignment.center,
-                      image: NetworkImage(),
+                      image: AssetImage('images/shared/star.png'),
                     )),
                 child: Center(
                     child: Text(_rank.toString(),
