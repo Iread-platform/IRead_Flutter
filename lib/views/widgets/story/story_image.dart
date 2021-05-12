@@ -41,9 +41,7 @@ class StoryImage extends StatelessWidget {
                       if (loadingProgress == null) {
                         return child;
                       }
-                      return SizedBox(
-                        width: 100,
-                        height: 150,
+                      return Container(
                         child: Center(
                           child: CircularProgressIndicator(
                             value: loadingProgress.expectedTotalBytes != null
@@ -53,6 +51,10 @@ class StoryImage extends StatelessWidget {
                           ),
                         ),
                       );
+                    },
+                    errorBuilder:
+                        (BuildContext context, exception, stackTrace) {
+                      return Image.asset('images/shared/error.jpg');
                     },
                   ),
                 ),
