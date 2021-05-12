@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
         ),
         home: Scaffold(
           body: Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(100.0),
               child: Ranking(name: 'Motasem', progress: 0.5, rank: 16)),
         ));
   }

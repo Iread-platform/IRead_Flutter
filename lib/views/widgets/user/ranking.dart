@@ -16,7 +16,7 @@ class Ranking extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 50,
+      height: 50.0,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -24,7 +24,7 @@ class Ranking extends StatelessWidget {
           UserAvatar(
             imageUrl:
                 'https://images.unsplash.com/flagged/photo-1573740144655-bbb6e88fb18a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=375&q=80',
-            radius: 25,
+            radius: 25.0,
           ),
           SizedBox(
             width: 2,
@@ -42,7 +42,7 @@ class Ranking extends StatelessWidget {
   Widget _rankingBar(BuildContext context) {
     final progressBarWidth = 100.0;
     return Container(
-      width: progressBarWidth + 50,
+      width: progressBarWidth + 50.0,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -70,7 +70,7 @@ class Ranking extends StatelessWidget {
                           image: DecorationImage(
                             alignment: Alignment.center,
                             fit: BoxFit.fill,
-                            image: AssetImage('images/shared/star.png'),
+                            image: AssetImage('assets/images/shared/star.png'),
                           )),
                       child: Center(
                           child: Text(_rank.toString(),
@@ -89,10 +89,10 @@ class Ranking extends StatelessWidget {
                     width: progressBarWidth,
                     child: ProgressBar(
                       borderRadius: storyBorderRadius,
-                      borderWidth: 1,
-                      height: 12,
+                      borderWidth: 1.0,
+                      height: 12.0,
                       progress: _progress,
-                      padding: 2,
+                      padding: 2.0,
                     ),
                   ),
                 ),

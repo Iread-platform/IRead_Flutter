@@ -23,13 +23,13 @@ class ProgressBar extends StatelessWidget {
       shadowBlurRadius})
       : _color = color,
         _progress = progress ?? 0,
-        _height = height ?? 10,
-        _borderWidth = borderWidth ?? 1,
-        _padding = padding ?? 1,
-        _borderRadius = borderRadius ?? 50,
+        _height = height ?? 10.0,
+        _borderWidth = borderWidth ?? 1.0,
+        _padding = padding ?? 1.0,
+        _borderRadius = borderRadius ?? 50.0,
         _dropShadow = dropShadow ?? false,
         _shadowOffset = shadowOffset ?? Offset(0, 0),
-        _shadowBlurRadius = shadowBlurRadius ?? 2;
+        _shadowBlurRadius = shadowBlurRadius ?? 2.0;
 
   @override
   Widget build(BuildContext context) {
