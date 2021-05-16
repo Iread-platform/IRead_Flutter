@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:iread_flutter/themes/colors.dart';
 import 'package:iread_flutter/themes/theme.dart';
 import 'package:iread_flutter/views/widgets/story/story_card.dart';
 
