@@ -16,7 +16,7 @@ class Ranking extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 50.0,
+      height: 75.0,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -24,10 +24,7 @@ class Ranking extends StatelessWidget {
           UserAvatar(
             imageUrl:
                 'https://images.unsplash.com/flagged/photo-1573740144655-bbb6e88fb18a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=375&q=80',
-            radius: 25.0,
-          ),
-          SizedBox(
-            width: 2,
+            radius: 40.0,
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,7 +39,7 @@ class Ranking extends StatelessWidget {
   Widget _rankingBar(BuildContext context) {
     final progressBarWidth = 100.0;
     return Container(
-      width: progressBarWidth + 50.0,
+      width: progressBarWidth + 40.0,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -52,19 +49,26 @@ class Ranking extends StatelessWidget {
               alignment: Alignment.center,
               children: [
                 Positioned(
-                  top: 4,
-                  left: 0,
-                  child: Text(
-                    _name,
-                    style: Theme.of(context).textTheme.headline6,
+                  top: 24,
+                  left: 1,
+                  child: Container(
+                    width: progressBarWidth - 4,
+                    child: Text(
+                      _name,
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline6
+                          .copyWith(fontSize: 16),
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                 ),
                 Positioned(
-                  top: 4,
-                  left: progressBarWidth - 10.0,
+                  top: 30,
+                  left: progressBarWidth - 12.0,
                   child: Container(
-                      width: 50,
-                      height: 50,
+                      width: 40,
+                      height: 40,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(50),
                           image: DecorationImage(
@@ -83,7 +87,7 @@ class Ranking extends StatelessWidget {
                                           .onPrimary)))),
                 ),
                 Positioned(
-                  top: 29,
+                  top: 50,
                   left: 0,
                   child: Container(
                     width: progressBarWidth,
