@@ -49,7 +49,7 @@ class Ranking extends StatelessWidget {
               alignment: Alignment.center,
               children: [
                 Positioned(
-                  top: 24,
+                  top: 28,
                   left: 1,
                   child: Container(
                     width: progressBarWidth - 4,
@@ -58,7 +58,7 @@ class Ranking extends StatelessWidget {
                       style: Theme.of(context)
                           .textTheme
                           .headline6
-                          .copyWith(fontSize: 16),
+                          .copyWith(fontSize: 14),
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
