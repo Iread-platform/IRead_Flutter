@@ -35,8 +35,8 @@ class ProfileStoryCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Flexible(flex: 2, child: Container()),
-              Flexible(flex: 4, child: _storyDetails(context)),
+              Flexible(flex: 4, child: Container()),
+              Flexible(flex: 7, child: _storyDetails(context)),
             ],
           ),
           Row(
@@ -73,7 +73,7 @@ class ProfileStoryCard extends StatelessWidget {
                   offset: Offset(1, 0),
                   spreadRadius: -1)
             ]),
-        padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+        padding: EdgeInsets.symmetric(horizontal: 18, vertical: 12),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
