@@ -24,13 +24,25 @@ class SearchBar extends StatelessWidget {
   }
 
   _inputDecoration(BuildContext context) => InputDecoration(
-      border: OutlineInputBorder(
+        border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(50),
-          borderSide: BorderSide(width: 2)),
-      fillColor: Theme.of(context).colorScheme.surface,
-      prefixIcon: Padding(
-        padding: const EdgeInsets.only(left: 32, right: 24),
-        child: Icon(Icons.search),
-      ),
-      hintText: _hintText);
+          borderSide: BorderSide(width: 0, color: Colors.transparent),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(50),
+          borderSide: BorderSide(width: 0, color: Colors.transparent),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(width: 0, color: Colors.transparent),
+        ),
+        filled: true,
+        fillColor: Theme.of(context).colorScheme.surface,
+        focusColor: Theme.of(context).colorScheme.secondary,
+        prefixIcon: Padding(
+          padding: const EdgeInsets.only(left: 32, right: 24),
+          child: Icon(Icons.search),
+        ),
+        hintText: _hintText,
+      );
 }
