@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:m3allem_flutter/view/widgets/layout/responsive_layout_builder.dart';
-import 'package:m3allem_flutter/utils/extensions.dart';
+import 'responsive_layout_builder.dart';
+import 'package:iread_flutter/utils/extensions.dart';
 
 class ResponsiveFlex extends StatelessWidget {
   final List<int> _onXSm;
