@@ -14,6 +14,9 @@ class SearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      decoration: BoxDecoration(boxShadow: [
+        BoxShadow(blurRadius: 5, offset: Offset(0, 1), color: Colors.black26)
+      ], borderRadius: BorderRadius.circular(50)),
       child: TextField(
         decoration: _inputDecoration(context),
         controller: _search,
@@ -24,18 +27,10 @@ class SearchBar extends StatelessWidget {
   }
 
   _inputDecoration(BuildContext context) => InputDecoration(
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(50),
-          borderSide: BorderSide(width: 0, color: Colors.transparent),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(50),
-          borderSide: BorderSide(width: 0, color: Colors.transparent),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(width: 0, color: Colors.transparent),
-        ),
+        border: _inputBorder(Colors.transparent, 0),
+        enabledBorder: _inputBorder(Colors.transparent, 0),
+        focusedBorder: _inputBorder(Theme.of(context).colorScheme.primary, 0),
+        errorBorder: _inputBorder(Colors.red, 0),
         filled: true,
         fillColor: Theme.of(context).colorScheme.surface,
         focusColor: Theme.of(context).colorScheme.secondary,
@@ -44,5 +39,11 @@ class SearchBar extends StatelessWidget {
           child: Icon(Icons.search),
         ),
         hintText: _hintText,
+      );
+
+  _inputBorder(Color color, double width) => OutlineInputBorder(
+        borderRadius: BorderRadius.circular(50),
+        borderSide:
+            BorderSide(width: width ?? 0, color: color ?? Colors.transparent),
       );
 }
