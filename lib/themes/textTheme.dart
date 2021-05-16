@@ -11,9 +11,9 @@ TextTheme textTheme = TextTheme(
     fontSize: 14,
   ),
   subtitle2: TextStyle(
-      color: Colors.black87, fontSize: 16, fontWeight: FontWeight.w700),
+      color: Colors.black87, fontSize: 16, fontWeight: FontWeight.w600),
   subtitle1: TextStyle(
-      color: Colors.black87, fontSize: 18, fontWeight: FontWeight.w700),
+      color: Colors.black87, fontSize: 18, fontWeight: FontWeight.w600),
   headline6: TextStyle(
       color: colorScheme.primary, fontSize: 18, fontWeight: FontWeight.bold),
   headline5: TextStyle(
