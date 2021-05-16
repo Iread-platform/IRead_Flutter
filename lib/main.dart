@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iread_flutter/themes/colors.dart';
 import 'package:iread_flutter/themes/theme.dart';
 import 'package:iread_flutter/views/widgets/story/story_card.dart';
 
@@ -11,14 +12,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: theme,
+      title: 'Iread',
+      theme: mainTheme,
       home: Scaffold(
         appBar: AppBar(),
         body: Padding(
           padding: const EdgeInsets.all(20.0),
           child: StoryCard(
-            color: Colors.blue[300],
+            color: Colors.cyan,
             title: 'Wood, Wire, Wings',
             imageUrl:
                 'https://i.pinimg.com/236x/20/3b/53/203b533756c2a5efe9bafb39960b4fcb.jpg',
