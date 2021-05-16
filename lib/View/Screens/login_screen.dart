@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -7,11 +8,8 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final userNameController = TextEditingController();
-
   final passwordController = TextEditingController();
-
   final GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
-
   bool hidePassword = true;
 
   @override
@@ -23,26 +21,31 @@ class _LoginScreenState extends State<LoginScreen> {
         children: [
           // ================= Image Header ==================
           Container(
-            height: h * 0.35,
-            width: w,
+            height: h * 0.3,
             child: Stack(
               children: [
-                Container(
-                  height: h * 0.35 * 0.8,
-                  width: w * 0.6,
-                  decoration: BoxDecoration(
-                    color: Colors.orangeAccent,
-                    borderRadius: BorderRadius.only(
-                      bottomRight: Radius.circular(50),
+                Transform.translate(
+                  offset: Offset(0, -h * 0.05),
+                  child: Container(
+                    child: Container(
+                      child: Transform.scale(
+                        scale: 1.2,
+                        child: SvgPicture.asset(
+                          "assets/signin_background_top.svg",
+                          color: Colors.orangeAccent,
+                          alignment: Alignment.topLeft,
+                        ),
+                      ),
                     ),
                   ),
                 ),
                 Center(
                   child: Container(
+                    height: h * 0.4,
                     alignment: Alignment.bottomCenter,
                     child: CircleAvatar(
+                      radius: 60,
                       backgroundColor: Colors.orangeAccent,
-                      radius: 75,
                       backgroundImage: NetworkImage(
                           'https://thumbs.dreamstime.com/b/man-hipster-avatar-cartoon-guy-black-hair-flat-icon-blue-background-user-person-character-vector-illustration-185480506.jpg'),
                     ),
@@ -55,7 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
           Form(
             key: loginFormKey,
             child: Container(
-              height: h * 0.40,
+              height: h * 0.5,
               width: w * 0.8,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,27 +121,21 @@ class _LoginScreenState extends State<LoginScreen> {
 
           //====================== Footer ==============================
           Container(
-              height: h * 0.25,
-              width: w,
-              child: Stack(
-                alignment: Alignment.bottomRight,
-                children: [
-                  Container(
-                    width: w * 0.6,
-                    decoration: BoxDecoration(
-                      color: Colors.orangeAccent,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(100),
-                      ),
-                    ),
-                    // child: SvgPicture.asset(
-                    //   "assets/testSvg.svg",
-                    //   height: 200,
-                    //   semanticsLabel: 'A red up arrow',
-                    // ),
+            height: h * 0.2,
+            child: Transform.translate(
+              offset: Offset(w * 0.3, h * 0.1),
+              child: Container(
+                child: Transform.scale(
+                  scale: 2.2,
+                  child: SvgPicture.asset(
+                    "assets/signin_background_bottom.svg",
+                    color: Colors.pink[200],
+                    alignment: Alignment.center,
                   ),
-                ],
-              )),
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
