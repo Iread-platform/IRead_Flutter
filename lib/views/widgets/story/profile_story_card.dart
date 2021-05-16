@@ -64,7 +64,7 @@ class ProfileStoryCard extends StatelessWidget {
                 child: ResponsiveLayoutBuilder(
                     onXSm: (context) => _storyPagesAndTime(context, 12),
                     onSm: (context) => _storyPagesAndTime(context, 32))),
-            Expanded(flex: 1, child: _storyProgress(context, 32)),
+            Expanded(flex: 1, child: _storyProgress(context, 12)),
           ],
         ),
       );
@@ -92,7 +92,7 @@ class ProfileStoryCard extends StatelessWidget {
             ),
             Expanded(
               child: _detailsRow(context, _flippedTimePages,
-                  _flippedPages.toString() + 'page'),
+                  _flippedPages.toString() + ' pages'),
             )
           ],
         ),
