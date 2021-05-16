@@ -5,9 +5,11 @@ class SearchBar extends StatelessWidget {
 
   final String _hintText;
   final Function(String value) _onChanged;
+  final Function(String value) _onSubmitted;
 
-  SearchBar({onChanged, hintText})
+  SearchBar({onChanged, hintText, onSubmitted})
       : _onChanged = onChanged,
+        _onSubmitted = onSubmitted,
         _hintText = hintText ?? 'Story Name';
   @override
   Widget build(BuildContext context) {
@@ -16,6 +18,7 @@ class SearchBar extends StatelessWidget {
         decoration: _inputDecoration(context),
         controller: _search,
         onChanged: _onChanged,
+        onSubmitted: _onSubmitted,
       ),
     );
   }
