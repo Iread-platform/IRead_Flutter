@@ -32,29 +32,21 @@ class SubtitlesScreen extends StatelessWidget {
                 child: Stack(
                   alignment: Alignment.topRight,
                   children: [
-                    Container(
-                      height: h * 0.3,
-                      width: w * 0.5,
-                      decoration: BoxDecoration(
-                        color: Colors.orangeAccent,
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(100),
+                    Transform.translate(
+                      offset: Offset(w * 0.08, -h * 0.01),
+                      child: Transform.scale(
+                        scale: 1.25,
+                        child: SvgPicture.asset(
+                          "assets/subtitles_background_top.svg",
+                          color: Colors.orangeAccent,
+                          alignment: Alignment.topRight,
                         ),
                       ),
-                      // child: SvgPicture.asset(
-                      //   "assets/testSvg.svg",
-                      //   height: 200,
-                      //   semanticsLabel: 'A red up arrow',
-                      // ),
                     ),
                     Container(
-                        // color: Colors.amber,
-                        width: w * 0.8,
-                        // height: h*0.25,
                         alignment: Alignment.centerRight,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
-                          // crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Container(
                               alignment: Alignment.centerRight,
@@ -132,19 +124,18 @@ class SubtitlesScreen extends StatelessWidget {
             child: Stack(
               children: [
                 Container(
-                  height: h * 0.3,
                   width: w * 0.6,
-                  decoration: BoxDecoration(
-                    color: Colors.orangeAccent,
-                    borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(100),
+                  child: Transform.translate(
+                    offset: Offset(-w * 0.1, h * 0.1),
+                    child: Transform.scale(
+                      scale: 1.6,
+                      child: SvgPicture.asset(
+                        "assets/subtitles_background_bottom.svg",
+                        color: Colors.pink[200],
+                        alignment: Alignment.topRight,
+                      ),
                     ),
                   ),
-                  // child: SvgPicture.asset(
-                  //   "assets/testSvg.svg",
-                  //   height: 200,
-                  //   semanticsLabel: 'A red up arrow',
-                  // ),
                 ),
               ],
             ))
