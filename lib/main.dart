@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:iread_flutter/views/widgets/story/story_card.dart';
 
+import 'views/widgets/drawer_widget.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -25,6 +27,7 @@ class MyApp extends StatelessWidget {
       ),
       home: Scaffold(
         appBar: AppBar(),
+        drawer: DrawerWidget(),
         body: Padding(
           padding: const EdgeInsets.all(20.0),
           child: StoryCard(
