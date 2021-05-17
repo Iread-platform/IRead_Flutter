@@ -40,10 +40,8 @@ class StoriesSection extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Wrap(
-              alignment: WrapAlignment.spaceEvenly,
-              runSpacing: _verticalSpace,
-              spacing: _horizontalSpace,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
               children: _storiesWidgets(context),
             ),
           )
