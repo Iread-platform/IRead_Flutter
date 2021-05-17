@@ -1,1 +1,2 @@
-double storyBorderRadius = 50;
+double storyBorderRadius = 30;
+double smallBorderRadius = 8;
