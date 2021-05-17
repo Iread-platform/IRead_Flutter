@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iread_flutter/views/widgets/search_bar.dart';
+import 'package:iread_flutter/views/widgets/story/profile_story_card.dart';
 
 void main() {
   runApp(MyApp());
@@ -25,7 +25,17 @@ class MyApp extends StatelessWidget {
       ),
       home: Scaffold(
         appBar: AppBar(),
-        body: Padding(padding: const EdgeInsets.all(20.0), child: SearchBar()),
+        body: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: ProfileStoryCard(
+              imageUrl:
+                  'https://i.pinimg.com/236x/20/3b/53/203b533756c2a5efe9bafb39960b4fcb.jpg',
+              color: Colors.amber,
+              title: 'Title',
+              readingTime: 24.0,
+              flippedPages: 3,
+              progress: 0.3,
+            )),
       ),
     );
   }
