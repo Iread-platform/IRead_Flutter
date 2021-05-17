@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iread_flutter/views/widgets/user/ranking.dart';
+import 'package:iread_flutter/views/widgets/story/profile_story_card.dart';
 
 void main() {
   runApp(MyApp());
@@ -10,24 +10,34 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          // This is the theme of your application.
-          //
-          // Try running your application with "flutter run". You'll see the
-          // application has a blue toolbar. Then, without quitting the app, try
-          // changing the primarySwatch below to Colors.green and then invoke
-          // "hot reload" (press "r" in the console where you ran "flutter run",
-          // or simply save your changes to "hot reload" in a Flutter IDE).
-          // Notice that the counter didn't reset back to zero; the application
-          // is not restarted.
-          primarySwatch: Colors.blue,
-        ),
-        home: Scaffold(
-          body: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 100.0),
-              child: Ranking(name: 'Student Name', progress: 0.5, rank: 16)),
-        ));
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        // This is the theme of your application.
+        //
+        // Try running your application with "flutter run". You'll see the
+        // application has a blue toolbar. Then, without quitting the app, try
+        // changing the primarySwatch below to Colors.green and then invoke
+        // "hot reload" (press "r" in the console where you ran "flutter run",
+        // or simply save your changes to "hot reload" in a Flutter IDE).
+        // Notice that the counter didn't reset back to zero; the application
+        // is not restarted.
+        primarySwatch: Colors.blue,
+      ),
+      home: Scaffold(
+        appBar: AppBar(),
+        body: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: ProfileStoryCard(
+              imageUrl:
+                  'https://i.pinimg.com/236x/20/3b/53/203b533756c2a5efe9bafb39960b4fcb.jpg',
+              color: Colors.amber,
+              title: 'Title',
+              readingTime: 24.0,
+              flippedPages: 3,
+              progress: 0.3,
+            )),
+      ),
+    );
   }
 }
 
