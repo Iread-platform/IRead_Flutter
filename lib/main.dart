@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iread_flutter/themes/theme.dart';
+import 'package:iread_flutter/views/open_library.dart';
 import 'package:iread_flutter/views/widgets/story/profile_story_card.dart';
 import 'package:iread_flutter/models/stories_section_model.dart';
 import 'package:iread_flutter/models/story.dart';
@@ -19,14 +20,9 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(),
         body: Padding(
             padding: const EdgeInsets.all(20.0),
-            child: ProfileStoryCard(
-              imageUrl:
-                  'https://i.pinimg.com/236x/20/3b/53/203b533756c2a5efe9bafb39960b4fcb.jpg',
-              color: Colors.amber,
-              title: 'Title',
-              readingTime: 24.0,
-              flippedPages: 3,
-              progress: 0.3,
+            child: OpenLibrary(
+              sections: storiesSection,
+              storyWidth: 200,
             )),
       ),
     );
