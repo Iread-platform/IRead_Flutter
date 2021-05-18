@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iread_flutter/views/widgets/story/profile_story_card.dart';
+import 'package:iread_flutter/models/stories_section_model.dart';
+import 'package:iread_flutter/models/story.dart';
 
 void main() {
   runApp(MyApp());
