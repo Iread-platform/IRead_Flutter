@@ -76,11 +76,6 @@ class ApiService {
           throw NetworkException(
               message: appSettings.Settings.HTTP_REQUEST_STATE_CODE[408]);
         }
-      case 409:
-        {
-          throw DatabaseException(
-              message: appSettings.Settings.HTTP_REQUEST_STATE_CODE[409]);
-        }
       default:
         {
           throw NetworkException(message: "Unknown Error");
