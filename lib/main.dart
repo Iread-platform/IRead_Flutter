@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iread_flutter/themes/theme.dart';
+import 'package:iread_flutter/configs/themes/theme.dart';
 import 'package:iread_flutter/views/widgets/story/profile_story_card.dart';
 
 void main() {
