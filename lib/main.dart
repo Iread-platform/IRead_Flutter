@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-
 import 'package:iread_flutter/config/themes/theme.dart';
-import 'package:iread_flutter/views/widgets/story/profile_story_card.dart';
+import 'package:iread_flutter/views/open_library.dart';
+
+import 'models/stories_section_model.dart';
+import 'models/story.dart';
 
 void main() {
   runApp(MyApp());
@@ -18,19 +20,33 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(),
         body: Padding(
             padding: const EdgeInsets.all(20.0),
-            child: ProfileStoryCard(
-              imageUrl:
-                  'https://i.pinimg.com/236x/20/3b/53/203b533756c2a5efe9bafb39960b4fcb.jpg',
-              color: Colors.amber,
-              title: 'Title',
-              readingTime: 24.0,
-              flippedPages: 3,
-              progress: 0.3,
+            child: OpenLibrary(
+              sections: storiesSection,
+              storyWidth: 200,
             )),
       ),
     );
   }
 }
+
+// TODO clear static stories
+List<StoriesSectionModel> storiesSection = [
+  StoriesSectionModel('Continue Reading', [story, story, story, story]),
+  StoriesSectionModel('Continue Reading', [story, story, story, story]),
+  StoriesSectionModel('Continue Reading', [story, story, story, story]),
+  StoriesSectionModel('Continue Reading', [story, story, story, story]),
+  StoriesSectionModel('Continue Reading', [story, story, story, story]),
+  StoriesSectionModel('Continue Reading', [story, story, story, story]),
+  StoriesSectionModel('Continue Reading', [story, story, story, story]),
+];
+
+Story story = Story(
+    title: 'Wood, Wire, Wings',
+    color: Colors.teal,
+    imageUrl: 'https://blog-cdn.reedsy.com/uploads/2019/12/another.jpg',
+    progress: 0.45,
+    flippedPages: 53,
+    readingTime: 127.25);
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
