@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:iread_flutter/themes/theme.dart';
 import 'package:iread_flutter/views/open_library.dart';
 import 'package:iread_flutter/models/stories_section_model.dart';
 import 'package:iread_flutter/models/story.dart';
+=======
+import 'package:iread_flutter/config/themes/theme.dart';
+import 'package:iread_flutter/views/widgets/story/profile_story_card.dart';
+>>>>>>> develop
 
 void main() {
   runApp(MyApp());
