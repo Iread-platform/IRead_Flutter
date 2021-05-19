@@ -17,6 +17,7 @@ class OpenLibrary extends StatelessWidget {
     return Container(
       child: SingleChildScrollView(
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: _sectionsBuilder(context),
         ),
       ),
@@ -36,6 +37,7 @@ class OpenLibrary extends StatelessWidget {
         height: _verticalSpacing,
       ));
     });
+
     columnChildren.removeLast();
 
     return columnChildren;

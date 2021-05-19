@@ -9,6 +9,7 @@ class StoriesSection extends StatelessWidget {
   final double _storyWidth;
   final double _horizontalSpace;
   final double _verticalSpace;
+  final double _sectionHeight;
 
   StoriesSection(
       {storiesList,
@@ -16,37 +17,41 @@ class StoriesSection extends StatelessWidget {
       storyWidth,
       horizontalSpace,
       verticalSpace,
-      titleBottomSpacing})
+      titleBottomSpacing,
+      sectionHeight})
       : _stories = storiesList,
         _title = title,
         _storyWidth = storyWidth ?? 150,
         _horizontalSpace = horizontalSpace ?? 24,
         _verticalSpace = verticalSpace ?? 24,
-        _titleBottomSpacing = titleBottomSpacing ?? 32;
+        _titleBottomSpacing = titleBottomSpacing ?? 32,
+        _sectionHeight = sectionHeight ?? 150;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            _title,
-            style: Theme.of(context).textTheme.headline4,
-          ),
-          SizedBox(
-            height: _titleBottomSpacing,
-          ),
-          Padding(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          _title,
+          style: Theme.of(context).textTheme.headline4,
+        ),
+        SizedBox(
+          height: _titleBottomSpacing,
+        ),
+        SizedBox(
+          height: _sectionHeight,
+          child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: ListView(
+              shrinkWrap: true,
               scrollDirection: Axis.horizontal,
               children: _storiesWidgets(context),
             ),
-          )
-        ],
-      ),
+          ),
+        )
+      ],
     );
   }
 
