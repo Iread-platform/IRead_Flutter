@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:iread_flutter/configs/themes/colors.dart';
-import 'package:iread_flutter/configs/themes/textTheme.dart';
+import 'package:iread_flutter/Configs/themes/colors.dart';
+import 'package:iread_flutter/Configs/themes/textTheme.dart';
 
 ThemeData mainTheme = ThemeData(
     primaryColor: colorScheme.primary,

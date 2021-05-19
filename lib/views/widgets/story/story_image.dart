@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iread_flutter/configs/themes/border_radius.dart';
+import 'package:iread_flutter/Configs/themes/border_radius.dart';
 
 /// [imageUrl] refer to the network url og the image, 'do not use asset path',
 /// It is 'required'.

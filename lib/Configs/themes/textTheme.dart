@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iread_flutter/configs/themes/colors.dart';
+import 'package:iread_flutter/Configs/themes/colors.dart';
 
 TextTheme textTheme = TextTheme(
   bodyText1: TextStyle(
