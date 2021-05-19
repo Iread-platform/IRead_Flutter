@@ -1,24 +1,24 @@
 {
-    "sextion": [
+    "lyrics": [
         {
             "word": "The",
-            "time": "00:00:00"
+            "milliseconds": "0"
         },
         {
             "word": "story",
-            "time": "00:00:30"
+            "milliseconds": "30"
         },
         {
             "word": "player",
-            "time": "00:00:60"
+            "milliseconds": "60"
         },
         {
             "word": "is",
-            "time": "00:00:90"
+            "milliseconds": "90"
         },
         {
             "word": "work",
-            "time": "00:01:20"
+            "milliseconds": "120"
         }
     ]
 }
