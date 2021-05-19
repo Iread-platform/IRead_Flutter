@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:iread_flutter/Configs/themes/border_radius.dart';
+
+import 'package:iread_flutter/config/themes/border_radius.dart';
 import 'package:iread_flutter/views/widgets/shared/progress_bar.dart';
 import 'package:iread_flutter/views/widgets/user/avatar.dart';
 
