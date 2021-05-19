@@ -57,6 +57,7 @@ class StoriesSection extends StatelessWidget {
     List<Widget> stories = [];
     _stories.forEach((element) {
       final story = Container(
+        margin: EdgeInsets.only(right: 12),
         width: _storyWidth,
         child: StoryCard(
           title: element.title,
