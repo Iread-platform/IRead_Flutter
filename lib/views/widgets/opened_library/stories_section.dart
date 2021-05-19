@@ -7,23 +7,17 @@ class StoriesSection extends StatelessWidget {
   final String _title;
   final double _titleBottomSpacing;
   final double _storyWidth;
-  final double _horizontalSpace;
-  final double _verticalSpace;
   final double _sectionHeight;
 
   StoriesSection(
       {storiesList,
       @required title,
       storyWidth,
-      horizontalSpace,
-      verticalSpace,
       titleBottomSpacing,
       sectionHeight})
       : _stories = storiesList,
         _title = title,
         _storyWidth = storyWidth ?? 150,
-        _horizontalSpace = horizontalSpace ?? 24,
-        _verticalSpace = verticalSpace ?? 24,
         _titleBottomSpacing = titleBottomSpacing ?? 32,
         _sectionHeight = sectionHeight ?? 150;
 
