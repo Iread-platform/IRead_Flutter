@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class StoryPlayer extends StatefulWidget {
   @override
   _StoryPlayerState createState() => _StoryPlayerState();
