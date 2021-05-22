@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:iread_flutter/views/widgets/shared/progress_bar.dart';
@@ -19,14 +17,18 @@ class StoryAudioPlayer extends StatefulWidget {
   _AudioPlayerState createState() => _AudioPlayerState();
 }
 
-class _AudioPlayerState extends State<StoryAudioPlayer> {
+class _AudioPlayerState extends State<StoryAudioPlayer>
+    with TickerProviderStateMixin {
   AudioCache audioCach = AudioCache();
   AudioPlayer audioPlayer = AudioPlayer();
   int _duration;
 
+  AnimationController _playPauseAnimationController;
+
   @override
   void initState() {
     super.initState();
+
     audioPlayer.onAudioPositionChanged.listen((event) {
       widget._progress.sink.add(event.inMilliseconds);
     });
@@ -34,6 +36,11 @@ class _AudioPlayerState extends State<StoryAudioPlayer> {
       _duration = event.inMilliseconds;
     });
     audioPlayer.play(widget._audioUrl);
+
+    _playPauseAnimationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 300));
+
+    _playPauseAnimationController.forward();
   }
 
   @override
@@ -43,7 +50,7 @@ class _AudioPlayerState extends State<StoryAudioPlayer> {
         stream: widget._progress.stream,
         builder: (context, AsyncSnapshot<int> snapshot) {
           if (_duration == null || !snapshot.hasData) {
-            return CircularProgressIndicator();
+            return Center(child: CircularProgressIndicator());
           }
 
           return Column(
@@ -57,22 +64,34 @@ class _AudioPlayerState extends State<StoryAudioPlayer> {
               StreamBuilder(
                 stream: audioPlayer.onPlayerStateChanged,
                 builder: (context, AsyncSnapshot<PlayerState> snapshot) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      IconButton(
-                        icon: Icon(audioPlayer.state == PlayerState.PLAYING
-                            ? Icons.pause
-                            : Icons.play_arrow),
-                        onPressed: () {
-                          print(audioPlayer.state);
-                          audioPlayer.state == PlayerState.PLAYING
-                              ? audioPlayer.pause()
-                              : audioPlayer.resume();
-                        },
-                        color: Theme.of(context).colorScheme.primary,
-                      )
-                    ],
+                  return Container(
+                    height: 30,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          icon: AnimatedIcon(
+                            icon: AnimatedIcons.play_pause,
+                            progress: _playPauseAnimationController,
+                            size: 25,
+                          ),
+                          onPressed: () {
+                            switch (audioPlayer.state) {
+                              case PlayerState.PLAYING:
+                                _playPauseAnimationController.reverse();
+                                audioPlayer.pause();
+                                break;
+
+                              default:
+                                _playPauseAnimationController.forward();
+                                audioPlayer.resume();
+                                break;
+                            }
+                          },
+                          color: Theme.of(context).colorScheme.primary,
+                        )
+                      ],
+                    ),
                   );
                 },
               )
