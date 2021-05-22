@@ -23,6 +23,8 @@ class _AudioPlayerState extends State<StoryAudioPlayer>
   AudioPlayer audioPlayer = AudioPlayer();
   int _duration;
 
+  GlobalKey _progressBarKey = GlobalKey();
+
   AnimationController _playPauseAnimationController;
 
   @override
@@ -56,11 +58,29 @@ class _AudioPlayerState extends State<StoryAudioPlayer>
           return Column(
             children: [
               GestureDetector(
-                  child: ProgressBar(
-                progress: snapshot.data / _duration,
-                height: 15.0,
-                padding: 2.0,
-              )),
+                key: _progressBarKey,
+                child: ProgressBar(
+                  progress: snapshot.data / _duration,
+                  height: 15.0,
+                  padding: 2.0,
+                ),
+                onTapDown: (details) {
+                  double width = _progressBarKey.currentContext.size.width;
+                  double xOffset = details.localPosition.dx;
+
+                  double clickRelativeX = xOffset / width;
+
+                  double milliseconds = clickRelativeX * _duration;
+
+                  audioPlayer
+                      .seek(Duration(milliseconds: milliseconds.round()));
+                  print('width $width');
+                  print('xOffset $xOffset');
+                  print('click relative $clickRelativeX');
+                  print('duration $_duration');
+                  print('milliseconds $milliseconds');
+                },
+              ),
               StreamBuilder(
                 stream: audioPlayer.onPlayerStateChanged,
                 builder: (context, AsyncSnapshot<PlayerState> snapshot) {
