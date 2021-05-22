@@ -54,18 +54,27 @@ class _AudioPlayerState extends State<StoryAudioPlayer> {
                 height: 15.0,
                 padding: 2.0,
               )),
-              Row(
-                children: [
-                  IconButton(
-                      icon: Icon(audioPlayer.state == PlayerState.PLAYING
-                          ? Icons.pause
-                          : Icons.play_arrow),
-                      onPressed: () {
-                        audioPlayer.state == PlayerState.PLAYING
-                            ? audioPlayer.pause()
-                            : audioPlayer.resume();
-                      })
-                ],
+              StreamBuilder(
+                stream: audioPlayer.onPlayerStateChanged,
+                builder: (context, AsyncSnapshot<PlayerState> snapshot) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        icon: Icon(audioPlayer.state == PlayerState.PLAYING
+                            ? Icons.pause
+                            : Icons.play_arrow),
+                        onPressed: () {
+                          print(audioPlayer.state);
+                          audioPlayer.state == PlayerState.PLAYING
+                              ? audioPlayer.pause()
+                              : audioPlayer.resume();
+                        },
+                        color: Theme.of(context).colorScheme.primary,
+                      )
+                    ],
+                  );
+                },
               )
             ],
           );
