@@ -46,12 +46,28 @@ class _AudioPlayerState extends State<StoryAudioPlayer> {
             return CircularProgressIndicator();
           }
 
-          return GestureDetector(
-            child: ProgressBar(
-              progress: snapshot.data / _duration,
-              height: 15.0,
-              padding: 2.0,
-            ),
+          return Column(
+            children: [
+              GestureDetector(
+                  child: ProgressBar(
+                progress: snapshot.data / _duration,
+                height: 15.0,
+                padding: 2.0,
+              )),
+              Row(
+                children: [
+                  IconButton(
+                      icon: Icon(audioPlayer.state == PlayerState.PLAYING
+                          ? Icons.pause
+                          : Icons.play_arrow),
+                      onPressed: () {
+                        audioPlayer.state == PlayerState.PLAYING
+                            ? audioPlayer.pause()
+                            : audioPlayer.resume();
+                      })
+                ],
+              )
+            ],
           );
         },
       ),
