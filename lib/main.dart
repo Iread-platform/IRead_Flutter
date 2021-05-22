@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iread_flutter/config/themes/theme.dart';
 import 'package:iread_flutter/views/open_library.dart';
+import 'package:iread_flutter/views/widgets/story/story_player.dart';
 
 import 'models/stories_section_model.dart';
 import 'models/story.dart';
@@ -20,10 +21,9 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(),
         body: Padding(
             padding: const EdgeInsets.all(20.0),
-            child: OpenLibrary(
-              sections: storiesSection,
-              storyWidth: 200,
-            )),
+            child: StoryPlayer(
+                'https://cdnm.meln.top/mx/Sia%20-%20Unstoppable.mp3?hash=MzcxNzQ1NDY0LzQ1NjI4NzY3MC5tcDM=',
+                false)),
       ),
     );
   }
