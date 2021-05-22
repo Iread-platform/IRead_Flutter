@@ -1,5 +1,6 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:iread_flutter/views/widgets/media/story_audio_player.dart';
 
 class StoryPlayer extends StatefulWidget {
   final _audioUrl;
@@ -14,17 +15,14 @@ class StoryPlayer extends StatefulWidget {
 }
 
 class _StoryPlayerState extends State<StoryPlayer> {
-  AudioCache audioCach = AudioCache();
-  AudioPlayer audioPlayer = AudioPlayer();
-
   @override
   void initState() {
-    audioPlayer.play(widget._audioUrl);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return StoryAudioPlayer(
+        audioUrl: widget._audioUrl, isAssetFile: widget._isAssetFile);
   }
 }
