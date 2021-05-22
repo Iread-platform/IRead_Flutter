@@ -74,11 +74,6 @@ class _AudioPlayerState extends State<StoryAudioPlayer>
 
                   audioPlayer
                       .seek(Duration(milliseconds: milliseconds.round()));
-                  print('width $width');
-                  print('xOffset $xOffset');
-                  print('click relative $clickRelativeX');
-                  print('duration $_duration');
-                  print('milliseconds $milliseconds');
                 },
               ),
               StreamBuilder(
@@ -127,4 +122,8 @@ class _AudioPlayerState extends State<StoryAudioPlayer>
     widget._progress.close();
     super.dispose();
   }
+
+  get positionStream => audioPlayer.onAudioPositionChanged;
+
+  get durationStream => audioPlayer.onDurationChanged;
 }

@@ -22,7 +22,11 @@ class _StoryPlayerState extends State<StoryPlayer> {
 
   @override
   Widget build(BuildContext context) {
-    return StoryAudioPlayer(
-        audioUrl: widget._audioUrl, isAssetFile: widget._isAssetFile);
+    return Column(
+      children: [
+        StoryAudioPlayer(
+            audioUrl: widget._audioUrl, isAssetFile: widget._isAssetFile),
+      ],
+    );
   }
 }
