@@ -8,8 +8,7 @@ class StoryAudioPlayer extends StatefulWidget {
   final _isAssetFile;
 
   final BehaviorSubject<int> _progress = new BehaviorSubject();
-  final BehaviorSubject<_ProgressIndicator> _pressPosition =
-      new BehaviorSubject();
+  final BehaviorSubject<dynamic> _pressPosition = new BehaviorSubject();
 
   StoryAudioPlayer({audioUrl, isAssetFile})
       : _audioUrl = audioUrl,
@@ -31,16 +30,20 @@ class _AudioPlayerState extends State<StoryAudioPlayer>
 
   double _progressBarWidth;
 
+  bool _dragStarted = false;
+
   @override
   void initState() {
     super.initState();
 
     audioPlayer.onAudioPositionChanged.listen((event) {
       widget._progress.sink.add(event.inMilliseconds);
+      widget._pressPosition.sink.add(event.inMilliseconds);
     });
     audioPlayer.onDurationChanged.listen((event) {
       _duration = event.inMilliseconds;
     });
+
     audioPlayer.play(widget._audioUrl);
 
     _playPauseAnimationController = AnimationController(
@@ -51,6 +54,13 @@ class _AudioPlayerState extends State<StoryAudioPlayer>
 
   @override
   Widget build(BuildContext context) {
+    // Get progress bar width
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      if (_progressBarKey.currentContext == null) return;
+
+      _progressBarWidth = _progressBarKey.currentContext.size.width;
+    });
+
     return Container(
       child: StreamBuilder(
         stream: widget._progress.stream,
@@ -63,6 +73,7 @@ class _AudioPlayerState extends State<StoryAudioPlayer>
             children: [
               Stack(
                 alignment: Alignment.center,
+                clipBehavior: Clip.none,
                 children: [
                   Container(
                     padding: EdgeInsets.symmetric(vertical: 24),
@@ -74,45 +85,42 @@ class _AudioPlayerState extends State<StoryAudioPlayer>
                         padding: 2.0,
                       ),
                       onTapDown: (details) {
-                        _progressBarWidth =
-                            _progressBarKey.currentContext.size.width;
-                        double xOffset = details.localPosition.dx;
-
-                        double clickRelativeX = xOffset / _progressBarWidth;
-
-                        double milliseconds = clickRelativeX * _duration;
-
-                        final duration =
-                            Duration(milliseconds: milliseconds.round());
-
+                        final offsetX = details.localPosition.dx;
+                        final duration = _calcDuration(offsetX);
                         audioPlayer.seek(duration);
-
                         widget._pressPosition.sink
-                            .add(_ProgressIndicator(duration, xOffset));
+                            .add(_ProgressIndicator(duration, offsetX));
                       },
+                      onHorizontalDragStart: (details) {},
                     ),
                   ),
                   StreamBuilder(
                     stream: widget._pressPosition,
-                    builder:
-                        (context, AsyncSnapshot<_ProgressIndicator> snapshot) {
-                      if (!snapshot.hasData) {
+                    builder: (context, AsyncSnapshot<dynamic> snapshot) {
+                      if (!snapshot.hasData || _progressBarWidth == null) {
                         return SizedBox();
                       }
 
                       final data = snapshot.data;
+                      double offsetX = 0.0;
+
+                      if (data is int && !_dragStarted) {
+                        offsetX = data.toDouble();
+                        offsetX /= _duration;
+                        offsetX *= _progressBarWidth;
+                      } else {
+                        offsetX = data.offsetX;
+                      }
+
                       return Positioned(
-                        left: data.offsetX,
+                        left: offsetX - 16,
                         child: SizedBox(
-                          width: 30,
-                          height: 30,
+                          width: 20,
+                          height: 20,
                           child: Container(
                             decoration: BoxDecoration(
                               color: Theme.of(context).colorScheme.primary,
                               shape: BoxShape.circle,
-                            ),
-                            child: Center(
-                              child: Text('${data.minutes} : ${data.seconds}'),
                             ),
                           ),
                         ),
@@ -166,6 +174,17 @@ class _AudioPlayerState extends State<StoryAudioPlayer>
   void dispose() {
     widget._progress.close();
     super.dispose();
+  }
+
+  // Calc duration based on indicator position
+  Duration _calcDuration(double xOffset) {
+    double clickRelativeX = xOffset / _progressBarWidth;
+
+    double milliseconds = clickRelativeX * _duration;
+
+    final duration = Duration(milliseconds: milliseconds.round());
+
+    return duration;
   }
 
   get positionStream => audioPlayer.onAudioPositionChanged;
