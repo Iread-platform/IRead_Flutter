@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
         body: Padding(
             padding: const EdgeInsets.all(20.0),
             child: StoryPlayer(
-                'https://cdnm.meln.top/mx/Sia%20-%20Unstoppable.mp3?hash=MzcxNzQ1NDY0LzQ1NjI4NzY3MC5tcDM=',
+                'https://cdnm.meln.top/mr/LP%20-%20Lost%20On%20You.mp3?session_key=5bfa355af48dc7c59da756c907498888&hash=ab3909c0e52f6d61f12ee7873ae11afb',
                 false)),
       ),
     );

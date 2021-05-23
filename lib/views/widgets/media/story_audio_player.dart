@@ -8,6 +8,8 @@ class StoryAudioPlayer extends StatefulWidget {
   final _isAssetFile;
 
   final BehaviorSubject<int> _progress = new BehaviorSubject();
+  final BehaviorSubject<_ProgressIndicator> _pressPosition =
+      new BehaviorSubject();
 
   StoryAudioPlayer({audioUrl, isAssetFile})
       : _audioUrl = audioUrl,
@@ -26,6 +28,8 @@ class _AudioPlayerState extends State<StoryAudioPlayer>
   GlobalKey _progressBarKey = GlobalKey();
 
   AnimationController _playPauseAnimationController;
+
+  double _progressBarWidth;
 
   @override
   void initState() {
@@ -57,24 +61,65 @@ class _AudioPlayerState extends State<StoryAudioPlayer>
 
           return Column(
             children: [
-              GestureDetector(
-                key: _progressBarKey,
-                child: ProgressBar(
-                  progress: snapshot.data / _duration,
-                  height: 15.0,
-                  padding: 2.0,
-                ),
-                onTapDown: (details) {
-                  double width = _progressBarKey.currentContext.size.width;
-                  double xOffset = details.localPosition.dx;
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 24),
+                    child: GestureDetector(
+                      key: _progressBarKey,
+                      child: ProgressBar(
+                        progress: snapshot.data / _duration,
+                        height: 15.0,
+                        padding: 2.0,
+                      ),
+                      onTapDown: (details) {
+                        _progressBarWidth =
+                            _progressBarKey.currentContext.size.width;
+                        double xOffset = details.localPosition.dx;
 
-                  double clickRelativeX = xOffset / width;
+                        double clickRelativeX = xOffset / _progressBarWidth;
 
-                  double milliseconds = clickRelativeX * _duration;
+                        double milliseconds = clickRelativeX * _duration;
 
-                  audioPlayer
-                      .seek(Duration(milliseconds: milliseconds.round()));
-                },
+                        final duration =
+                            Duration(milliseconds: milliseconds.round());
+
+                        audioPlayer.seek(duration);
+
+                        widget._pressPosition.sink
+                            .add(_ProgressIndicator(duration, xOffset));
+                      },
+                    ),
+                  ),
+                  StreamBuilder(
+                    stream: widget._pressPosition,
+                    builder:
+                        (context, AsyncSnapshot<_ProgressIndicator> snapshot) {
+                      if (!snapshot.hasData) {
+                        return SizedBox();
+                      }
+
+                      final data = snapshot.data;
+                      return Positioned(
+                        left: data.offsetX,
+                        child: SizedBox(
+                          width: 30,
+                          height: 30,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.primary,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Center(
+                              child: Text('${data.minutes} : ${data.seconds}'),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ],
               ),
               StreamBuilder(
                 stream: audioPlayer.onPlayerStateChanged,
@@ -126,4 +171,26 @@ class _AudioPlayerState extends State<StoryAudioPlayer>
   get positionStream => audioPlayer.onAudioPositionChanged;
 
   get durationStream => audioPlayer.onDurationChanged;
+}
+
+class _ProgressIndicator {
+  int _hours;
+  int _minutes;
+  int _seconds;
+  double _offsetX;
+
+  _ProgressIndicator(Duration duration, double offsetX) {
+    int seconds = duration.inSeconds;
+
+    _hours = (seconds / 3600).floor();
+    seconds %= 3600;
+    _minutes = (seconds / 60).floor();
+    _seconds = seconds % 60;
+    _offsetX = offsetX;
+  }
+
+  get seconds => _seconds;
+  get minutes => _minutes;
+  get hours => _hours;
+  get offsetX => _offsetX;
 }
