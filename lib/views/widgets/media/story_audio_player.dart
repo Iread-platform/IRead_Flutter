@@ -131,6 +131,12 @@ class _AudioPlayerState extends State<StoryAudioPlayer>
                         offsetX = data.offsetX;
                       }
 
+                      offsetX = offsetX < 0
+                          ? 16
+                          : offsetX > _progressBarWidth
+                              ? _progressBarWidth
+                              : offsetX;
+
                       _lastOffsetX = offsetX;
                       return Positioned(
                         left: offsetX - 16,
