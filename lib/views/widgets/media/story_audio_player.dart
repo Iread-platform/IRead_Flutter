@@ -191,15 +191,23 @@ class _AudioPlayerState extends State<StoryAudioPlayer>
                   iconSize: 32,
                   alignment: Alignment.bottomCenter,
                   padding: const EdgeInsets.all(0),
-                  icon: AnimatedIcon(
-                    icon: AnimatedIcons.play_pause,
-                    progress: _playPauseAnimationController,
-                  ),
+                  icon: snapshot.data != PlayerState.COMPLETED
+                      ? AnimatedIcon(
+                          icon: AnimatedIcons.play_pause,
+                          progress: _playPauseAnimationController,
+                        )
+                      : Icon(Icons.refresh),
                   onPressed: () {
                     switch (audioPlayer.state) {
                       case PlayerState.PLAYING:
                         _playPauseAnimationController.reverse();
                         audioPlayer.pause();
+                        break;
+
+                      case PlayerState.COMPLETED:
+                        _playPauseAnimationController.forward();
+                        audioPlayer.seek(Duration(milliseconds: 0));
+                        audioPlayer.resume();
                         break;
 
                       default:
