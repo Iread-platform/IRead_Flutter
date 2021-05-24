@@ -181,18 +181,19 @@ class _AudioPlayerState extends State<StoryAudioPlayer>
         stream: audioPlayer.onPlayerStateChanged,
         builder: (context, AsyncSnapshot<PlayerState> snapshot) {
           return Container(
+            alignment: Alignment.center,
             height: 25,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 IconButton(
-                  iconSize: 25,
-                  alignment: Alignment.center,
-                  icon: Center(
-                    child: AnimatedIcon(
-                      icon: AnimatedIcons.play_pause,
-                      progress: _playPauseAnimationController,
-                    ),
+                  splashRadius: 24,
+                  iconSize: 32,
+                  alignment: Alignment.bottomCenter,
+                  padding: const EdgeInsets.all(0),
+                  icon: AnimatedIcon(
+                    icon: AnimatedIcons.play_pause,
+                    progress: _playPauseAnimationController,
                   ),
                   onPressed: () {
                     switch (audioPlayer.state) {
