@@ -76,119 +76,11 @@ class _AudioPlayerState extends State<StoryAudioPlayer>
                 alignment: Alignment.center,
                 clipBehavior: Clip.none,
                 children: [
-                  Container(
-                    padding: EdgeInsets.symmetric(vertical: 24),
-                    child: GestureDetector(
-                      key: _progressBarKey,
-                      child: ProgressBar(
-                        progress: snapshot.data / _duration,
-                        height: 15.0,
-                        padding: 2.0,
-                      ),
-                      onTapDown: (details) {
-                        final offsetX = details.localPosition.dx;
-                        final duration = _calcDuration(offsetX);
-                        audioPlayer.seek(duration);
-                        widget._pressPosition.sink
-                            .add(_ProgressIndicator(duration, offsetX));
-                      },
-                      onHorizontalDragStart: (details) {
-                        _dragStarted = true;
-                        final offsetX = details.localPosition.dx;
-                        widget._pressPosition.sink.add(_ProgressIndicator(
-                            _calcDuration(offsetX), offsetX));
-                      },
-                      onHorizontalDragUpdate: (details) {
-                        final offsetX = details.localPosition.dx;
-                        widget._pressPosition.sink.add(_ProgressIndicator(
-                            _calcDuration(offsetX), offsetX));
-                      },
-                      onHorizontalDragEnd: (details) {
-                        _dragStarted = false;
-                        audioPlayer.seek(_calcDuration(_lastOffsetX));
-                      },
-                    ),
-                  ),
-                  StreamBuilder(
-                    stream: widget._pressPosition,
-                    builder: (context, AsyncSnapshot<dynamic> snapshot) {
-                      if (!snapshot.hasData || _progressBarWidth == null) {
-                        return SizedBox();
-                      }
-
-                      final data = snapshot.data;
-                      double offsetX = 0.0;
-
-                      if (data is int) {
-                        if (_dragStarted) {
-                          offsetX = _lastOffsetX;
-                        } else {
-                          offsetX = data.toDouble();
-                          offsetX /= _duration;
-                          offsetX *= _progressBarWidth;
-                        }
-                      } else {
-                        offsetX = data.offsetX;
-                      }
-
-                      offsetX = offsetX < 0
-                          ? 16
-                          : offsetX > _progressBarWidth
-                              ? _progressBarWidth
-                              : offsetX;
-
-                      _lastOffsetX = offsetX;
-                      return Positioned(
-                        left: offsetX - 16,
-                        child: SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.primary,
-                              shape: BoxShape.circle,
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
+                  _progressBar(context, snapshot.data),
+                  _progressBarIndicator(context),
                 ],
               ),
-              StreamBuilder(
-                stream: audioPlayer.onPlayerStateChanged,
-                builder: (context, AsyncSnapshot<PlayerState> snapshot) {
-                  return Container(
-                    height: 30,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        IconButton(
-                          icon: AnimatedIcon(
-                            icon: AnimatedIcons.play_pause,
-                            progress: _playPauseAnimationController,
-                            size: 25,
-                          ),
-                          onPressed: () {
-                            switch (audioPlayer.state) {
-                              case PlayerState.PLAYING:
-                                _playPauseAnimationController.reverse();
-                                audioPlayer.pause();
-                                break;
-
-                              default:
-                                _playPauseAnimationController.forward();
-                                audioPlayer.resume();
-                                break;
-                            }
-                          },
-                          color: Theme.of(context).colorScheme.primary,
-                        )
-                      ],
-                    ),
-                  );
-                },
-              )
+              _controlButtons(context)
             ],
           );
         },
@@ -202,15 +94,136 @@ class _AudioPlayerState extends State<StoryAudioPlayer>
     super.dispose();
   }
 
+  Container _progressBar(BuildContext context, int data) => Container(
+        padding: EdgeInsets.symmetric(vertical: 24),
+        child: GestureDetector(
+          key: _progressBarKey,
+          child: ProgressBar(
+            progress: data / _duration,
+            height: 15.0,
+            padding: 2.0,
+          ),
+          onTapDown: (details) {
+            final offsetX = details.localPosition.dx;
+            final duration = _calcDuration(offsetX);
+            audioPlayer.seek(duration);
+            widget._pressPosition.sink
+                .add(_ProgressIndicator(duration, offsetX));
+          },
+          onHorizontalDragStart: (details) {
+            _dragStarted = true;
+            final offsetX = details.localPosition.dx;
+            _updatePressPosition(offsetX);
+          },
+          onHorizontalDragUpdate: (details) {
+            final offsetX = details.localPosition.dx;
+            _updatePressPosition(offsetX);
+          },
+          onHorizontalDragEnd: (details) {
+            _dragStarted = false;
+            audioPlayer.seek(_calcDuration(_lastOffsetX));
+          },
+        ),
+      );
+
+  Widget _progressBarIndicator(BuildContext context) => StreamBuilder(
+        stream: widget._pressPosition,
+        builder: (context, AsyncSnapshot<dynamic> snapshot) {
+          if (!snapshot.hasData || _progressBarWidth == null) {
+            return SizedBox();
+          }
+
+          final data = snapshot.data;
+
+          return Positioned(
+            left: _calcProgressIndicatorOffset(data) - 16,
+            child: SizedBox(
+              width: 20,
+              height: 20,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary,
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ),
+          );
+        },
+      );
+
+  Widget _controlButtons(BuildContext context) => StreamBuilder(
+        stream: audioPlayer.onPlayerStateChanged,
+        builder: (context, AsyncSnapshot<PlayerState> snapshot) {
+          return Container(
+            height: 30,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  icon: AnimatedIcon(
+                    icon: AnimatedIcons.play_pause,
+                    progress: _playPauseAnimationController,
+                    size: 25,
+                  ),
+                  onPressed: () {
+                    switch (audioPlayer.state) {
+                      case PlayerState.PLAYING:
+                        _playPauseAnimationController.reverse();
+                        audioPlayer.pause();
+                        break;
+
+                      default:
+                        _playPauseAnimationController.forward();
+                        audioPlayer.resume();
+                        break;
+                    }
+                  },
+                  color: Theme.of(context).colorScheme.primary,
+                )
+              ],
+            ),
+          );
+        },
+      );
   // Calc duration based on indicator position
-  Duration _calcDuration(double xOffset) {
-    double clickRelativeX = xOffset / _progressBarWidth;
+  Duration _calcDuration(double offsetX) {
+    double clickRelativeX = offsetX / _progressBarWidth;
 
     double milliseconds = clickRelativeX * _duration;
 
     final duration = Duration(milliseconds: milliseconds.round());
 
     return duration;
+  }
+
+  void _updatePressPosition(double offsetX) {
+    widget._pressPosition.sink
+        .add(_ProgressIndicator(_calcDuration(offsetX), offsetX));
+  }
+
+  double _calcProgressIndicatorOffset(dynamic data) {
+    double offsetX = 0.0;
+
+    if (data is int) {
+      if (_dragStarted) {
+        offsetX = _lastOffsetX;
+      } else {
+        offsetX = data.toDouble();
+        offsetX /= _duration;
+        offsetX *= _progressBarWidth;
+      }
+    } else {
+      offsetX = data.offsetX;
+    }
+
+    offsetX = offsetX < 0
+        ? 16
+        : offsetX > _progressBarWidth
+            ? _progressBarWidth
+            : offsetX;
+
+    _lastOffsetX = offsetX;
+    return offsetX;
   }
 
   get positionStream => audioPlayer.onAudioPositionChanged;
