@@ -31,6 +31,7 @@ class _AudioPlayerState extends State<StoryAudioPlayer>
   double _progressBarWidth;
 
   bool _dragStarted = false;
+  double _lastOffsetX;
 
   @override
   void initState() {
@@ -91,7 +92,21 @@ class _AudioPlayerState extends State<StoryAudioPlayer>
                         widget._pressPosition.sink
                             .add(_ProgressIndicator(duration, offsetX));
                       },
-                      onHorizontalDragStart: (details) {},
+                      onHorizontalDragStart: (details) {
+                        _dragStarted = true;
+                        final offsetX = details.localPosition.dx;
+                        widget._pressPosition.sink.add(_ProgressIndicator(
+                            _calcDuration(offsetX), offsetX));
+                      },
+                      onHorizontalDragUpdate: (details) {
+                        final offsetX = details.localPosition.dx;
+                        widget._pressPosition.sink.add(_ProgressIndicator(
+                            _calcDuration(offsetX), offsetX));
+                      },
+                      onHorizontalDragEnd: (details) {
+                        _dragStarted = false;
+                        audioPlayer.seek(_calcDuration(_lastOffsetX));
+                      },
                     ),
                   ),
                   StreamBuilder(
@@ -104,14 +119,19 @@ class _AudioPlayerState extends State<StoryAudioPlayer>
                       final data = snapshot.data;
                       double offsetX = 0.0;
 
-                      if (data is int && !_dragStarted) {
-                        offsetX = data.toDouble();
-                        offsetX /= _duration;
-                        offsetX *= _progressBarWidth;
+                      if (data is int) {
+                        if (_dragStarted) {
+                          offsetX = _lastOffsetX;
+                        } else {
+                          offsetX = data.toDouble();
+                          offsetX /= _duration;
+                          offsetX *= _progressBarWidth;
+                        }
                       } else {
                         offsetX = data.offsetX;
                       }
 
+                      _lastOffsetX = offsetX;
                       return Positioned(
                         left: offsetX - 16,
                         child: SizedBox(
