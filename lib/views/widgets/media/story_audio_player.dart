@@ -64,6 +64,19 @@ class _AudioPlayerState extends State<StoryAudioPlayer>
             return Center(child: CircularProgressIndicator());
           }
 
+          int progressPercent;
+          if (snapshot.data is int) {
+            if (_dragStarted) {
+              progressPercent = _lastPosition;
+            } else {
+              progressPercent = snapshot.data;
+            }
+          } else {
+            progressPercent = snapshot.data.inMilliseconds;
+          }
+
+          _lastPosition = progressPercent;
+
           return Column(
             children: [
               Stack(
@@ -73,6 +86,22 @@ class _AudioPlayerState extends State<StoryAudioPlayer>
                   _progressBar(context, snapshot.data),
                   _progressBarIndicator(context, snapshot),
                 ],
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _positionCounter(
+                        context,
+                        _ProgressIndicator(
+                            Duration(milliseconds: _lastPosition), 0)),
+                    _positionCounter(
+                        context,
+                        _ProgressIndicator(
+                            Duration(milliseconds: _duration), 0))
+                  ],
+                ),
               ),
               _controlButtons(context)
             ],
@@ -94,23 +123,11 @@ class _AudioPlayerState extends State<StoryAudioPlayer>
       _progressBarWidth = _progressBarKey.currentContext.size.width;
     });
 
-    int progressPercent;
-    if (data is int) {
-      if (_dragStarted) {
-        progressPercent = _lastPosition;
-      } else {
-        progressPercent = data;
-      }
-    } else {
-      progressPercent = data.inMilliseconds;
-    }
-
-    _lastPosition = progressPercent;
     return Container(
       child: GestureDetector(
         key: _progressBarKey,
         child: ProgressBar(
-          progress: progressPercent / _duration,
+          progress: _lastPosition / _duration,
           height: 15.0,
           padding: 2.0,
         ),
@@ -146,7 +163,7 @@ class _AudioPlayerState extends State<StoryAudioPlayer>
     final data = snapshot.data;
 
     return Positioned(
-      left: _calcProgressIndicatorOffset(data) - 16,
+      left: _calcProgressIndicatorOffset(data) - 10,
       child: SizedBox(
         width: 20,
         height: 20,
@@ -164,15 +181,18 @@ class _AudioPlayerState extends State<StoryAudioPlayer>
         stream: audioPlayer.onPlayerStateChanged,
         builder: (context, AsyncSnapshot<PlayerState> snapshot) {
           return Container(
-            height: 30,
+            height: 25,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 IconButton(
-                  icon: AnimatedIcon(
-                    icon: AnimatedIcons.play_pause,
-                    progress: _playPauseAnimationController,
-                    size: 25,
+                  iconSize: 25,
+                  alignment: Alignment.center,
+                  icon: Center(
+                    child: AnimatedIcon(
+                      icon: AnimatedIcons.play_pause,
+                      progress: _playPauseAnimationController,
+                    ),
                   ),
                   onPressed: () {
                     switch (audioPlayer.state) {
@@ -194,6 +214,15 @@ class _AudioPlayerState extends State<StoryAudioPlayer>
           );
         },
       );
+
+  Text _positionCounter(BuildContext context, _ProgressIndicator progress) =>
+      Text(
+        '${progress.minutes}:${progress.seconds}',
+        style: Theme.of(context)
+            .textTheme
+            .bodyText2
+            .copyWith(color: Theme.of(context).colorScheme.primary),
+      );
   // Calc duration based on indicator position
   Duration _calcDuration(double offsetX) {
     double clickRelativeX = offsetX / _progressBarWidth;
@@ -206,6 +235,11 @@ class _AudioPlayerState extends State<StoryAudioPlayer>
   }
 
   void _updatePressPosition(double offsetX) {
+    offsetX = offsetX < 0
+        ? 0
+        : offsetX > _progressBarWidth
+            ? _progressBarWidth
+            : offsetX;
     widget._pressPosition.sink
         .add(_ProgressIndicator(_calcDuration(offsetX), offsetX));
   }
@@ -225,12 +259,6 @@ class _AudioPlayerState extends State<StoryAudioPlayer>
     } else {
       offsetX = data.offsetX;
     }
-
-    offsetX = offsetX < 0
-        ? 16
-        : offsetX > _progressBarWidth
-            ? _progressBarWidth
-            : offsetX;
 
     _lastOffsetX = offsetX;
     return offsetX;
