@@ -32,6 +32,7 @@ class _AudioPlayerState extends State<StoryAudioPlayer>
 
   bool _dragStarted = false;
   double _lastOffsetX;
+  int _lastPosition;
 
   @override
   void initState() {
@@ -55,17 +56,10 @@ class _AudioPlayerState extends State<StoryAudioPlayer>
 
   @override
   Widget build(BuildContext context) {
-    // Get progress bar width
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      if (_progressBarKey.currentContext == null) return;
-
-      _progressBarWidth = _progressBarKey.currentContext.size.width;
-    });
-
     return Container(
       child: StreamBuilder(
-        stream: widget._progress.stream,
-        builder: (context, AsyncSnapshot<int> snapshot) {
+        stream: widget._pressPosition.stream,
+        builder: (context, AsyncSnapshot<dynamic> snapshot) {
           if (_duration == null || !snapshot.hasData) {
             return Center(child: CircularProgressIndicator());
           }
@@ -77,7 +71,7 @@ class _AudioPlayerState extends State<StoryAudioPlayer>
                 clipBehavior: Clip.none,
                 children: [
                   _progressBar(context, snapshot.data),
-                  _progressBarIndicator(context),
+                  _progressBarIndicator(context, snapshot),
                 ],
               ),
               _controlButtons(context)
@@ -94,62 +88,77 @@ class _AudioPlayerState extends State<StoryAudioPlayer>
     super.dispose();
   }
 
-  Container _progressBar(BuildContext context, int data) => Container(
-        padding: EdgeInsets.symmetric(vertical: 24),
-        child: GestureDetector(
-          key: _progressBarKey,
-          child: ProgressBar(
-            progress: data / _duration,
-            height: 15.0,
-            padding: 2.0,
-          ),
-          onTapDown: (details) {
-            final offsetX = details.localPosition.dx;
-            final duration = _calcDuration(offsetX);
-            audioPlayer.seek(duration);
-            widget._pressPosition.sink
-                .add(_ProgressIndicator(duration, offsetX));
-          },
-          onHorizontalDragStart: (details) {
-            _dragStarted = true;
-            final offsetX = details.localPosition.dx;
-            _updatePressPosition(offsetX);
-          },
-          onHorizontalDragUpdate: (details) {
-            final offsetX = details.localPosition.dx;
-            _updatePressPosition(offsetX);
-          },
-          onHorizontalDragEnd: (details) {
-            _dragStarted = false;
-            audioPlayer.seek(_calcDuration(_lastOffsetX));
-          },
+  Container _progressBar(BuildContext context, dynamic data) {
+    // Get progress bar width
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _progressBarWidth = _progressBarKey.currentContext.size.width;
+    });
+
+    int progressPercent;
+    if (data is int) {
+      if (_dragStarted) {
+        progressPercent = _lastPosition;
+      } else {
+        progressPercent = data;
+      }
+    } else {
+      progressPercent = data.inMilliseconds;
+    }
+
+    _lastPosition = progressPercent;
+    return Container(
+      child: GestureDetector(
+        key: _progressBarKey,
+        child: ProgressBar(
+          progress: progressPercent / _duration,
+          height: 15.0,
+          padding: 2.0,
         ),
-      );
-
-  Widget _progressBarIndicator(BuildContext context) => StreamBuilder(
-        stream: widget._pressPosition,
-        builder: (context, AsyncSnapshot<dynamic> snapshot) {
-          if (!snapshot.hasData || _progressBarWidth == null) {
-            return SizedBox();
-          }
-
-          final data = snapshot.data;
-
-          return Positioned(
-            left: _calcProgressIndicatorOffset(data) - 16,
-            child: SizedBox(
-              width: 20,
-              height: 20,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary,
-                  shape: BoxShape.circle,
-                ),
-              ),
-            ),
-          );
+        onTapDown: (details) {
+          final offsetX = details.localPosition.dx;
+          final duration = _calcDuration(offsetX);
+          audioPlayer.seek(duration);
+          widget._pressPosition.sink.add(_ProgressIndicator(duration, offsetX));
         },
-      );
+        onHorizontalDragStart: (details) {
+          _dragStarted = true;
+          final offsetX = details.localPosition.dx;
+          _updatePressPosition(offsetX);
+        },
+        onHorizontalDragUpdate: (details) {
+          final offsetX = details.localPosition.dx;
+          _updatePressPosition(offsetX);
+        },
+        onHorizontalDragEnd: (details) {
+          _dragStarted = false;
+          audioPlayer.seek(_calcDuration(_lastOffsetX));
+          audioPlayer.resume();
+        },
+      ),
+    );
+  }
+
+  Widget _progressBarIndicator(BuildContext context, dynamic snapshot) {
+    if (!snapshot.hasData || _progressBarWidth == null) {
+      return SizedBox();
+    }
+
+    final data = snapshot.data;
+
+    return Positioned(
+      left: _calcProgressIndicatorOffset(data) - 16,
+      child: SizedBox(
+        width: 20,
+        height: 20,
+        child: Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.primary,
+            shape: BoxShape.circle,
+          ),
+        ),
+      ),
+    );
+  }
 
   Widget _controlButtons(BuildContext context) => StreamBuilder(
         stream: audioPlayer.onPlayerStateChanged,
@@ -201,6 +210,7 @@ class _AudioPlayerState extends State<StoryAudioPlayer>
         .add(_ProgressIndicator(_calcDuration(offsetX), offsetX));
   }
 
+  // Calc offset in case if the user drag the indicator or just tap on the progress bar
   double _calcProgressIndicatorOffset(dynamic data) {
     double offsetX = 0.0;
 
@@ -232,12 +242,14 @@ class _AudioPlayerState extends State<StoryAudioPlayer>
 }
 
 class _ProgressIndicator {
+  int _inMilliseconds;
   int _hours;
   int _minutes;
   int _seconds;
   double _offsetX;
 
   _ProgressIndicator(Duration duration, double offsetX) {
+    _inMilliseconds = duration.inMilliseconds;
     int seconds = duration.inSeconds;
 
     _hours = (seconds / 3600).floor();
@@ -251,4 +263,5 @@ class _ProgressIndicator {
   get minutes => _minutes;
   get hours => _hours;
   get offsetX => _offsetX;
+  get inMilliseconds => _inMilliseconds;
 }
