@@ -5,13 +5,13 @@ import 'package:rxdart/rxdart.dart';
 
 class StoryAudioPlayer extends StatefulWidget {
   final _audioUrl;
-  final _isAssetFile;
+  final _isLocalFile;
 
   final _bloc = StoryAudioPlayerBloc();
 
-  StoryAudioPlayer({audioUrl, isAssetFile})
+  StoryAudioPlayer({audioUrl, isLocalFile})
       : _audioUrl = audioUrl,
-        _isAssetFile = isAssetFile;
+        _isLocalFile = isLocalFile;
 
   @override
   _AudioPlayerState createState() => _AudioPlayerState();
@@ -27,7 +27,7 @@ class _AudioPlayerState extends State<StoryAudioPlayer>
   void initState() {
     super.initState();
 
-    widget._bloc.init(widget._audioUrl);
+    widget._bloc.init(widget._audioUrl, widget._isLocalFile);
 
     _playPauseAnimationController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 300));
@@ -235,7 +235,9 @@ class StoryAudioPlayerBloc {
   double _lastOffsetX;
   int _lastPosition;
 
-  void init(String audioUrl) {
+  final BehaviorSubject<dynamic> _pressPosition = new BehaviorSubject();
+
+  void init(String audioUrl, bool isLocalFile) {
     audioPlayer.onAudioPositionChanged.listen((event) {
       addPosition(event.inMilliseconds);
     });
@@ -245,8 +247,6 @@ class StoryAudioPlayerBloc {
 
     audioPlayer.play(audioUrl);
   }
-
-  final BehaviorSubject<dynamic> _pressPosition = new BehaviorSubject();
 
   void addPosition(dynamic position) {
     _pressPosition.sink.add(position);

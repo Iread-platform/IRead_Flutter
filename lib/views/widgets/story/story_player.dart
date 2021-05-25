@@ -25,7 +25,7 @@ class _StoryPlayerState extends State<StoryPlayer> {
     return Column(
       children: [
         StoryAudioPlayer(
-            audioUrl: widget._audioUrl, isAssetFile: widget._isAssetFile),
+            audioUrl: widget._audioUrl, isLocalFile: widget._isAssetFile),
       ],
     );
   }
