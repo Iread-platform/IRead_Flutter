@@ -7,8 +7,7 @@ class StoryAudioPlayer extends StatefulWidget {
   final _audioUrl;
   final _isAssetFile;
 
-  final BehaviorSubject<int> _progress = new BehaviorSubject();
-  final BehaviorSubject<dynamic> _pressPosition = new BehaviorSubject();
+  final _bloc = StoryAudioPlayerBloc();
 
   StoryAudioPlayer({audioUrl, isAssetFile})
       : _audioUrl = audioUrl,
@@ -20,33 +19,15 @@ class StoryAudioPlayer extends StatefulWidget {
 
 class _AudioPlayerState extends State<StoryAudioPlayer>
     with TickerProviderStateMixin {
-  AudioCache audioCach = AudioCache();
-  AudioPlayer audioPlayer = AudioPlayer();
-  int _duration;
-
   GlobalKey _progressBarKey = GlobalKey();
 
   AnimationController _playPauseAnimationController;
-
-  double _progressBarWidth;
-
-  bool _dragStarted = false;
-  double _lastOffsetX;
-  int _lastPosition;
 
   @override
   void initState() {
     super.initState();
 
-    audioPlayer.onAudioPositionChanged.listen((event) {
-      widget._progress.sink.add(event.inMilliseconds);
-      widget._pressPosition.sink.add(event.inMilliseconds);
-    });
-    audioPlayer.onDurationChanged.listen((event) {
-      _duration = event.inMilliseconds;
-    });
-
-    audioPlayer.play(widget._audioUrl);
+    widget._bloc.init(widget._audioUrl);
 
     _playPauseAnimationController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 300));
@@ -58,24 +39,13 @@ class _AudioPlayerState extends State<StoryAudioPlayer>
   Widget build(BuildContext context) {
     return Container(
       child: StreamBuilder(
-        stream: widget._pressPosition.stream,
+        stream: widget._bloc.positionStream,
         builder: (context, AsyncSnapshot<dynamic> snapshot) {
-          if (_duration == null || !snapshot.hasData) {
+          if (widget._bloc.duration == null || !snapshot.hasData) {
             return Center(child: CircularProgressIndicator());
           }
 
-          int progressPercent;
-          if (snapshot.data is int) {
-            if (_dragStarted) {
-              progressPercent = _lastPosition;
-            } else {
-              progressPercent = snapshot.data;
-            }
-          } else {
-            progressPercent = snapshot.data.inMilliseconds;
-          }
-
-          _lastPosition = progressPercent;
+          widget._bloc.calcLastPosition(snapshot.data);
 
           return Column(
             children: [
@@ -95,11 +65,12 @@ class _AudioPlayerState extends State<StoryAudioPlayer>
                     _positionCounter(
                         context,
                         _ProgressIndicator(
-                            Duration(milliseconds: _lastPosition), 0)),
+                            Duration(milliseconds: widget._bloc.lastPosition),
+                            0)),
                     _positionCounter(
                         context,
                         _ProgressIndicator(
-                            Duration(milliseconds: _duration), 0))
+                            Duration(milliseconds: widget._bloc.duration), 0))
                   ],
                 ),
               ),
@@ -113,57 +84,53 @@ class _AudioPlayerState extends State<StoryAudioPlayer>
 
   @override
   void dispose() {
-    widget._progress.close();
+    widget._bloc.dispose();
     super.dispose();
   }
 
   Container _progressBar(BuildContext context, dynamic data) {
     // Get progress bar width
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      _progressBarWidth = _progressBarKey.currentContext.size.width;
+      widget._bloc._progressBarWidth =
+          _progressBarKey.currentContext.size.width;
     });
 
     return Container(
       child: GestureDetector(
         key: _progressBarKey,
         child: ProgressBar(
-          progress: _lastPosition / _duration,
+          progress: widget._bloc.progressPercent,
           height: 15.0,
           padding: 2.0,
         ),
         onTapDown: (details) {
           final offsetX = details.localPosition.dx;
-          final duration = _calcDuration(offsetX);
-          audioPlayer.seek(duration);
-          widget._pressPosition.sink.add(_ProgressIndicator(duration, offsetX));
+          widget._bloc.playOnOffset(offsetX);
         },
         onHorizontalDragStart: (details) {
-          _dragStarted = true;
           final offsetX = details.localPosition.dx;
-          _updatePressPosition(offsetX);
+          widget._bloc.startDrag(offsetX);
         },
         onHorizontalDragUpdate: (details) {
           final offsetX = details.localPosition.dx;
-          _updatePressPosition(offsetX);
+          widget._bloc.updatePressPosition(offsetX);
         },
         onHorizontalDragEnd: (details) {
-          _dragStarted = false;
-          audioPlayer.seek(_calcDuration(_lastOffsetX));
-          audioPlayer.resume();
+          widget._bloc.endDrag();
         },
       ),
     );
   }
 
   Widget _progressBarIndicator(BuildContext context, dynamic snapshot) {
-    if (!snapshot.hasData || _progressBarWidth == null) {
+    if (!snapshot.hasData || widget._bloc.progressBarWidth == null) {
       return SizedBox();
     }
 
     final data = snapshot.data;
 
     return Positioned(
-      left: _calcProgressIndicatorOffset(data) - 10,
+      left: widget._bloc.calcProgressIndicatorOffset(data) - 10,
       child: SizedBox(
         width: 20,
         height: 20,
@@ -178,7 +145,7 @@ class _AudioPlayerState extends State<StoryAudioPlayer>
   }
 
   Widget _controlButtons(BuildContext context) => StreamBuilder(
-        stream: audioPlayer.onPlayerStateChanged,
+        stream: widget._bloc.playerStateStream,
         builder: (context, AsyncSnapshot<PlayerState> snapshot) {
           return Container(
             alignment: Alignment.center,
@@ -198,21 +165,20 @@ class _AudioPlayerState extends State<StoryAudioPlayer>
                         )
                       : Icon(Icons.refresh),
                   onPressed: () {
-                    switch (audioPlayer.state) {
+                    switch (widget._bloc.currentState) {
                       case PlayerState.PLAYING:
                         _playPauseAnimationController.reverse();
-                        audioPlayer.pause();
+                        widget._bloc.pause();
                         break;
 
                       case PlayerState.COMPLETED:
                         _playPauseAnimationController.forward();
-                        audioPlayer.seek(Duration(milliseconds: 0));
-                        audioPlayer.resume();
+                        widget._bloc.stop();
                         break;
 
                       default:
                         _playPauseAnimationController.forward();
-                        audioPlayer.resume();
+                        widget._bloc.resume();
                         break;
                     }
                   },
@@ -232,50 +198,6 @@ class _AudioPlayerState extends State<StoryAudioPlayer>
             .bodyText2
             .copyWith(color: Theme.of(context).colorScheme.primary),
       );
-  // Calc duration based on indicator position
-  Duration _calcDuration(double offsetX) {
-    double clickRelativeX = offsetX / _progressBarWidth;
-
-    double milliseconds = clickRelativeX * _duration;
-
-    final duration = Duration(milliseconds: milliseconds.round());
-
-    return duration;
-  }
-
-  void _updatePressPosition(double offsetX) {
-    offsetX = offsetX < 0
-        ? 0
-        : offsetX > _progressBarWidth
-            ? _progressBarWidth
-            : offsetX;
-    widget._pressPosition.sink
-        .add(_ProgressIndicator(_calcDuration(offsetX), offsetX));
-  }
-
-  // Calc offset in case if the user drag the indicator or just tap on the progress bar
-  double _calcProgressIndicatorOffset(dynamic data) {
-    double offsetX = 0.0;
-
-    if (data is int) {
-      if (_dragStarted) {
-        offsetX = _lastOffsetX;
-      } else {
-        offsetX = data.toDouble();
-        offsetX /= _duration;
-        offsetX *= _progressBarWidth;
-      }
-    } else {
-      offsetX = data.offsetX;
-    }
-
-    _lastOffsetX = offsetX;
-    return offsetX;
-  }
-
-  get positionStream => audioPlayer.onAudioPositionChanged;
-
-  get durationStream => audioPlayer.onDurationChanged;
 }
 
 class _ProgressIndicator {
@@ -301,4 +223,131 @@ class _ProgressIndicator {
   get hours => _hours;
   get offsetX => _offsetX;
   get inMilliseconds => _inMilliseconds;
+}
+
+class StoryAudioPlayerBloc {
+  AudioCache audioCache = AudioCache();
+  AudioPlayer audioPlayer = AudioPlayer();
+  int _duration;
+
+  double _progressBarWidth;
+  bool _dragStarted = false;
+  double _lastOffsetX;
+  int _lastPosition;
+
+  void init(String audioUrl) {
+    audioPlayer.onAudioPositionChanged.listen((event) {
+      addPosition(event.inMilliseconds);
+    });
+    audioPlayer.onDurationChanged.listen((event) {
+      _duration = event.inMilliseconds;
+    });
+
+    audioPlayer.play(audioUrl);
+  }
+
+  final BehaviorSubject<dynamic> _pressPosition = new BehaviorSubject();
+
+  void addPosition(dynamic position) {
+    _pressPosition.sink.add(position);
+  }
+
+  void updatePressPosition(double offsetX) {
+    offsetX = offsetX < 0
+        ? 0
+        : offsetX > _progressBarWidth
+            ? _progressBarWidth
+            : offsetX;
+    _pressPosition.sink.add(_ProgressIndicator(calcDuration(offsetX), offsetX));
+  }
+
+  // Calc duration based on indicator position
+  Duration calcDuration(double offsetX) {
+    double clickRelativeX = offsetX / _progressBarWidth;
+
+    double milliseconds = clickRelativeX * _duration;
+
+    final duration = Duration(milliseconds: milliseconds.round());
+
+    return duration;
+  }
+
+  // Calc offset in case if the user drag the indicator or just tap on the progress bar
+  double calcProgressIndicatorOffset(dynamic data) {
+    double offsetX = 0.0;
+
+    if (data is int) {
+      if (_dragStarted) {
+        offsetX = _lastOffsetX;
+      } else {
+        offsetX = data.toDouble();
+        offsetX /= _duration;
+        offsetX *= _progressBarWidth;
+      }
+    } else {
+      offsetX = data.offsetX;
+    }
+
+    _lastOffsetX = offsetX;
+    return offsetX;
+  }
+
+  void calcLastPosition(dynamic data) {
+    int progressPercent;
+    if (data is int) {
+      if (_dragStarted) {
+        progressPercent = _lastPosition;
+      } else {
+        progressPercent = data;
+      }
+    } else {
+      progressPercent = data.inMilliseconds;
+    }
+
+    _lastPosition = progressPercent;
+  }
+
+  void playOnOffset(double offsetX) {
+    final duration = calcDuration(offsetX);
+    audioPlayer.seek(duration);
+    addPosition(_ProgressIndicator(duration, offsetX));
+  }
+
+  void startDrag(double offsetX) {
+    _dragStarted = true;
+    updatePressPosition(offsetX);
+  }
+
+  void endDrag() {
+    _dragStarted = false;
+    audioPlayer.seek(calcDuration(_lastOffsetX));
+    audioPlayer.resume();
+  }
+
+  void resume() {
+    audioPlayer.resume();
+  }
+
+  void pause() {
+    audioPlayer.pause();
+  }
+
+  void stop() {
+    audioPlayer.stop();
+    resume();
+  }
+
+  void dispose() {
+    _pressPosition.close();
+  }
+
+  get positionStream => _pressPosition.stream;
+  get playerStateStream => audioPlayer.onPlayerStateChanged;
+
+  get duration => _duration;
+  get dragStarted => _dragStarted;
+  get lastPosition => _lastPosition;
+  get progressPercent => _lastPosition / _duration;
+  get currentState => audioPlayer.state;
+  get progressBarWidth => _progressBarWidth;
 }
