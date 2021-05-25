@@ -56,6 +56,30 @@ class _AudioPlayerState extends State<StoryAudioPlayer>
                 children: [
                   _progressBar(context, snapshot.data),
                   _progressBarIndicator(context, snapshot),
+                  Positioned(
+                    top: 0,
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: GestureDetector(
+                      child: Container(color: Colors.transparent),
+                      onTapDown: (details) {
+                        final offsetX = details.localPosition.dx;
+                        widget._bloc.playOnOffset(offsetX);
+                      },
+                      onHorizontalDragStart: (details) {
+                        final offsetX = details.localPosition.dx;
+                        widget._bloc.startDrag(offsetX);
+                      },
+                      onHorizontalDragUpdate: (details) {
+                        final offsetX = details.localPosition.dx;
+                        widget._bloc.updatePressPosition(offsetX);
+                      },
+                      onHorizontalDragEnd: (details) {
+                        widget._bloc.endDrag();
+                      },
+                    ),
+                  )
                 ],
               ),
               Padding(
@@ -97,28 +121,11 @@ class _AudioPlayerState extends State<StoryAudioPlayer>
     });
 
     return Container(
-      child: GestureDetector(
-        key: _progressBarKey,
-        child: ProgressBar(
-          progress: widget._bloc.progressPercent,
-          height: 15.0,
-          padding: 2.0,
-        ),
-        onTapDown: (details) {
-          final offsetX = details.localPosition.dx;
-          widget._bloc.playOnOffset(offsetX);
-        },
-        onHorizontalDragStart: (details) {
-          final offsetX = details.localPosition.dx;
-          widget._bloc.startDrag(offsetX);
-        },
-        onHorizontalDragUpdate: (details) {
-          final offsetX = details.localPosition.dx;
-          widget._bloc.updatePressPosition(offsetX);
-        },
-        onHorizontalDragEnd: (details) {
-          widget._bloc.endDrag();
-        },
+      key: _progressBarKey,
+      child: ProgressBar(
+        progress: widget._bloc.progressPercent,
+        height: 15.0,
+        padding: 2.0,
       ),
     );
   }

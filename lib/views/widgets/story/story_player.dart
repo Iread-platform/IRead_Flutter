@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:iread_flutter/bloc/story_player_bloc.dart';
 import 'package:iread_flutter/views/widgets/media/story_audio_player.dart';
 import 'package:provider/provider.dart';
 
