@@ -1,6 +1,7 @@
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:iread_flutter/bloc/story_player_bloc.dart';
 import 'package:iread_flutter/views/widgets/media/story_audio_player.dart';
+import 'package:provider/provider.dart';
 
 class StoryPlayer extends StatefulWidget {
   final _audioUrl;
@@ -25,7 +26,9 @@ class _StoryPlayerState extends State<StoryPlayer> {
     return Column(
       children: [
         StoryAudioPlayer(
-            audioUrl: widget._audioUrl, isLocalFile: widget._isAssetFile),
+            audioUrl: widget._audioUrl,
+            isLocalFile: widget._isAssetFile,
+            bloc: Provider.of<StoryAudioPlayerBloc>(context)),
       ],
     );
   }

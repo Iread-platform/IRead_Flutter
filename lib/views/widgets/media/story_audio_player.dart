@@ -7,11 +7,12 @@ class StoryAudioPlayer extends StatefulWidget {
   final _audioUrl;
   final _isLocalFile;
 
-  final _bloc = StoryAudioPlayerBloc();
+  final _bloc;
 
-  StoryAudioPlayer({audioUrl, isLocalFile})
+  StoryAudioPlayer({audioUrl, isLocalFile, bloc})
       : _audioUrl = audioUrl,
-        _isLocalFile = isLocalFile;
+        _isLocalFile = isLocalFile,
+        _bloc = bloc;
 
   @override
   _AudioPlayerState createState() => _AudioPlayerState();
@@ -225,7 +226,7 @@ class _ProgressIndicator {
   get inMilliseconds => _inMilliseconds;
 }
 
-class StoryAudioPlayerBloc {
+class StoryAudioPlayerBloc extends ChangeNotifier {
   AudioCache audioCache = AudioCache();
   AudioPlayer audioPlayer = AudioPlayer();
   int _duration;
