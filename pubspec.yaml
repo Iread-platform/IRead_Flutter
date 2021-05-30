@@ -30,6 +30,9 @@ dependencies:
   cupertino_icons: ^1.0.2
   provider: ^5.0.0
   speech_bubble: ^0.0.9
+  fluro: ^2.0.3
+  flutter_svg: ^0.22.0
+  http: ^0.13.3
 
 dev_dependencies:
   flutter_test:
@@ -45,6 +48,8 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  assets:
+    - assets/images/shared/star.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

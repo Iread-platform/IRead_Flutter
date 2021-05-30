@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:iread_flutter/themes/border_radius.dart';
+
+import 'package:iread_flutter/config/themes/border_radius.dart';
+import 'package:iread_flutter/views/widgets/shared/progress_bar.dart';
 import 'package:iread_flutter/views/widgets/story/story_image.dart';
 
 /// [progress] determines progress bar value, if progress is not exist
@@ -47,23 +49,18 @@ class StoryCard extends StatelessWidget {
     }
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
-      child: Container(
-        padding: EdgeInsets.all(2),
-        decoration: BoxDecoration(
-            border: Border.all(color: _color, width: 1),
-            borderRadius: BorderRadius.circular(storyBorderRadius)),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(storyBorderRadius),
-          child: LinearProgressIndicator(
-            backgroundColor: Theme.of(context).colorScheme.surface,
-            value: _progress,
-            valueColor: AlwaysStoppedAnimation<Color>(_color),
-            minHeight: 8,
-          ),
-        ),
-      ),
-    );
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
+        child: ProgressBar(
+          borderRadius: storyBorderRadius,
+          color: _color,
+          height: 12,
+          progress: _progress,
+          borderWidth: 2,
+          padding: 1,
+          dropShadow: true,
+          shadowOffset: Offset(1, 1),
+          shadowBlurRadius: 10,
+        ));
   }
 
   Widget _storyTitle(BuildContext context) => Text(_title,
