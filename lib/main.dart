@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iread_flutter/config/themes/theme.dart';
+import 'package:iread_flutter/utils/i_read_icons.dart';
 import 'package:iread_flutter/views/open_library.dart';
 
 import 'models/stories_section_model.dart';
@@ -17,18 +18,17 @@ class MyApp extends StatelessWidget {
       title: 'Iread',
       theme: mainTheme,
       home: Scaffold(
-        appBar: AppBar(),
-        body: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: OpenLibrary(
-              sections: storiesSection,
-              storyWidth: 200,
-            )),
-      ),
+          appBar: AppBar(),
+          body: Container(
+            child: Center(
+              child: Icon(IReadIcons.arrow),
+            ),
+          )),
     );
   }
 }
 
+// ignore: todo
 // TODO clear static stories
 List<StoriesSectionModel> storiesSection = [
   StoriesSectionModel('Continue Reading', [story, story, story, story]),
