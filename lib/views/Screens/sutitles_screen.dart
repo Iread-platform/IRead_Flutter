@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:iread_flutter/utils/i_read_icons.dart';
 import 'package:iread_flutter/views/widgets/user/avatar.dart';
 
 class SubtitlesScreen extends StatelessWidget {
@@ -23,7 +24,8 @@ class SubtitlesScreen extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 padding: EdgeInsets.all(20),
                 child: Icon(
-                  Icons.menu_rounded,
+                  IReadIcons.list,
+                  color: Theme.of(context).primaryColor,
                   size: 40,
                 ),
               ),

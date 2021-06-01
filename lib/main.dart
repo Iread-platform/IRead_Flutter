@@ -5,7 +5,6 @@ import 'package:iread_flutter/utils/i_read_icons.dart';
 import 'models/stories_section_model.dart';
 import 'models/story.dart';
 
-
 void main() {
   runApp(MyApp());
 }
@@ -18,12 +17,13 @@ class MyApp extends StatelessWidget {
       title: 'Iread',
       theme: mainTheme,
       home: Scaffold(
-          appBar: AppBar(),
-          body: Container(
-            child: Center(
-              child: Icon(IReadIcons.arrow),
-            ),
-          )),
+        appBar: AppBar(),
+        body: Container(
+          child: Center(
+            child: Icon(IReadIcons.arrow),
+          ),
+        ),
+      ),
     );
   }
 }
