@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:iread_flutter/config/themes/theme.dart';
 import 'package:iread_flutter/utils/i_read_icons.dart';
-import 'package:iread_flutter/views/open_library.dart';
 
 import 'models/stories_section_model.dart';
 import 'models/story.dart';
+
 
 void main() {
   runApp(MyApp());

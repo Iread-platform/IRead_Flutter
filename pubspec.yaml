@@ -28,8 +28,8 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  fluro: ^2.0.3
   flutter_svg: ^0.22.0
+  fluro: ^2.0.3
   http: ^0.13.3
 
 dev_dependencies:
@@ -46,13 +46,13 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-  assets:
-    - assets/images/shared/star.png
+    
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+    - assets/images/shared/curve_top.svg
+    - assets/images/shared/curve_bottom.svg
+    - assets/images/shared/star.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
