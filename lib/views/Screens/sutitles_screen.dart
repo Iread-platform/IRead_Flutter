@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:iread_flutter/utils/i_read_icons.dart';
+import 'package:iread_flutter/views/widgets/user/avatar.dart';
 
 class SubtitlesScreen extends StatelessWidget {
   @override
@@ -22,7 +24,8 @@ class SubtitlesScreen extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 padding: EdgeInsets.all(20),
                 child: Icon(
-                  Icons.menu_rounded,
+                  IReadIcons.list,
+                  color: Theme.of(context).primaryColor,
                   size: 40,
                 ),
               ),
@@ -37,7 +40,7 @@ class SubtitlesScreen extends StatelessWidget {
                       child: Transform.scale(
                         scale: 1.25,
                         child: SvgPicture.asset(
-                          "assets/subtitles_background_top.svg",
+                          "assets/images/shared/curve_top.svg",
                           color: Colors.orangeAccent,
                           alignment: Alignment.topRight,
                         ),
@@ -55,10 +58,10 @@ class SubtitlesScreen extends StatelessWidget {
                             ),
                             Container(
                               width: w * 0.8 * 0.4,
-                              child: CircleAvatar(
-                                radius: 45.0,
-                                backgroundImage: NetworkImage(
-                                    'https://cdn3.vectorstock.com/i/1000x1000/33/62/boy-kid-inside-circle-design-vector-11353362.jpg'),
+                              child: UserAvatar(
+                                imageUrl:
+                                    "https://cdn3.vectorstock.com/i/1000x1000/33/62/boy-kid-inside-circle-design-vector-11353362.jpg",
+                                radius: 70.3,
                               ),
                             ),
                           ],
@@ -74,43 +77,50 @@ class SubtitlesScreen extends StatelessWidget {
           height: h * 0.5,
           width: w * 0.8,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Text(
-                "subtitles",
-                style: Theme.of(context).textTheme.headline4,
+              Container(
+                width: w * 0.7,
+                child: Text(
+                  "subtitles",
+                  style: Theme.of(context).textTheme.headline3,
+                ),
               ),
               Container(
                 alignment: Alignment.center,
                 child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.purple,
-                    padding: EdgeInsets.symmetric(horizontal: 80, vertical: 15),
+                  child: Container(
+                    alignment: Alignment.center,
+                    width: w * 0.6,
+                    height: 50,
+                    child: Text("الكتب العربية"),
                   ),
-                  child: Text("الكتب العربية"),
                   onPressed: () {},
                 ),
               ),
               Container(
                 alignment: Alignment.center,
                 child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.purple,
-                    padding: EdgeInsets.symmetric(horizontal: 80, vertical: 15),
+                  child: Container(
+                    alignment: Alignment.center,
+                    width: w * 0.6,
+                    height: 50,
+                    child: Text("English Book"),
                   ),
-                  child: Text("English Book"),
                   onPressed: () {},
                 ),
               ),
               Container(
                 alignment: Alignment.center,
                 child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.purple,
-                    padding: EdgeInsets.symmetric(horizontal: 80, vertical: 15),
+                  style: ButtonStyle(),
+                  child: Container(
+                    alignment: Alignment.center,
+                    width: w * 0.6,
+                    height: 50,
+                    child: Text("Francais Book"),
                   ),
-                  child: Text("Francais Book"),
                   onPressed: () {},
                 ),
               ),
@@ -130,7 +140,7 @@ class SubtitlesScreen extends StatelessWidget {
                     child: Transform.scale(
                       scale: 1.6,
                       child: SvgPicture.asset(
-                        "assets/subtitles_background_bottom.svg",
+                        "assets/images/shared/curve_bottom.svg",
                         color: Colors.pink[200],
                         alignment: Alignment.topRight,
                       ),

@@ -4,6 +4,7 @@ import 'package:iread_flutter/views/widgets/story/profile_story_card.dart';
 
 class AppRoutes {
   static final List<AppRoute> appRoutes = [
+    // ignore: todo
     // TODO remove dummy route
     AppRoute(
       '/profileStory',
