@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iread_flutter/utils/i_read_icons.dart';
 
 class DrawerWidget extends StatelessWidget {
   @override
@@ -13,31 +14,44 @@ class DrawerWidget extends StatelessWidget {
         child: Center(
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 20),
-            height: h * 0.7,
+            height: h * 0.8,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(Icons.clear_rounded, size: 40, color: Colors.purple),
-                iconWithText(title: " Home", icon: Icons.home, on_Tap: () {}),
-                iconWithText(
-                  title: " Open Library",
-                  icon: Icons.menu_book_sharp,
-                  on_Tap: () {},
+                Icon(Icons.clear_rounded,
+                    size: 40, color: Theme.of(context).colorScheme.primary),
+                SizedBox(
+                  height: 30,
                 ),
                 iconWithText(
-                  title: " Assignment",
-                  icon: Icons.assignment,
-                  on_Tap: () {},
+                  context,
+                  title: "Home",
+                  icon: IReadIcons.home,
+                  onTap: () {},
                 ),
                 iconWithText(
-                  title: " Profile",
-                  icon: Icons.person,
-                  on_Tap: () {},
+                  context,
+                  title: "Open Library",
+                  icon: IReadIcons.book,
+                  onTap: () {},
                 ),
                 iconWithText(
-                  title: " Subtitles",
-                  icon: Icons.subtitles,
-                  on_Tap: () {},
+                  context,
+                  title: "Assignment",
+                  icon: IReadIcons.assignment,
+                  onTap: () {},
+                ),
+                iconWithText(
+                  context,
+                  title: "Profile",
+                  icon: IReadIcons.profile,
+                  onTap: () {},
+                ),
+                iconWithText(
+                  context,
+                  title: "Subtitles",
+                  icon: IReadIcons.subtitles,
+                  onTap: () {},
                 ),
               ],
             ),
@@ -47,7 +61,8 @@ class DrawerWidget extends StatelessWidget {
     );
   }
 
-  Widget iconWithText({String title, IconData icon, Function on_Tap}) {
+  Widget iconWithText(BuildContext context,
+      {String title, IconData icon, Function onTap}) {
     return InkWell(
       splashColor: Colors.black.withOpacity(0.5),
       borderRadius: BorderRadius.circular(100),
@@ -56,18 +71,17 @@ class DrawerWidget extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Icon(icon, size: 40, color: Colors.purple),
-            Text(
-              title,
-              style: TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.purple),
+            Container(
+                child: Icon(icon,
+                    size: 35, color: Theme.of(context).colorScheme.primary)),
+            SizedBox(
+              width: 20,
             ),
+            Text(title, style: Theme.of(context).textTheme.headline4),
           ],
         ),
       ),
-      onTap: on_Tap,
+      onTap: onTap,
     );
   }
 }

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:iread_flutter/views/widgets/story/story_card.dart';
+import 'package:iread_flutter/config/themes/theme.dart';
+import 'package:iread_flutter/utils/i_read_icons.dart';
+
+import 'models/stories_section_model.dart';
+import 'models/story.dart';
 
 import 'views/widgets/drawer_widget.dart';
 
@@ -12,36 +16,40 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
+      title: 'Iread',
+      theme: mainTheme,
       home: Scaffold(
         appBar: AppBar(),
         drawer: DrawerWidget(),
-        body: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: StoryCard(
-            color: Colors.blue[300],
-            title: 'Wood, Wire, Wings',
-            imageUrl:
-                'https://i.pinimg.com/236x/20/3b/53/203b533756c2a5efe9bafb39960b4fcb.jpg',
-            progress: 0.3,
+        body: Container(
+          child: Center(
+            child: Icon(IReadIcons.arrow),
           ),
         ),
       ),
     );
   }
 }
+
+// ignore: todo
+// TODO clear static stories
+List<StoriesSectionModel> storiesSection = [
+  StoriesSectionModel('Continue Reading', [story, story, story, story]),
+  StoriesSectionModel('Continue Reading', [story, story, story, story]),
+  StoriesSectionModel('Continue Reading', [story, story, story, story]),
+  StoriesSectionModel('Continue Reading', [story, story, story, story]),
+  StoriesSectionModel('Continue Reading', [story, story, story, story]),
+  StoriesSectionModel('Continue Reading', [story, story, story, story]),
+  StoriesSectionModel('Continue Reading', [story, story, story, story]),
+];
+
+Story story = Story(
+    title: 'Wood, Wire, Wings',
+    color: Colors.teal,
+    imageUrl: 'https://blog-cdn.reedsy.com/uploads/2019/12/another.jpg',
+    progress: 0.45,
+    flippedPages: 53,
+    readingTime: 127.25);
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
