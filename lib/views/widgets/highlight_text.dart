@@ -25,7 +25,7 @@ class HighlighText extends StatelessWidget {
     var h = MediaQuery.of(context).size.height;
     return Center(
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 10, vertical: 140),
+        // margin: EdgeInsets.symmetric(horizontal: 10, vertical: 140),
         height: h,
         child: SelectableText.rich(
           TextSpan(children: getStory(context)),

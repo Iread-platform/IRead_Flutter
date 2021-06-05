@@ -105,7 +105,7 @@ class MyTextSelectionControls extends TextSelectionControls {
     return Consumer<TextSelectionProvider>(
       builder: (context, cart, child) {
         return TextSelectionToolbar(
-            anchorAbove: Offset(position.dx + 10, position.dy + 135),
+            anchorAbove: Offset(position.dx, position.dy),
             anchorBelow: Offset(position.dx + 10, -140),
             toolbarBuilder: (context, _) {
               return Container(
