@@ -15,11 +15,11 @@ class StoriesSearchList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(12.0),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 24),
       child: Column(
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Container(
                 padding:
@@ -30,7 +30,7 @@ class StoriesSearchList extends StatelessWidget {
                     boxShadow: [mediumBottomRightShadow]),
                 child: Text(
                   _storiesSection.title,
-                  style: Theme.of(context).textTheme.headline2,
+                  style: Theme.of(context).textTheme.headline6,
                 ),
               )
             ],
