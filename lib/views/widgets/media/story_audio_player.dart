@@ -1,3 +1,4 @@
+import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:iread_flutter/views/widgets/shared/progress_bar.dart';
@@ -154,7 +155,7 @@ class _AudioPlayerState extends State<StoryAudioPlayer>
 
   Widget _controlButtons(BuildContext context) => StreamBuilder(
         stream: widget._bloc.playerStateStream,
-        builder: (context, AsyncSnapshot<PlayerState> snapshot) {
+        builder: (context, AsyncSnapshot<AudioPlayerState> snapshot) {
           return Container(
             alignment: Alignment.center,
             height: 25,
@@ -166,7 +167,7 @@ class _AudioPlayerState extends State<StoryAudioPlayer>
                   iconSize: 32,
                   alignment: Alignment.bottomCenter,
                   padding: const EdgeInsets.all(0),
-                  icon: snapshot.data != PlayerState.COMPLETED
+                  icon: snapshot.data != AudioPlayerState.COMPLETED
                       ? AnimatedIcon(
                           icon: AnimatedIcons.play_pause,
                           progress: _playPauseAnimationController,
@@ -174,12 +175,12 @@ class _AudioPlayerState extends State<StoryAudioPlayer>
                       : Icon(Icons.refresh),
                   onPressed: () {
                     switch (widget._bloc.currentState) {
-                      case PlayerState.PLAYING:
+                      case AudioPlayerState.PLAYING:
                         _playPauseAnimationController.reverse();
                         widget._bloc.pause();
                         break;
 
-                      case PlayerState.COMPLETED:
+                      case AudioPlayerState.COMPLETED:
                         _playPauseAnimationController.forward();
                         widget._bloc.stop();
                         break;
