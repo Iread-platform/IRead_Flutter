@@ -1,6 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:iread_flutter/themes/border_radius.dart';
+
+import 'package:iread_flutter/config/themes/border_radius.dart';
 
 /// [imageUrl] refer to the network url og the image, 'do not use asset path',
 /// It is 'required'.
@@ -15,7 +15,7 @@ class StoryImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container(
         alignment: Alignment.bottomRight,
-        padding: EdgeInsets.only(left: 24, top: 8),
+        padding: EdgeInsets.only(left: 12, top: 8),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(storyBorderRadius),
             color: _color,

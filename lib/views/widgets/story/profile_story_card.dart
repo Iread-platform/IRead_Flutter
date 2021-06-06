@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:iread_flutter/themes/border_radius.dart';
+
+import 'package:iread_flutter/config/themes/border_radius.dart';
+import 'package:iread_flutter/views/widgets/layout/responsive_layout_builder.dart';
 import 'package:iread_flutter/views/widgets/story/story_image.dart';
 
 class ProfileStoryCard extends StatelessWidget {
@@ -34,9 +36,10 @@ class ProfileStoryCard extends StatelessWidget {
         alignment: Alignment.centerRight,
         children: [
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Flexible(flex: 2, child: Container()),
-              Flexible(flex: 4, child: _storyDetails(context)),
+              Flexible(flex: 3, child: _storyDetails(context))
             ],
           ),
           Row(
@@ -53,16 +56,21 @@ class ProfileStoryCard extends StatelessWidget {
   }
 
   Widget _storyDetails(BuildContext context) => Container(
-        margin: EdgeInsets.only(top: 16, bottom: 8, left: 12),
+        padding: EdgeInsets.only(top: 24, bottom: 8),
         child: Column(
           children: [
-            Expanded(flex: 3, child: _storyPagesAndTime(context)),
-            Expanded(flex: 1, child: _storyProgress(context)),
+            Expanded(
+                flex: 3,
+                child: ResponsiveLayoutBuilder(
+                    onXSm: (context) => _storyPagesAndTime(context, 12),
+                    onSm: (context) => _storyPagesAndTime(context, 32))),
+            Expanded(flex: 1, child: _storyProgress(context, 12)),
           ],
         ),
       );
 
-  Widget _storyPagesAndTime(BuildContext context) => Container(
+  Widget _storyPagesAndTime(BuildContext context, double leftPadding) =>
+      Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(smallBorderRadius),
             color: Theme.of(context).colorScheme.surface,
@@ -73,14 +81,19 @@ class ProfileStoryCard extends StatelessWidget {
                   offset: Offset(1, 0),
                   spreadRadius: -1)
             ]),
-        padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+        padding:
+            EdgeInsets.only(left: leftPadding, top: 8, bottom: 8, right: 8),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            _detailsRow(
-                context, _readingTimeTitle, _readingTime.toString() + ' m'),
-            _detailsRow(
-                context, _flippedTimePages, _flippedPages.toString() + 'page')
+            Expanded(
+              child: _detailsRow(
+                  context, _readingTimeTitle, _readingTime.toString() + ' m'),
+            ),
+            Expanded(
+              child: _detailsRow(context, _flippedTimePages,
+                  _flippedPages.toString() + ' pages'),
+            )
           ],
         ),
       );
@@ -99,25 +112,26 @@ class ProfileStoryCard extends StatelessWidget {
         ],
       );
 
-  Widget _storyProgress(BuildContext context) {
+  Widget _storyProgress(BuildContext context, double leftPadding) {
     return Container(
-      alignment: Alignment.center,
+      padding: EdgeInsets.only(left: leftPadding, right: 8),
+      alignment: Alignment.centerRight,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(smallBorderRadius),
         color: _color,
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Flexible(
-            flex: 5,
+            flex: 10,
             child: Container(
               height: 12,
               decoration: BoxDecoration(
                   border: Border.all(
                       width: 2, color: Theme.of(context).colorScheme.surface),
                   borderRadius: BorderRadius.circular(storyBorderRadius)),
-              margin: EdgeInsets.symmetric(horizontal: 32),
+              margin: EdgeInsets.only(right: 12),
               child: LinearProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(_color),
                 value: _progress,
@@ -126,7 +140,7 @@ class ProfileStoryCard extends StatelessWidget {
             ),
           ),
           Flexible(
-            flex: 1,
+            flex: 3,
             child: Text(
               _progress.toString() + '%',
               style: Theme.of(context)

@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:iread_flutter/config/themes/theme.dart';
+import 'package:iread_flutter/utils/i_read_icons.dart';
 import 'package:iread_flutter/views/widgets/story/profile_story_card.dart';
+
+import 'models/stories_section_model.dart';
+import 'models/story.dart';
 
 void main() {
   runApp(MyApp());
@@ -10,19 +15,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
+      title: 'Iread',
+      theme: mainTheme,
       home: Scaffold(
         appBar: AppBar(),
         body: Padding(
@@ -40,6 +34,26 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+// ignore: todo
+// TODO clear static stories
+List<StoriesSectionModel> storiesSection = [
+  StoriesSectionModel('Continue Reading', [story, story, story, story]),
+  StoriesSectionModel('Continue Reading', [story, story, story, story]),
+  StoriesSectionModel('Continue Reading', [story, story, story, story]),
+  StoriesSectionModel('Continue Reading', [story, story, story, story]),
+  StoriesSectionModel('Continue Reading', [story, story, story, story]),
+  StoriesSectionModel('Continue Reading', [story, story, story, story]),
+  StoriesSectionModel('Continue Reading', [story, story, story, story]),
+];
+
+Story story = Story(
+    title: 'Wood, Wire, Wings',
+    color: Colors.teal,
+    imageUrl: 'https://blog-cdn.reedsy.com/uploads/2019/12/another.jpg',
+    progress: 0.45,
+    flippedPages: 53,
+    readingTime: 127.25);
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
