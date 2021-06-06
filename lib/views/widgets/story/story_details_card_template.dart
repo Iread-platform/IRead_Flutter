@@ -9,7 +9,10 @@ class StoryDetailsCard extends StatelessWidget {
   final Widget _lowerSection;
 
   const StoryDetailsCard(
-      {Story story, Widget upperSection, Widget lowerSection, Key key})
+      {@required Story story,
+      @required Widget upperSection,
+      @required Widget lowerSection,
+      Key key})
       : _story = story,
         _upperSection = upperSection,
         _lowerSection = lowerSection,
