@@ -6,6 +6,9 @@ import 'package:provider/provider.dart';
 import 'package:speech_bubble/speech_bubble.dart';
 
 class MyTextSelectionControls extends TextSelectionControls {
+  var marginX;
+  var marginY;
+  MyTextSelectionControls({this.marginX, this.marginY});
   List<Widget> popupMenu({bool isWord, bool highlighted}) {
     // If a word where selected, There will be two options: Vocabulary and highlight.
     if (isWord && !highlighted) {
@@ -105,7 +108,7 @@ class MyTextSelectionControls extends TextSelectionControls {
     return Consumer<TextSelectionProvider>(
       builder: (context, cart, child) {
         return TextSelectionToolbar(
-            anchorAbove: Offset(position.dx, position.dy),
+            anchorAbove: Offset(position.dx + marginX, position.dy + marginY),
             anchorBelow: Offset(position.dx + 10, -140),
             toolbarBuilder: (context, _) {
               return Container(
