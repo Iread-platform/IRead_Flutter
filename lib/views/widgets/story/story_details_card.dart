@@ -1,29 +1,59 @@
 import 'package:flutter/material.dart';
 import 'package:iread_flutter/models/story.dart';
+import 'package:iread_flutter/views/widgets/layout/responsive_layout_builder.dart';
 import 'package:iread_flutter/views/widgets/story/story_image.dart';
 
 class StoryDetailsCard extends StatelessWidget {
   final Story _story;
-  const StoryDetailsCard({Story story, Key key})
+  final Widget _upperSection;
+  final Widget _lowerSection;
+
+  const StoryDetailsCard(
+      {Story story, Widget upperSection, Widget lowerSection, Key key})
       : _story = story,
+        _upperSection = upperSection,
+        _lowerSection = lowerSection,
         super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          height: 200,
-          width: 150,
-          child: Row(
+    return Container(
+      height: 200,
+      child: Stack(
+        alignment: Alignment.centerRight,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(
-                  child: StoryImage(
-                      imageUrl: _story.imageUrl, color: _story.color))
+              Flexible(flex: 2, child: Container()),
+              Flexible(flex: 3, child: _storyDetails(context))
             ],
           ),
-        ),
-      ],
+          Row(
+            children: [
+              Flexible(
+                  flex: 2,
+                  child: StoryImage(
+                      imageUrl: _story.imageUrl, color: _story.color)),
+              Flexible(flex: 3, child: Container())
+            ],
+          ),
+        ],
+      ),
     );
   }
+
+  Widget _storyDetails(BuildContext context) => Container(
+        padding: EdgeInsets.only(top: 24, bottom: 8),
+        child: Column(
+          children: [
+            Expanded(
+                flex: 3,
+                child: ResponsiveLayoutBuilder(
+                  onXSm: (context) => _upperSection,
+                )),
+            Expanded(flex: 1, child: _lowerSection),
+          ],
+        ),
+      );
 }
