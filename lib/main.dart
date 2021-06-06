@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(),
         body: Container(
             child: StoriesSearchList(
-          tag: 'Stories',
+          storiesSection: storiesSection[0],
         )),
       ),
     );

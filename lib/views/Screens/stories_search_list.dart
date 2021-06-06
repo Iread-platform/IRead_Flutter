@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:iread_flutter/config/themes/border_radius.dart';
+import 'package:iread_flutter/config/themes/shadows.dart';
 import 'package:iread_flutter/models/stories_section_model.dart';
 
 class StoriesSearchList extends StatelessWidget {
@@ -19,9 +21,17 @@ class StoriesSearchList extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                _storiesSection.title,
-                style: Theme.of(context).textTheme.headline2,
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+                decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surface,
+                    borderRadius: BorderRadius.circular(storyBorderRadius),
+                    boxShadow: [mediumBottomRightShadow]),
+                child: Text(
+                  _storiesSection.title,
+                  style: Theme.of(context).textTheme.headline2,
+                ),
               )
             ],
           ),
