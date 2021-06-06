@@ -3,6 +3,7 @@ import 'package:iread_flutter/config/themes/theme.dart';
 import 'package:iread_flutter/views/widgets/media/story_audio_player.dart';
 import 'package:iread_flutter/views/widgets/story/story_player.dart';
 import 'package:provider/provider.dart';
+
 import 'models/stories_section_model.dart';
 import 'models/story.dart';
 
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
             child: ChangeNotifierProvider(
               create: (context) => StoryAudioPlayerBloc(),
               child: StoryPlayer(
-                  'https://pl.meln.top/mr/ab3909c0e52f6d61f12ee7873ae11afb.mp3?session_key=1b96c6f2e36254a1534703446faccf7e',
+                  'https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_5MG.mp3',
                   false),
             )),
       ),
