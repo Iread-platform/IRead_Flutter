@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:iread_flutter/config/themes/theme.dart';
-import 'package:iread_flutter/views/open_library.dart';
 import 'package:iread_flutter/views/widgets/media/story_audio_player.dart';
 import 'package:iread_flutter/views/widgets/story/story_player.dart';
 import 'package:provider/provider.dart';
-
 import 'models/stories_section_model.dart';
 import 'models/story.dart';
 
@@ -34,6 +32,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
+// ignore: todo
 // TODO clear static stories
 List<StoriesSectionModel> storiesSection = [
   StoriesSectionModel('Continue Reading', [story, story, story, story]),

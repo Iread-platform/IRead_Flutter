@@ -347,6 +347,7 @@ class StoryAudioPlayerBloc extends ChangeNotifier {
 
   void dispose() {
     _pressPosition.close();
+    super.dispose();
   }
 
   get positionStream => _pressPosition.stream;
