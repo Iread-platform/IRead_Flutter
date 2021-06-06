@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iread_flutter/config/themes/border_radius.dart';
 import 'package:iread_flutter/models/story.dart';
-import 'package:iread_flutter/views/widgets/story/story_details_card.dart';
+import 'package:iread_flutter/views/widgets/story/story_details_card_template.dart';
 
 class ProfileStoryCard extends StatelessWidget {
   final Story _story;
