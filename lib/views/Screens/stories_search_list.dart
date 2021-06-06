@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:iread_flutter/config/themes/border_radius.dart';
 import 'package:iread_flutter/config/themes/shadows.dart';
 import 'package:iread_flutter/models/stories_section_model.dart';
+import 'package:iread_flutter/models/story.dart';
+import 'package:iread_flutter/views/widgets/story/story_image.dart';
 
 class StoriesSearchList extends StatelessWidget {
   final StoriesSectionModel _storiesSection;
@@ -35,7 +37,19 @@ class StoriesSearchList extends StatelessWidget {
               )
             ],
           ),
-          Column()
+          Expanded(
+              child: ListView.separated(
+                  itemBuilder: (context, int index) {
+                    Story story = _storiesSection.stories[index];
+                    return StoryImage(
+                        imageUrl: story.imageUrl, color: story.color);
+                  },
+                  separatorBuilder: (context, int index) {
+                    return SizedBox(
+                      height: 12,
+                    );
+                  },
+                  itemCount: _storiesSection.stories.length))
         ],
       ),
     );
