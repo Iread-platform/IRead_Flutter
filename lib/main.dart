@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:iread_flutter/config/themes/theme.dart';
-import 'package:iread_flutter/utils/i_read_icons.dart';
 import 'package:iread_flutter/views/Screens/stories_search_list.dart';
 
 import 'models/stories_section_model.dart';
@@ -20,8 +19,9 @@ class MyApp extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(),
         body: Container(
-          child: StoriesSearchList()
-        ),
+            child: StoriesSearchList(
+          tag: 'Stories',
+        )),
       ),
     );
   }
