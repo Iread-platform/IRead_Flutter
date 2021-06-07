@@ -15,7 +15,7 @@ class StoryDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(left: 12, right: 12, top: 50),
+      padding: const EdgeInsets.only(left: 24, right: 24, top: 50),
       child: ListView(
         children: [
           StoryDetailsActions(

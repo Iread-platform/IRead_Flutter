@@ -22,7 +22,7 @@ class StoryDetailsActions extends StatelessWidget {
               child: Row(
             children: [
               Container(
-                width: 200,
+                width: 150,
                 child: Column(
                   children: [
                     RatingBarIndicator(
@@ -31,7 +31,7 @@ class StoryDetailsActions extends StatelessWidget {
                       itemSize: 24,
                       unratedColor: Colors.black12,
                       itemPadding: const EdgeInsets.symmetric(
-                          horizontal: 4, vertical: 4),
+                          horizontal: 2, vertical: 4),
                       itemBuilder: (BuildContext context, int index) => Icon(
                         IReadIcons.star,
                         color: Colors.amberAccent,
