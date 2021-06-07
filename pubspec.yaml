@@ -53,6 +53,7 @@ flutter:
     - assets/images/shared/curve_top.svg
     - assets/images/shared/curve_bottom.svg
     - assets/images/shared/star.png
+    - assets/images/shared/error.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

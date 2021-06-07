@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:iread_flutter/config/themes/border_radius.dart';
 
 /// [imageUrl] refer to the network url og the image, 'do not use asset path',
@@ -54,7 +53,7 @@ class StoryImage extends StatelessWidget {
                     },
                     errorBuilder:
                         (BuildContext context, exception, stackTrace) {
-                      return Image.asset('images/shared/error.jpg');
+                      return Image.asset('assets/images/shared/error.jpg');
                     },
                     frameBuilder: (BuildContext context, child, frame,
                         bool wasSynchronoslyLoaded) {

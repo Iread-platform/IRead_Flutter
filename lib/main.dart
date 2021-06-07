@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:iread_flutter/config/themes/theme.dart';
-import 'package:iread_flutter/utils/i_read_icons.dart';
 import 'package:iread_flutter/views/widgets/story/profile_story_card.dart';
 
 import 'models/stories_section_model.dart';
@@ -22,8 +21,7 @@ class MyApp extends StatelessWidget {
         body: Padding(
             padding: const EdgeInsets.all(20.0),
             child: ProfileStoryCard(
-              imageUrl:
-                  'https://i.pinimg.com/564x/aa/47/06/aa4706077339fb1bd6d4952eab8feb79.jpg',
+              imageUrl: 'https://picsum.photos/200/300',
               color: Colors.amber,
               title: 'Title',
               readingTime: 24.0,
