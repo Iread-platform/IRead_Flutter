@@ -22,7 +22,6 @@ class StoryDetailsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 200,
-      clipBehavior: Clip.none,
       child: Stack(
         alignment: Alignment.centerRight,
         clipBehavior: Clip.none,

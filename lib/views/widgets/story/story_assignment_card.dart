@@ -83,6 +83,7 @@ class StoryAssignmentCard extends StatelessWidget {
             Icon(
               Icons.filter_none_rounded,
               color: color,
+              size: 20,
             ),
             SizedBox(
               width: 4,
@@ -95,7 +96,11 @@ class StoryAssignmentCard extends StatelessWidget {
             SizedBox(
               width: 8,
             ),
-            Icon(Icons.attach_file_rounded, color: color),
+            Icon(
+              Icons.attach_file_rounded,
+              color: color,
+              size: 20,
+            ),
             SizedBox(
               width: 4,
             ),
