@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iread_flutter/models/story.dart';
 import 'package:iread_flutter/views/widgets/story/story_description.dart';
 import 'package:iread_flutter/views/widgets/story/story_details_actions.dart';
+import 'package:iread_flutter/views/widgets/story/story_evaluation.dart';
 import 'package:iread_flutter/views/widgets/story/story_related_tags.dart';
 
 class StoryDetails extends StatelessWidget {
@@ -35,6 +36,10 @@ class StoryDetails extends StatelessWidget {
           StoryRelatedTags(
             tags: _story.tags,
           ),
+          SizedBox(
+            height: 24,
+          ),
+          StoryEvaluation(),
           SizedBox(
             height: 24,
           )
