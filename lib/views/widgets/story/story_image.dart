@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
 import 'package:iread_flutter/config/themes/border_radius.dart';
+import 'package:iread_flutter/config/themes/shadows.dart';
 
 /// [imageUrl] refer to the network url og the image, 'do not use asset path',
 /// It is 'required'.
@@ -25,10 +25,7 @@ class StoryImage extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(storyBorderRadius),
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.black26, blurRadius: 5, offset: Offset(-1, 0))
-              ]),
+              boxShadow: [mediumBottomRightShadow]),
           child: ClipRRect(
             borderRadius: BorderRadius.all(Radius.circular(storyBorderRadius)),
             child: Row(
