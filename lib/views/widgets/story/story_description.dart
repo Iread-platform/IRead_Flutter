@@ -6,6 +6,9 @@ class StoryDescription extends StatelessWidget {
   final String _author;
   final int _pages;
 
+  final String _authorLabel = 'Written by ';
+  final String _pagesLabel = 'Number of pages ';
+
   const StoryDescription(
       {@required String title,
       @required String description,
@@ -26,7 +29,33 @@ class StoryDescription extends StatelessWidget {
           Text(
             _title,
             style: Theme.of(context).textTheme.headline2,
-          )
+          ),
+          Text(
+            _description,
+            style: Theme.of(context)
+                .textTheme
+                .bodyText1
+                .copyWith(color: Theme.of(context).colorScheme.primary),
+          ),
+          SizedBox(
+            height: 12,
+          ),
+          Text(
+            _author == null ? _authorLabel + 'Unknown' : _authorLabel + _author,
+            style: Theme.of(context)
+                .textTheme
+                .bodyText1
+                .copyWith(color: Theme.of(context).colorScheme.primary),
+          ),
+          _pages != null
+              ? Text(
+                  _pagesLabel + _pages.toString(),
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyText1
+                      .copyWith(color: Theme.of(context).colorScheme.primary),
+                )
+              : SizedBox()
         ],
       ),
     );

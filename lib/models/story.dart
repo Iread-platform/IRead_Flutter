@@ -5,6 +5,7 @@ import 'model.dart';
 class Story extends Model {
   String _title;
   String _imageUrl;
+  String _description;
   double _progress;
   Color _color;
   int _flippedPages;
@@ -13,6 +14,7 @@ class Story extends Model {
   Story(
       {@required title,
       @required color,
+      @required description,
       imageUrl,
       progress,
       flippedPages,
@@ -24,9 +26,11 @@ class Story extends Model {
         _flippedPages = flippedPages,
         _readingTime = readingTime,
         _progress = progress,
+        _description = description,
         super(id: id);
 
   get title => _title;
+  get description => _description;
   get progress => _progress;
   get color => _color;
   get imageUrl => _imageUrl;

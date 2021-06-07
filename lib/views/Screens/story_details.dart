@@ -24,7 +24,7 @@ class StoryDetails extends StatelessWidget {
           ),
           StoryDescription(
             title: _story.title,
-            description: 'Descripton',
+            description: _story.description,
           )
         ],
       ),
