@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:iread_flutter/config/themes/theme.dart';
-import 'package:iread_flutter/utils/i_read_icons.dart';
 import 'package:iread_flutter/views/Screens/story_details.dart';
 
 import 'models/stories_section_model.dart';
@@ -21,7 +20,9 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(),
         body: Container(
           child: Center(
-            child: StoryDetails(),
+            child: StoryDetails(
+              story: story,
+            ),
           ),
         ),
       ),
@@ -44,7 +45,8 @@ List<StoriesSectionModel> storiesSection = [
 Story story = Story(
     title: 'Wood, Wire, Wings',
     color: Colors.teal,
-    imageUrl: 'https://blog-cdn.reedsy.com/uploads/2019/12/another.jpg',
+    imageUrl:
+        'https://i.pinimg.com/564x/e8/57/19/e857194da3e1687bb56fc902982fc422.jpg',
     progress: 0.45,
     flippedPages: 53,
     readingTime: 127.25);

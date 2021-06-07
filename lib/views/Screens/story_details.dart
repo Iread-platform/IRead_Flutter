@@ -1,11 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:iread_flutter/views/widgets/story/story_image.dart';
+import 'package:iread_flutter/models/story.dart';
+import 'package:iread_flutter/views/widgets/story/story_details_actions.dart';
 
 class StoryDetails extends StatelessWidget {
+  final Story _story;
+
+  StoryDetails({@required Story story, Key key})
+      : _story = story,
+        super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return StoryImage(
-        imageUrl: 'https://i.pinimg.com/564x/14/9f/06/149f06037f450b664235b55c56c1b5a2.jpg',
-        color: Colors.amberAccent);
+    return Container(
+      margin: const EdgeInsets.only(top: 150),
+      child: ListView(
+        children: [
+          StoryDetailsActions(
+            story: _story,
+          ),
+        ],
+      ),
+    );
   }
 }
