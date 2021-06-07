@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iread_flutter/config/themes/border_radius.dart';
 import 'package:iread_flutter/models/story.dart';
 import 'package:iread_flutter/views/widgets/review/rating_bar.dart';
 import 'package:iread_flutter/views/widgets/story/story_image.dart';
@@ -16,6 +17,7 @@ class StoryDetailsActions extends StatelessWidget {
     return Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
               child: Row(
@@ -32,21 +34,30 @@ class StoryDetailsActions extends StatelessWidget {
             ],
           )),
           Container(
-              child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(right: 16),
-                child: _elevatedButton(context, _buttons[0], () {}),
-              ),
-              _elevatedButton(context, _buttons[1], () {}),
-              Padding(
-                padding: const EdgeInsets.only(right: 16),
-                child: _elevatedButton(context, _buttons[2], () {}),
-              )
-            ],
-          ))
+            margin: const EdgeInsets.only(top: 24),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 32),
+                  child: _elevatedButton(context, _buttons[0], () {}),
+                ),
+                SizedBox(
+                  height: 12,
+                ),
+                _elevatedButton(context, _buttons[1], () {}),
+                SizedBox(
+                  height: 12,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 32),
+                  child: _elevatedButton(context, _buttons[2], () {}),
+                )
+              ],
+            ),
+          )
         ],
       ),
     );
@@ -69,5 +80,7 @@ class StoryDetailsActions extends StatelessWidget {
   ButtonStyle _elevatedButtonStyle(BuildContext context) =>
       ElevatedButton.styleFrom(
           primary: _story.color,
-          onPrimary: Theme.of(context).colorScheme.surface);
+          onPrimary: Theme.of(context).colorScheme.surface,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(storyBorderRadius)));
 }
