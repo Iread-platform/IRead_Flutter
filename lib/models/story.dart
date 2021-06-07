@@ -12,11 +12,13 @@ class Story extends Model {
   Color _color;
   int _flippedPages;
   double _readingTime;
+  List<String> _tags;
 
   Story(
       {@required title,
       @required color,
       @required description,
+      tags,
       author,
       pages,
       imageUrl,
@@ -33,6 +35,7 @@ class Story extends Model {
         _description = description,
         _author = author,
         _pages = pages,
+        _tags = tags,
         super(id: id);
 
   get title => _title;
@@ -44,4 +47,5 @@ class Story extends Model {
   get imageUrl => _imageUrl;
   get flippedPages => _flippedPages;
   get readingTime => _readingTime;
+  get tags => _tags;
 }
