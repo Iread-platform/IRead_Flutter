@@ -3,9 +3,10 @@ import 'package:iread_flutter/config/themes/border_radius.dart';
 import 'package:iread_flutter/config/themes/shadows.dart';
 import 'package:iread_flutter/models/story.dart';
 import 'package:iread_flutter/views/widgets/story/story_details_card_template.dart';
-import 'package:iread_flutter/views/widgets/user/avatar.dart';
 
 class StoryAssignmentCard extends StatelessWidget {
+  final double _spaceBetweenIcons = 12;
+  final double _spaceBetweenTextAndIcon = 4;
   final Story _story;
 
   const StoryAssignmentCard({Story story, Key key})
@@ -63,30 +64,16 @@ class StoryAssignmentCard extends StatelessWidget {
             color: _story.color,
             boxShadow: [mediumBottomRightShadow]),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            UserAvatar(
-                radius: 18.0,
-                imageUrl:
-                    'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'),
-            SizedBox(
-              width: 4,
-            ),
-            Text(
-              'user name',
-              style:
-                  Theme.of(context).textTheme.bodyText2.copyWith(color: color),
-            ),
-            SizedBox(
-              width: 12,
-            ),
             Icon(
               Icons.filter_none_rounded,
               color: color,
               size: 20,
             ),
             SizedBox(
-              width: 4,
+              width: _spaceBetweenTextAndIcon,
             ),
             Text(
               '2',
@@ -94,7 +81,7 @@ class StoryAssignmentCard extends StatelessWidget {
                   Theme.of(context).textTheme.bodyText2.copyWith(color: color),
             ),
             SizedBox(
-              width: 8,
+              width: _spaceBetweenIcons,
             ),
             Icon(
               Icons.attach_file_rounded,
@@ -102,10 +89,26 @@ class StoryAssignmentCard extends StatelessWidget {
               size: 20,
             ),
             SizedBox(
-              width: 4,
+              width: _spaceBetweenTextAndIcon,
             ),
             Text(
               '4',
+              style:
+                  Theme.of(context).textTheme.bodyText2.copyWith(color: color),
+            ),
+            SizedBox(
+              width: _spaceBetweenIcons,
+            ),
+            Icon(
+              Icons.chat,
+              color: color,
+              size: 20,
+            ),
+            SizedBox(
+              width: _spaceBetweenTextAndIcon,
+            ),
+            Text(
+              '24',
               style:
                   Theme.of(context).textTheme.bodyText2.copyWith(color: color),
             )
