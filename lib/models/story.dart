@@ -6,6 +6,8 @@ class Story extends Model {
   String _title;
   String _imageUrl;
   String _description;
+  String _author;
+  int _pages;
   double _progress;
   Color _color;
   int _flippedPages;
@@ -15,6 +17,8 @@ class Story extends Model {
       {@required title,
       @required color,
       @required description,
+      author,
+      pages,
       imageUrl,
       progress,
       flippedPages,
@@ -27,10 +31,14 @@ class Story extends Model {
         _readingTime = readingTime,
         _progress = progress,
         _description = description,
+        _author = author,
+        _pages = pages,
         super(id: id);
 
   get title => _title;
   get description => _description;
+  get author => _author;
+  get pages => _pages;
   get progress => _progress;
   get color => _color;
   get imageUrl => _imageUrl;
