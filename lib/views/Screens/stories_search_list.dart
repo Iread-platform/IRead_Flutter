@@ -42,6 +42,7 @@ class StoriesSearchList extends StatelessWidget {
           ),
           Expanded(
               child: ListView.separated(
+                  clipBehavior: Clip.none,
                   itemBuilder: (context, int index) {
                     Story story = _storiesSection.stories[index];
                     return StoryAssignmentCard(

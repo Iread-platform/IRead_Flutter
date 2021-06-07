@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:iread_flutter/config/themes/border_radius.dart';
 import 'package:iread_flutter/config/themes/shadows.dart';
 import 'package:iread_flutter/models/story.dart';
-import 'package:iread_flutter/utils/i_read_icons.dart';
 import 'package:iread_flutter/views/widgets/story/story_details_card_template.dart';
 import 'package:iread_flutter/views/widgets/user/avatar.dart';
 
@@ -15,10 +14,15 @@ class StoryAssignmentCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final lowerSectionColor =
+        _story.color == Theme.of(context).colorScheme.surface
+            ? Theme.of(context).colorScheme.primary
+            : Theme.of(context).colorScheme.surface;
+
     return StoryDetailsCard(
       story: _story,
       upperSection: _upperSection(context),
-      lowerSection: _lowerSection(context),
+      lowerSection: _lowerSection(context, lowerSectionColor),
     );
   }
 
@@ -52,8 +56,8 @@ class StoryAssignmentCard extends StatelessWidget {
         ),
       );
 
-  Widget _lowerSection(BuildContext context) => Container(
-        padding: const EdgeInsets.only(left: 18, right: 18),
+  Widget _lowerSection(BuildContext context, Color color) => Container(
+        padding: const EdgeInsets.only(left: 8, right: 8),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(smallBorderRadius),
             color: _story.color,
@@ -70,12 +74,36 @@ class StoryAssignmentCard extends StatelessWidget {
             ),
             Text(
               'user name',
-              style: Theme.of(context).textTheme.bodyText2.copyWith(
-                  color: _story.color == Theme.of(context).colorScheme.surface
-                      ? Theme.of(context).colorScheme.primary
-                      : Theme.of(context).colorScheme.surface),
+              style:
+                  Theme.of(context).textTheme.bodyText2.copyWith(color: color),
             ),
-            Icon(IReadIcons.book)
+            SizedBox(
+              width: 12,
+            ),
+            Icon(
+              Icons.filter_none_rounded,
+              color: color,
+            ),
+            SizedBox(
+              width: 4,
+            ),
+            Text(
+              '2',
+              style:
+                  Theme.of(context).textTheme.bodyText2.copyWith(color: color),
+            ),
+            SizedBox(
+              width: 8,
+            ),
+            Icon(Icons.attach_file_rounded, color: color),
+            SizedBox(
+              width: 4,
+            ),
+            Text(
+              '4',
+              style:
+                  Theme.of(context).textTheme.bodyText2.copyWith(color: color),
+            )
           ],
         ),
       );
