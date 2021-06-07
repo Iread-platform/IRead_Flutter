@@ -29,6 +29,7 @@ class StoryDetailsActions extends StatelessWidget {
                       rating: 3.75,
                       itemCount: 5,
                       itemSize: 24,
+                      unratedColor: Colors.black12,
                       itemPadding: const EdgeInsets.symmetric(
                           horizontal: 4, vertical: 4),
                       itemBuilder: (BuildContext context, int index) => Icon(
