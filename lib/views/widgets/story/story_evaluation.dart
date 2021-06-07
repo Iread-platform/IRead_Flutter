@@ -5,6 +5,7 @@ import 'package:iread_flutter/views/widgets/user/avatar.dart';
 
 class StoryEvaluation extends StatelessWidget {
   final String _evaluationHeader = 'Evaluation';
+  final String _evaluateLabel = 'Evaluate';
 
   const StoryEvaluation({Key key}) : super(key: key);
 
@@ -25,6 +26,9 @@ class StoryEvaluation extends StatelessWidget {
             'Student name',
             style: Theme.of(context).textTheme.headline5,
           ),
+          SizedBox(
+            height: 8,
+          ),
           RatingBar.builder(
               itemSize: 24,
               itemCount: 5,
@@ -37,6 +41,22 @@ class StoryEvaluation extends StatelessWidget {
                     color: Colors.amber,
                   ),
               onRatingUpdate: (rating) {}),
+          SizedBox(
+            height: 12,
+          ),
+          ElevatedButton(
+            onPressed: () {},
+            child: Text(
+              _evaluateLabel,
+              style: Theme.of(context)
+                  .textTheme
+                  .subtitle2
+                  .copyWith(color: Theme.of(context).colorScheme.surface),
+            ),
+            style: ElevatedButton.styleFrom(
+              primary: Theme.of(context).colorScheme.secondary,
+            ),
+          )
         ],
       ),
     );
