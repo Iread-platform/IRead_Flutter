@@ -32,7 +32,9 @@ class StoryDetails extends StatelessWidget {
           SizedBox(
             height: 24,
           ),
-          StoryRelatedTags(),
+          StoryRelatedTags(
+            tags: _story.tags,
+          ),
         ],
       ),
     );

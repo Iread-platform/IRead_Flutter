@@ -11,10 +11,18 @@ class Tag extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.background,
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(storyBorderRadius),
           boxShadow: [BoxShadow()]),
+      child: Text(
+        _title,
+        style: Theme.of(context)
+            .textTheme
+            .bodyText2
+            .copyWith(color: Theme.of(context).colorScheme.primary),
+      ),
     );
   }
 }
