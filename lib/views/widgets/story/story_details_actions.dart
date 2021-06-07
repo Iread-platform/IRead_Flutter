@@ -68,7 +68,7 @@ class StoryDetailsActions extends StatelessWidget {
       ElevatedButton(
         onPressed: onPressed,
         child: Text(
-          _buttons[0],
+          title,
           style: Theme.of(context)
               .textTheme
               .headline6
