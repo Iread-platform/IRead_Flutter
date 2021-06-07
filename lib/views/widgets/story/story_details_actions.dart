@@ -63,18 +63,21 @@ class StoryDetailsActions extends StatelessWidget {
     );
   }
 
-  ElevatedButton _elevatedButton(
+  Container _elevatedButton(
           BuildContext context, String title, Function onPressed) =>
-      ElevatedButton(
-        onPressed: onPressed,
-        child: Text(
-          title,
-          style: Theme.of(context)
-              .textTheme
-              .headline6
-              .copyWith(color: Theme.of(context).colorScheme.surface),
+      Container(
+        width: 125,
+        child: ElevatedButton(
+          onPressed: onPressed,
+          child: Text(
+            title,
+            style: Theme.of(context)
+                .textTheme
+                .headline6
+                .copyWith(color: Theme.of(context).colorScheme.surface),
+          ),
+          style: _elevatedButtonStyle(context),
         ),
-        style: _elevatedButtonStyle(context),
       );
 
   ButtonStyle _elevatedButtonStyle(BuildContext context) =>
