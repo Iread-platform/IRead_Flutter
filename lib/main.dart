@@ -4,6 +4,7 @@ import 'package:iread_flutter/views/Screens/story_details.dart';
 
 import 'models/stories_section_model.dart';
 import 'models/story.dart';
+import 'models/user.dart';
 
 void main() {
   runApp(MyApp());
@@ -49,18 +50,14 @@ Story story = Story(
     description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sit amet lacus tincidunt, consequat lorem ac, consectetur ligula. Sed non nunc vehicula, pretium arcu a, faucibus eros. Cras lacinia magna sed enim malesuada finibus. Nulla et varius neque. Etiam dolor erat, dictum sodales facilisis ac, cursus vehicula lacus. Vestibulum et ante lorem. Pellentesque pretium arcu felis, nec efficitur lacus ultricies quis. Morbi eu tortor facilisis, porta elit quis, varius diam.',
     author: 'Motasem Ghozlan',
-    tags: [
-      'Anger',
-      'Love',
-      'Feelings',
-      'Generous',
-      'Learning',
-    'Effective'
-    ],
+    tags: ['Anger', 'Love', 'Feelings', 'Generous', 'Learning', 'Effective'],
     pages: 1300,
     progress: 0.45,
     flippedPages: 53,
     readingTime: 127.25);
+
+User user =
+    User(name: 'Motasem Ghozlan', imageUrl: 'https://picsum.photos/200/300');
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
