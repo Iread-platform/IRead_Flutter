@@ -46,7 +46,7 @@ Story story = Story(
     title: 'Wood, Wire, Wings',
     color: Colors.teal,
     imageUrl:
-        'https://i.pinimg.com/564x/e8/57/19/e857194da3e1687bb56fc902982fc422.jpg',
+        'https://i.pinimg.com/564x/a7/fa/51/a7fa5151b66314fe7cf4bc189c72eff5.jpg',
     progress: 0.45,
     flippedPages: 53,
     readingTime: 127.25);
