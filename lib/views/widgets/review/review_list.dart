@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iread_flutter/views/widgets/review/rating_bar.dart';
 import 'package:iread_flutter/views/widgets/user/avatar.dart';
 
 class ReviewList extends StatelessWidget {
@@ -7,25 +8,22 @@ class ReviewList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        _review(context, 'https://picsum.photos/200/300',
-            'Pellentesque id eros nisi. Etiam gravida lacus a ipsum eleifend, sit amet scelerisque metus fermentum. Etiam eget turpis eget nibh finibus molestie. Quisque quam metus'),
+        _review(context, 'https://picsum.photos/200/300', 3.5),
         SizedBox(
           height: 12,
         ),
-        _review(context, 'https://picsum.photos/200/300',
-            'Pellentesque id eros nisi. Etiam gravida lacus a ipsum eleifend, sit amet scelerisque metus fermentum. Etiam eget turpis eget nibh finibus molestie. Quisque quam metus'),
+        _review(context, 'https://picsum.photos/200/300', 4.2),
         SizedBox(
           height: 12,
         ),
-        _review(context, 'https://picsum.photos/200/300',
-            'Pellentesque id eros nisi. Etiam gravida lacus a ipsum eleifend, sit amet scelerisque metus fermentum. Etiam eget turpis eget nibh finibus molestie. Quisque quam metus'),
+        _review(context, 'https://picsum.photos/200/300', 2.8),
       ],
     );
   }
 
-  Widget _review(BuildContext context, String imageUrl, String description) =>
-      Row(
+  Widget _review(BuildContext context, String imageUrl, double rating) => Row(
         children: [
           Column(
             children: [
@@ -45,15 +43,7 @@ class ReviewList extends StatelessWidget {
           SizedBox(
             width: 12,
           ),
-          Expanded(
-            child: Text(
-              description,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyText1
-                  .copyWith(color: Theme.of(context).colorScheme.primary),
-            ),
-          )
+          RatingBar(rating: rating)
         ],
       );
 }
