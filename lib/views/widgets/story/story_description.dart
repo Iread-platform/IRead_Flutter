@@ -40,20 +40,28 @@ class StoryDescription extends StatelessWidget {
           SizedBox(
             height: 12,
           ),
-          Text(
-            _author == null ? _authorLabel + 'Unknown' : _authorLabel + _author,
-            style: Theme.of(context)
-                .textTheme
-                .bodyText1
-                .copyWith(color: Theme.of(context).colorScheme.primary),
+          Container(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              _author == null
+                  ? _authorLabel + 'Unknown'
+                  : _authorLabel + _author,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyText1
+                  .copyWith(color: Theme.of(context).colorScheme.primary),
+            ),
           ),
           _pages != null
-              ? Text(
-                  _pagesLabel + _pages.toString(),
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyText1
-                      .copyWith(color: Theme.of(context).colorScheme.primary),
+              ? Container(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    _pagesLabel + _pages.toString(),
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText1
+                        .copyWith(color: Theme.of(context).colorScheme.primary),
+                  ),
                 )
               : SizedBox()
         ],
