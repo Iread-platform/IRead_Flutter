@@ -43,25 +43,21 @@ class StoryDetailsActions extends StatelessWidget {
             ],
           )),
           Container(
-              margin: const EdgeInsets.only(right: 32),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 12),
-                    child: _elevatedButton(context, _buttons[0], () {}),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 32),
-                    child: _elevatedButton(context, _buttons[1], () {}),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 12),
-                    child: _elevatedButton(context, _buttons[2], () {}),
-                  )
-                ],
-              ))
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 16),
+                child: _elevatedButton(context, _buttons[0], () {}),
+              ),
+              _elevatedButton(context, _buttons[1], () {}),
+              Padding(
+                padding: const EdgeInsets.only(right: 16),
+                child: _elevatedButton(context, _buttons[2], () {}),
+              )
+            ],
+          ))
         ],
       ),
     );

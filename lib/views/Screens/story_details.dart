@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iread_flutter/models/story.dart';
+import 'package:iread_flutter/views/widgets/story/story_description.dart';
 import 'package:iread_flutter/views/widgets/story/story_details_actions.dart';
 
 class StoryDetails extends StatelessWidget {
@@ -12,12 +13,19 @@ class StoryDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(top: 75),
+      padding: const EdgeInsets.only(left: 12, right: 12, top: 50),
       child: ListView(
         children: [
           StoryDetailsActions(
             story: _story,
           ),
+          SizedBox(
+            height: 24,
+          ),
+          StoryDescription(
+            title: _story.title,
+            description: 'Descripton',
+          )
         ],
       ),
     );
