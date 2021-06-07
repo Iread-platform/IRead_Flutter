@@ -22,7 +22,12 @@ class StoryRelatedTags extends StatelessWidget {
             _relatedTagsHeader,
             style: Theme.of(context).textTheme.headline4,
           ),
+          SizedBox(
+            height: 12,
+          ),
           Wrap(
+            spacing: 8,
+            runSpacing: 8,
             children: _buildTags(context),
           )
         ],

@@ -20,7 +20,7 @@ class Tag extends StatelessWidget {
         _title,
         style: Theme.of(context)
             .textTheme
-            .bodyText2
+            .subtitle2
             .copyWith(color: Theme.of(context).colorScheme.primary),
       ),
     );
