@@ -4,6 +4,8 @@ import 'package:iread_flutter/utils/i_read_icons.dart';
 import 'package:iread_flutter/views/widgets/review/review_list.dart';
 import 'package:iread_flutter/views/widgets/user/avatar.dart';
 
+import '../../../main.dart';
+
 class StoryEvaluation extends StatelessWidget {
   final String _evaluationHeader = 'Evaluation';
   final String _evaluateLabel = 'Evaluate';
@@ -20,11 +22,11 @@ class StoryEvaluation extends StatelessWidget {
             style: Theme.of(context).textTheme.headline4,
           ),
           UserAvatar(
-            imageUrl: 'https://picsum.photos/200/300',
+            imageUrl: user.imageUrl,
             radius: 50.0,
           ),
           Text(
-            'Student name',
+            user.name,
             style: Theme.of(context).textTheme.headline5,
           ),
           SizedBox(
