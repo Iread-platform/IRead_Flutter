@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:iread_flutter/utils/i_read_icons.dart';
+import 'package:iread_flutter/views/widgets/review/review_list.dart';
 import 'package:iread_flutter/views/widgets/user/avatar.dart';
 
 class StoryEvaluation extends StatelessWidget {
@@ -56,7 +57,11 @@ class StoryEvaluation extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               primary: Theme.of(context).colorScheme.secondary,
             ),
-          )
+          ),
+          SizedBox(
+            height: 24,
+          ),
+          ReviewList()
         ],
       ),
     );
