@@ -7,22 +7,24 @@ import 'package:iread_flutter/views/widgets/story/story_related_tags.dart';
 
 class StoryDetails extends StatelessWidget {
   final Story _story;
+  final double _verticalSpacing;
 
-  StoryDetails({@required Story story, Key key})
+  StoryDetails({@required Story story, double verticalSpacing, Key key})
       : _story = story,
+        _verticalSpacing = verticalSpacing ?? 48,
         super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(left: 24, right: 24, top: 50),
       child: ListView(
+        padding: const EdgeInsets.only(left: 24, right: 24, top: 50),
         children: [
           StoryDetailsActions(
             story: _story,
           ),
           SizedBox(
-            height: 24,
+            height: _verticalSpacing,
           ),
           StoryDescription(
             title: _story.title,
@@ -31,17 +33,17 @@ class StoryDetails extends StatelessWidget {
             pages: _story.pages,
           ),
           SizedBox(
-            height: 24,
+            height: _verticalSpacing,
           ),
           StoryRelatedTags(
             tags: _story.tags,
           ),
           SizedBox(
-            height: 24,
+            height: _verticalSpacing,
           ),
           StoryEvaluation(),
           SizedBox(
-            height: 24,
+            height: _verticalSpacing,
           )
         ],
       ),
