@@ -46,7 +46,7 @@ class StoryImage extends StatelessWidget {
                             value: loadingProgress.expectedTotalBytes != null
                                 ? loadingProgress.cumulativeBytesLoaded /
                                     loadingProgress.expectedTotalBytes
-                                : null,
+                                : 0,
                           ),
                         ),
                       );
@@ -64,7 +64,7 @@ class StoryImage extends StatelessWidget {
                           child: child,
                           opacity: frame == null ? 0 : 1,
                           curve: Curves.easeIn,
-                          duration: Duration(milliseconds: 300),
+                          duration: Duration(milliseconds: 500),
                         );
                     },
                   ),
