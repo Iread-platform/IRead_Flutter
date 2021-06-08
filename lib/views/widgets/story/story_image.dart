@@ -64,11 +64,13 @@ class AnimatedNetworkImage extends StatefulWidget {
 
 class _AnimatedNetworkImageState extends State<AnimatedNetworkImage>
     with TickerProviderStateMixin {
-  bool imageLoaded = false;
+  bool imageLoaded;
   AnimationController _controller;
 
   @override
   void initState() {
+    print("re build");
+    imageLoaded = false;
     _controller = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 300));
     super.initState();
@@ -80,10 +82,9 @@ class _AnimatedNetworkImageState extends State<AnimatedNetworkImage>
       widget._imageUrl,
       fit: BoxFit.cover,
       loadingBuilder: (context, child, loadingProgress) {
+        print('Image is loaded $imageLoaded');
         if (loadingProgress == null) {
-          return imageLoaded
-              ? child
-              : Center(child: CircularProgressIndicator());
+          return child;
         }
 
         if (!imageLoaded) {
@@ -116,7 +117,11 @@ class _AnimatedNetworkImageState extends State<AnimatedNetworkImage>
                   ));
         }
 
-        return child;
+        return !imageLoaded
+            ? child
+            : Center(
+                child: CircularProgressIndicator(),
+              );
       },
     );
   }

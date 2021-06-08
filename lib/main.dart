@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
           StoryCard(
             title: "Title",
             imageUrl:
-                'https://images.unsplash.com/photo-1623131418931-11498160a47d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=700&q=80',
+                'https://images.unsplash.com/photo-1623133106725-1e3d77acb7f9?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80',
             color: Colors.cyan,
           ),
         ],
