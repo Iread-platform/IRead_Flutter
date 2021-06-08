@@ -7,6 +7,8 @@ import 'package:iread_flutter/config/themes/border_radius.dart';
 class StoryImage extends StatelessWidget {
   final String _imageUrl;
   final Color _color;
+  final ValueNotifier<Widget> _selectedWidget = ValueNotifier(null);
+
   StoryImage({@required imageUrl, @required color})
       : _imageUrl = imageUrl,
         _color = color;
@@ -21,57 +23,104 @@ class StoryImage extends StatelessWidget {
             boxShadow: [
               BoxShadow(color: Colors.grey, blurRadius: 5, offset: Offset(1, 0))
             ]),
-        child: Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(storyBorderRadius),
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.black26, blurRadius: 5, offset: Offset(-1, 0))
-              ]),
-          child: ClipRRect(
-            borderRadius: BorderRadius.all(Radius.circular(storyBorderRadius)),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Image.network(
-                    _imageUrl,
-                    fit: BoxFit.cover,
-                    loadingBuilder: (context, child, loadingProgress) {
-                      if (loadingProgress == null) {
-                        return child;
-                      }
-                      return Container(
-                        child: Center(
-                          child: CircularProgressIndicator(
-                            value: loadingProgress.expectedTotalBytes != null
-                                ? loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes
-                                : 0,
-                          ),
-                        ),
-                      );
-                    },
-                    errorBuilder:
-                        (BuildContext context, exception, stackTrace) {
-                      return Image.asset('assets/images/shared/error.jpg');
-                    },
-                    frameBuilder: (BuildContext context, child, frame,
-                        bool wasSynchronoslyLoaded) {
-                      if (wasSynchronoslyLoaded) {
-                        return child;
-                      } else
-                        return AnimatedOpacity(
-                          child: child,
-                          opacity: frame == null ? 0 : 1,
-                          curve: Curves.easeIn,
-                          duration: Duration(milliseconds: 500),
-                        );
-                    },
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minHeight: 100),
+          child: Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(storyBorderRadius),
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 5,
+                      offset: Offset(-1, 0))
+                ]),
+            child: ClipRRect(
+              borderRadius:
+                  BorderRadius.all(Radius.circular(storyBorderRadius)),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: AnimatedNetworkImage(
+                      imageUrl: _imageUrl,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
       );
+}
+
+class AnimatedNetworkImage extends StatefulWidget {
+  final String _imageUrl;
+  const AnimatedNetworkImage({String imageUrl, Key key})
+      : _imageUrl = imageUrl,
+        super(key: key);
+
+  @override
+  _AnimatedNetworkImageState createState() => _AnimatedNetworkImageState();
+}
+
+class _AnimatedNetworkImageState extends State<AnimatedNetworkImage>
+    with TickerProviderStateMixin {
+  bool imageLoaded = false;
+  AnimationController _controller;
+
+  @override
+  void initState() {
+    _controller = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 300));
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Image.network(
+      widget._imageUrl,
+      fit: BoxFit.cover,
+      loadingBuilder: (context, child, loadingProgress) {
+        if (loadingProgress == null) {
+          return imageLoaded
+              ? child
+              : Center(child: CircularProgressIndicator());
+        }
+
+        imageLoaded = true;
+        final double loadingValue = (loadingProgress.expectedTotalBytes != null)
+            ? loadingProgress.cumulativeBytesLoaded /
+                loadingProgress.expectedTotalBytes
+            : 0;
+
+        return Container(
+            child:
+                Center(child: CircularProgressIndicator(value: loadingValue)));
+      },
+      errorBuilder: (BuildContext context, exception, stackTrace) {
+        print(stackTrace);
+        return Image.asset('assets/images/shared/error.jpg');
+      },
+      frameBuilder:
+          (BuildContext context, child, frame, bool wasSynchronoslyLoaded) {
+        if (frame != null) {
+          _controller.forward();
+          return AnimatedBuilder(
+              animation: _controller,
+              child: child,
+              builder: (context, child) => Opacity(
+                    opacity: _controller.value,
+                    child: child,
+                  ));
+        }
+
+        return child;
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 }
