@@ -86,7 +86,10 @@ class _AnimatedNetworkImageState extends State<AnimatedNetworkImage>
               : Center(child: CircularProgressIndicator());
         }
 
-        imageLoaded = true;
+        if (!imageLoaded) {
+          imageLoaded = true;
+        }
+
         final double loadingValue = (loadingProgress.expectedTotalBytes != null)
             ? loadingProgress.cumulativeBytesLoaded /
                 loadingProgress.expectedTotalBytes
