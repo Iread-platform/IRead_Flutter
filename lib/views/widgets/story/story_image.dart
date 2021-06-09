@@ -69,7 +69,6 @@ class _AnimatedNetworkImageState extends State<AnimatedNetworkImage>
 
   @override
   void initState() {
-    print("re build");
     imageLoaded = false;
     _controller = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 300));
@@ -82,7 +81,6 @@ class _AnimatedNetworkImageState extends State<AnimatedNetworkImage>
       widget._imageUrl,
       fit: BoxFit.cover,
       loadingBuilder: (context, child, loadingProgress) {
-        print('Image is loaded $imageLoaded');
         if (loadingProgress == null) {
           return child;
         }
