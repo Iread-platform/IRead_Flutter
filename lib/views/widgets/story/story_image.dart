@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iread_flutter/config/themes/border_radius.dart';
 
 /// [imageUrl] refer to the network url og the image, 'do not use asset path',
@@ -28,6 +29,7 @@ class StoryImage extends StatelessWidget {
           constraints: BoxConstraints(minHeight: _minHeight),
           child: Container(
             decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primary,
                 borderRadius: BorderRadius.circular(storyBorderRadius),
                 boxShadow: [
                   BoxShadow(
@@ -102,7 +104,15 @@ class _AnimatedNetworkImageState extends State<AnimatedNetworkImage>
       },
       errorBuilder: (BuildContext context, exception, stackTrace) {
         print(stackTrace);
-        return Container(child: Image.asset('assets/images/shared/error.jpg'));
+        _controller.forward();
+        return AnimatedBuilder(
+            animation: _controller,
+            builder: (context, snapshot) {
+              return Opacity(
+                child: SvgPicture.asset('assets/images/shared/error.svg'),
+                opacity: _controller.value,
+              );
+            });
       },
       frameBuilder:
           (BuildContext context, child, frame, bool wasSynchronoslyLoaded) {
