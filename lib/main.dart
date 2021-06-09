@@ -28,20 +28,17 @@ class MyApp extends StatelessWidget {
         children: [
           StoryCard(
             title: "Title",
-            imageUrl:
-                'https://images.unsplash.com/photo-1622983472974-4c5a568beeec?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80',
+            imageUrl: 'https://picsum.photos/200/300',
             color: Colors.cyan,
           ),
           StoryCard(
             title: "Title",
-            imageUrl:
-                'https://images.unsplash.com/photo-1623119632232-01163ce7e939?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80',
+            imageUrl: 'https://picsum.photos/200/300',
             color: Colors.cyan,
           ),
           StoryCard(
             title: "Title",
-            imageUrl:
-                'https://images.unsplash.com/photo-1623133106725-1e3d77acb7f9?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80',
+            imageUrl: 'https://picsum.photos/200/300',
             color: Colors.cyan,
           ),
         ],
