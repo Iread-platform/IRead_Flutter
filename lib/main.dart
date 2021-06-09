@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:iread_flutter/config/themes/theme.dart';
+import 'package:iread_flutter/views/widgets/story/story_card.dart';
 import 'package:iread_flutter/views/widgets/text_selection_provider.dart';
-
 import 'package:provider/provider.dart';
 
 import 'models/stories_section_model.dart';
 import 'models/story.dart';
-import 'views/Screens/story_screen.dart';
 
 void main() {
   runApp(
@@ -22,7 +22,17 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Iread',
-      home: Scaffold(body: StoryScreen(strStory: "aaa",)),
+      theme: mainTheme,
+      home: Scaffold(
+          body: ListView(
+        children: [
+          StoryCard(
+            title: "Title",
+            imageUrl: 'https://picsum.photos/200/300',
+            color: Colors.cyan,
+          ),
+        ],
+      )),
     );
   }
 }
@@ -46,4 +56,3 @@ Story story = Story(
     progress: 0.45,
     flippedPages: 53,
     readingTime: 127.25);
-
