@@ -1,24 +1,50 @@
-import 'package:iread_flutter/models/lyrics/lyrics_word.dart';
-import 'package:iread_flutter/utils/file_utils.dart';
+import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/cupertino.dart';
 
-class StoryPlayerBloc {
-  static Future<List<LyricsWord>> readLyricsFile(String path) async {
-    final json = await FileUtils.readAssetJson(path);
+class StoryPlayerBloc extends ChangeNotifier {
+  AudioPlayer audioPlayer;
+  Duration duration;
+  Duration progress;
+  AudioPlayerState audioPlayerState = AudioPlayerState.PLAYING;
+  StoryPlayerBloc() {
+    audioPlayer = AudioPlayer();
+    initListeners();
+  }
+  void initListeners() {
+    audioPlayer.onDurationChanged.listen((Duration d) {
+      duration = d;
+      notifyListeners();
+    });
 
-    return _jsonToLyricsList(json);
+    audioPlayer.onPlayerStateChanged.listen((event) {
+      audioPlayerState = event;
+      print(audioPlayerState);
+      notifyListeners();
+    });
+
+    audioPlayer.onAudioPositionChanged.listen((event) {
+      progress = event;
+      notifyListeners();
+    });
   }
 
-  static List<LyricsWord> _jsonToLyricsList(Map<String, dynamic> json) {
-    List<LyricsWord> lyricsList = [];
-    json = json['lyrics'];
+  void play(String url) async {
+    audioPlayer.play(url);
+  }
 
-    for (int i = 0; i < json.length; i++) {
-      LyricsWord lyricsWord = LyricsWord(
-          word: json[i]['word'], milliseconds: json[i]['milliseconds']);
+  void pause() {
+    audioPlayer.pause();
+  }
 
-      lyricsList.add(lyricsWord);
-    }
+  void resume() {
+    audioPlayer.resume();
+  }
 
-    return lyricsList;
+  void stop() {
+    audioPlayer.stop();
+  }
+
+  void seek(Duration duration) {
+    audioPlayer.seek(duration);
   }
 }

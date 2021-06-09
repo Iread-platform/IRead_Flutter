@@ -6,7 +6,7 @@ class StoryPlayer extends StatefulWidget {
   final _audioUrl;
   final _isAssetFile;
 
-  StoryPlayer(audioUrl, isAssetFile)
+  StoryPlayer({audioUrl, isAssetFile})
       : _audioUrl = audioUrl,
         _isAssetFile = isAssetFile;
 
@@ -25,9 +25,9 @@ class _StoryPlayerState extends State<StoryPlayer> {
     return Column(
       children: [
         StoryAudioPlayer(
-            audioUrl: widget._audioUrl,
-            isLocalFile: widget._isAssetFile,
-            bloc: Provider.of<StoryAudioPlayerBloc>(context)),
+          audioUrl: widget._audioUrl,
+          isLocalFile: widget._isAssetFile,
+        ),
       ],
     );
   }
