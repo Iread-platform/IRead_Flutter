@@ -18,8 +18,13 @@ class DrawerWidget extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(Icons.clear_rounded,
-                    size: 40, color: Theme.of(context).colorScheme.primary),
+                InkWell(
+                  child: Icon(Icons.clear_rounded,
+                      size: 40, color: Theme.of(context).colorScheme.primary),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
                 SizedBox(
                   height: 30,
                 ),
