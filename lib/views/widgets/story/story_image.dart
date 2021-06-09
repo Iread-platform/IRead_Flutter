@@ -7,11 +7,12 @@ import 'package:iread_flutter/config/themes/border_radius.dart';
 class StoryImage extends StatelessWidget {
   final String _imageUrl;
   final Color _color;
-  final ValueNotifier<Widget> _selectedWidget = ValueNotifier(null);
+  final double _minHeight;
 
   StoryImage({@required imageUrl, @required color})
       : _imageUrl = imageUrl,
-        _color = color;
+        _color = color,
+        _minHeight = 150;
 
   @override
   Widget build(BuildContext context) => Container(
@@ -24,13 +25,13 @@ class StoryImage extends StatelessWidget {
               BoxShadow(color: Colors.grey, blurRadius: 5, offset: Offset(1, 0))
             ]),
         child: ConstrainedBox(
-          constraints: BoxConstraints(minHeight: 100),
+          constraints: BoxConstraints(minHeight: _minHeight),
           child: Container(
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(storyBorderRadius),
                 boxShadow: [
                   BoxShadow(
-                      color: Colors.black26,
+                      color: Colors.black12,
                       blurRadius: 5,
                       offset: Offset(-1, 0))
                 ]),
@@ -54,7 +55,8 @@ class StoryImage extends StatelessWidget {
 
 class AnimatedNetworkImage extends StatefulWidget {
   final String _imageUrl;
-  const AnimatedNetworkImage({String imageUrl, Key key})
+
+  const AnimatedNetworkImage({@required String imageUrl, Key key})
       : _imageUrl = imageUrl,
         super(key: key);
 
@@ -100,7 +102,7 @@ class _AnimatedNetworkImageState extends State<AnimatedNetworkImage>
       },
       errorBuilder: (BuildContext context, exception, stackTrace) {
         print(stackTrace);
-        return Image.asset('assets/images/shared/error.jpg');
+        return Container(child: Image.asset('assets/images/shared/error.jpg'));
       },
       frameBuilder:
           (BuildContext context, child, frame, bool wasSynchronoslyLoaded) {
@@ -115,7 +117,7 @@ class _AnimatedNetworkImageState extends State<AnimatedNetworkImage>
                   ));
         }
 
-        return !imageLoaded
+        return imageLoaded
             ? child
             : Center(
                 child: CircularProgressIndicator(),

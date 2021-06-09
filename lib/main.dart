@@ -31,16 +31,6 @@ class MyApp extends StatelessWidget {
             imageUrl: 'https://picsum.photos/200/300',
             color: Colors.cyan,
           ),
-          StoryCard(
-            title: "Title",
-            imageUrl: 'https://picsum.photos/200/300',
-            color: Colors.cyan,
-          ),
-          StoryCard(
-            title: "Title",
-            imageUrl: 'https://picsum.photos/200/300',
-            color: Colors.cyan,
-          ),
         ],
       )),
     );
