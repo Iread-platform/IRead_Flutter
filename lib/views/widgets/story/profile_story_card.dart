@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iread_flutter/config/themes/border_radius.dart';
 import 'package:iread_flutter/models/story.dart';
+import 'package:iread_flutter/views/widgets/shared/progress_bar.dart';
 import 'package:iread_flutter/views/widgets/story/story_details_card_template.dart';
 
 class ProfileStoryCard extends StatelessWidget {
@@ -90,21 +91,15 @@ class ProfileStoryCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Flexible(
-            flex: 10,
-            child: Container(
-              height: 12,
-              decoration: BoxDecoration(
-                  border: Border.all(
-                      width: 2, color: Theme.of(context).colorScheme.surface),
-                  borderRadius: BorderRadius.circular(storyBorderRadius)),
-              margin: EdgeInsets.only(right: 12),
-              child: LinearProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(_story.color),
-                value: _story.progress ?? 0,
-                backgroundColor: Theme.of(context).colorScheme.surface,
-              ),
-            ),
-          ),
+              flex: 9,
+              child: ProgressBar(
+                height: 16.0,
+                progress: _story.progress,
+                color: _story.color,
+                borderWidth: 2.0,
+                padding: 0.0,
+                borderRadius: storyBorderRadius,
+              )),
           Flexible(
             flex: 3,
             child: Text(
