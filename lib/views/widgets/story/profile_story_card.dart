@@ -7,22 +7,13 @@ class ProfileStoryCard extends StatelessWidget {
   final Story _story;
   final String _readingTimeTitle = 'Reading Time';
   final String _flippedTimePages = 'Flipped Pages';
-  final double _progress;
-  final int _flippedPages;
-  final double _readingTime;
 
   ProfileStoryCard(
       {Key key,
       @required Story story,
-      progress,
-      flippedPages,
-      readingTime,
       storyDetailsUpperSection,
       storyDetailsBottomSection})
       : _story = story,
-        _progress = progress ?? 0,
-        _flippedPages = flippedPages,
-        _readingTime = readingTime,
         super(key: key);
 
   @override
@@ -53,11 +44,21 @@ class ProfileStoryCard extends StatelessWidget {
           children: [
             Expanded(
               child: _detailsRow(
-                  context, _readingTimeTitle, _readingTime.toString() + ' m'),
+                  context,
+                  _readingTimeTitle,
+                  (_story.readingTime != null
+                          ? _story.readingTime.toString()
+                          : '0') +
+                      ' m'),
             ),
             Expanded(
-              child: _detailsRow(context, _flippedTimePages,
-                  _flippedPages.toString() + ' pages'),
+              child: _detailsRow(
+                  context,
+                  _flippedTimePages,
+                  (_story.flippedPages != null
+                          ? _story.flippedPages.toString()
+                          : '0') +
+                      ' pages'),
             )
           ],
         ),
@@ -99,7 +100,7 @@ class ProfileStoryCard extends StatelessWidget {
               margin: EdgeInsets.only(right: 12),
               child: LinearProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(_story.color),
-                value: _progress,
+                value: _story.progress ?? 0,
                 backgroundColor: Theme.of(context).colorScheme.surface,
               ),
             ),
@@ -107,7 +108,10 @@ class ProfileStoryCard extends StatelessWidget {
           Flexible(
             flex: 3,
             child: Text(
-              _progress.toString() + '%',
+              (_story.progress != null
+                      ? (_story.progress * 100).toString()
+                      : '0') +
+                  '%',
               style: Theme.of(context)
                   .textTheme
                   .subtitle2
