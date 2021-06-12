@@ -29,8 +29,8 @@ class StoryDetailsCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Flexible(flex: 2, child: Container()),
-              Flexible(flex: 3, child: _storyDetails(context))
+              Flexible(flex: 5, child: Container()),
+              Flexible(flex: 9, child: _storyDetails(context))
             ],
           ),
           Row(

@@ -21,8 +21,8 @@ class ProfileStoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return StoryDetailsCard(
       story: _story,
-      upperSection: _storyPagesAndTime(context, 12),
-      lowerSection: _storyProgress(context, 12),
+      upperSection: _storyPagesAndTime(context, 28),
+      lowerSection: _storyProgress(context, 28),
     );
   }
 

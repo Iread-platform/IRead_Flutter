@@ -21,7 +21,8 @@ class StoriesSearchList extends StatelessWidget {
       children: [
         Expanded(
             child: ListView.separated(
-                padding: const EdgeInsets.symmetric(horizontal: 18),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 18, vertical: 24),
                 clipBehavior: Clip.none,
                 itemBuilder: (context, int index) {
                   if (index == 0) {
@@ -29,7 +30,7 @@ class StoriesSearchList extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Container(
-                          margin: const EdgeInsets.symmetric(vertical: 24),
+                          margin: const EdgeInsets.only(bottom: 12),
                           padding: const EdgeInsets.symmetric(
                               horizontal: 18, vertical: 8),
                           decoration: BoxDecoration(
