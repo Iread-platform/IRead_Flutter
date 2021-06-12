@@ -18,15 +18,12 @@ void main() {
   runApp(
     BlocProvider(
       create: (context) => StoryscreenBloc()..add(GetAudioEvent()),
-      // child: MultiProvider(
-      //   providers: [
-      //     ChangeNotifierProvider(create: (context) => TextSelectionProvider()),
-      //     ChangeNotifierProvider(create: (context) => StoryPlayerBloc()),
-      //     ChangeNotifierProvider(create: (context) => StoryBloc()),
-      //   ],
+      child: MultiProvider(providers: [
+        ChangeNotifierProvider(create: (context) => TextSelectionProvider()),
 
-      // ),
-      child: MyApp(),
+        // ChangeNotifierProvider(create: (context) => StoryPlayerBloc()),
+        ChangeNotifierProvider(create: (context) => StoryBloc()),
+      ], child: MyApp()),
     ),
   );
 }

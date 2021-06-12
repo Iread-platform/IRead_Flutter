@@ -28,15 +28,16 @@ The next day, a wolf happened to pass by the lane where the three little pigs li
 }
 
 class _StoryScreenState extends State<StoryScreen> {
-  var bloc;
+  StoryscreenBloc bloc;
+  StoryscreenBloc blocListner;
 
   @override
   void initState() {
-    bloc = BlocProvider.of<StoryscreenBloc>(context, listen: false);
     super.initState();
-    // bloc.play(
-    //     "https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_5MG.mp3");
-    // bloc.pause();
+    bloc = BlocProvider.of<StoryscreenBloc>(context, listen: false);
+    // blocListner = BlocProvider.of<StoryscreenBloc>(context, listen: true);
+    bloc.add(GetAudioEvent());
+    // bloc.add(PlayEvent(bloc.))
   }
 
   bool play = true;
@@ -111,15 +112,15 @@ class _StoryScreenState extends State<StoryScreen> {
                   ),
                 ),
               ),
-              // Expanded(
-              //   flex: 5,
-              //   child: Container(
-              //     child: HighlighText(
-              //         storyString: widget.strStory,
-              //         marginX: w * 0.15,
-              //         marginY: h * 0.45 - 10),
-              //   ),
-              // ),
+              Expanded(
+                flex: 5,
+                child: Container(
+                  child: HighlighText(
+                      storyString: widget.strStory,
+                      marginX: w * 0.15,
+                      marginY: h * 0.45 - 10),
+                ),
+              ),
               Expanded(
                 flex: 1,
                 child: Container(
@@ -149,42 +150,48 @@ class _StoryScreenState extends State<StoryScreen> {
                   ),
                 ),
               ),
-              Container(
-                width: w * 0.8,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    BlocBuilder(
-                      builder:(context, state) {
-                        if (bloc.duration != null && bloc.progress != null) {
-                          return Container(
-                            child: InkWell(
-                              child: Icon(
-                                bloc.audioPlayerState ==
-                                        AudioPlayerState.PLAYING
-                                    ? Icons.pause
-                                    : Icons.play_arrow,
-                                color: Colors.purple,
-                                size: 70,
-                              ),
-                              onTap: () {
-                                if (!(bloc.audioPlayerState ==
-                                    AudioPlayerState.PLAYING)) {
-                                  bloc.add(ResumeEvent());
-                                } else {
-                                  bloc.add(PauseEvent());
-                                }
-                              },
-                            ),
-                          );
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: w * 0.8,
+                    alignment: Alignment.center,
+                    child: ProgressBar(
+                      progress: Duration(seconds: 10),
+                      total: Duration(seconds: 30),
+                      buffered: Duration(seconds: 15),
+                      progressBarColor: Colors.purple,
+                      bufferedBarColor: Colors.purple.withOpacity(0.5),
+                      baseBarColor: Colors.purple.withOpacity(0.3),
+                      thumbColor: Colors.purple,
+                      barHeight: 20,
+                      onSeek: (value) {},
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(bottom: 10),
+                    alignment: Alignment.bottomCenter,
+                    child: InkWell(
+                      child: Icon(
+                        Icons.pause,
+                        // blocListner.audioPlayerState == AudioPlayerState.PLAYING
+                        //     ? Icons.pause
+                        //     : Icons.play_arrow,
+                        color: Colors.purple,
+                        size: 70,
+                      ),
+                      onTap: () {
+                        if (!(blocListner.audioPlayerState ==
+                            AudioPlayerState.PLAYING)) {
+                          bloc.add(ResumeEvent());
                         } else {
-                          return Container();
+                          bloc.add(PauseEvent());
                         }
                       },
                     ),
-                  ],
-                ),
-              ),
+                  ),
+                ],
+              )
             ],
           ),
         ),

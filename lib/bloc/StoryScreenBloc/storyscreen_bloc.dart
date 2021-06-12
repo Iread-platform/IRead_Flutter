@@ -11,12 +11,12 @@ part 'storyscreen_state.dart';
 
 class StoryscreenBloc extends Bloc<StoryscreenEvent, StoryscreenState> {
   AudioPlayer audioPlayer;
+  String url;
   Duration duration;
   Duration progress;
   AudioPlayerState audioPlayerState = AudioPlayerState.PLAYING;
-  StoryscreenBloc() : super(null) {
+  StoryscreenBloc() : super(StoryscreenInitial()) {
     audioPlayer = AudioPlayer();
-    initListeners();
   }
   @override
   Stream<StoryscreenState> mapEventToState(
@@ -25,10 +25,11 @@ class StoryscreenBloc extends Bloc<StoryscreenEvent, StoryscreenState> {
     yield LoadingState();
     if (event is GetAudioEvent) {
       Data<String> audioData = await StoryRepository().getAudioURL();
-      play(audioData.data);
       yield LoadedURLState(audioData);
-    } else if (event is GetStoryEvent) {
-      print("heere");
+      play(audioData.data);
+    }
+    
+     else if (event is GetStoryEvent) {
       Data story = await StoryRepository().getStory();
       yield LoadedStoryState(story);
     } else {
