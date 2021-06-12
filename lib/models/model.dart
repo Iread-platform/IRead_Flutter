@@ -1,7 +1,7 @@
 class Model {
   int _id;
 
-  Model({id}) : _id = id;
+  Model({int id}) : _id = id;
 
   get id => _id;
 }

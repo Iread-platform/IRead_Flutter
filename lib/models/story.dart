@@ -26,6 +26,15 @@ class Story extends Model {
         _progress = progress,
         super(id: id);
 
+  Story.fromJson(Map<String, dynamic> json) : super(id: json['id']) {
+    _title = json['title'];
+    _color = Color(int.parse('0x' + json['color'], radix: 16));
+    _imageUrl = json['imageUrl'];
+    _flippedPages = json['flippedPages'];
+    _readingTime = json['readingTime'];
+    _progress = json['progress'];
+  }
+
   get title => _title;
   get progress => _progress;
   get color => _color;
