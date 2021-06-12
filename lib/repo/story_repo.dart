@@ -1,12 +1,21 @@
-import 'package:iread_flutter/models/story.dart';
+import 'dart:convert';
 
-class StoryRepo {
+import 'package:iread_flutter/models/story.dart';
+import 'package:iread_flutter/repo/main_repo.dart';
+import 'package:iread_flutter/services/api_service.dart';
+
+class StoryRepo extends MainRepo {
+  static final StoryRepo _instance = StoryRepo._internal();
 
   final tagSearchEndPoint = "";
 
-  List<Story> searchByTag(String tag) {
-    try {
+  factory StoryRepo() => _instance;
+  StoryRepo._internal();
 
+  Future<List<Story>> searchByTag(String tag) async {
+    try {
+      final jsonText = await apiService.request(requestType: RequestType.GET, endPoint: tagSearchEndPoint);
+      final json = jsonDecode(jsonText);
     }
   }
 }
