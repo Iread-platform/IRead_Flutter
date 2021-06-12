@@ -20,5 +20,15 @@ class ResumeEvent extends StoryscreenEvent {}
 
 class SeekEvent extends StoryscreenEvent {
   Duration duration;
-  SeekEvent(duration);
+  SeekEvent(this.duration);
+}
+
+class ChangeProgressEvent extends StoryscreenEvent {
+  Duration progress;
+  ChangeProgressEvent(this.progress);
+}
+
+class ChangeDurationEvent extends StoryscreenEvent {
+  Duration duration;
+  ChangeDurationEvent(this.duration);
 }

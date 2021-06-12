@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iread_flutter/bloc/StoryScreenBloc/storyscreen_bloc.dart';
-import 'package:iread_flutter/bloc/story_player_bloc.dart';
 import 'package:iread_flutter/views/Widgets/highlight_text.dart';
-import 'package:iread_flutter/views/Widgets/media/story_audio_player.dart';
-import 'package:provider/provider.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 
 class StoryScreen extends StatefulWidget {
@@ -28,16 +25,10 @@ The next day, a wolf happened to pass by the lane where the three little pigs li
 }
 
 class _StoryScreenState extends State<StoryScreen> {
-  StoryscreenBloc bloc;
-  StoryscreenBloc blocListner;
-
   @override
   void initState() {
     super.initState();
-    bloc = BlocProvider.of<StoryscreenBloc>(context, listen: false);
-    // blocListner = BlocProvider.of<StoryscreenBloc>(context, listen: true);
-    bloc.add(GetAudioEvent());
-    // bloc.add(PlayEvent(bloc.))
+    BlocProvider.of<StoryscreenBloc>(context).add(GetAudioEvent());
   }
 
   bool play = true;
@@ -150,51 +141,70 @@ class _StoryScreenState extends State<StoryScreen> {
                   ),
                 ),
               ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: w * 0.8,
-                    alignment: Alignment.center,
-                    child: ProgressBar(
-                      progress: Duration(seconds: 10),
-                      total: Duration(seconds: 30),
+              Container(
+                width: w * 0.8,
+                alignment: Alignment.center,
+                child: BlocBuilder<StoryscreenBloc, StoryscreenState>(
+                  builder: (context, state) {
+                    return ProgressBar(
+                      progress:
+                          BlocProvider.of<StoryscreenBloc>(context).progress ??
+                              Duration(seconds: 0),
+                      total:
+                          BlocProvider.of<StoryscreenBloc>(context).duration ??
+                              Duration(seconds: 0),
                       buffered: Duration(seconds: 15),
                       progressBarColor: Colors.purple,
                       bufferedBarColor: Colors.purple.withOpacity(0.5),
                       baseBarColor: Colors.purple.withOpacity(0.3),
                       thumbColor: Colors.purple,
                       barHeight: 20,
-                      onSeek: (value) {},
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(bottom: 10),
-                    alignment: Alignment.bottomCenter,
-                    child: InkWell(
-                      child: Icon(
-                        Icons.pause,
-                        // blocListner.audioPlayerState == AudioPlayerState.PLAYING
-                        //     ? Icons.pause
-                        //     : Icons.play_arrow,
+                      onSeek: (duration) {
+                        print(duration);
+                        BlocProvider.of<StoryscreenBloc>(context).add(
+                          SeekEvent(
+                            duration,
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(bottom: 10),
+                alignment: Alignment.bottomCenter,
+                child: InkWell(
+                  child: BlocBuilder<StoryscreenBloc, StoryscreenState>(
+                    builder: (context, state) {
+                      return Icon(
+                        (state is PlayerState)
+                            ? state.audioState == AudioPlayerState.PLAYING
+                                ? Icons.pause
+                                : Icons.play_arrow
+                            : Icons.pause,
                         color: Colors.purple,
                         size: 70,
-                      ),
-                      onTap: () {
-                        if (!(blocListner.audioPlayerState ==
-                            AudioPlayerState.PLAYING)) {
-                          bloc.add(ResumeEvent());
-                        } else {
-                          bloc.add(PauseEvent());
-                        }
-                      },
-                    ),
+                      );
+                    },
                   ),
-                ],
+                  onTap: () {
+                    if (!(BlocProvider.of<StoryscreenBloc>(context,
+                                listen: false)
+                            .audioPlayerState ==
+                        AudioPlayerState.PLAYING)) {
+                      BlocProvider.of<StoryscreenBloc>(context, listen: false)
+                          .add(ResumeEvent());
+                    } else {
+                      BlocProvider.of<StoryscreenBloc>(context, listen: false)
+                          .add(PauseEvent());
+                    }
+                  },
+                ),
               )
             ],
           ),
-        ),
+        )
       ],
     );
   }

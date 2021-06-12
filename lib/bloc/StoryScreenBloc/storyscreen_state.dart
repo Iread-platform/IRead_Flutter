@@ -3,7 +3,6 @@ part of 'storyscreen_bloc.dart';
 @immutable
 abstract class StoryscreenState {}
 
-
 class StoryscreenInitial extends StoryscreenState {}
 
 class LoadingState extends StoryscreenState {}
@@ -21,6 +20,16 @@ class LoadedStoryState extends StoryscreenState {
 class PlayerState extends StoryscreenState {
   AudioPlayerState audioState;
   PlayerState(this.audioState);
+}
+
+class ProgressState extends StoryscreenState {
+  Duration progress;
+  ProgressState(this.progress);
+}
+
+class DurationState extends StoryscreenState {
+  Duration duration;
+  DurationState(this.duration);
 }
 
 class ErrorState extends StoryscreenState {
