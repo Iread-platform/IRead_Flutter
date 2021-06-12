@@ -20,7 +20,8 @@ class StoryImage extends StatelessWidget {
             borderRadius: BorderRadius.circular(storyBorderRadius),
             color: _color,
             boxShadow: [
-              BoxShadow(color: Colors.grey, blurRadius: 5, offset: Offset(1, 0))
+              BoxShadow(
+                  color: Colors.black12, blurRadius: 5, offset: Offset(1, 0))
             ]),
         child: Container(
           decoration: BoxDecoration(
