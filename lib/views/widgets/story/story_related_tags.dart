@@ -28,6 +28,7 @@ class StoryRelatedTags extends StatelessWidget {
           Wrap(
             spacing: 8,
             runSpacing: 8,
+            clipBehavior: Clip.antiAlias,
             children: _buildTags(context),
           )
         ],

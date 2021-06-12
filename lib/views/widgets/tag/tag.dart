@@ -10,12 +10,7 @@ class Tag extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-      decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
-          borderRadius: BorderRadius.circular(storyBorderRadius),
-          boxShadow: [BoxShadow()]),
+    return ElevatedButton(
       child: Text(
         _title,
         style: Theme.of(context)
@@ -23,6 +18,13 @@ class Tag extends StatelessWidget {
             .subtitle2
             .copyWith(color: Theme.of(context).colorScheme.primary),
       ),
+      onPressed: () {},
+      style: ElevatedButton.styleFrom(
+          primary: Theme.of(context).colorScheme.surface,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(storyBorderRadius)),
+          elevation: 4,
+          shadowColor: Colors.black38),
     );
   }
 }
