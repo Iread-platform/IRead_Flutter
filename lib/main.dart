@@ -18,15 +18,10 @@ class MyApp extends StatelessWidget {
       title: 'Iread',
       theme: mainTheme,
       home: Scaffold(
-        appBar: AppBar(),
-        body: Container(
-          child: Center(
-            child: StoryDetails(
-              story: story,
-            ),
-          ),
-        ),
-      ),
+          appBar: AppBar(),
+          body: StoryDetails(
+            story: story,
+          )),
     );
   }
 }

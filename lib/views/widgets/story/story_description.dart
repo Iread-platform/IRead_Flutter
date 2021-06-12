@@ -30,6 +30,9 @@ class StoryDescription extends StatelessWidget {
             _title,
             style: Theme.of(context).textTheme.headline2,
           ),
+          SizedBox(
+            height: 6,
+          ),
           Text(
             _description,
             style: Theme.of(context)

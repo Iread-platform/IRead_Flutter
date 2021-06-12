@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:iread_flutter/config/themes/border_radius.dart';
 import 'package:iread_flutter/views/widgets/shared/progress_bar.dart';
 import 'package:iread_flutter/views/widgets/story/story_image.dart';
@@ -30,7 +29,7 @@ class StoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.max,
       children: [
         StoryImage(imageUrl: _imageUrl, color: _color),
         _studentProgress(context),
