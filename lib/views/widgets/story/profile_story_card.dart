@@ -93,7 +93,7 @@ class ProfileStoryCard extends StatelessWidget {
           Flexible(
               flex: 9,
               child: ProgressBar(
-                height: 16.0,
+                height: 12.0,
                 progress: _story.progress,
                 color: _story.color,
                 borderWidth: 2.0,
