@@ -1,24 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iread_flutter/bloc/story_bloc.dart';
 import 'package:iread_flutter/bloc/story_player_bloc.dart';
 import 'package:iread_flutter/bloc/text_selection_provider.dart';
+import 'package:iread_flutter/models/Data.dart';
 import 'package:iread_flutter/views/Widgets/highlight_text.dart';
 
 import 'package:provider/provider.dart';
 
+import 'bloc/StoryScreenBloc/storyscreen_bloc.dart';
 import 'models/stories_section_model.dart';
 import 'models/story.dart';
+import 'models/word.dart';
 import 'views/Screens/story_screen.dart';
 
 void main() {
-  runApp(MultiProvider(
-    providers: [
-      ChangeNotifierProvider(create: (context) => TextSelectionProvider()),
-      ChangeNotifierProvider(create: (context) => StoryPlayerBloc()),
-      ChangeNotifierProvider(create: (context) => StoryBloc()),
-    ],
-    child: MyApp(),
-  ));
+  runApp(
+    BlocProvider(
+      create: (context) => StoryscreenBloc()..add(GetAudioEvent()),
+      // child: MultiProvider(
+      //   providers: [
+      //     ChangeNotifierProvider(create: (context) => TextSelectionProvider()),
+      //     ChangeNotifierProvider(create: (context) => StoryPlayerBloc()),
+      //     ChangeNotifierProvider(create: (context) => StoryBloc()),
+      //   ],
+
+      // ),
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -38,10 +48,11 @@ The next day, a wolf happened to pass by the lane where the three little pigs li
     return MaterialApp(
       title: 'Iread',
       home: Scaffold(
-        body: StoryScreen(
+          body: Center(
+        child: StoryScreen(
           strStory: storyString,
         ),
-      ),
+      )),
     );
   }
 }

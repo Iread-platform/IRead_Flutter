@@ -1,6 +1,7 @@
 class Data<T> {
   T _data;
   String _message = "";
+  int st;
   Data(this._data, this._message);
 
   T get data => _data;

@@ -5,14 +5,24 @@ abstract class StoryscreenState {}
 
 class StoryscreenInitial extends StoryscreenState {}
 
-class Loading extends StoryscreenState {}
+class LoadingState extends StoryscreenState {}
 
-class Loaded extends StoryscreenState {
+class LoadedURLState extends StoryscreenState {
   var data;
-  Loaded(this.data);
+  LoadedURLState(this.data);
 }
 
-class Error extends StoryscreenState {
+class LoadedStoryState extends StoryscreenState {
+  var data;
+  LoadedStoryState(this.data);
+}
+
+class PlayerState extends StoryscreenState {
+  AudioPlayerState audioState;
+  PlayerState(this.audioState);
+}
+
+class ErrorState extends StoryscreenState {
   var message;
-  Error(this.message);
+  ErrorState(this.message);
 }

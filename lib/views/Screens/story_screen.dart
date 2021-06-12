@@ -1,6 +1,8 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:iread_flutter/bloc/StoryScreenBloc/storyscreen_bloc.dart';
 import 'package:iread_flutter/bloc/story_player_bloc.dart';
 import 'package:iread_flutter/views/Widgets/highlight_text.dart';
 import 'package:iread_flutter/views/Widgets/media/story_audio_player.dart';
@@ -30,10 +32,10 @@ class _StoryScreenState extends State<StoryScreen> {
 
   @override
   void initState() {
-    bloc = Provider.of<StoryPlayerBloc>(context, listen: false);
+    bloc = BlocProvider.of<StoryscreenBloc>(context, listen: false);
     super.initState();
-    bloc.play(
-        "https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_5MG.mp3");
+    // bloc.play(
+    //     "https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_5MG.mp3");
     // bloc.pause();
   }
 
@@ -109,15 +111,15 @@ class _StoryScreenState extends State<StoryScreen> {
                   ),
                 ),
               ),
-              Expanded(
-                flex: 5,
-                child: Container(
-                  child: HighlighText(
-                      storyString: widget.strStory,
-                      marginX: w * 0.15,
-                      marginY: h * 0.45 - 10),
-                ),
-              ),
+              // Expanded(
+              //   flex: 5,
+              //   child: Container(
+              //     child: HighlighText(
+              //         storyString: widget.strStory,
+              //         marginX: w * 0.15,
+              //         marginY: h * 0.45 - 10),
+              //   ),
+              // ),
               Expanded(
                 flex: 1,
                 child: Container(
@@ -152,43 +154,13 @@ class _StoryScreenState extends State<StoryScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Consumer<StoryPlayerBloc>(
-                      builder: (context, value, child) {
-                        if (value.duration != null && value.progress != null) {
-                          return Container(
-                            margin: EdgeInsets.only(top: 50),
-                            child: ProgressBar(
-                              progress: value.progress,
-                              thumbRadius: 0,
-                              barHeight: 20,
-                              progressBarColor: Colors.purple,
-                              baseBarColor: Colors.purple.withOpacity(0.24),
-                              bufferedBarColor: Colors.purple.withOpacity(0.3),
-                              thumbColor: Colors.purple,
-                              timeLabelTextStyle: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  height: 2),
-                              buffered: Duration(milliseconds: 90000),
-                              total: value.duration,
-                              onSeek: (duration) {
-                                bloc.seek(duration);
-                              },
-                            ),
-                          );
-                        } else {
-                          return CircularProgressIndicator();
-                        }
-                      },
-                    ),
-                    Consumer<StoryPlayerBloc>(
-                      builder: (context, value, child) {
-                        if (value.duration != null && value.progress != null) {
+                    BlocBuilder(
+                      builder:(context, state) {
+                        if (bloc.duration != null && bloc.progress != null) {
                           return Container(
                             child: InkWell(
                               child: Icon(
-                                value.audioPlayerState ==
+                                bloc.audioPlayerState ==
                                         AudioPlayerState.PLAYING
                                     ? Icons.pause
                                     : Icons.play_arrow,
@@ -196,11 +168,11 @@ class _StoryScreenState extends State<StoryScreen> {
                                 size: 70,
                               ),
                               onTap: () {
-                                if (!(value.audioPlayerState ==
+                                if (!(bloc.audioPlayerState ==
                                     AudioPlayerState.PLAYING)) {
-                                  bloc.resume();
+                                  bloc.add(ResumeEvent());
                                 } else {
-                                  bloc.pause();
+                                  bloc.add(PauseEvent());
                                 }
                               },
                             ),

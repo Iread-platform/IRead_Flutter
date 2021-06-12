@@ -21,6 +21,7 @@ class StoryPlayerBloc extends ChangeNotifier {
       print(audioPlayerState);
       notifyListeners();
     });
+    
 
     audioPlayer.onAudioPositionChanged.listen((event) {
       progress = event;
