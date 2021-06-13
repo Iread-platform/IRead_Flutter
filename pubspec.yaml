@@ -35,8 +35,8 @@ dependencies:
   fluro: ^2.0.3
   flutter_svg: ^0.22.0
   http: ^0.13.3
-  audioplayers: ^0.15.0
   rxdart: ^0.27.0
+  audioplayers: ^0.15.0
   audio_video_progress_bar: ^0.4.0
 
 dev_dependencies:

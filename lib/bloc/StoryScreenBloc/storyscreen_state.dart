@@ -18,7 +18,7 @@ class LoadedStoryState extends StoryscreenState {
 }
 
 class PlayerState extends StoryscreenState {
-  AudioPlayerState audioState;
+  AudioPlayerState audioState = AudioPlayerState.PLAYING;
   PlayerState(this.audioState);
 }
 

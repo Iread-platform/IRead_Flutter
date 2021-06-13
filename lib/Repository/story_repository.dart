@@ -12,7 +12,7 @@ class StoryRepository {
   String audioURL;
   String story;
   String dummyAudioURL =
-      "https://cdnm.meln.top/mx/Jonathan%20Roy%20-%20Keeping%20Me%20Alive.mp3?hash=LTIwMDE0NTU1NjAvNjI0NTU1NjAubXAz";
+      "https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_5MG.mp3";
   String dummyData = '''[
     {"word": "while", "start": 0, "timestamp": 0},
     {"word": "drawing", "start": 0, "timestamp": 500},
@@ -31,6 +31,13 @@ class StoryRepository {
   StoryRepository() {
     apiService = new ApiService();
   }
+  /*
+  request : 
+    storyid , page 
+  response: 
+    audio , text , image, 
+  */
+
   Future<Data<String>> getAudioURL() async {
     try {
       // final responseText = await apiService.request(

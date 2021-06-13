@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iread_flutter/bloc/StoryScreenBloc/storyscreen_bloc.dart';
+import 'package:iread_flutter/utils/i_read_icons.dart';
 import 'package:iread_flutter/views/Widgets/highlight_text.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 
@@ -25,187 +26,211 @@ The next day, a wolf happened to pass by the lane where the three little pigs li
 }
 
 class _StoryScreenState extends State<StoryScreen> {
+  bool play = true;
+  var w;
+  var h;
+  var bloc;
+
   @override
   void initState() {
     super.initState();
+    print("init");
     BlocProvider.of<StoryscreenBloc>(context).add(GetAudioEvent());
   }
 
-  bool play = true;
   @override
   Widget build(BuildContext context) {
-    var w = MediaQuery.of(context).size.width;
-    var h = MediaQuery.of(context).size.height;
+    w = MediaQuery.of(context).size.width;
+    h = MediaQuery.of(context).size.height;
+    bloc = BlocProvider.of<StoryscreenBloc>(context);
     return Column(
       children: [
-        Container(
-          height: h * 0.45,
-          child: Stack(
-            children: [
-              Container(
-                height: h * 0.45,
-                child: Image.network(
-                  "https://www.jotform.com/blog/wp-content/uploads/2018/07/photos-with-story-featured-15.jpg",
-                  alignment: Alignment.bottomCenter,
-                ),
-              ),
-              Transform.translate(
-                offset: Offset(200, -140),
-                child: Container(
-                  child: Container(
-                    child: Transform.scale(
-                      scale: 1.2,
-                      child: SvgPicture.asset(
-                        "assets/images/shared/curve_top_right.svg",
-                        color: Colors.orange[200],
-                        alignment: Alignment.topLeft,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Container(
-                height: h * 0.45,
-                margin: EdgeInsets.all(40),
-                alignment: Alignment.topRight,
-                child: Icon(
-                  Icons.arrow_forward_ios_rounded,
-                  size: 40,
-                  color: Colors.purple,
-                ),
-              ),
-              Container(
-                height: 120,
-                width: 120,
-                alignment: Alignment.center,
-                child: Icon(
-                  Icons.menu,
-                  color: Colors.purple,
-                  size: 40,
-                ),
-              )
-            ],
-          ),
-        ),
-        Container(
-          height: h * 0.30,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                flex: 1,
-                child: Container(
-                  child: Icon(
-                    Icons.arrow_back_ios_rounded,
-                    color: Colors.purple,
-                    size: 40,
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 5,
-                child: Container(
-                  child: HighlighText(
-                      storyString: widget.strStory,
-                      marginX: w * 0.15,
-                      marginY: h * 0.45 - 10),
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Container(
-                  child: Icon(
-                    Icons.arrow_forward_ios_rounded,
-                    color: Colors.purple,
-                    size: 40,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        Container(
-          height: h * 0.25,
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              Transform.translate(
-                offset: Offset(-w * 0.5, h * 0.1),
-                child: Transform.scale(
-                  scale: 1.6,
-                  child: SvgPicture.asset(
-                    "assets/images/shared/curve_bottom_left.svg",
-                    color: Colors.pink[200],
-                    alignment: Alignment.topRight,
-                  ),
-                ),
-              ),
-              Container(
-                width: w * 0.8,
-                alignment: Alignment.center,
-                child: BlocBuilder<StoryscreenBloc, StoryscreenState>(
-                  builder: (context, state) {
-                    return ProgressBar(
-                      progress:
-                          BlocProvider.of<StoryscreenBloc>(context).progress ??
-                              Duration(seconds: 0),
-                      total:
-                          BlocProvider.of<StoryscreenBloc>(context).duration ??
-                              Duration(seconds: 0),
-                      buffered: Duration(seconds: 15),
-                      progressBarColor: Colors.purple,
-                      bufferedBarColor: Colors.purple.withOpacity(0.5),
-                      baseBarColor: Colors.purple.withOpacity(0.3),
-                      thumbColor: Colors.purple,
-                      barHeight: 20,
-                      onSeek: (duration) {
-                        print(duration);
-                        BlocProvider.of<StoryscreenBloc>(context).add(
-                          SeekEvent(
-                            duration,
-                          ),
-                        );
-                      },
-                    );
-                  },
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.only(bottom: 10),
-                alignment: Alignment.bottomCenter,
-                child: InkWell(
-                  child: BlocBuilder<StoryscreenBloc, StoryscreenState>(
-                    builder: (context, state) {
-                      return Icon(
-                        (state is PlayerState)
-                            ? state.audioState == AudioPlayerState.PLAYING
-                                ? Icons.pause
-                                : Icons.play_arrow
-                            : Icons.pause,
-                        color: Colors.purple,
-                        size: 70,
-                      );
-                    },
-                  ),
-                  onTap: () {
-                    if (!(BlocProvider.of<StoryscreenBloc>(context,
-                                listen: false)
-                            .audioPlayerState ==
-                        AudioPlayerState.PLAYING)) {
-                      BlocProvider.of<StoryscreenBloc>(context, listen: false)
-                          .add(ResumeEvent());
-                    } else {
-                      BlocProvider.of<StoryscreenBloc>(context, listen: false)
-                          .add(PauseEvent());
-                    }
-                  },
-                ),
-              )
-            ],
-          ),
-        )
+        header(), // HomeButton - backArrow - ImageStory
+        textStory(), // Selectable text Story
+        player(), // progress - playPauseButton
       ],
+    );
+  }
+
+  Widget header() {
+    return Container(
+      height: h * 0.45,
+      child: Stack(
+        children: [
+          Container(
+            height: h * 0.45,
+            child: Image.network(
+              "https://www.jotform.com/blog/wp-content/uploads/2018/07/photos-with-story-featured-15.jpg",
+              alignment: Alignment.bottomCenter,
+            ),
+          ),
+          Transform.translate(
+            offset: Offset(200, -140),
+            child: Container(
+              child: Container(
+                child: Transform.scale(
+                  scale: 1.2,
+                  child: SvgPicture.asset(
+                    "assets/images/shared/curve_top_right.svg",
+                    color: Colors.orange[200],
+                    alignment: Alignment.topLeft,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Container(
+            height: h * 0.45,
+            margin: EdgeInsets.all(40),
+            alignment: Alignment.topRight,
+            child: Icon(
+              IReadIcons.arrow,
+              size: 40,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          ),
+          Container(
+            height: 120,
+            width: 120,
+            alignment: Alignment.center,
+            child: Icon(
+              Icons.menu,
+              color: Theme.of(context).colorScheme.primary,
+              size: 40,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget textStory() {
+    return Container(
+      height: h * 0.30,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            flex: 1,
+            child: Container(
+              child: Icon(
+                IReadIcons.arrow_back,
+                color: Theme.of(context).colorScheme.primary,
+                size: 40,
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 5,
+            child: Container(
+              child: HighlighText(
+                  storyString: widget.strStory,
+                  marginX: w * 0.15,
+                  marginY: h * 0.45 - 10),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Container(
+              child: Icon(
+                IReadIcons.arrow,
+                color: Theme.of(context).colorScheme.primary,
+                size: 40,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget player() {
+    return Container(
+        height: h * 0.25,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Transform.translate(
+              offset: Offset(-w * 0.5, h * 0.1),
+              child: Transform.scale(
+                scale: 1.6,
+                child: SvgPicture.asset(
+                  "assets/images/shared/curve_bottom_left.svg",
+                  color: Colors.pink[200],
+                  alignment: Alignment.topRight,
+                ),
+              ),
+            ),
+            BlocBuilder<StoryscreenBloc, StoryscreenState>(
+              builder: (context, state) {
+                if (state is LoadingState) {
+                  return CircularProgressIndicator();
+                } else {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: w * 0.8,
+                        alignment: Alignment.center,
+                        child: progress(),
+                      ),
+                      Container(
+                        alignment: Alignment.bottomCenter,
+                        child: InkWell(
+                          child: Builder(builder: (context) {
+                            if (bloc.audioPlayerState !=
+                                AudioPlayerState.PLAYING) {
+                              return Icon(
+                                Icons.play_arrow,
+                                color: Theme.of(context).colorScheme.primary,
+                                size: 70,
+                              );
+                            } else {
+                              return Icon(
+                                Icons.pause,
+                                color: Theme.of(context).colorScheme.primary,
+                                size: 70,
+                              );
+                            }
+                          }),
+                          onTap: () {
+                            if (!(bloc.audioPlayerState ==
+                                AudioPlayerState.PLAYING)) {
+                              bloc.add(ResumeEvent());
+                            } else {
+                              bloc.add(PauseEvent());
+                            }
+                          },
+                        ),
+                      )
+                    ],
+                  );
+                }
+              },
+            ),
+          ],
+        ));
+  }
+
+  Widget progress() {
+    return ProgressBar(
+      progress: bloc.progress ?? Duration(seconds: 0),
+      total: bloc.duration ?? Duration(seconds: 0),
+      buffered: Duration(seconds: 15),
+      progressBarColor: Theme.of(context).colorScheme.primary,
+      bufferedBarColor: Theme.of(context).colorScheme.primary.withOpacity(0.5),
+      baseBarColor: Theme.of(context).colorScheme.primary.withOpacity(0.3),
+      thumbColor: Theme.of(context).colorScheme.primary,
+      barHeight: 20,
+      onSeek: (duration) {
+        print(duration);
+        bloc.add(
+          SeekEvent(
+            duration,
+          ),
+        );
+      },
     );
   }
 }

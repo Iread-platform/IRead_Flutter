@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:bloc/bloc.dart';
 import 'package:iread_flutter/Repository/story_repository.dart';
@@ -10,71 +11,103 @@ part 'storyscreen_event.dart';
 part 'storyscreen_state.dart';
 
 class StoryscreenBloc extends Bloc<StoryscreenEvent, StoryscreenState> {
-  AudioPlayer audioPlayer;
   String url;
+  AudioPlayer audioPlayer;
   Duration duration;
   Duration progress;
-  AudioPlayerState audioPlayerState = AudioPlayerState.PLAYING;
+  AudioPlayerState audioPlayerState;
+  // AudioCache /cache;
+  StoryRepository storyRepository;
   StoryscreenBloc() : super(StoryscreenInitial()) {
     audioPlayer = AudioPlayer();
+    // cache = AudioCache();
+    // cache.clearCache();
+    audioPlayerState = AudioPlayerState.PLAYING;
+    storyRepository = StoryRepository();
     initListeners();
   }
   @override
   Stream<StoryscreenState> mapEventToState(
     StoryscreenEvent event,
   ) async* {
-    yield LoadingState();
     if (event is GetAudioEvent) {
-      Data<String> audioData = await StoryRepository().getAudioURL();
-      yield LoadedURLState(audioData);
+      yield LoadingState();
+      Data<String> audioData = await storyRepository.getAudioURL();
+      await Future.delayed(Duration(seconds: 3));
       play(audioData.data);
-    } else if (event is GetStoryEvent) {
-      Data story = await StoryRepository().getStory();
+      yield PlayerState(AudioPlayerState.PLAYING);
+    }
+    // ======== GetStoryEvent ==========
+    else if (event is GetStoryEvent) {
+      Data story = await storyRepository.getStory();
       yield LoadedStoryState(story);
-    } else {
+    }
+    //==========  player Controller ==============
+    else {
+      //======== Play ==========
       if (event is PlayEvent) {
         play(event.url);
+        audioPlayerState = AudioPlayerState.PLAYING;
         yield PlayerState(AudioPlayerState.PLAYING);
-      } else if (event is PauseEvent) {
+      }
+      //======== Pause ==========
+      else if (event is PauseEvent) {
         pause();
+        audioPlayerState = AudioPlayerState.PAUSED;
         yield PlayerState(AudioPlayerState.PAUSED);
-      } else if (event is StopEvent) {
+      }
+      //======== Stop ==========
+      else if (event is StopEvent) {
         stop();
+        audioPlayerState = AudioPlayerState.STOPPED;
+
         yield PlayerState(AudioPlayerState.STOPPED);
-      } else if (event is ResumeEvent) {
+      }
+      //======== Resume ==========
+      else if (event is ResumeEvent) {
         resume();
+        audioPlayerState = AudioPlayerState.PLAYING;
+
         yield PlayerState(AudioPlayerState.PLAYING);
-      } else if (event is SeekEvent) {
-        print("event ${event.duration}");
+      }
+      //======== Seek ==========
+      else if (event is SeekEvent) {
         seek(event.duration);
         resume();
+        audioPlayerState = AudioPlayerState.PLAYING;
+
         yield PlayerState(AudioPlayerState.PLAYING);
-      } else if (event is ChangeProgressEvent) {
+      }
+      //======== Progress ==========
+      else if (event is ChangeProgressEvent) {
         yield ProgressState(event.progress);
-      } else if (event is ChangeDurationEvent) {
+      }
+      //======== Duration ==========
+      else if (event is ChangeDurationEvent) {
         yield DurationState(event.duration);
       } else {}
     }
   }
 
   void initListeners() {
+    // ====== listen (Duration - Progress - PlayerState) ======
     StreamSubscription duratoionStream;
     duratoionStream = audioPlayer.onDurationChanged.listen((Duration d) {
       duration = d;
       this.add(ChangeDurationEvent(duration));
-      print("ssssss : $d");
       audioPlayer.onDurationChanged.drain();
       duratoionStream.cancel();
     });
-    audioPlayer.onPlayerStateChanged.listen((event) {
-      audioPlayerState = event;
-      print(audioPlayerState);
-    });
+    // audioPlayer.onPlayerStateChanged.listen((event) {
+    //   audioPlayerState = event;
+    // });
 
     audioPlayer.onAudioPositionChanged.listen((event) {
       progress = event;
-
       this.add(ChangeProgressEvent(progress));
+    });
+    audioPlayer.onPlayerCompletion.listen((event) {
+      this.add(SeekEvent(Duration(milliseconds: 0)));
     });
   }
 
@@ -95,8 +128,6 @@ class StoryscreenBloc extends Bloc<StoryscreenEvent, StoryscreenState> {
   }
 
   void seek(Duration duration) async {
-    print("seeeeeeeeek");
-    print(duration);
     await audioPlayer.seek(duration);
   }
 }
