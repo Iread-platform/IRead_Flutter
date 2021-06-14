@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,6 +32,7 @@ class _StoryScreenState extends State<StoryScreen> {
   var w;
   var h;
   var bloc;
+  int i = 0;
 
   @override
   void initState() {
@@ -167,6 +170,9 @@ class _StoryScreenState extends State<StoryScreen> {
                 if (state is LoadingState) {
                   return CircularProgressIndicator();
                 } else {
+                  BlocProvider.of<StoryscreenBloc>(context)
+                      .add(HighlightWordEvent(index: Random().nextInt(10)));
+
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

@@ -1,8 +1,11 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iread_flutter/Repository/story_repository.dart';
 import 'package:iread_flutter/models/Data.dart';
 import 'package:meta/meta.dart';
@@ -16,7 +19,7 @@ class StoryscreenBloc extends Bloc<StoryscreenEvent, StoryscreenState> {
   Duration duration;
   Duration progress;
   AudioPlayerState audioPlayerState;
-  // AudioCache /cache;
+  var context;
   StoryRepository storyRepository;
   StoryscreenBloc() : super(StoryscreenInitial()) {
     audioPlayer = AudioPlayer();
@@ -60,14 +63,12 @@ class StoryscreenBloc extends Bloc<StoryscreenEvent, StoryscreenState> {
       else if (event is StopEvent) {
         stop();
         audioPlayerState = AudioPlayerState.STOPPED;
-
         yield PlayerState(AudioPlayerState.STOPPED);
       }
       //======== Resume ==========
       else if (event is ResumeEvent) {
         resume();
         audioPlayerState = AudioPlayerState.PLAYING;
-
         yield PlayerState(AudioPlayerState.PLAYING);
       }
       //======== Seek ==========
@@ -75,7 +76,6 @@ class StoryscreenBloc extends Bloc<StoryscreenEvent, StoryscreenState> {
         seek(event.duration);
         resume();
         audioPlayerState = AudioPlayerState.PLAYING;
-
         yield PlayerState(AudioPlayerState.PLAYING);
       }
       //======== Progress ==========
@@ -85,6 +85,11 @@ class StoryscreenBloc extends Bloc<StoryscreenEvent, StoryscreenState> {
       //======== Duration ==========
       else if (event is ChangeDurationEvent) {
         yield DurationState(event.duration);
+      }
+      if (event is HighlightWordEvent) {
+        List<TextSpan> s = getStory(highLightword: event.index);
+
+        yield HighLightWordState(spans: s);
       } else {}
     }
   }
@@ -101,9 +106,9 @@ class StoryscreenBloc extends Bloc<StoryscreenEvent, StoryscreenState> {
     // audioPlayer.onPlayerStateChanged.listen((event) {
     //   audioPlayerState = event;
     // });
-
     audioPlayer.onAudioPositionChanged.listen((event) {
       progress = event;
+
       this.add(ChangeProgressEvent(progress));
     });
     audioPlayer.onPlayerCompletion.listen((event) {
@@ -129,5 +134,32 @@ class StoryscreenBloc extends Bloc<StoryscreenEvent, StoryscreenState> {
 
   void seek(Duration duration) async {
     await audioPlayer.seek(duration);
+  }
+
+  String highLightIndex;
+  String storyString;
+  List<TextSpan> spans = [];
+  List<TextStyle> styles = [];
+  List<String> wordsStory;
+
+  void init(String story) {
+    storyString = story;
+    wordsStory = storyString.split(" ");
+  }
+
+  List<TextSpan> getStory({int highLightword}) {
+    spans.clear();
+    for (int i = 0; i < wordsStory.length; i++) {
+      styles.add(TextStyle());
+      spans.add(
+        TextSpan(
+          style: highLightword == i
+              ? TextStyle(backgroundColor: Colors.purple)
+              : TextStyle(),
+          text: wordsStory[i]+" ",
+        ),
+      );
+    }
+    return spans;
   }
 }

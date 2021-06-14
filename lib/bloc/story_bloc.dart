@@ -14,18 +14,18 @@ class StoryBloc extends ChangeNotifier {
 
   List<TextSpan> getStory(context) {
     for (int i = 0; i < wordsStory.length; i++) {
-      styles.add(TextStyle());
+      styles.add(TextStyle(color: Colors.red));
       spans.add(
         TextSpan(
           style: styles[i],
           text: wordsStory[i] + " ",
-          recognizer: TapGestureRecognizer()
-            ..onTap = () {
-              print("Word : ${wordsStory[i]} , i : $i");
-              index = i;
-              styles[i] = TextStyle(color: Colors.red);
-              notifyListeners();
-            },
+          // recognizer: TapGestureRecognizer()
+          //   ..onTap = () {
+          //     print("Word : ${wordsStory[i]} , i : $i");
+          //     index = i;
+          //     styles[i] = TextStyle(color: Colors.red);
+          //     notifyListeners();
+          //   },
         ),
       );
     }

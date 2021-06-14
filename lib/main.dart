@@ -9,15 +9,17 @@ import 'models/story.dart';
 import 'views/Screens/story_screen.dart';
 
 void main() {
-  runApp(
-    BlocProvider(
-      create: (context) => StoryscreenBloc(),
-      child: MultiProvider(providers: [
-        ChangeNotifierProvider(create: (context) => TextSelectionProvider()),
-        ChangeNotifierProvider(create: (context) => StoryBloc()),
-      ], child: MyApp()),
-    ),
-  );
+  runApp(MultiBlocProvider(
+    providers: [
+      BlocProvider(
+        create: (context) => StoryscreenBloc(),
+      )
+    ],
+    child: MultiProvider(providers: [
+      ChangeNotifierProvider(create: (context) => TextSelectionProvider()),
+      ChangeNotifierProvider(create: (context) => StoryBloc()),
+    ], child: MyApp()),
+  ));
 }
 
 class MyApp extends StatelessWidget {

@@ -34,5 +34,15 @@ class DurationState extends StoryscreenState {
 
 class ErrorState extends StoryscreenState {
   var message;
-  ErrorState(this.message);
+  ErrorState({this.message});
+}
+
+class HighLightWordState extends StoryscreenState {
+  List<TextSpan> spans;
+  HighLightWordState({this.spans});
+}
+
+class HighLightSentenceState extends StoryscreenState {
+  List<TextSpan> spans;
+  HighLightSentenceState(this.spans);
 }

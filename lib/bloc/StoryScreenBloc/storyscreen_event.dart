@@ -32,3 +32,23 @@ class ChangeDurationEvent extends StoryscreenEvent {
   Duration duration;
   ChangeDurationEvent(this.duration);
 }
+
+class SeekToWordEvent extends StoryscreenEvent {
+  int index;
+  SeekToWordEvent({this.index});
+}
+
+class HighlightWordEvent extends StoryscreenEvent {
+  int index;
+  HighlightWordEvent({this.index});
+}
+
+class HighlightSentenceEvent extends StoryscreenEvent {
+  int index;
+  HighlightSentenceEvent({this.index});
+}
+
+class VocabularyEvent extends StoryscreenEvent {
+  int index;
+  VocabularyEvent({this.index});
+}
