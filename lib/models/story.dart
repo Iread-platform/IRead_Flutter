@@ -69,4 +69,9 @@ class Story extends Model {
   get imageUrl => _imageUrl;
   get flippedPages => _flippedPages;
   get readingTime => _readingTime;
+  get releaseDate => _releaseDate;
+  get description => _desciption;
+  get level => _storyLevel;
+  get writer => _writer;
+  get rating => _rating;
 }
