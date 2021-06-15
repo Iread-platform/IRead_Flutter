@@ -17,13 +17,13 @@ class StoriesSearchList extends StatefulWidget {
 }
 
 class _StoriesSearchListState extends State<StoriesSearchList> {
+  final GlobalKey<AnimatedListState> _listKey = GlobalKey();
   StoryBloc _storyBloc;
 
   @override
   void initState() {
     super.initState();
     _storyBloc = context.read<StoryBloc>();
-    print(_storyBloc);
   }
 
   @override
@@ -31,10 +31,12 @@ class _StoriesSearchListState extends State<StoriesSearchList> {
     return BlocBuilder<StoryBloc, StoryState>(
         bloc: _storyBloc,
         builder: (context, state) {
-          print("State type is ${state.runtimeType}");
           switch (state.runtimeType) {
             case SearchByTagState:
               final stories = (state as SearchByTagState).storiesSection;
+              WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                _init(context, stories);
+              });
               return _storiesList(context, stories);
             case StoryLoadingState:
               return Center(child: CircularProgressIndicator());
@@ -49,45 +51,64 @@ class _StoriesSearchListState extends State<StoriesSearchList> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Expanded(
-            child: ListView.separated(
+            child: AnimatedList(
+                key: _listKey,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 18, vertical: 24),
-                clipBehavior: Clip.none,
-                itemBuilder: (context, int index) {
+                itemBuilder: (context, int index, animation) {
                   if (index == 0) {
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.only(bottom: 12),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 18, vertical: 8),
-                          decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.surface,
-                              borderRadius:
-                                  BorderRadius.circular(storyBorderRadius),
-                              boxShadow: [mediumBottomRightShadow]),
-                          child: Text(
-                            stories.title,
-                            style: Theme.of(context).textTheme.headline6,
+                    return ScaleTransition(
+                      scale: animation.drive(Tween<double>(begin: 0, end: 1)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(bottom: 24),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 18, vertical: 8),
+                            decoration: BoxDecoration(
+                                color: Theme.of(context).colorScheme.surface,
+                                borderRadius:
+                                    BorderRadius.circular(storyBorderRadius),
+                                boxShadow: [mediumBottomRightShadow]),
+                            child: Text(
+                              stories.title,
+                              style: Theme.of(context).textTheme.headline6,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     );
                   }
 
-                  Story story = stories.stories[index - 1];
-                  return ProfileStoryCard(
-                    story: story,
-                  );
+                  if (index <= stories.stories.length) {
+                    Story story = stories.stories[index - 1];
+                    return SlideTransition(
+                      position: animation.drive(Tween<Offset>(
+                          begin: const Offset(-1, 0), end: const Offset(0, 0))),
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: ProfileStoryCard(
+                          story: story,
+                        ),
+                      ),
+                    );
+                  }
+
+                  return Container();
                 },
-                separatorBuilder: (context, int index) {
-                  return SizedBox(
-                    height: 12,
-                  );
-                },
-                itemCount: stories.stories.length + 1))
+                initialItemCount: 0))
       ],
     );
+  }
+
+  Widget _init(BuildContext context, StoriesSectionModel stories) {
+    AnimatedListState state = _listKey.currentState;
+
+    state.insertItem(0, duration: Duration(milliseconds: 300));
+
+    for (int i = 0; i < stories.stories.length; i++) {
+      state.insertItem(i, duration: Duration(milliseconds: 400 + i * 100));
+    }
   }
 }
