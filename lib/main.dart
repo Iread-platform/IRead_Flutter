@@ -42,7 +42,7 @@ List<StoriesSectionModel> storiesSection = [
 Story story = Story(
     title: 'Wood, Wire, Wings',
     color: Colors.teal,
-    imageUrl: 'https://blog-cdn.reedsy.com/uploads/2019/12/another.jpg',
+    imageUrl: 'https://picsum.photos/200/300',
     progress: 0.45,
     flippedPages: 53,
     readingTime: 127.25);
