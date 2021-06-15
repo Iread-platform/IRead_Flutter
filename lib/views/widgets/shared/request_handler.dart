@@ -12,11 +12,11 @@ import 'package:iread_flutter/config/themes/colors.dart';
 /// [isDismissible] is a boolean variable that indicates if you want user to
 /// dismiss messages that shows upon the [mainContent] or not.
 /// [other] is the widget that appears when the [Data] status is not one of the previous statuses, [other] has a default value.
-class RequestHandler<T extends S, B extends Bloc<E, S>, S extends BlocState, E>
-    extends StatefulWidget {
+class RequestHandler<T extends SuccessState,
+    B extends Bloc<BlocEvent, BlocState>> extends StatefulWidget {
   final B _bloc;
   final Widget _mainContent;
-  final Widget Function(BuildContext, T data) _onSuccess;
+  final Widget Function(BuildContext, T) _onSuccess;
   final Widget _onFailed;
   final Widget _inProgress;
   final Widget _other;
@@ -24,7 +24,7 @@ class RequestHandler<T extends S, B extends Bloc<E, S>, S extends BlocState, E>
 
   RequestHandler(
       {@required main,
-      @required onSuccess,
+      @required Widget Function(BuildContext, T) onSuccess,
       onFailed,
       inProgress,
       other,
@@ -39,12 +39,11 @@ class RequestHandler<T extends S, B extends Bloc<E, S>, S extends BlocState, E>
         _isDismissible = isDismissible ?? true;
 
   @override
-  _RequestHandlerState<T, B, S, E> createState() =>
-      _RequestHandlerState<T, B, S, E>();
+  _RequestHandlerState<T, B> createState() => _RequestHandlerState<T, B>();
 }
 
-class _RequestHandlerState<T extends S, B extends Bloc<E, S>,
-    S extends BlocState, E> extends State<RequestHandler> {
+class _RequestHandlerState<T extends SuccessState,
+    B extends Bloc<BlocEvent, BlocState>> extends State<RequestHandler<T, B>> {
   @override
   void initState() {
     super.initState();
@@ -57,7 +56,7 @@ class _RequestHandlerState<T extends S, B extends Bloc<E, S>,
       children: [
         widget._mainContent,
         Positioned.fill(
-          child: BlocBuilder<B, S>(
+          child: BlocBuilder<B, BlocState>(
               bloc: widget._bloc,
               builder: (context, state) {
                 // If request has not been initialized yet;
@@ -99,7 +98,7 @@ class _RequestHandlerState<T extends S, B extends Bloc<E, S>,
                       );
                     case DataState.Success:
                       // Build content widget on the data provided by the stream
-                      return widget._onSuccess(context, state as T);
+                      return widget._onSuccess(context, state);
                     default:
                       return widget._other ??
                           _InfoWidget(message: "Unhandled Error");

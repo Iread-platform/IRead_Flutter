@@ -1,13 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:iread_flutter/bloc/base/base_bloc.dart';
 import 'package:iread_flutter/bloc/story_bloc/story_bloc.dart';
 import 'package:iread_flutter/bloc/story_bloc/story_state.dart';
 import 'package:iread_flutter/config/themes/border_radius.dart';
 import 'package:iread_flutter/config/themes/shadows.dart';
 import 'package:iread_flutter/models/stories_section_model.dart';
 import 'package:iread_flutter/models/story.dart';
+import 'package:iread_flutter/views/widgets/shared/request_handler.dart';
 import 'package:iread_flutter/views/widgets/story/profile_story_card.dart';
 
 class StoriesSearchList extends StatefulWidget {
@@ -29,25 +29,16 @@ class _StoriesSearchListState extends State<StoriesSearchList> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<StoryBloc, BlocState>(
-        bloc: _storyBloc,
-        builder: (context, state) {
-          switch (state.runtimeType) {
-            case SearchByTagState:
-              final stories = (state as SearchByTagState).storiesSection;
-              WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-                _init(context, stories);
-              });
-              return _storiesList(context, stories);
-            case StoryLoadingState:
-              return Center(child: CircularProgressIndicator());
-          }
-
-          return CircularProgressIndicator();
-        });
+    return RequestHandler<SearchByTagState, StoryBloc>(
+        main: Container(),
+        onSuccess: (context, data) {
+          WidgetsBinding.instance.addPostFrameCallback((timeStamp) {_init(context, data.data);});
+          return _storiesList(context, data.data);
+        },
+        bloc: _storyBloc);
   }
 
-  Row _storiesList(BuildContext context, StoriesSectionModel stories) {
+  Widget _storiesList(BuildContext context, StoriesSectionModel stories) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
