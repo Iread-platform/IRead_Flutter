@@ -13,6 +13,7 @@ class Story extends Model {
   Color _color;
   int _flippedPages;
   double _readingTime;
+  List<String> _keyWords = [];
   double _rating;
 
   Story(
@@ -26,7 +27,9 @@ class Story extends Model {
       double progress,
       int flippedPages,
       double readingTime,
-      id})
+      List<String> keyWords,
+      double rating,
+      int id})
       : _title = title,
         _color = color,
         _releaseDate = releaseDate,
@@ -37,6 +40,8 @@ class Story extends Model {
         _flippedPages = flippedPages,
         _readingTime = readingTime,
         _progress = progress,
+        _keyWords = keyWords,
+        _rating = rating,
         super(id: id);
 
   Story.fromJson(Map<String, dynamic> json) : super(id: json['storyId']) {
