@@ -51,7 +51,7 @@ class Story extends Model {
     _storyLevel = json['storyLevel'];
     _writer = json['writer'];
     _rating = json['rating'];
-    _color = Color(int.parse('0x' + json['color'], radix: 16));
+    _color = Color(int.parse(json['color'], radix: 16));
     _imageUrl = json['imageUrl'];
     _flippedPages = json['flippedPages'];
     _readingTime = json['readingTime'];

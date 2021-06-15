@@ -1,21 +1,50 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:iread_flutter/bloc/story_bloc/story_bloc.dart';
+import 'package:iread_flutter/bloc/story_bloc/story_state.dart';
 import 'package:iread_flutter/config/themes/border_radius.dart';
 import 'package:iread_flutter/config/themes/shadows.dart';
 import 'package:iread_flutter/models/stories_section_model.dart';
 import 'package:iread_flutter/models/story.dart';
 import 'package:iread_flutter/views/widgets/story/profile_story_card.dart';
 
-class StoriesSearchList extends StatelessWidget {
-  final StoriesSectionModel _storiesSection;
+class StoriesSearchList extends StatefulWidget {
+  const StoriesSearchList({Key key}) : super(key: key);
 
-  const StoriesSearchList(
-      {@required StoriesSectionModel storiesSection, Key key})
-      : _storiesSection = storiesSection,
-        super(key: key);
+  @override
+  _StoriesSearchListState createState() => _StoriesSearchListState();
+}
+
+class _StoriesSearchListState extends State<StoriesSearchList> {
+  StoryBloc _storyBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    _storyBloc = context.read<StoryBloc>();
+    print(_storyBloc);
+  }
 
   @override
   Widget build(BuildContext context) {
+    return BlocBuilder<StoryBloc, StoryState>(
+        bloc: _storyBloc,
+        builder: (context, state) {
+          print("State type is ${state.runtimeType}");
+          switch (state.runtimeType) {
+            case SearchByTagState:
+              final stories = (state as SearchByTagState).storiesSection;
+              return _storiesList(context, stories);
+            case StoryLoadingState:
+              return Center(child: CircularProgressIndicator());
+          }
+
+          return CircularProgressIndicator();
+        });
+  }
+
+  Row _storiesList(BuildContext context, StoriesSectionModel stories) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -39,7 +68,7 @@ class StoriesSearchList extends StatelessWidget {
                                   BorderRadius.circular(storyBorderRadius),
                               boxShadow: [mediumBottomRightShadow]),
                           child: Text(
-                            _storiesSection.title,
+                            stories.title,
                             style: Theme.of(context).textTheme.headline6,
                           ),
                         ),
@@ -47,7 +76,7 @@ class StoriesSearchList extends StatelessWidget {
                     );
                   }
 
-                  Story story = _storiesSection.stories[index - 1];
+                  Story story = stories.stories[index - 1];
                   return ProfileStoryCard(
                     story: story,
                   );
@@ -57,7 +86,7 @@ class StoriesSearchList extends StatelessWidget {
                     height: 12,
                   );
                 },
-                itemCount: _storiesSection.stories.length + 1))
+                itemCount: stories.stories.length + 1))
       ],
     );
   }

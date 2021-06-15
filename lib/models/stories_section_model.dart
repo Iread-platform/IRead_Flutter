@@ -12,8 +12,9 @@ class StoriesSectionModel extends Model {
     title = json['title'];
     final stories = json['stories'];
 
-    stories.foreach((e) {
-      this.stories.add(Story.fromJson(stories));
-    });
+    this.stories = [];
+    for (int i = 0; i < stories.length; i++) {
+      this.stories.add(Story.fromJson(stories[i]));
+    }
   }
 }

@@ -4,7 +4,11 @@ abstract class StoryState {}
 
 class StoryLoadingState extends StoryState {}
 
+class StoryErrorSate extends StoryState {}
+
 class SearchByTagState extends StoryState {
-  final StoriesSectionModel sectionModel;
-  SearchByTagState(this.sectionModel);
+  final StoriesSectionModel _sectionModel;
+  SearchByTagState(this._sectionModel);
+
+  get storiesSection => _sectionModel;
 }
