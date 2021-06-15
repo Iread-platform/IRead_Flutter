@@ -13,7 +13,7 @@ class Story extends Model {
   Color _color;
   int _flippedPages;
   double _readingTime;
-  List<String> _keyWords = [];
+  List<String> _keyWords;
   double _rating;
 
   Story(
@@ -56,6 +56,11 @@ class Story extends Model {
     _flippedPages = json['flippedPages'];
     _readingTime = json['readingTime'];
     _progress = json['progress'];
+
+    _keyWords = [];
+    for (int i = 0; i < json['keyWords'].length; i++) {
+      _keyWords.add(json['keyWords'][i]);
+    }
   }
 
   get title => _title;
