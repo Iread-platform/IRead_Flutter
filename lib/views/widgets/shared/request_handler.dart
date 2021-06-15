@@ -12,7 +12,7 @@ import 'package:iread_flutter/config/themes/colors.dart';
 /// [isDismissible] is a boolean variable that indicates if you want user to
 /// dismiss messages that shows upon the [mainContent] or not.
 /// [other] is the widget that appears when the [Data] status is not one of the previous statuses, [other] has a default value.
-class RequestHandler<T, B extends Bloc<E, S>, S extends BlocState, E>
+class RequestHandler<T extends S, B extends Bloc<E, S>, S extends BlocState, E>
     extends StatefulWidget {
   final B _bloc;
   final Widget _mainContent;
@@ -43,8 +43,8 @@ class RequestHandler<T, B extends Bloc<E, S>, S extends BlocState, E>
       _RequestHandlerState<T, B, S, E>();
 }
 
-class _RequestHandlerState<T, B extends Bloc<E, S>, S extends BlocState, E>
-    extends State<RequestHandler> {
+class _RequestHandlerState<T extends S, B extends Bloc<E, S>,
+    S extends BlocState, E> extends State<RequestHandler> {
   @override
   void initState() {
     super.initState();
@@ -99,7 +99,7 @@ class _RequestHandlerState<T, B extends Bloc<E, S>, S extends BlocState, E>
                       );
                     case DataState.Success:
                       // Build content widget on the data provided by the stream
-                      return widget._onSuccess(context, state);
+                      return widget._onSuccess(context, state as T);
                     default:
                       return widget._other ??
                           _InfoWidget(message: "Unhandled Error");
