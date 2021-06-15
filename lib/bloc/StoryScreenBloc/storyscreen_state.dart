@@ -7,14 +7,9 @@ class StoryscreenInitial extends StoryscreenState {}
 
 class LoadingState extends StoryscreenState {}
 
-class LoadedURLState extends StoryscreenState {
-  var data;
-  LoadedURLState(this.data);
-}
-
-class LoadedStoryState extends StoryscreenState {
-  var data;
-  LoadedStoryState(this.data);
+class LoadedState extends StoryscreenState {
+  Data<StoryPage> data;
+  LoadedState({this.data});
 }
 
 class PlayerState extends StoryscreenState {
@@ -38,8 +33,8 @@ class ErrorState extends StoryscreenState {
 }
 
 class HighLightWordState extends StoryscreenState {
-  List<TextSpan> spans;
-  HighLightWordState({this.spans});
+  int index;
+  HighLightWordState({this.index});
 }
 
 class HighLightSentenceState extends StoryscreenState {

@@ -1,13 +1,12 @@
 import 'dart:async';
 import 'dart:math';
-
-import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iread_flutter/Repository/story_repository.dart';
 import 'package:iread_flutter/models/Data.dart';
+import 'package:iread_flutter/models/story_page_model.dart';
 import 'package:meta/meta.dart';
 
 part 'storyscreen_event.dart';
@@ -18,10 +17,14 @@ class StoryscreenBloc extends Bloc<StoryscreenEvent, StoryscreenState> {
   AudioPlayer audioPlayer;
   Duration duration;
   Duration progress;
+  int wordProgressIndex = 0;
   AudioPlayerState audioPlayerState;
+  Data<StoryPage> storyPageData;
   var context;
   StoryRepository storyRepository;
   StoryscreenBloc() : super(StoryscreenInitial()) {
+    // storyPageData = Data<StoryPage>(StoryPage(), "");
+
     audioPlayer = AudioPlayer();
     // cache = AudioCache();
     // cache.clearCache();
@@ -33,18 +36,17 @@ class StoryscreenBloc extends Bloc<StoryscreenEvent, StoryscreenState> {
   Stream<StoryscreenState> mapEventToState(
     StoryscreenEvent event,
   ) async* {
-    if (event is GetAudioEvent) {
+    if (event is FetchStoryPage) {
       yield LoadingState();
-      Data<String> audioData = await storyRepository.getAudioURL();
-      await Future.delayed(Duration(seconds: 3));
-      play(audioData.data);
+      storyPageData = await storyRepository.fetchStoryPage();
+      await Future.delayed(Duration(seconds: 1));
+      print(storyPageData.data.story);
+      yield LoadedState(data: storyPageData);
+      play(storyPageData.data.audioURL);
       yield PlayerState(AudioPlayerState.PLAYING);
     }
     // ======== GetStoryEvent ==========
-    else if (event is GetStoryEvent) {
-      Data story = await storyRepository.getStory();
-      yield LoadedStoryState(story);
-    }
+
     //==========  player Controller ==============
     else {
       //======== Play ==========
@@ -87,9 +89,9 @@ class StoryscreenBloc extends Bloc<StoryscreenEvent, StoryscreenState> {
         yield DurationState(event.duration);
       }
       if (event is HighlightWordEvent) {
-        List<TextSpan> s = getStory(highLightword: event.index);
+        // List<TextSpan> s = getStory(highLightword: event.index);
 
-        yield HighLightWordState(spans: s);
+        yield HighLightWordState(index: event.index);
       } else {}
     }
   }
@@ -108,10 +110,18 @@ class StoryscreenBloc extends Bloc<StoryscreenEvent, StoryscreenState> {
     // });
     audioPlayer.onAudioPositionChanged.listen((event) {
       progress = event;
-
+      for (int i = 0; i < storyPageData.data.words.length; i++) {
+        if (storyPageData.data.words[i].time > progress.inMilliseconds) {
+          int x = i-1;
+          highLightIndex = x.toString();
+          break;
+        }
+      }
+      
       this.add(ChangeProgressEvent(progress));
     });
     audioPlayer.onPlayerCompletion.listen((event) {
+      wordProgressIndex = 0;
       this.add(SeekEvent(Duration(milliseconds: 0)));
     });
   }
@@ -147,19 +157,19 @@ class StoryscreenBloc extends Bloc<StoryscreenEvent, StoryscreenState> {
     wordsStory = storyString.split(" ");
   }
 
-  List<TextSpan> getStory({int highLightword}) {
-    spans.clear();
-    for (int i = 0; i < wordsStory.length; i++) {
-      styles.add(TextStyle());
-      spans.add(
-        TextSpan(
-          style: highLightword == i
-              ? TextStyle(backgroundColor: Colors.purple)
-              : TextStyle(),
-          text: wordsStory[i]+" ",
-        ),
-      );
-    }
-    return spans;
-  }
+  // List<TextSpan> getStory({int highLightword}) {
+  //   spans.clear();
+  //   for (int i = 0; i < wordsStory.length; i++) {
+  //     styles.add(TextStyle());
+  //     spans.add(
+  //       TextSpan(
+  //         style: highLightword == i
+  //             ? TextStyle(backgroundColor: Colors.purple)
+  //             : TextStyle(),
+  //         text: wordsStory[i] + " ",
+  //       ),
+  //     );
+  //   }
+  //   return spans;
+  // }
 }

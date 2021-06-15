@@ -1,54 +1,143 @@
-[
-    {
-        "word": "while",
-        "timestamp": "0"
-    },
-    {
-        "word": "drawing",
-        "timestamp": "500"
-    },
-    {
-        "word": "in",
-        "timestamp": "800"
-    },
-    {
-        "word": "class",
-        "timestamp": "1200"
-    },
-    {
-        "word": "at",
-        "timestamp": "1300"
-    },
-    {
-        "word": "Stagwood",
-        "timestamp": "1800"
-    },
-    {
-        "word": "School",
-        "timestamp": "1900"
-    },
-    {
-        "word": "old",
-        "timestamp": "2500"
-    },
-    {
-        "word": "Cal",
-        "timestamp": "2800"
-    },
-    {
-        "word": "sees",
-        "timestamp": "3000"
-    },
-    {
-        "word": "a",
-        "timestamp": "3200"
-    },
-    {
-        "word": "frog",
-        "timestamp": "3400"
-    },
-    {
-        "word": "staring",
-        "timestamp": "3700"
-    }
-]
+{
+    "pageNumber": 0,
+    "pageCount": 10,
+    "story": "I am happy to join with you today in what will go down in history as the greatest demonstration for freedom in the history of our nation.",
+    "audioURL": "https://media1.vocaroo.com/mp3/1bgFZTX0goKj",
+    "words": [
+        {
+            "word": "I",
+            "startIndex": 0,
+            "time": 2860.74
+        },
+        {
+            "word": "am",
+            "startIndex": 0,
+            "time": 3159.15
+        },
+        {
+            "word": "happy",
+            "startIndex": 0,
+            "time": 3355.29
+        },
+        {
+            "word": "to",
+            "startIndex": 0,
+            "time": 4157.28
+        },
+        {
+            "word": "join",
+            "startIndex": 0,
+            "time": 4354.03
+        },
+        {
+            "word": "with",
+            "startIndex": 0,
+            "time": 4957.5
+        },
+        {
+            "word": "you",
+            "startIndex": 0,
+            "time": 5252.69
+        },
+        {
+            "word": "today",
+            "startIndex": 0,
+            "time": 5553.68
+        },
+        {
+            "word": "in",
+            "startIndex": 0,
+            "time": 8650.67
+        },
+        {
+            "word": "what",
+            "startIndex": 0,
+            "time": 9254.31
+        },
+        {
+            "word": "will",
+            "startIndex": 0,
+            "time": 9555.3
+        },
+        {
+            "word": "go",
+            "startIndex": 0,
+            "time": 9753.5
+        },
+        {
+            "word": "down",
+            "startIndex": 0,
+            "time": 9963.02
+        },
+        {
+            "word": "in",
+            "startIndex": 0,
+            "time": 10664.25
+        },
+        {
+            "word": "history",
+            "startIndex": 0,
+            "time": 10860.79
+        },
+        {
+            "word": "as",
+            "startIndex": 0,
+            "time": 13351.71
+        },
+        {
+            "word": "the",
+            "startIndex": 0,
+            "time": 13853.31
+        },
+        {
+            "word": "greatest",
+            "startIndex": 0,
+            "time": 14850.75
+        },
+        {
+            "word": "demonstration",
+            "startIndex": 0,
+            "time": 15153.56
+        },
+        {
+            "word": "for",
+            "startIndex": 0,
+            "time": 16760.89
+        },
+        {
+            "word": "freedom",
+            "startIndex": 0,
+            "time": 16955.5
+        },
+        {
+            "word": "in",
+            "startIndex": 0,
+            "time": 17452.85
+        },
+        {
+            "word": "the",
+            "startIndex": 0,
+            "time": 17757.42
+        },
+        {
+            "word": "history",
+            "startIndex": 0,
+            "time": 17956.05
+        },
+        {
+            "word": "of",
+            "startIndex": 0,
+            "time": 18500.29
+        },
+        {
+            "word": "our",
+            "startIndex": 0,
+            "time": 18900.36
+        },
+        {
+            "word": "nation",
+            "startIndex": 0,
+            "time": 19200.66
+        }
+    ]
+}

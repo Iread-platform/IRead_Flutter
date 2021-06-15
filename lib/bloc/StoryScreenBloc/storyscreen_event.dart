@@ -3,9 +3,7 @@ part of 'storyscreen_bloc.dart';
 @immutable
 abstract class StoryscreenEvent {}
 
-class GetAudioEvent extends StoryscreenEvent {}
-
-class GetStoryEvent extends StoryscreenEvent {}
+class FetchStoryPage extends StoryscreenEvent {}
 
 class PlayEvent extends StoryscreenEvent {
   String url;

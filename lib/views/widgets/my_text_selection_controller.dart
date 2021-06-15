@@ -6,11 +6,12 @@ import 'package:iread_flutter/utils/i_read_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:speech_bubble/speech_bubble.dart';
 
+enum _TextSelectionHandlePosition { start, end }
+
 class MyTextSelectionControls extends TextSelectionControls {
   var marginX;
   var marginY;
   MyTextSelectionControls({this.marginX, this.marginY});
-
   // =============== override Cursor ================
   @override
   Widget buildHandle(BuildContext context, TextSelectionHandleType type,
@@ -23,6 +24,7 @@ class MyTextSelectionControls extends TextSelectionControls {
   }
 
   // =============== Override Popup Menu ================
+
   @override
   Widget buildToolbar(
       BuildContext context,
@@ -40,7 +42,7 @@ class MyTextSelectionControls extends TextSelectionControls {
             anchorBelow: Offset(0, 0),
             toolbarBuilder: (context, _) {
               print(position.dy + marginY);
-              return (position.dy > 30 && position.dy<250)
+              return (position.dy > 30 && position.dy < 250)
                   ? FittedBox(
                       child: Container(
                         decoration: BoxDecoration(
@@ -86,10 +88,12 @@ class MyTextSelectionControls extends TextSelectionControls {
     return Size(0, 0);
   }
 
+  
   List<Widget> popupMenu(
       {context, bool isWord, bool highlighted, bool playButton}) {
     // If a word where selected, There will be two options: Vocabulary and highlight.
     if (isWord && !highlighted) {
+      
       return [
         TextSelectionToolbarTextButton(
           padding: EdgeInsets.symmetric(horizontal: 10),

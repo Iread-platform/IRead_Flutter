@@ -34,6 +34,7 @@ dependencies:
   speech_bubble: ^0.0.9
   fluro: ^2.0.3
   flutter_svg: ^0.22.0
+  word_selectable_text: ^0.1.0
   http: ^0.13.3
   rxdart: ^0.27.0
   audioplayers: ^0.15.0
@@ -59,6 +60,7 @@ flutter:
     - assets/images/shared/curve_bottom_right.svg
     - assets/images/shared/curve_top_left.svg
     - assets/images/shared/curve_top_right.svg
+    - lib/Repository/dummyData.json
 
   # To add assets to your application, add an assets section, like this:
   # assets:

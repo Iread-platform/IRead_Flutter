@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'bloc/StoryScreenBloc/storyscreen_bloc.dart';
 import 'models/stories_section_model.dart';
 import 'models/story.dart';
+
 import 'views/Screens/story_screen.dart';
 
 void main() {
@@ -39,11 +40,22 @@ The next day, a wolf happened to pass by the lane where the three little pigs li
     return MaterialApp(
       title: 'Iread',
       home: Scaffold(
-          body: Center(
-        child: StoryScreen(
-          strStory: storyString,
+        body: Center(
+          child: StoryScreen(),
         ),
-      )),
+        // body: Container(
+        //   padding: EdgeInsets.all(40),
+        //   width: double.infinity,
+        //   child: WordSelectableText(
+        //     selectable: true,
+        //     highlight: true,
+        //     text: "hello how are you ",
+        //     onWordTapped: (word, index) {},
+
+        //     style: TextStyle(fontSize: 20),
+        //   ),
+        // ),
+      ),
     );
   }
 }

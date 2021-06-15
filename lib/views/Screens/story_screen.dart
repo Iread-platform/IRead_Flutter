@@ -5,23 +5,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iread_flutter/bloc/StoryScreenBloc/storyscreen_bloc.dart';
+import 'package:iread_flutter/models/story_page_model.dart';
 import 'package:iread_flutter/utils/i_read_icons.dart';
 import 'package:iread_flutter/views/Widgets/highlight_text.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 
 class StoryScreen extends StatefulWidget {
-  String strStory =
-      '''Once upon a time there was an old mother pig who had three little pigs and not enough food to feed them. So when they were old enough, she sent them out into the world to seek their fortunes.
+//   String strStory =
+//       '''Once upon a time there was an old mother pig who had three little pigs and not enough food to feed them. So when they were old enough, she sent them out into the world to seek their fortunes.
 
-The first little pig was very lazy. He didn't want to work at all and he built his house out of straw. The second little pig worked a little bit harder but he was somewhat lazy too and he built his house out of sticks. Then, they sang and danced and played together the rest of the day.
+// The first little pig was very lazy. He didn't want to work at all and he built his house out of straw. The second little pig worked a little bit harder but he was somewhat lazy too and he built his house out of sticks. Then, they sang and danced and played together the rest of the day.
 
-The third little pig worked hard all day and built his house with bricks. It was a sturdy house complete with a fine fireplace and chimney. It looked like it could withstand the strongest winds.
+// The third little pig worked hard all day and built his house with bricks. It was a sturdy house complete with a fine fireplace and chimney. It looked like it could withstand the strongest winds.
 
+// The next day, a wolf happened to pass by the lane where the three little pigs lived; and he saw the straw house, and he smelled the pig inside. He thought the pig would make a mighty fine meal and his mouth began to water ''';
 
- 
-The next day, a wolf happened to pass by the lane where the three little pigs lived; and he saw the straw house, and he smelled the pig inside. He thought the pig would make a mighty fine meal and his mouth began to water ''';
-
-  StoryScreen({this.strStory});
+//   StoryScreen({this.strStory});
 
   @override
   _StoryScreenState createState() => _StoryScreenState();
@@ -38,7 +37,7 @@ class _StoryScreenState extends State<StoryScreen> {
   void initState() {
     super.initState();
     print("init");
-    BlocProvider.of<StoryscreenBloc>(context).add(GetAudioEvent());
+    BlocProvider.of<StoryscreenBloc>(context).add(FetchStoryPage());
   }
 
   @override
@@ -89,7 +88,7 @@ class _StoryScreenState extends State<StoryScreen> {
             child: Icon(
               IReadIcons.arrow,
               size: 40,
-              color: Theme.of(context).colorScheme.primary,
+              color: Colors.purple,
             ),
           ),
           Container(
@@ -98,7 +97,7 @@ class _StoryScreenState extends State<StoryScreen> {
             alignment: Alignment.center,
             child: Icon(
               Icons.menu,
-              color: Theme.of(context).colorScheme.primary,
+              color: Colors.purple,
               size: 40,
             ),
           )
@@ -119,7 +118,7 @@ class _StoryScreenState extends State<StoryScreen> {
             child: Container(
               child: Icon(
                 IReadIcons.arrow_back,
-                color: Theme.of(context).colorScheme.primary,
+                color: Colors.purple,
                 size: 40,
               ),
             ),
@@ -127,10 +126,29 @@ class _StoryScreenState extends State<StoryScreen> {
           Expanded(
             flex: 5,
             child: Container(
-              child: HighlighText(
-                  storyString: widget.strStory,
-                  marginX: w * 0.15,
-                  marginY: h * 0.45 - 10),
+              child: Builder(builder: (context) {
+                if (BlocProvider.of<StoryscreenBloc>(context, listen: true)
+                        .storyPageData ==
+                    null) {
+                  return Center(child: CircularProgressIndicator(strokeWidth: 10,valueColor: AlwaysStoppedAnimation<Color>(Colors.purple),));
+                } else {
+                  return HighlighText(
+                      storyString: BlocProvider.of<StoryscreenBloc>(context,
+                                  listen: true)
+                              .storyPageData
+                              .data
+                              .story ??
+                          "",
+                      words: BlocProvider.of<StoryscreenBloc>(context,
+                                  listen: true)
+                              .storyPageData
+                              .data
+                              .words ??
+                          [],
+                      marginX: w * 0.15,
+                      marginY: h * 0.45 - 10);
+                }
+              }),
             ),
           ),
           Expanded(
@@ -138,7 +156,7 @@ class _StoryScreenState extends State<StoryScreen> {
             child: Container(
               child: Icon(
                 IReadIcons.arrow,
-                color: Theme.of(context).colorScheme.primary,
+                color: Colors.purple,
                 size: 40,
               ),
             ),
@@ -168,11 +186,11 @@ class _StoryScreenState extends State<StoryScreen> {
             BlocBuilder<StoryscreenBloc, StoryscreenState>(
               builder: (context, state) {
                 if (state is LoadingState) {
-                  return CircularProgressIndicator();
+                  return Container();
                 } else {
-                  BlocProvider.of<StoryscreenBloc>(context)
-                      .add(HighlightWordEvent(index: Random().nextInt(10)));
-
+                  print("progress");
+                  // BlocProvider.of<StoryscreenBloc>(context, listen: false)
+                  //     .highLightIndex = Random().nextInt(10).toString();
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -189,13 +207,13 @@ class _StoryScreenState extends State<StoryScreen> {
                                 AudioPlayerState.PLAYING) {
                               return Icon(
                                 Icons.play_arrow,
-                                color: Theme.of(context).colorScheme.primary,
+                                color: Colors.purple,
                                 size: 70,
                               );
                             } else {
                               return Icon(
                                 Icons.pause,
-                                color: Theme.of(context).colorScheme.primary,
+                                color: Colors.purple,
                                 size: 70,
                               );
                             }
@@ -224,10 +242,10 @@ class _StoryScreenState extends State<StoryScreen> {
       progress: bloc.progress ?? Duration(seconds: 0),
       total: bloc.duration ?? Duration(seconds: 0),
       buffered: Duration(seconds: 15),
-      progressBarColor: Theme.of(context).colorScheme.primary,
-      bufferedBarColor: Theme.of(context).colorScheme.primary.withOpacity(0.5),
-      baseBarColor: Theme.of(context).colorScheme.primary.withOpacity(0.3),
-      thumbColor: Theme.of(context).colorScheme.primary,
+      progressBarColor: Colors.purple,
+      bufferedBarColor: Colors.purple.withOpacity(0.3),
+      baseBarColor: Colors.purple.withOpacity(0.2),
+      thumbColor: Colors.purple,
       barHeight: 20,
       onSeek: (duration) {
         print(duration);
