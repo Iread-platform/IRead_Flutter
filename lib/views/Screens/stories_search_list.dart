@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:iread_flutter/bloc/base/base_bloc.dart';
 import 'package:iread_flutter/bloc/story_bloc/story_bloc.dart';
 import 'package:iread_flutter/bloc/story_bloc/story_state.dart';
 import 'package:iread_flutter/config/themes/border_radius.dart';
@@ -28,7 +29,7 @@ class _StoriesSearchListState extends State<StoriesSearchList> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<StoryBloc, StoryState>(
+    return BlocBuilder<StoryBloc, BlocState>(
         bloc: _storyBloc,
         builder: (context, state) {
           switch (state.runtimeType) {
@@ -102,7 +103,7 @@ class _StoriesSearchListState extends State<StoriesSearchList> {
     );
   }
 
-  Widget _init(BuildContext context, StoriesSectionModel stories) {
+  void _init(BuildContext context, StoriesSectionModel stories) {
     AnimatedListState state = _listKey.currentState;
 
     state.insertItem(0, duration: Duration(milliseconds: 300));

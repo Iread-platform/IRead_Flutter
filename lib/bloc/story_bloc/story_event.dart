@@ -1,4 +1,6 @@
-abstract class StoryEvent {}
+import 'package:iread_flutter/bloc/base/base_bloc.dart';
+
+class StoryEvent extends BlocEvent {}
 
 class LoadingEvent extends StoryEvent {}
 

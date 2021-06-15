@@ -1,7 +1,7 @@
-import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:iread_flutter/bloc/story_bloc/story_state.dart';
+import 'package:iread_flutter/bloc/base/base_bloc.dart';
+import 'package:iread_flutter/config/themes/colors.dart';
 
 /// [RequestHandler] show widgets due to the [Data] object status.
 /// [stream]] accepts [Stream] of [Future<Data>], [stream] is required.
@@ -12,7 +12,8 @@ import 'package:iread_flutter/bloc/story_bloc/story_state.dart';
 /// [isDismissible] is a boolean variable that indicates if you want user to
 /// dismiss messages that shows upon the [mainContent] or not.
 /// [other] is the widget that appears when the [Data] status is not one of the previous statuses, [other] has a default value.
-class RequestHandler<T, B extends BlocBase<S>, S> extends StatefulWidget {
+class RequestHandler<T, B extends Bloc<E, S>, S extends BlocState, E>
+    extends StatefulWidget {
   final B _bloc;
   final Widget _mainContent;
   final Widget Function(BuildContext, T data) _onSuccess;
@@ -38,10 +39,11 @@ class RequestHandler<T, B extends BlocBase<S>, S> extends StatefulWidget {
         _isDismissible = isDismissible ?? true;
 
   @override
-  _RequestHandlerState<T, B, S> createState() => _RequestHandlerState<T>();
+  _RequestHandlerState<T, B, S, E> createState() =>
+      _RequestHandlerState<T, B, S, E>();
 }
 
-class _RequestHandlerState<T, B extends BlocBase<S>, S>
+class _RequestHandlerState<T, B extends Bloc<E, S>, S extends BlocState, E>
     extends State<RequestHandler> {
   @override
   void initState() {
@@ -59,13 +61,12 @@ class _RequestHandlerState<T, B extends BlocBase<S>, S>
               bloc: widget._bloc,
               builder: (context, state) {
                 // If request has not been initialized yet;
-                if (!state is StoryLoadingState ||
-                    snapshot.data.status == DataStatus.none)
+                if (state.state == DataState.Init)
                   return SizedBox(
                     width: 0,
                   );
                 // If the request is in progress
-                if (snapshot.data.status == DataStatus.inProgress) {
+                if (state.state == DataState.Loading) {
                   return widget._inProgress ??
                       Container(
                         color: Theme.of(context).colorScheme.background,
@@ -74,21 +75,20 @@ class _RequestHandlerState<T, B extends BlocBase<S>, S>
 
                   // If the response has been received
                 } else {
-                  switch (snapshot.data.status) {
-                    case DataStatus.faild:
+                  switch (state.state) {
+                    case DataState.Fail:
                       return Stack(
                         alignment: Alignment.topRight,
                         children: [
                           widget._onFailed ??
-                              _InfoWidget.failed(
-                                  message: snapshot.data.message),
+                              _InfoWidget.failed(message: state.message),
                           widget._isDismissible
                               ? Positioned(
                                   top: 0,
                                   child: IconButton(
                                     icon: Icon(Icons.close),
                                     onPressed: () {
-                                      _closeStream.sink.add(Data.empty());
+                                      widget._bloc.add(CloseEvent());
                                     },
                                   ),
                                 )
@@ -97,9 +97,9 @@ class _RequestHandlerState<T, B extends BlocBase<S>, S>
                                 )
                         ],
                       );
-                    case DataStatus.succeed:
+                    case DataState.Success:
                       // Build content widget on the data provided by the stream
-                      return widget._onSuccess(context, snapshot.data);
+                      return widget._onSuccess(context, state);
                     default:
                       return widget._other ??
                           _InfoWidget(message: "Unhandled Error");
@@ -113,7 +113,6 @@ class _RequestHandlerState<T, B extends BlocBase<S>, S>
 
   @override
   void dispose() {
-    _closeStream.close();
     super.dispose();
   }
 }
@@ -133,8 +132,8 @@ class _InfoWidget extends StatelessWidget {
   _InfoWidget.failed({@required message})
       : _message = message,
         _textStyle = null,
-        _bgColor = AppColors.error,
-        _color = AppColors.background;
+        _bgColor = colorScheme.error,
+        _color = colorScheme.background;
 
   @override
   Widget build(BuildContext context) {
@@ -153,7 +152,7 @@ class _InfoWidget extends StatelessWidget {
                 Theme.of(context)
                     .textTheme
                     .subtitle1
-                    .copyWith(color: _color ?? AppColors.darkGrey),
+                    .copyWith(color: _color ?? colorScheme.onSurface),
           ),
         ),
       ),

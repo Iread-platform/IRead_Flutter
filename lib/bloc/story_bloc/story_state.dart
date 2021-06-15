@@ -1,14 +1,24 @@
+import 'package:flutter/cupertino.dart';
+import 'package:iread_flutter/bloc/base/base_bloc.dart';
 import 'package:iread_flutter/models/stories_section_model.dart';
 
-abstract class StoryState {}
+class StoryLoadingState extends BlocState {
+  StoryLoadingState() {
+    state = DataState.Loading;
+  }
+}
 
-class StoryLoadingState extends StoryState {}
+class StoryErrorSate extends BlocState {
+  StoryErrorSate() {
+    state = DataState.Fail;
+  }
+}
 
-class StoryErrorSate extends StoryState {}
+class SearchByTagState extends SuccessState<StoriesSectionModel> {
+  SearchByTagState({@required data}) {
+    this.data = data;
+    state = DataState.Success;
+  }
 
-class SearchByTagState extends StoryState {
-  final StoriesSectionModel _sectionModel;
-  SearchByTagState(this._sectionModel);
-
-  get storiesSection => _sectionModel;
+  get storiesSection => data;
 }
