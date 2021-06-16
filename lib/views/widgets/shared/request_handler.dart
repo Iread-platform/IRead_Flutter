@@ -75,11 +75,13 @@ class _RequestHandlerState<T extends SuccessState,
                   // If the response has been received
                 } else {
                   if (state is FailState) {
+                    FailState failState = state;
                     return Stack(
                       alignment: Alignment.topRight,
                       children: [
                         widget._onFailed ??
-                            _InfoWidget.failed(message: state.message),
+                            failState.widget ??
+                            _InfoWidget.failed(message: failState.message),
                         widget._isDismissible
                             ? Positioned(
                                 top: 0,

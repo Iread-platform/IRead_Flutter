@@ -24,11 +24,10 @@ class SuccessState<T> extends BlocState {
 }
 
 class FailState extends BlocState {
-  Exception _exception;
   Widget _widget;
-  FailState({@required Exception exception, Widget widget})
-      : _exception = exception,
-        _widget = widget;
+  FailState({@required Exception exception, Widget widget}) : _widget = widget;
+
+  get widget => _widget;
 }
 
 abstract class BlocEvent {}
