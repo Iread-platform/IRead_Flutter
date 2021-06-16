@@ -80,6 +80,22 @@ class StoryscreenBloc extends Bloc<StoryscreenEvent, StoryscreenState> {
         audioPlayerState = AudioPlayerState.PLAYING;
         yield PlayerState(AudioPlayerState.PLAYING);
       }
+      //======== Seek to word ==========
+
+      else if (event is SeekToWordEvent) {
+        for (int i = 0; i < storyPageData.data.words.length; i++) {
+          if (storyPageData.data.words[i].startIndex >= event.index) {
+            seek(Duration(
+                milliseconds: storyPageData
+                    .data.words[i - 1 >= 0 ? i - 1 : i].time
+                    .toInt()));
+            resume();
+            audioPlayerState = AudioPlayerState.PLAYING;
+            yield PlayerState(AudioPlayerState.PLAYING);
+            break;
+          }
+        }
+      }
       //======== Progress ==========
       else if (event is ChangeProgressEvent) {
         yield ProgressState(event.progress);
@@ -112,12 +128,12 @@ class StoryscreenBloc extends Bloc<StoryscreenEvent, StoryscreenState> {
       progress = event;
       for (int i = 0; i < storyPageData.data.words.length; i++) {
         if (storyPageData.data.words[i].time > progress.inMilliseconds) {
-          int x = i-1;
+          int x = i - 1;
           highLightIndex = x.toString();
           break;
         }
       }
-      
+
       this.add(ChangeProgressEvent(progress));
     });
     audioPlayer.onPlayerCompletion.listen((event) {

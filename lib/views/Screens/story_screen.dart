@@ -11,17 +11,6 @@ import 'package:iread_flutter/views/Widgets/highlight_text.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 
 class StoryScreen extends StatefulWidget {
-//   String strStory =
-//       '''Once upon a time there was an old mother pig who had three little pigs and not enough food to feed them. So when they were old enough, she sent them out into the world to seek their fortunes.
-
-// The first little pig was very lazy. He didn't want to work at all and he built his house out of straw. The second little pig worked a little bit harder but he was somewhat lazy too and he built his house out of sticks. Then, they sang and danced and played together the rest of the day.
-
-// The third little pig worked hard all day and built his house with bricks. It was a sturdy house complete with a fine fireplace and chimney. It looked like it could withstand the strongest winds.
-
-// The next day, a wolf happened to pass by the lane where the three little pigs lived; and he saw the straw house, and he smelled the pig inside. He thought the pig would make a mighty fine meal and his mouth began to water ''';
-
-//   StoryScreen({this.strStory});
-
   @override
   _StoryScreenState createState() => _StoryScreenState();
 }
@@ -31,12 +20,12 @@ class _StoryScreenState extends State<StoryScreen> {
   var w;
   var h;
   var bloc;
-  int i = 0;
+  var blocListener;
 
   @override
   void initState() {
     super.initState();
-    print("init");
+
     BlocProvider.of<StoryscreenBloc>(context).add(FetchStoryPage());
   }
 
@@ -45,6 +34,7 @@ class _StoryScreenState extends State<StoryScreen> {
     w = MediaQuery.of(context).size.width;
     h = MediaQuery.of(context).size.height;
     bloc = BlocProvider.of<StoryscreenBloc>(context);
+    blocListener = BlocProvider.of<StoryscreenBloc>(context, listen: true);
     return Column(
       children: [
         header(), // HomeButton - backArrow - ImageStory
@@ -127,24 +117,16 @@ class _StoryScreenState extends State<StoryScreen> {
             flex: 5,
             child: Container(
               child: Builder(builder: (context) {
-                if (BlocProvider.of<StoryscreenBloc>(context, listen: true)
-                        .storyPageData ==
-                    null) {
-                  return Center(child: CircularProgressIndicator(strokeWidth: 10,valueColor: AlwaysStoppedAnimation<Color>(Colors.purple),));
+                if (blocListener.storyPageData == null) {
+                  return Center(
+                      child: CircularProgressIndicator(
+                    strokeWidth: 10,
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.purple),
+                  ));
                 } else {
                   return HighlighText(
-                      storyString: BlocProvider.of<StoryscreenBloc>(context,
-                                  listen: true)
-                              .storyPageData
-                              .data
-                              .story ??
-                          "",
-                      words: BlocProvider.of<StoryscreenBloc>(context,
-                                  listen: true)
-                              .storyPageData
-                              .data
-                              .words ??
-                          [],
+                      storyString: blocListener.storyPageData.data.story ?? "",
+                      words: blocListener.storyPageData.data.words ?? [],
                       marginX: w * 0.15,
                       marginY: h * 0.45 - 10);
                 }
@@ -188,9 +170,6 @@ class _StoryScreenState extends State<StoryScreen> {
                 if (state is LoadingState) {
                   return Container();
                 } else {
-                  print("progress");
-                  // BlocProvider.of<StoryscreenBloc>(context, listen: false)
-                  //     .highLightIndex = Random().nextInt(10).toString();
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

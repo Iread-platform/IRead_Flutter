@@ -36,21 +36,16 @@ class _HighlighTextState extends State<HighlighText> {
           children: [
             for (int i = 0; i < widget.words.length; i++)
               TextSpan(
-                  text: widget.words[i].word + " ",
-                  style: BlocProvider.of<StoryscreenBloc>(context, listen: true)
-                              .highLightIndex
-                              .toString() ==
-                          i.toString()
-                      ? TextStyle(backgroundColor: Colors.purple)
-                      : TextStyle())
+                text: widget.words[i].word + " ",
+                style: BlocProvider.of<StoryscreenBloc>(context, listen: true)
+                            .highLightIndex
+                            .toString() ==
+                        i.toString()
+                    ? TextStyle(backgroundColor: Colors.purple)
+                    : TextStyle(),
+              )
           ],
         ),
-        // autofocus: true,
-        // focusNode: FocusNode(
-        //   descendantsAreFocusable: true,
-        //   canRequestFocus: true,
-        //   debugLabel: "how",
-        // ),
         selectionControls: MyTextSelectionControls(
           marginX: widget.marginX,
           marginY: widget.marginY,
@@ -60,8 +55,19 @@ class _HighlighTextState extends State<HighlighText> {
         textAlign: TextAlign.center,
         showCursor: true,
         onSelectionChanged: (selection, cause) {
+          print("selection $selection");
+          print("cause $cause");
+
           String textSelected =
               widget.storyString.substring(selection.start, selection.end);
+          if (cause == SelectionChangedCause.longPress) {
+            BlocProvider.of<StoryscreenBloc>(context).add(PauseEvent());
+          } else if (cause == SelectionChangedCause.drag) {
+            print("draggggggg");
+          } else {
+            BlocProvider.of<StoryscreenBloc>(context)
+                .add(SeekToWordEvent(index: selection.start));
+          }
           Provider.of<TextSelectionProvider>(context, listen: false)
               .changeSelection(
                   selection: selection, textSelected: textSelected);

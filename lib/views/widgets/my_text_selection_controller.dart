@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:iread_flutter/bloc/StoryScreenBloc/storyscreen_bloc.dart';
 import 'package:iread_flutter/bloc/text_selection_provider.dart';
 import 'package:iread_flutter/utils/i_read_icons.dart';
 import 'package:provider/provider.dart';
@@ -17,9 +19,9 @@ class MyTextSelectionControls extends TextSelectionControls {
   Widget buildHandle(BuildContext context, TextSelectionHandleType type,
       double textLineHeight) {
     return Icon(
-      Icons.star_outlined,
+      Icons.arrow_drop_up_rounded,
       color: Colors.purple,
-      size: 30,
+      size: 50,
     );
   }
 
@@ -41,37 +43,38 @@ class MyTextSelectionControls extends TextSelectionControls {
             anchorAbove: Offset(position.dx + marginX, position.dy + marginY),
             anchorBelow: Offset(0, 0),
             toolbarBuilder: (context, _) {
-              print(position.dy + marginY);
-              return (position.dy > 30 && position.dy < 250)
-                  ? FittedBox(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(40),
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.black,
-                                blurRadius: 15,
-                                offset: Offset(0, 10),
-                                spreadRadius: 0)
-                          ],
-                        ),
-                        child: SpeechBubble(
-                          padding: EdgeInsets.all(0),
-                          color: Colors.white,
-                          borderRadius: 40,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: popupMenu(
-                              context: context,
-                              isWord: cart.textSelectedIsWord,
-                              highlighted: cart.highlighted,
-                              playButton: cart.playButton,
-                            ),
-                          ),
-                        ),
+              return FittedBox(
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(40),
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.black,
+                          blurRadius: 15,
+                          offset: Offset(0, 10),
+                          spreadRadius: 0)
+                    ],
+                  ),
+                  child: SpeechBubble(
+                    padding: EdgeInsets.all(0),
+                    color: Colors.white,
+                    borderRadius: 40,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: popupMenu(
+                        context: context,
+                        isWord: cart.textSelectedIsWord,
+                        highlighted: cart.highlighted,
+                        playButton: cart.playButton,
                       ),
-                    )
-                  : Container();
+                    ),
+                  ),
+                ),
+              );
+
+              // return (position.dy > 30 && position.dy < 250)
+              //     ?
+              //     : Container();
             },
             children: [Container()]);
       },
@@ -80,7 +83,7 @@ class MyTextSelectionControls extends TextSelectionControls {
 
   @override
   Offset getHandleAnchor(TextSelectionHandleType type, double textLineHeight) {
-    return Offset(15, 10);
+    return Offset(25, 20);
   }
 
   @override
@@ -88,12 +91,10 @@ class MyTextSelectionControls extends TextSelectionControls {
     return Size(0, 0);
   }
 
-  
   List<Widget> popupMenu(
       {context, bool isWord, bool highlighted, bool playButton}) {
     // If a word where selected, There will be two options: Vocabulary and highlight.
     if (isWord && !highlighted) {
-      
       return [
         TextSelectionToolbarTextButton(
           padding: EdgeInsets.symmetric(horizontal: 10),
@@ -117,7 +118,12 @@ class MyTextSelectionControls extends TextSelectionControls {
             IReadIcons.play,
             color: Colors.purple,
           ),
-          onPressed: () {},
+          onPressed: () {
+            BlocProvider.of<StoryscreenBloc>(context).add(SeekToWordEvent(
+                index: Provider.of<TextSelectionProvider>(context , listen: false)
+                    .selection
+                    .start));
+          },
         )
       ];
     }
