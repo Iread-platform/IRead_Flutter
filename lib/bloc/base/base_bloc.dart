@@ -21,7 +21,14 @@ class SuccessState<T> extends BlocState {
   T data;
 }
 
-class FailState extends BlocState {}
+class FailState extends BlocState {
+  String _imageUrl;
+  bool _isAssetImage;
+
+  FailState({String imageUrl, bool isAssetImage})
+      : _imageUrl = imageUrl,
+        _isAssetImage = isAssetImage;
+}
 
 abstract class BlocEvent {}
 
