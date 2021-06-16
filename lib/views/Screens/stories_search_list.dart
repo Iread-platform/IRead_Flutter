@@ -19,20 +19,22 @@ class StoriesSearchList extends StatefulWidget {
 
 class _StoriesSearchListState extends State<StoriesSearchList> {
   final GlobalKey<AnimatedListState> _listKey = GlobalKey();
-  StoryBloc _storyBloc;
+  SearchStoriesByTag _storyBloc;
 
   @override
   void initState() {
     super.initState();
-    _storyBloc = context.read<StoryBloc>();
+    _storyBloc = context.read<SearchStoriesByTag>();
   }
 
   @override
   Widget build(BuildContext context) {
-    return RequestHandler<SearchByTagState, StoryBloc>(
+    return RequestHandler<SearchByTagState, SearchStoriesByTag>(
         main: Container(),
         onSuccess: (context, data) {
-          WidgetsBinding.instance.addPostFrameCallback((timeStamp) {_init(context, data.data);});
+          WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+            _init(context, data.data);
+          });
           return _storiesList(context, data.data);
         },
         bloc: _storyBloc);

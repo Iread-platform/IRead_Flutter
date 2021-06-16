@@ -60,12 +60,12 @@ class _RequestHandlerState<T extends SuccessState,
               bloc: widget._bloc,
               builder: (context, state) {
                 // If request has not been initialized yet;
-                if (state.state == DataState.Init)
+                if (state is InitialState)
                   return SizedBox(
                     width: 0,
                   );
                 // If the request is in progress
-                if (state.state == DataState.Loading) {
+                if (state is LoadingState) {
                   return widget._inProgress ??
                       Container(
                         color: Theme.of(context).colorScheme.background,
@@ -74,8 +74,8 @@ class _RequestHandlerState<T extends SuccessState,
 
                   // If the response has been received
                 } else {
-                  switch (state.state) {
-                    case DataState.Fail:
+                  switch (state.runtimeType) {
+                    case FailState:
                       return Stack(
                         alignment: Alignment.topRight,
                         children: [
@@ -96,7 +96,7 @@ class _RequestHandlerState<T extends SuccessState,
                                 )
                         ],
                       );
-                    case DataState.Success:
+                    case SuccessState:
                       // Build content widget on the data provided by the stream
                       return widget._onSuccess(context, state);
                     default:

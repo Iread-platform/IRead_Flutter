@@ -1,10 +1,6 @@
 import 'package:iread_flutter/bloc/base/base_bloc.dart';
 
-class StoryEvent extends BlocEvent {}
-
-class LoadingEvent extends StoryEvent {}
-
-class SearchByTagEvent extends StoryEvent {
+class SearchByTagEvent extends BlocEvent {
   final String _title;
   SearchByTagEvent(this._title);
 

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:iread_flutter/bloc/base/base_bloc.dart';
 import 'package:iread_flutter/bloc/story_bloc/story_bloc.dart';
 import 'package:iread_flutter/bloc/story_bloc/story_event.dart';
-import 'package:iread_flutter/bloc/story_bloc/story_state.dart';
 import 'package:iread_flutter/config/themes/theme.dart';
 import 'package:iread_flutter/views/Screens/stories_search_list.dart';
 
@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
         body: Container(
             child: BlocProvider(
           create: (_) =>
-              StoryBloc(StoryLoadingState())..add(SearchByTagEvent("tag")),
+              SearchStoriesByTag(InitialState())..add(SearchByTagEvent("tag")),
           child: StoriesSearchList(),
         )),
       ),

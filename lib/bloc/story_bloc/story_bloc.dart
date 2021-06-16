@@ -4,16 +4,16 @@ import 'package:iread_flutter/bloc/story_bloc/story_event.dart';
 import 'package:iread_flutter/bloc/story_bloc/story_state.dart';
 import 'package:iread_flutter/repo/story_repo.dart';
 
-class StoryBloc extends Bloc<BlocEvent, BlocState> {
+class SearchStoriesByTag extends Bloc<BlocEvent, BlocState> {
   final StoryRepo storyRepo = StoryRepo();
 
-  StoryBloc(BlocState initialState) : super(initialState);
+  SearchStoriesByTag(BlocState initialState) : super(initialState);
 
   @override
   Stream<BlocState> mapEventToState(BlocEvent event) async* {
     switch (event.runtimeType) {
       case LoadingEvent:
-        yield StoryLoadingState();
+        yield LoadingState();
         break;
       case SearchByTagEvent:
         yield await _searchStoriesByTag(event);
@@ -21,10 +21,7 @@ class StoryBloc extends Bloc<BlocEvent, BlocState> {
     }
   }
 
-  Future<SearchByTagState> _searchStoriesByTag(StoryEvent event) async {
-    SearchByTagEvent searchByTagEvent = event as SearchByTagEvent;
-
-    return SearchByTagState(
-        data: await storyRepo.searchByTag(searchByTagEvent.title));
+  Future<SearchByTagState> _searchStoriesByTag(SearchByTagEvent event) async {
+    return SearchByTagState(data: await storyRepo.searchByTag(event.title));
   }
 }
