@@ -17,6 +17,8 @@ class RequestHandler<T extends SuccessState,
   final B _bloc;
   final Widget _mainContent;
   final Widget Function(BuildContext context, T successState) _onSuccess;
+  final Widget Function(BuildContext context, FailState failState)
+      _onFailBuilder;
   final Widget _onFailed;
   final Widget _inProgress;
   final Widget _other;
@@ -25,13 +27,15 @@ class RequestHandler<T extends SuccessState,
   RequestHandler(
       {@required main,
       @required Widget Function(BuildContext, T) onSuccess,
-      onFailed,
-      inProgress,
-      other,
-      isDismissible,
+      Widget Function(BuildContext context, FailState failState) onFailBuilder,
+      Widget onFailed,
+      Widget inProgress,
+      Widget other,
+      bool isDismissible,
       @required B bloc})
       : _mainContent = main,
         _onSuccess = onSuccess,
+        _onFailBuilder = onFailBuilder,
         _onFailed = onFailed,
         _inProgress = inProgress,
         _other = other,
@@ -79,8 +83,8 @@ class _RequestHandlerState<T extends SuccessState,
                     return Stack(
                       alignment: Alignment.topRight,
                       children: [
-                        widget._onFailed ??
-                            failState.widget ??
+                        widget._onFailBuilder(context, failState) ??
+                            widget._onFailed ??
                             _InfoWidget.failed(message: failState.message),
                         widget._isDismissible
                             ? Positioned(

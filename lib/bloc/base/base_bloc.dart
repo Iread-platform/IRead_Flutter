@@ -1,5 +1,3 @@
-import 'package:flutter/cupertino.dart';
-
 enum DataState { Loading, Success, Fail, Init, Close }
 
 abstract class BlocState {
@@ -23,12 +21,7 @@ class SuccessState<T> extends BlocState {
   T data;
 }
 
-class FailState extends BlocState {
-  Widget _widget;
-  FailState({@required Exception exception, Widget widget}) : _widget = widget;
-
-  get widget => _widget;
-}
+class FailState extends BlocState {}
 
 abstract class BlocEvent {}
 
