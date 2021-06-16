@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iread_flutter/bloc/StoryScreenBloc/storyscreen_bloc.dart';
-import 'package:iread_flutter/models/story_page_model.dart';
 import 'package:iread_flutter/utils/i_read_icons.dart';
 import 'package:iread_flutter/views/Widgets/highlight_text.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
@@ -86,7 +85,7 @@ class _StoryScreenState extends State<StoryScreen> {
             width: 120,
             alignment: Alignment.center,
             child: Icon(
-              Icons.menu,
+              IReadIcons.home,
               color: Colors.purple,
               size: 40,
             ),
@@ -185,7 +184,7 @@ class _StoryScreenState extends State<StoryScreen> {
                             if (bloc.audioPlayerState !=
                                 AudioPlayerState.PLAYING) {
                               return Icon(
-                                Icons.play_arrow,
+                                IReadIcons.play,
                                 color: Colors.purple,
                                 size: 70,
                               );
