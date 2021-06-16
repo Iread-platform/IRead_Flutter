@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iread_flutter/bloc/base/base_bloc.dart';
-import 'package:iread_flutter/bloc/story_bloc/search_stories_by_tag.dart';
-import 'package:iread_flutter/bloc/story_bloc/search_stories_by_tag_event.dart';
 import 'package:iread_flutter/config/themes/theme.dart';
 import 'package:iread_flutter/views/Screens/stories_search_list.dart';
 
+import 'bloc/search_stories_by_tag_bloc/search_stories_by_tag.dart';
+import 'bloc/search_stories_by_tag_bloc/search_stories_by_tag_event.dart';
 import 'models/stories_section_model.dart';
 import 'models/story.dart';
 
@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(),
         body: Container(
             child: BlocProvider(
-          create: (_) => SearchStoriesByTag(InitialState())
+          create: (_) => SearchStoriesByTagBloc(LoadingState())
             ..add(SearchStoriesByTagEvent("tag")),
           child: StoriesSearchList(),
         )),

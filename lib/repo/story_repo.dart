@@ -1,5 +1,8 @@
+import 'package:iread_flutter/bloc/base/base_bloc.dart';
 import 'package:iread_flutter/models/stories_section_model.dart';
 import 'package:iread_flutter/repo/main_repo.dart';
+import 'package:iread_flutter/utils/data.dart';
+import 'package:iread_flutter/utils/exception.dart';
 
 class StoryRepo extends MainRepo {
   static final StoryRepo _instance = StoryRepo._internal();
@@ -92,11 +95,15 @@ class StoryRepo extends MainRepo {
     ]
   };
 
-  Future<StoriesSectionModel> searchByTag(String tag) async {
+  Future<Data<StoriesSectionModel>> searchByTag(String tag) async {
     /*final jsonText = await apiService.request(
           requestType: RequestType.GET, endPoint: tagSearchEndPoint);
       final json = jsonDecode(jsonText);*/
     // TODO get real data
-    return StoriesSectionModel.fromJson(storySectionJson);
+    try {
+      return StoriesSectionModel.fromJson(storySectionJson);
+    } on NetworkException catch (e) {
+      return FailState(message: e.message);
+    } catch (e) {}
   }
 }

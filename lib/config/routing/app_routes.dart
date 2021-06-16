@@ -2,8 +2,8 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iread_flutter/bloc/base/base_bloc.dart';
-import 'package:iread_flutter/bloc/story_bloc/search_stories_by_tag.dart';
-import 'package:iread_flutter/bloc/story_bloc/search_stories_by_tag_event.dart';
+import 'package:iread_flutter/bloc/search_stories_by_tag_bloc/search_stories_by_tag.dart';
+import 'package:iread_flutter/bloc/search_stories_by_tag_bloc/search_stories_by_tag_event.dart';
 import 'package:iread_flutter/main.dart';
 import 'package:iread_flutter/views/Screens/stories_search_list.dart';
 import 'package:iread_flutter/views/widgets/story/story_assignment_card.dart';
@@ -26,7 +26,7 @@ class AppRoutes {
         Handler(
             handlerFunc: (BuildContext context, Map<String, dynamic> params) =>
                 BlocProvider(
-                  create: (_) => SearchStoriesByTag(InitialState())
+                  create: (_) => SearchStoriesByTagBloc(LoadingState())
                     ..add(SearchStoriesByTagEvent(params['tag'][0])),
                   child: StoriesSearchList(),
                 )))

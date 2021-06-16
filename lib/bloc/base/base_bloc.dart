@@ -1,33 +1,23 @@
-enum DataState { Loading, Success, Fail, Init, Close }
+import 'package:flutter/cupertino.dart';
 
 abstract class BlocState {
-  DataState state = DataState.Success;
   String message = "Success";
-}
 
-class LoadingState extends BlocState {
-  LoadingState() {
-    state = DataState.Loading;
+  BlocState({String message}) {
+    message = message ?? "Success";
   }
 }
 
-class InitialState extends BlocState {
-  InitialState() {
-    state = DataState.Init;
-  }
-}
+class LoadingState extends BlocState {}
+
+class InitialState extends BlocState {}
 
 class SuccessState<T> extends BlocState {
   T data;
 }
 
 class FailState extends BlocState {
-  String _imageUrl;
-  bool _isAssetImage;
-
-  FailState({String imageUrl, bool isAssetImage})
-      : _imageUrl = imageUrl,
-        _isAssetImage = isAssetImage;
+  FailState({@required String message}) : super(message: message);
 }
 
 abstract class BlocEvent {}

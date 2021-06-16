@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:iread_flutter/bloc/story_bloc/search_stories_by_tag.dart';
-import 'package:iread_flutter/bloc/story_bloc/search_stories_by_tag_state.dart';
+import 'package:iread_flutter/bloc/search_stories_by_tag_bloc/search_stories_by_tag.dart';
+import 'package:iread_flutter/bloc/search_stories_by_tag_bloc/search_stories_by_tag_state.dart';
 import 'package:iread_flutter/config/themes/border_radius.dart';
 import 'package:iread_flutter/config/themes/shadows.dart';
 import 'package:iread_flutter/models/stories_section_model.dart';
@@ -19,17 +19,17 @@ class StoriesSearchList extends StatefulWidget {
 
 class _StoriesSearchListState extends State<StoriesSearchList> {
   final GlobalKey<AnimatedListState> _listKey = GlobalKey();
-  SearchStoriesByTag _storyBloc;
+  SearchStoriesByTagBloc _storyBloc;
 
   @override
   void initState() {
     super.initState();
-    _storyBloc = context.read<SearchStoriesByTag>();
+    _storyBloc = context.read<SearchStoriesByTagBloc>();
   }
 
   @override
   Widget build(BuildContext context) {
-    return RequestHandler<SearchStoriesByTagState, SearchStoriesByTag>(
+    return RequestHandler<SearchStoriesByTagState, SearchStoriesByTagBloc>(
         main: Container(),
         onSuccess: (context, data) {
           WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
