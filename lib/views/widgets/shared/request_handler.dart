@@ -74,35 +74,33 @@ class _RequestHandlerState<T extends SuccessState,
 
                   // If the response has been received
                 } else {
-                  switch (state.runtimeType) {
-                    case FailState:
-                      return Stack(
-                        alignment: Alignment.topRight,
-                        children: [
-                          widget._onFailed ??
-                              _InfoWidget.failed(message: state.message),
-                          widget._isDismissible
-                              ? Positioned(
-                                  top: 0,
-                                  child: IconButton(
-                                    icon: Icon(Icons.close),
-                                    onPressed: () {
-                                      widget._bloc.add(CloseEvent());
-                                    },
-                                  ),
-                                )
-                              : SizedBox(
-                                  width: 0,
-                                )
-                        ],
-                      );
-                    case SuccessState:
-                      // Build content widget on the data provided by the stream
-                      return widget._onSuccess(context, state);
-                    default:
-                      return widget._other ??
-                          _InfoWidget(message: "Unhandled Error");
+                  if (state is FailState) {
+                    return Stack(
+                      alignment: Alignment.topRight,
+                      children: [
+                        widget._onFailed ??
+                            _InfoWidget.failed(message: state.message),
+                        widget._isDismissible
+                            ? Positioned(
+                                top: 0,
+                                child: IconButton(
+                                  icon: Icon(Icons.close),
+                                  onPressed: () {
+                                    widget._bloc.add(CloseEvent());
+                                  },
+                                ),
+                              )
+                            : SizedBox(
+                                width: 0,
+                              )
+                      ],
+                    );
+                  } else if (state is SuccessState) {
+                    return widget._onSuccess(context, state);
                   }
+
+                  return widget._other ??
+                      _InfoWidget.failed(message: "Unhandled Error");
                 }
               }),
         )
@@ -132,7 +130,7 @@ class _InfoWidget extends StatelessWidget {
       : _message = message,
         _textStyle = null,
         _bgColor = colorScheme.error,
-        _color = colorScheme.background;
+        _color = colorScheme.surface;
 
   @override
   Widget build(BuildContext context) {
