@@ -16,7 +16,7 @@ class RequestHandler<T extends SuccessState,
     B extends Bloc<BlocEvent, BlocState>> extends StatefulWidget {
   final B _bloc;
   final Widget _mainContent;
-  final Widget Function(BuildContext, T) _onSuccess;
+  final Widget Function(BuildContext context, T successState) _onSuccess;
   final Widget _onFailed;
   final Widget _inProgress;
   final Widget _other;
