@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:iread_flutter/bloc/story_bloc/story_bloc.dart';
-import 'package:iread_flutter/bloc/story_bloc/story_state.dart';
+import 'package:iread_flutter/bloc/story_bloc/search_stories_by_tag.dart';
+import 'package:iread_flutter/bloc/story_bloc/search_stories_by_tag_state.dart';
 import 'package:iread_flutter/config/themes/border_radius.dart';
 import 'package:iread_flutter/config/themes/shadows.dart';
 import 'package:iread_flutter/models/stories_section_model.dart';
@@ -29,7 +29,7 @@ class _StoriesSearchListState extends State<StoriesSearchList> {
 
   @override
   Widget build(BuildContext context) {
-    return RequestHandler<SearchByTagState, SearchStoriesByTag>(
+    return RequestHandler<SearchStoriesByTagState, SearchStoriesByTag>(
         main: Container(),
         onSuccess: (context, data) {
           WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
