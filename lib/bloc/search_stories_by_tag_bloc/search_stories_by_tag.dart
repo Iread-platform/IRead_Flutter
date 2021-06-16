@@ -4,6 +4,7 @@ import 'package:iread_flutter/bloc/search_stories_by_tag_bloc/search_stories_by_
 import 'package:iread_flutter/bloc/search_stories_by_tag_bloc/search_stories_by_tag_state.dart';
 import 'package:iread_flutter/models/stories_section_model.dart';
 import 'package:iread_flutter/repo/story_repo.dart';
+import 'package:iread_flutter/utils/data.dart';
 
 class SearchStoriesByTagBloc extends Bloc<BlocEvent, BlocState> {
   final StoryRepo storyRepo = StoryRepo();
@@ -26,9 +27,14 @@ class SearchStoriesByTagBloc extends Bloc<BlocEvent, BlocState> {
     }
   }
 
-  Future<SearchStoriesByTagState> _searchStoriesByTag(
-      SearchStoriesByTagEvent event) async {
-    this.stories = await storyRepo.searchByTag(event.title);
-    return SearchStoriesByTagState(data: this.stories);
+  Future<BlocState> _searchStoriesByTag(SearchStoriesByTagEvent event) async {
+    final data = await storyRepo.searchByTag(event.title);
+
+    if (data.state == DataState.Success) {
+      this.stories = data.data;
+      return SearchStoriesByTagState(data: this.stories);
+    }
+
+    return FailState(message: data.message);
   }
 }
