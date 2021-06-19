@@ -4,8 +4,11 @@ import 'package:iread_flutter/bloc/story_bloc.dart';
 import 'package:iread_flutter/bloc/text_selection_provider.dart';
 import 'package:provider/provider.dart';
 import 'bloc/StoryScreenBloc/storyscreen_bloc.dart';
+
+
 import 'models/stories_section_model.dart';
 import 'models/story.dart';
+import 'models/user.dart';
 
 import 'views/Screens/story_screen.dart';
 
@@ -25,16 +28,6 @@ void main() {
 
 // ignore: must_be_immutable
 class MyApp extends StatelessWidget {
-  String storyString =
-      '''Once upon a time there was an old mother pig who had three little pigs and not enough food to feed them. So when they were old enough, she sent them out into the world to seek their fortunes.
-
-The first little pig was very lazy. He didn't want to work at all and he built his house out of straw. The second little pig worked a little bit harder but he was somewhat lazy too and he built his house out of sticks. Then, they sang and danced and played together the rest of the day.
-
-The third little pig worked hard all day and built his house with bricks. It was a sturdy house complete with a fine fireplace and chimney. It looked like it could withstand the strongest winds.
-
-
- 
-The next day, a wolf happened to pass by the lane where the three little pigs lived; and he saw the straw house, and he smelled the pig inside. He thought the pig would make a mighty fine meal and his mouth began to water ''';
 
   @override
   Widget build(BuildContext context) {
@@ -44,18 +37,6 @@ The next day, a wolf happened to pass by the lane where the three little pigs li
         body: Center(
           child: StoryScreen(),
         ),
-        // body: Container(
-        //   padding: EdgeInsets.all(40),
-        //   width: double.infinity,
-        //   child: WordSelectableText(
-        //     selectable: true,
-        //     highlight: true,
-        //     text: "hello how are you ",
-        //     onWordTapped: (word, index) {},
-
-        //     style: TextStyle(fontSize: 20),
-        //   ),
-        // ),
       ),
     );
   }
@@ -75,8 +56,18 @@ List<StoriesSectionModel> storiesSection = [
 
 Story story = Story(
     title: 'Wood, Wire, Wings',
-    color: Colors.teal,
-    imageUrl: 'https://blog-cdn.reedsy.com/uploads/2019/12/another.jpg',
+    color: Colors.black38,
+    imageUrl: 'https://picsum.photos/200/300',
+    description:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sit amet lacus tincidunt, consequat lorem ac, consectetur ligula. Sed non nunc vehicula, pretium arcu a, faucibus eros. Cras lacinia magna sed enim malesuada finibus. Nulla et varius neque. Etiam dolor erat, dictum sodales facilisis ac, cursus vehicula lacus. Vestibulum et ante lorem. Pellentesque pretium arcu felis, nec efficitur lacus ultricies quis. Morbi eu tortor facilisis, porta elit quis, varius diam.',
+    author: 'Motasem Ghozlan',
+    tags: ['Anger', 'Love', 'Feelings', 'Generous', 'Learning', 'Effective'],
+    pages: 1300,
     progress: 0.45,
     flippedPages: 53,
     readingTime: 127.25);
+
+User user =
+    User(name: 'Motasem Ghozlan', imageUrl: 'https://picsum.photos/200/300');
+
+
