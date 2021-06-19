@@ -56,7 +56,6 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/shared/star.png
-    - assets/images/shared/error.svg
     - assets/images/shared/curve_bottom_left.svg
     - assets/images/shared/curve_bottom_right.svg
     - assets/images/shared/curve_top_left.svg
