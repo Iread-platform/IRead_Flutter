@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iread_flutter/views/Widgets/highlight_text.dart';
 
+// ignore: must_be_immutable
 class StoryScreen extends StatelessWidget {
   String strStory;
   StoryScreen({this.strStory});
