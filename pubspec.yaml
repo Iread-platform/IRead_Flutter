@@ -33,6 +33,7 @@ dependencies:
   fluro: ^2.0.3
   flutter_svg: ^0.22.0
   http: ^0.13.3
+  flutter_rating_bar: ^4.0.0
   audioplayers: ^0.15.0
   rxdart: ^0.27.0
 
