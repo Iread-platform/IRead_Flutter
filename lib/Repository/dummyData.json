@@ -1,0 +1,143 @@
+{
+    "pageNumber": 0,
+    "pageCount": 10,
+    "story": "I am happy to join with you today in what will go down in history as the greatest demonstration for freedom in the history of our nation.",
+    "audioURL": "https://media1.vocaroo.com/mp3/1bgFZTX0goKj",
+    "words": [
+        {
+            "word": "I",
+            "startIndex": 0,
+            "time": 2860.74
+        },
+        {
+            "word": "am",
+            "startIndex": 2,
+            "time": 3159.15
+        },
+        {
+            "word": "happy",
+            "startIndex": 5,
+            "time": 3355.29
+        },
+        {
+            "word": "to",
+            "startIndex": 11,
+            "time": 4157.28
+        },
+        {
+            "word": "join",
+            "startIndex": 14,
+            "time": 4354.03
+        },
+        {
+            "word": "with",
+            "startIndex": 19,
+            "time": 4957.5
+        },
+        {
+            "word": "you",
+            "startIndex": 24,
+            "time": 5252.69
+        },
+        {
+            "word": "today",
+            "startIndex": 28,
+            "time": 5553.68
+        },
+        {
+            "word": "in",
+            "startIndex": 34,
+            "time": 8650.67
+        },
+        {
+            "word": "what",
+            "startIndex": 37,
+            "time": 9254.31
+        },
+        {
+            "word": "will",
+            "startIndex": 42,
+            "time": 9555.3
+        },
+        {
+            "word": "go",
+            "startIndex": 47,
+            "time": 9753.5
+        },
+        {
+            "word": "down",
+            "startIndex": 50,
+            "time": 9963.02
+        },
+        {
+            "word": "in",
+            "startIndex": 55,
+            "time": 10664.25
+        },
+        {
+            "word": "history",
+            "startIndex": 58,
+            "time": 10860.79
+        },
+        {
+            "word": "as",
+            "startIndex": 66,
+            "time": 13351.71
+        },
+        {
+            "word": "the",
+            "startIndex": 69,
+            "time": 13853.31
+        },
+        {
+            "word": "greatest",
+            "startIndex": 73,
+            "time": 14850.75
+        },
+        {
+            "word": "demonstration",
+            "startIndex": 82,
+            "time": 15153.56
+        },
+        {
+            "word": "for",
+            "startIndex": 96,
+            "time": 16760.89
+        },
+        {
+            "word": "freedom",
+            "startIndex": 100,
+            "time": 16955.5
+        },
+        {
+            "word": "in",
+            "startIndex": 108,
+            "time": 17452.85
+        },
+        {
+            "word": "the",
+            "startIndex": 111,
+            "time": 17757.42
+        },
+        {
+            "word": "history",
+            "startIndex": 115,
+            "time": 17956.05
+        },
+        {
+            "word": "of",
+            "startIndex": 123,
+            "time": 18500.29
+        },
+        {
+            "word": "our",
+            "startIndex": 126,
+            "time": 18900.36
+        },
+        {
+            "word": "nation",
+            "startIndex": 130,
+            "time": 19200.66
+        }
+    ]
+}
