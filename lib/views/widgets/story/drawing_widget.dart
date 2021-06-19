@@ -53,6 +53,7 @@ class _DrawingWidgetState extends State<DrawingWidget> {
               RenderBox renderBox = context.findRenderObject();
               closed = true;
               addPoint(renderBox, points[0]);
+              print('Points count ${points.length}');
             });
           },
         )

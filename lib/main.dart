@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Iread',
       theme: mainTheme,
-      home: Scaffold(body: DrawingWidget()),
+      home: Scaffold(body: Container(color: Colors.red, height: 400, child: DrawingWidget())),
     );
   }
 }
