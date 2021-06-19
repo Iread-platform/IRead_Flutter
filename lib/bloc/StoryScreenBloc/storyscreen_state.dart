@@ -1,6 +1,6 @@
 part of 'storyscreen_bloc.dart';
 
-@immutable
+
 abstract class StoryscreenState {}
 
 class StoryscreenInitial extends StoryscreenState {}

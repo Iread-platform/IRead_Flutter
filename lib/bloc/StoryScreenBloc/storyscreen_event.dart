@@ -1,13 +1,12 @@
 part of 'storyscreen_bloc.dart';
 
-@immutable
 abstract class StoryscreenEvent {}
 
 class FetchStoryPage extends StoryscreenEvent {}
 
 class PlayEvent extends StoryscreenEvent {
   String url;
-  PlayEvent(url);
+  PlayEvent(this.url);
 }
 
 class StopEvent extends StoryscreenEvent {}

@@ -61,7 +61,6 @@ flutter:
     - assets/images/shared/curve_top_left.svg
     - assets/images/shared/curve_top_right.svg
     - lib/Repository/dummyData.json
-
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:iread_flutter/views/widgets/media/story_audio_player.dart';
-import 'package:provider/provider.dart';
 
 class StoryPlayer extends StatefulWidget {
   final _audioUrl;

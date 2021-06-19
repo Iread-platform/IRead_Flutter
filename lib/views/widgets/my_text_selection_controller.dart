@@ -8,7 +8,7 @@ import 'package:iread_flutter/utils/i_read_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:speech_bubble/speech_bubble.dart';
 
-enum _TextSelectionHandlePosition { start, end }
+// enum _TextSelectionHandlePosition { start, end }
 
 class MyTextSelectionControls extends TextSelectionControls {
   var marginX;
