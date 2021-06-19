@@ -12,7 +12,7 @@ class RatingBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RatingBarIndicator(
-      rating: 3.75,
+      rating: _rating,
       itemCount: 5,
       itemSize: 24,
       unratedColor: Colors.black12,
