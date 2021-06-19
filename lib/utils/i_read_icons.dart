@@ -21,6 +21,7 @@ class IReadIcons {
   static const _kFontFam = 'IReadIcons';
   static const String _kFontPkg = null;
 
+  static const IconData assignment = IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData arrow_back = IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData book = IconData(0xe802, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData camera_fill = IconData(0xe803, fontFamily: _kFontFam, fontPackage: _kFontPkg);
@@ -36,4 +37,13 @@ class IReadIcons {
   static const IconData share = IconData(0xe80d, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData star = IconData(0xe80e, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData close = IconData(0xe80f, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData attach = IconData(0xe810, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData chat_dots = IconData(0xe811, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData close2 = IconData(0xe812, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData home = IconData(0xe813, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData subtitles = IconData(0xe814, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData wallet = IconData(0xe815, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData arrowdown = IconData(0xe816, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData arrowup = IconData(0xe817, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData profile = IconData(0xe818, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }
