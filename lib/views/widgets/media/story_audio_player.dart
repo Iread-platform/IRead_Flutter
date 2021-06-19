@@ -353,6 +353,7 @@ class StoryAudioPlayerBloc extends ChangeNotifier {
 
   get positionStream => _pressPosition.stream;
   get playerStateStream => audioPlayer.onPlayerStateChanged;
+  get durationStram => audioPlayer.getDuration();
 
   get duration => _duration;
   get dragStarted => _dragStarted;

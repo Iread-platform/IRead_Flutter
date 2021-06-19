@@ -29,6 +29,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   provider: ^5.0.0
+  flutter_bloc: ^7.0.1
   speech_bubble: ^0.0.9
   fluro: ^2.0.3
   flutter_svg: ^0.22.0
@@ -36,6 +37,7 @@ dependencies:
   flutter_rating_bar: ^4.0.0
   audioplayers: ^0.15.0
   rxdart: ^0.27.0
+  audio_video_progress_bar: ^0.4.0
 
 dev_dependencies:
   flutter_test:
@@ -53,12 +55,11 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/shared/star.png
-    - assets/images/shared/error.svg
     - assets/images/shared/curve_bottom_left.svg
     - assets/images/shared/curve_bottom_right.svg
     - assets/images/shared/curve_top_left.svg
     - assets/images/shared/curve_top_right.svg
-
+    - lib/Repository/dummyData.json
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 
