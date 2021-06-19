@@ -1,15 +1,9 @@
 part of 'storyscreen_bloc.dart';
 
+abstract class StoryscreenState extends BlocState {}
 
-abstract class StoryscreenState {}
-
-class StoryscreenInitial extends StoryscreenState {}
-
-class LoadingState extends StoryscreenState {}
-
-class LoadedState extends StoryscreenState {
-  Data<StoryPage> data;
-  LoadedState({this.data});
+class LoadedState extends SuccessState<Data<StoryPage>> {
+  LoadedState({data}) : super(data: data);
 }
 
 class PlayerState extends StoryscreenState {
@@ -25,11 +19,6 @@ class ProgressState extends StoryscreenState {
 class DurationState extends StoryscreenState {
   Duration duration;
   DurationState(this.duration);
-}
-
-class ErrorState extends StoryscreenState {
-  var message;
-  ErrorState({this.message});
 }
 
 class HighLightWordState extends StoryscreenState {

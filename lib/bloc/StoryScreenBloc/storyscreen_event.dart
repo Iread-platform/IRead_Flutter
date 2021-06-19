@@ -1,6 +1,6 @@
 part of 'storyscreen_bloc.dart';
 
-abstract class StoryscreenEvent {}
+abstract class StoryscreenEvent extends BlocEvent {}
 
 class FetchStoryPage extends StoryscreenEvent {}
 

@@ -4,13 +4,14 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iread_flutter/Repository/story_repository.dart';
+import 'package:iread_flutter/bloc/base/base_bloc.dart';
 import 'package:iread_flutter/models/Data.dart';
 import 'package:iread_flutter/models/story_page_model.dart';
 
 part 'storyscreen_event.dart';
 part 'storyscreen_state.dart';
 
-class StoryscreenBloc extends Bloc<StoryscreenEvent, StoryscreenState> {
+class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
   String url;
   AudioPlayer audioPlayer;
   Duration duration;
@@ -20,30 +21,25 @@ class StoryscreenBloc extends Bloc<StoryscreenEvent, StoryscreenState> {
   Data<StoryPage> storyPageData;
   var context;
   StoryRepository storyRepository;
-  StoryscreenBloc() : super(StoryscreenInitial()) {
-    // storyPageData = Data<StoryPage>(StoryPage(), "");
-
+  StoryscreenBloc() : super(InitialState()) {
     audioPlayer = AudioPlayer();
-    // cache = AudioCache();
-    // cache.clearCache();
     audioPlayerState = AudioPlayerState.PLAYING;
     storyRepository = StoryRepository();
     initListeners();
   }
   @override
-  Stream<StoryscreenState> mapEventToState(
-    StoryscreenEvent event,
+  Stream<BlocState> mapEventToState(
+    BlocEvent event,
   ) async* {
+    // ======== GetStoryEvent ==========
     if (event is FetchStoryPage) {
       yield LoadingState();
       storyPageData = await storyRepository.fetchStoryPage();
       await Future.delayed(Duration(seconds: 1));
-      print(storyPageData.data.story);
       yield LoadedState(data: storyPageData);
       play(storyPageData.data.audioURL);
       yield PlayerState(AudioPlayerState.PLAYING);
     }
-    // ======== GetStoryEvent ==========
 
     //==========  player Controller ==============
     else {
@@ -103,8 +99,6 @@ class StoryscreenBloc extends Bloc<StoryscreenEvent, StoryscreenState> {
         yield DurationState(event.duration);
       }
       if (event is HighlightWordEvent) {
-        // List<TextSpan> s = getStory(highLightword: event.index);
-
         yield HighLightWordState(index: event.index);
       } else {}
     }
@@ -170,20 +164,4 @@ class StoryscreenBloc extends Bloc<StoryscreenEvent, StoryscreenState> {
     storyString = story;
     wordsStory = storyString.split(" ");
   }
-
-  // List<TextSpan> getStory({int highLightword}) {
-  //   spans.clear();
-  //   for (int i = 0; i < wordsStory.length; i++) {
-  //     styles.add(TextStyle());
-  //     spans.add(
-  //       TextSpan(
-  //         style: highLightword == i
-  //             ? TextStyle(backgroundColor: Colors.purple)
-  //             : TextStyle(),
-  //         text: wordsStory[i] + " ",
-  //       ),
-  //     );
-  //   }
-  //   return spans;
-  // }
 }

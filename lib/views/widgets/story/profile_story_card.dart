@@ -1,72 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:iread_flutter/config/themes/border_radius.dart';
-import 'package:iread_flutter/views/widgets/layout/responsive_layout_builder.dart';
-import 'package:iread_flutter/views/widgets/story/story_image.dart';
+import 'package:iread_flutter/models/story.dart';
+import 'package:iread_flutter/views/widgets/shared/progress_bar.dart';
+import 'package:iread_flutter/views/widgets/story/story_details_card_template.dart';
 
 class ProfileStoryCard extends StatelessWidget {
+  final Story _story;
   final String _readingTimeTitle = 'Reading Time';
   final String _flippedTimePages = 'Flipped Pages';
-  final String _imageUrl;
-  final Color _color;
-  final double _progress;
-  final int _flippedPages;
-  final double _readingTime;
 
   ProfileStoryCard(
       {Key key,
-      @required imageUrl,
-      @required color,
-      progress,
-      @required title,
-      flippedPages,
-      readingTime})
-      : _imageUrl = imageUrl,
-        _color = color,
-        _progress = progress ?? 0,
-        _flippedPages = flippedPages,
-        _readingTime = readingTime,
+      @required Story story,
+      storyDetailsUpperSection,
+      storyDetailsBottomSection})
+      : _story = story,
         super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 200,
-      child: Stack(
-        alignment: Alignment.centerRight,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Flexible(flex: 2, child: Container()),
-              Flexible(flex: 3, child: _storyDetails(context))
-            ],
-          ),
-          Row(
-            children: [
-              Flexible(
-                  flex: 2,
-                  child: StoryImage(imageUrl: _imageUrl, color: _color)),
-              Flexible(flex: 3, child: Container())
-            ],
-          ),
-        ],
-      ),
+    return StoryDetailsCard(
+      story: _story,
+      upperSection: _storyPagesAndTime(context, 28),
+      lowerSection: _storyProgress(context, 28),
     );
   }
-
-  Widget _storyDetails(BuildContext context) => Container(
-        padding: EdgeInsets.only(top: 24, bottom: 8),
-        child: Column(
-          children: [
-            Expanded(
-                flex: 3,
-                child: ResponsiveLayoutBuilder(
-                    onXSm: (context) => _storyPagesAndTime(context, 12),
-                    onSm: (context) => _storyPagesAndTime(context, 32))),
-            Expanded(flex: 1, child: _storyProgress(context, 12)),
-          ],
-        ),
-      );
 
   Widget _storyPagesAndTime(BuildContext context, double leftPadding) =>
       Container(
@@ -87,11 +45,21 @@ class ProfileStoryCard extends StatelessWidget {
           children: [
             Expanded(
               child: _detailsRow(
-                  context, _readingTimeTitle, _readingTime.toString() + ' m'),
+                  context,
+                  _readingTimeTitle,
+                  (_story.readingTime != null
+                          ? _story.readingTime.toString()
+                          : '0') +
+                      ' m'),
             ),
             Expanded(
-              child: _detailsRow(context, _flippedTimePages,
-                  _flippedPages.toString() + ' pages'),
+              child: _detailsRow(
+                  context,
+                  _flippedTimePages,
+                  (_story.flippedPages != null
+                          ? _story.flippedPages.toString()
+                          : '0') +
+                      ' pages'),
             )
           ],
         ),
@@ -117,31 +85,28 @@ class ProfileStoryCard extends StatelessWidget {
       alignment: Alignment.centerRight,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(smallBorderRadius),
-        color: _color,
+        color: _story.color,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Flexible(
-            flex: 10,
-            child: Container(
-              height: 12,
-              decoration: BoxDecoration(
-                  border: Border.all(
-                      width: 2, color: Theme.of(context).colorScheme.surface),
-                  borderRadius: BorderRadius.circular(storyBorderRadius)),
-              margin: EdgeInsets.only(right: 12),
-              child: LinearProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(_color),
-                value: _progress,
-                backgroundColor: Theme.of(context).colorScheme.surface,
-              ),
-            ),
-          ),
+              flex: 9,
+              child: ProgressBar(
+                height: 12.0,
+                progress: _story.progress,
+                color: _story.color,
+                borderWidth: 2.0,
+                padding: 0.0,
+                borderRadius: storyBorderRadius,
+              )),
           Flexible(
             flex: 3,
             child: Text(
-              _progress.toString() + '%',
+              (_story.progress != null
+                      ? (_story.progress * 100).toString()
+                      : '0') +
+                  '%',
               style: Theme.of(context)
                   .textTheme
                   .subtitle2

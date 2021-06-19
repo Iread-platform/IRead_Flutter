@@ -29,7 +29,7 @@ class StoryDetails extends StatelessWidget {
           StoryDescription(
             title: _story.title,
             description: _story.description,
-            author: _story.author,
+            author: _story.writer,
             pages: _story.pages,
           ),
           SizedBox(

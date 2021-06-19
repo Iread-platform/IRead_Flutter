@@ -4,12 +4,9 @@ import 'package:iread_flutter/bloc/story_bloc.dart';
 import 'package:iread_flutter/bloc/text_selection_provider.dart';
 import 'package:provider/provider.dart';
 import 'bloc/StoryScreenBloc/storyscreen_bloc.dart';
-
-
 import 'models/stories_section_model.dart';
 import 'models/story.dart';
 import 'models/user.dart';
-
 import 'views/Screens/story_screen.dart';
 
 void main() {
@@ -60,7 +57,7 @@ Story story = Story(
     imageUrl: 'https://picsum.photos/200/300',
     description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sit amet lacus tincidunt, consequat lorem ac, consectetur ligula. Sed non nunc vehicula, pretium arcu a, faucibus eros. Cras lacinia magna sed enim malesuada finibus. Nulla et varius neque. Etiam dolor erat, dictum sodales facilisis ac, cursus vehicula lacus. Vestibulum et ante lorem. Pellentesque pretium arcu felis, nec efficitur lacus ultricies quis. Morbi eu tortor facilisis, porta elit quis, varius diam.',
-    author: 'Motasem Ghozlan',
+    writer: 'Motasem Ghozlan',
     tags: ['Anger', 'Love', 'Feelings', 'Generous', 'Learning', 'Effective'],
     pages: 1300,
     progress: 0.45,
