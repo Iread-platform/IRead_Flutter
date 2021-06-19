@@ -90,12 +90,12 @@ class FingerPainter extends CustomPainter {
           ..style = PaintingStyle.fill
           ..strokeCap = StrokeCap.butt
           ..isAntiAlias = true
-          ..color = Colors.black12.withOpacity(0.8),
+          ..color = Colors.black12.withOpacity(0.5),
         closed = closed;
 
   @override
   void paint(Canvas canvas, Size size) {
-    closed ? drawPolygon(canvas, size) : _drawLines(canvas, size);
+    closed ? _drawPolygon(canvas, size) : _drawLines(canvas, size);
   }
 
   void _drawLines(Canvas canvas, Size size) {
@@ -131,9 +131,8 @@ class FingerPainter extends CustomPainter {
     }
   }
 
-  void drawPolygon(Canvas canvas, Size size) {
+  void _drawPolygon(Canvas canvas, Size size) {
     final Path path = Path();
-
     path.addPolygon(pointsList, true);
     canvas.drawPath(path, paintData);
   }
