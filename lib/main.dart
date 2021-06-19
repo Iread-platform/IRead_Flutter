@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iread_flutter/config/themes/theme.dart';
-<<<<<<< HEAD
 import 'package:iread_flutter/views/widgets/story/drawing_widget.dart';
-import 'package:iread_flutter/views/widgets/text_selection_provider.dart';
-import 'package:provider/provider.dart';
-=======
-import 'package:iread_flutter/views/Screens/story_details.dart';
->>>>>>> develop
 
 import 'models/stories_section_model.dart';
 import 'models/story.dart';
