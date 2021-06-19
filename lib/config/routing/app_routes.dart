@@ -1,6 +1,12 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
-import 'package:iread_flutter/views/widgets/story/profile_story_card.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:iread_flutter/bloc/base/base_bloc.dart';
+import 'package:iread_flutter/bloc/search_stories_by_tag_bloc/search_stories_by_tag.dart';
+import 'package:iread_flutter/bloc/search_stories_by_tag_bloc/search_stories_by_tag_event.dart';
+import 'package:iread_flutter/main.dart';
+import 'package:iread_flutter/views/Screens/stories_search_list.dart';
+import 'package:iread_flutter/views/widgets/story/story_assignment_card.dart';
 
 class AppRoutes {
   static final List<AppRoute> appRoutes = [
@@ -10,16 +16,19 @@ class AppRoutes {
       '/profileStory',
       Handler(
         handlerFunc: (BuildContext context, Map<String, List<String>> params) =>
-            ProfileStoryCard(
-          imageUrl:
-              'https://i.pinimg.com/236x/20/3b/53/203b533756c2a5efe9bafb39960b4fcb.jpg',
-          color: Colors.amber,
-          title: 'Title',
-          readingTime: 24.0,
-          flippedPages: 3,
-          progress: 0.3,
+            StoryAssignmentCard(
+          story: story,
         ),
       ),
     ),
+    AppRoute(
+        '/searchByTag/:tag',
+        Handler(
+            handlerFunc: (BuildContext context, Map<String, dynamic> params) =>
+                BlocProvider(
+                  create: (_) => SearchStoriesByTagBloc(LoadingState())
+                    ..add(SearchStoriesByTagEvent(params['tag'][0])),
+                  child: StoriesSearchList(),
+                )))
   ];
 }
