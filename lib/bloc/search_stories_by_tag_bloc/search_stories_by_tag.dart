@@ -15,9 +15,6 @@ class SearchStoriesByTagBloc extends Bloc<BlocEvent, BlocState> {
   @override
   Stream<BlocState> mapEventToState(BlocEvent event) async* {
     switch (event.runtimeType) {
-      case LoadingEvent:
-        yield LoadingState();
-        break;
       case SearchStoriesByTagEvent:
         yield await _searchStoriesByTag(event);
         break;

@@ -14,6 +14,8 @@ class InitialState extends BlocState {}
 
 class SuccessState<T> extends BlocState {
   T data;
+
+  SuccessState({this.data});
 }
 
 class FailState extends BlocState {
@@ -21,7 +23,5 @@ class FailState extends BlocState {
 }
 
 abstract class BlocEvent {}
-
-class LoadingEvent extends BlocEvent {}
 
 class CloseEvent extends BlocEvent {}
