@@ -2,9 +2,13 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:iread_flutter/models/draw/polygon.dart';
 
 class DrawingWidget extends StatefulWidget {
-  const DrawingWidget({Key key}) : super(key: key);
+  final List<Polygon> _polygons;
+  DrawingWidget({Key key, List<Polygon> polygons})
+      : _polygons = polygons ?? [],
+        super(key: key);
 
   @override
   _DrawingWidgetState createState() => _DrawingWidgetState();
@@ -12,10 +16,11 @@ class DrawingWidget extends StatefulWidget {
 
 class _DrawingWidgetState extends State<DrawingWidget> {
   List<Offset> points = [];
-  StrokeCap strokeType = StrokeCap.round;
-  Color color = Colors.black;
-  double opacity = 0.5;
-  double strokeWidth = 2.0;
+  Paint paint = Paint()
+    ..strokeWidth = 4
+    ..color = Colors.black45.withOpacity(0.5)
+    ..isAntiAlias = true
+    ..style = PaintingStyle.fill;
   bool closed = false;
   double minimalDistance = 2;
 
@@ -53,7 +58,6 @@ class _DrawingWidgetState extends State<DrawingWidget> {
               RenderBox renderBox = context.findRenderObject();
               closed = true;
               addPoint(renderBox, points[0]);
-              print('Points count ${points.length}');
             });
           },
         )
