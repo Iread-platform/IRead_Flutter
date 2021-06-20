@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:iread_flutter/utils/validator.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -31,7 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Transform.scale(
                         scale: 1.2,
                         child: SvgPicture.asset(
-                          "assets/signin_background_top.svg",
+                          "assets/images/shared/curve_top_left.svg",
                           color: Colors.orangeAccent,
                           alignment: Alignment.topLeft,
                         ),
@@ -67,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   Text("User Name"),
                   TextFormField(
                     controller: userNameController,
-                    validator: validUserName,
+                    validator: Validator.validUserName,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15.0),
@@ -78,7 +79,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   Text("Password"),
                   TextFormField(
                     controller: passwordController,
-                    validator: validPassword,
+                    validator: Validator.validPassword,
                     obscureText: hidePassword,
                     decoration: InputDecoration(
                       suffixIcon: IconButton(
@@ -128,7 +129,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Transform.scale(
                   scale: 2.2,
                   child: SvgPicture.asset(
-                    "assets/signin_background_bottom.svg",
+                    "assets/images/shared/curve_bottom_right.svg",
                     color: Colors.pink[200],
                     alignment: Alignment.center,
                   ),
@@ -142,23 +143,6 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   //=========================== validation Function =========================
-  String validUserName(String value) {
-    if (value.trim().isEmpty) {
-      return "Field can't be empty";
-    } else if (value.trim().length < 4) {
-      return "User Name Must Be More Than 4 ";
-    } else {
-      return null;
-    }
-  }
-
-  String validPassword(String value) {
-    if (value.trim().isEmpty) {
-      return "Field Can't Be Empty";
-    } else {
-      return null;
-    }
-  }
 
   bool validate() {
     var formData = loginFormKey.currentState;
