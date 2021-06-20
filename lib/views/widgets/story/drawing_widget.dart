@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
@@ -16,6 +17,8 @@ class DrawingWidget extends StatefulWidget {
 
 class _DrawingWidgetState extends State<DrawingWidget> {
   List<Offset> points = [];
+  double maxY, minY, maxX, minX;
+
   Paint paint = Paint()
     ..strokeWidth = 4
     ..color = Colors.black45.withOpacity(0.5)
@@ -30,14 +33,10 @@ class _DrawingWidgetState extends State<DrawingWidget> {
       children: [
         CustomPaint(
             size: Size.infinite,
-            painter: FingerPainter(points: points, closed: closed)),
+            painter:
+                FingerPainter(points: points, closed: closed, paint: paint)),
         GestureDetector(
           onPanStart: (details) {
-            if (closed) {
-              points.clear();
-              closed = false;
-            }
-
             setState(
               () {
                 RenderBox renderBox = context.findRenderObject();
@@ -58,6 +57,12 @@ class _DrawingWidgetState extends State<DrawingWidget> {
               RenderBox renderBox = context.findRenderObject();
               closed = true;
               addPoint(renderBox, points[0]);
+              widget._polygons.add(Polygon(
+                  points: points,
+                  maxY: maxY,
+                  minY: minY,
+                  maxX: maxX,
+                  minX: minX));
             });
           },
         )
@@ -66,7 +71,20 @@ class _DrawingWidgetState extends State<DrawingWidget> {
   }
 
   void addPoint(RenderBox renderBox, Offset offset) {
-    points.add(renderBox.globalToLocal(offset));
+    Offset point = renderBox.globalToLocal(offset);
+    final double x = point.dx;
+    final double y = point.dy;
+    if (points.length == 0) {
+      maxY = minY = y;
+      maxX = minX = x;
+    } else {
+      maxX = max(maxX, x);
+      minX = min(minX, x);
+      maxY = max(maxY, y);
+      minY = min(minY, y);
+    }
+
+    points.add(point);
   }
 
   void _checkDistance(RenderBox renderBox) {
