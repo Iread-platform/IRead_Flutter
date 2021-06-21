@@ -141,7 +141,6 @@ class _StoryScreenState extends State<StoryScreen> {
                         ? Container(
                             alignment: Alignment.topLeft,
                             key: stoyryKey,
-                            color: Colors.red,
                             child: HighlighText(
                                 storyString:
                                     blocListener.storyPageData.data.story ?? "",
