@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iread_flutter/Repository/story_repository.dart';
 import 'package:iread_flutter/bloc/base/base_bloc.dart';
+import 'package:iread_flutter/bloc/text_selection_provider.dart';
 import 'package:iread_flutter/models/Data.dart';
 import 'package:iread_flutter/models/story_page_model.dart';
+import 'package:provider/provider.dart';
 
 part 'storyscreen_event.dart';
 part 'storyscreen_state.dart';
@@ -36,6 +38,29 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
       yield LoadingState();
       storyPageData = await storyRepository.fetchStoryPage();
       await Future.delayed(Duration(seconds: 1));
+      var words = storyPageData.data.words;
+      Size size = Size(0, 0);
+      double scrollValue = 0;
+      String currentString = "";
+      words[0].newLine = true;
+      words[0].scrollHight = 0;
+      for (int i = 0; i < words.length; i++) {
+        currentString = currentString + words[i].word + " ";
+        size = calcTextSize(currentString, TextStyle(fontSize: 20));
+
+        if (size.width >= (391 * 0.7)) {
+          words[i - 1].newLine = true;
+          scrollValue = scrollValue + size.height.toInt();
+          words[i - 1].scrollHight = scrollValue;
+          size = Size(0, 0);
+          currentString = " ";
+        }
+      }
+      storyPageData.data.words = words;
+      for (Words word in storyPageData.data.words) {
+        print(
+            "word : ${word.word} , time : ${word.time} , newline : ${word.newLine} , hight : ${word.scrollHight}");
+      }
       yield LoadedState(data: storyPageData);
       play(storyPageData.data.audioURL);
       yield PlayerState(AudioPlayerState.PLAYING);
@@ -122,6 +147,7 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
         if (storyPageData.data.words[i].time > progress.inMilliseconds) {
           int x = i - 1;
           highLightIndex = x.toString();
+          
           break;
         }
       }
@@ -163,5 +189,14 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
   void init(String story) {
     storyString = story;
     wordsStory = storyString.split(" ");
+  }
+
+  Size calcTextSize(String text, TextStyle style) {
+    final TextPainter textPainter = TextPainter(
+      text: TextSpan(text: text, style: style),
+      textDirection: TextDirection.ltr,
+      textScaleFactor: WidgetsBinding.instance.window.textScaleFactor,
+    )..layout();
+    return textPainter.size;
   }
 }

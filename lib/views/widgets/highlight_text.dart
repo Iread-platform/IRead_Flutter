@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iread_flutter/bloc/StoryScreenBloc/storyscreen_bloc.dart';
@@ -14,6 +13,7 @@ class HighlighText extends StatefulWidget {
   var marginY = 0.0;
   var storyString = "";
   List<Words> words;
+  GlobalKey globalKey = GlobalKey();
   HighlighText({this.storyString, this.words, this.marginX, this.marginY});
 
   @override
@@ -29,7 +29,9 @@ class _HighlighTextState extends State<HighlighText> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return SingleChildScrollView(
+      controller: Provider.of<TextSelectionProvider>(context, listen: false)
+          .scrollController,
       child: SelectableText.rich(
         TextSpan(
           children: [
@@ -40,8 +42,8 @@ class _HighlighTextState extends State<HighlighText> {
                             .highLightIndex
                             .toString() ==
                         i.toString()
-                    ? TextStyle(backgroundColor: Colors.purple)
-                    : TextStyle(),
+                    ? TextStyle(backgroundColor: Colors.purple , fontSize: 20)
+                    : TextStyle(fontSize: 20),
               )
           ],
         ),

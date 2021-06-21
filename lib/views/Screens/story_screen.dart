@@ -1,13 +1,16 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iread_flutter/bloc/StoryScreenBloc/storyscreen_bloc.dart';
 import 'package:iread_flutter/bloc/base/base_bloc.dart';
+import 'package:iread_flutter/bloc/text_selection_provider.dart';
 import 'package:iread_flutter/utils/i_read_icons.dart';
 import 'package:iread_flutter/views/Widgets/highlight_text.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:iread_flutter/views/Widgets/shared/request_handler.dart';
+import 'package:provider/provider.dart';
 
 class StoryScreen extends StatefulWidget {
   @override
@@ -20,7 +23,8 @@ class _StoryScreenState extends State<StoryScreen> {
   var h;
   var bloc;
   var blocListener;
-
+  GlobalKey stoyryKey = GlobalKey();
+  double x = 10;
   @override
   void initState() {
     super.initState();
@@ -32,7 +36,7 @@ class _StoryScreenState extends State<StoryScreen> {
   Widget build(BuildContext context) {
     w = MediaQuery.of(context).size.width;
     h = MediaQuery.of(context).size.height;
-
+    print("wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww : $w");
     bloc = BlocProvider.of<StoryscreenBloc>(context);
     blocListener = BlocProvider.of<StoryscreenBloc>(context, listen: true);
     return Column(
@@ -103,42 +107,60 @@ class _StoryScreenState extends State<StoryScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            flex: 1,
-            child: Container(
-              child: Icon(
-                IReadIcons.arrow_back,
-                color: Colors.purple,
-                size: 40,
-              ),
+          Container(
+            width: w * 0.15,
+            child: Icon(
+              IReadIcons.arrow_back,
+              color: Colors.purple,
+              size: 40,
             ),
           ),
-          Expanded(
-            flex: 5,
+          Container(
+            width: w * 0.7,
             child: BlocBuilder<StoryscreenBloc, BlocState>(
               builder: (context, state) {
+                try {
+                  if (bloc.storyPageData.data
+                      .words[int.parse(bloc.highLightIndex)].newLine) {
+                    Provider.of<TextSelectionProvider>(context, listen: false)
+                        .scrollController
+                        .animateTo(
+                            bloc
+                                .storyPageData
+                                .data
+                                .words[int.parse(bloc.highLightIndex)]
+                                .scrollHight,
+                            duration: Duration(milliseconds: 500),
+                            curve: Curves.linear);
+                  }
+                } catch (e) {}
+
                 return RequestHandler<SuccessState, StoryscreenBloc>(
                     main: Container(),
                     other: blocListener.storyPageData != null
-                        ? HighlighText(
-                            storyString:
-                                blocListener.storyPageData.data.story ?? "",
-                            words: blocListener.storyPageData.data.words ?? [],
-                            marginX: w * 0.15,
-                            marginY: h * 0.45 - 10)
+                        ? Container(
+                            alignment: Alignment.topLeft,
+                            key: stoyryKey,
+                            color: Colors.red,
+                            child: HighlighText(
+                                storyString:
+                                    blocListener.storyPageData.data.story ?? "",
+                                words:
+                                    blocListener.storyPageData.data.words ?? [],
+                                marginX: w * 0.15,
+                                marginY: h * 0.45 - 10),
+                          )
                         : Container(),
                     bloc: bloc);
               },
             ),
           ),
-          Expanded(
-            flex: 1,
-            child: Container(
-              child: Icon(
-                IReadIcons.arrow,
-                color: Colors.purple,
-                size: 40,
-              ),
+          Container(
+            width: w * 0.15,
+            child: Icon(
+              IReadIcons.arrow,
+              color: Colors.purple,
+              size: 40,
             ),
           ),
         ],
