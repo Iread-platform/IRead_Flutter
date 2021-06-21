@@ -40,7 +40,7 @@ class SubtitlesScreen extends StatelessWidget {
                       child: Transform.scale(
                         scale: 1.25,
                         child: SvgPicture.asset(
-                          "assets/images/shared/curve_top.svg",
+                          "assets/images/shared/curve_top_right.svg",
                           color: Colors.orangeAccent,
                           alignment: Alignment.topRight,
                         ),
@@ -140,7 +140,7 @@ class SubtitlesScreen extends StatelessWidget {
                     child: Transform.scale(
                       scale: 1.6,
                       child: SvgPicture.asset(
-                        "assets/images/shared/curve_bottom.svg",
+                        "assets/images/shared/curve_bottom_left.svg",
                         color: Colors.pink[200],
                         alignment: Alignment.topRight,
                       ),

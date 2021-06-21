@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:iread_flutter/utils/validator.dart';
+import 'package:iread_flutter/views/widgets/user/avatar.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -26,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Stack(
               children: [
                 Transform.translate(
-                  offset: Offset(0, -h * 0.05),
+                  offset: Offset(0, -h * 0.06),
                   child: Container(
                     child: Container(
                       child: Transform.scale(
@@ -42,13 +43,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 Center(
                   child: Container(
-                    height: h * 0.4,
                     alignment: Alignment.bottomCenter,
-                    child: CircleAvatar(
-                      radius: 60,
-                      backgroundColor: Colors.orangeAccent,
-                      backgroundImage: NetworkImage(
-                          'https://thumbs.dreamstime.com/b/man-hipster-avatar-cartoon-guy-black-hair-flat-icon-blue-background-user-person-character-vector-illustration-185480506.jpg'),
+                    child: UserAvatar(
+                      imageUrl:
+                          'https://thumbs.dreamstime.com/b/man-hipster-avatar-cartoon-guy-black-hair-flat-icon-blue-background-user-person-character-vector-illustration-185480506.jpg',
+                      radius: 70.0,
                     ),
                   ),
                 ),
@@ -101,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     alignment: Alignment.center,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.purple,
+                        primary: Theme.of(context).colorScheme.primary,
                         padding:
                             EdgeInsets.symmetric(horizontal: 80, vertical: 15),
                       ),

@@ -32,12 +32,12 @@ dependencies:
   provider: ^5.0.0
   flutter_bloc: ^7.0.1
   speech_bubble: ^0.0.9
-  fluro: ^2.0.3
-  http: ^0.13.3
   flutter_rating_bar: ^4.0.0
   audioplayers: ^0.15.0
   rxdart: ^0.27.0
   audio_video_progress_bar: ^0.4.0
+  fluro: ^2.0.3
+  http: ^0.13.3
 
 dev_dependencies:
   flutter_test:
@@ -55,16 +55,12 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-
-  #   - images/a_dot_ham.jpeg
-
   assets:
-    - assets/images/shared/star.png
+    - assets/images/shared/curve_top_right.svg
+    - assets/images/shared/curve_top_left.svg
     - assets/images/shared/curve_bottom_left.svg
     - assets/images/shared/curve_bottom_right.svg
-    - assets/images/shared/curve_top_left.svg
-    - assets/images/shared/curve_top_right.svg
-    - lib/Repository/dummyData.json
+    - assets/images/shared/star.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 
