@@ -72,6 +72,7 @@ class _DrawingWidgetState extends State<DrawingWidget> {
 
   void addPoint(RenderBox renderBox, Offset offset) {
     Offset point = renderBox.globalToLocal(offset);
+    // Store min/max X and Y for a polygon.
     final double x = point.dx;
     final double y = point.dy;
     if (points.length == 0) {
