@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:iread_flutter/bloc/story_bloc.dart';
-import 'package:iread_flutter/bloc/text_selection_provider.dart';
+import 'package:iread_flutter/config/themes/theme.dart';
+import 'package:iread_flutter/views/widgets/story/drawing_widget.dart';
 import 'package:provider/provider.dart';
+
 import 'bloc/StoryScreenBloc/storyscreen_bloc.dart';
+import 'bloc/story_bloc.dart';
+import 'bloc/text_selection_provider.dart';
 import 'models/stories_section_model.dart';
 import 'models/story.dart';
 import 'models/user.dart';
-import 'views/Screens/story_screen.dart';
 
 void main() {
   runApp(MultiBlocProvider(
@@ -25,16 +27,13 @@ void main() {
 
 // ignore: must_be_immutable
 class MyApp extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Iread',
-      home: Scaffold(
-        body: Center(
-          child: StoryScreen(),
-        ),
-      ),
+      theme: mainTheme,
+      home:
+          Scaffold(body: Container(color: Colors.red, child: DrawingWidget())),
     );
   }
 }
@@ -66,5 +65,3 @@ Story story = Story(
 
 User user =
     User(name: 'Motasem Ghozlan', imageUrl: 'https://picsum.photos/200/300');
-
-
