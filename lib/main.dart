@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:iread_flutter/bloc/base/base_bloc.dart';
+import 'package:iread_flutter/bloc/drawing_bloc/drawing_bloc.dart';
 import 'package:iread_flutter/config/themes/theme.dart';
 import 'package:iread_flutter/views/widgets/story/drawing_widget.dart';
-import 'package:provider/provider.dart';
 
-import 'bloc/StoryScreenBloc/storyscreen_bloc.dart';
-import 'bloc/story_bloc.dart';
-import 'bloc/text_selection_provider.dart';
 import 'models/stories_section_model.dart';
 import 'models/story.dart';
 import 'models/user.dart';
@@ -15,13 +13,10 @@ void main() {
   runApp(MultiBlocProvider(
     providers: [
       BlocProvider(
-        create: (context) => StoryscreenBloc(),
+        create: (context) => DrawingBloc(InitialState()),
       )
     ],
-    child: MultiProvider(providers: [
-      ChangeNotifierProvider(create: (context) => TextSelectionProvider()),
-      ChangeNotifierProvider(create: (context) => StoryBloc()),
-    ], child: MyApp()),
+    child: MyApp(),
   ));
 }
 

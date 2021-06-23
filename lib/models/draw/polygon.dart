@@ -4,6 +4,7 @@ import 'package:iread_flutter/models/model.dart';
 class Polygon extends Model {
   List<Offset> _points;
   double _maxY, _minY, _maxX, _minX;
+  bool saved = false;
 
   Polygon(
       {@required List<Offset> points,
