@@ -15,5 +15,9 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
 
   addPolygon(Polygon polygon) => _polygons.add(polygon);
 
+  deletePolygon(int index) {
+    _polygons.removeAt(index);
+  }
+
   get polygons => _polygons;
 }

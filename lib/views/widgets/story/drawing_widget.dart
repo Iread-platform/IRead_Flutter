@@ -43,7 +43,7 @@ class _DrawingWidgetState extends State<DrawingWidget> {
         _customPaint(),
         _gestureDetector(),
         _bloc.polygons.length > 0
-            ? _drawActions(context, _bloc.polygons[0])
+            ? _drawActions(context, _bloc.polygons[0], 0)
             : SizedBox()
       ],
     );
@@ -83,16 +83,17 @@ class _DrawingWidgetState extends State<DrawingWidget> {
             closed = true;
             addPoint(renderBox, points[0]);
             _bloc.addPolygon(Polygon(
-                points: points,
+                points: List<Offset>.from(points),
                 maxY: maxY,
                 minY: minY,
                 maxX: maxX,
                 minX: minX));
+            points.clear();
           });
         },
       );
 
-  Widget _drawActions(BuildContext context, Polygon polygon) {
+  Widget _drawActions(BuildContext context, Polygon polygon, int index) {
     double x = (polygon.maxX + polygon.minX) / 2;
     double y = polygon.minY;
 
@@ -108,7 +109,14 @@ class _DrawingWidgetState extends State<DrawingWidget> {
         child: Row(
           children: [
             IconButton(icon: Icon(Icons.save_alt), onPressed: () {}),
-            IconButton(icon: Icon(IReadIcons.microphone), onPressed: () {})
+            IconButton(icon: Icon(IReadIcons.microphone), onPressed: () {}),
+            IconButton(
+                icon: Icon(IReadIcons.delete),
+                onPressed: () {
+                  setState(() {
+                    _bloc.deletePolygon(index);
+                  });
+                })
           ],
         ),
       ),
