@@ -1,10 +1,15 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:iread_flutter/models/draw/polygon.dart';
 
 class DrawingWidget extends StatefulWidget {
-  const DrawingWidget({Key key}) : super(key: key);
+  final List<Polygon> _polygons;
+  DrawingWidget({Key key, List<Polygon> polygons})
+      : _polygons = polygons ?? [],
+        super(key: key);
 
   @override
   _DrawingWidgetState createState() => _DrawingWidgetState();
@@ -12,10 +17,13 @@ class DrawingWidget extends StatefulWidget {
 
 class _DrawingWidgetState extends State<DrawingWidget> {
   List<Offset> points = [];
-  StrokeCap strokeType = StrokeCap.round;
-  Color color = Colors.black;
-  double opacity = 0.5;
-  double strokeWidth = 2.0;
+  double maxY, minY, maxX, minX;
+
+  Paint paint = Paint()
+    ..strokeWidth = 4
+    ..color = Colors.black45.withOpacity(0.5)
+    ..isAntiAlias = true
+    ..style = PaintingStyle.fill;
   bool closed = false;
   double minimalDistance = 2;
 
@@ -25,14 +33,10 @@ class _DrawingWidgetState extends State<DrawingWidget> {
       children: [
         CustomPaint(
             size: Size.infinite,
-            painter: FingerPainter(points: points, closed: closed)),
+            painter:
+                FingerPainter(points: points, closed: closed, paint: paint)),
         GestureDetector(
           onPanStart: (details) {
-            if (closed) {
-              points.clear();
-              closed = false;
-            }
-
             setState(
               () {
                 RenderBox renderBox = context.findRenderObject();
@@ -53,7 +57,12 @@ class _DrawingWidgetState extends State<DrawingWidget> {
               RenderBox renderBox = context.findRenderObject();
               closed = true;
               addPoint(renderBox, points[0]);
-              print('Points count ${points.length}');
+              widget._polygons.add(Polygon(
+                  points: points,
+                  maxY: maxY,
+                  minY: minY,
+                  maxX: maxX,
+                  minX: minX));
             });
           },
         )
@@ -62,7 +71,21 @@ class _DrawingWidgetState extends State<DrawingWidget> {
   }
 
   void addPoint(RenderBox renderBox, Offset offset) {
-    points.add(renderBox.globalToLocal(offset));
+    Offset point = renderBox.globalToLocal(offset);
+    // Store min/max X and Y for a polygon.
+    final double x = point.dx;
+    final double y = point.dy;
+    if (points.length == 0) {
+      maxY = minY = y;
+      maxX = minX = x;
+    } else {
+      maxX = max(maxX, x);
+      minX = min(minX, x);
+      maxY = max(maxY, y);
+      minY = min(minY, y);
+    }
+
+    points.add(point);
   }
 
   void _checkDistance(RenderBox renderBox) {
