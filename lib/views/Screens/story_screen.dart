@@ -28,7 +28,6 @@ class _StoryScreenState extends State<StoryScreen> {
   @override
   void initState() {
     super.initState();
-
     BlocProvider.of<StoryscreenBloc>(context).add(FetchStoryPage());
   }
 
@@ -36,7 +35,6 @@ class _StoryScreenState extends State<StoryScreen> {
   Widget build(BuildContext context) {
     w = MediaQuery.of(context).size.width;
     h = MediaQuery.of(context).size.height;
-    print("wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww : $w");
     bloc = BlocProvider.of<StoryscreenBloc>(context);
     blocListener = BlocProvider.of<StoryscreenBloc>(context, listen: true);
     return Column(
@@ -119,38 +117,8 @@ class _StoryScreenState extends State<StoryScreen> {
             width: w * 0.7,
             child: BlocBuilder<StoryscreenBloc, BlocState>(
               builder: (context, state) {
-                try {
-                  if (bloc.storyPageData.data
-                      .words[int.parse(bloc.highLightIndex)].newLine) {
-                    Provider.of<TextSelectionProvider>(context, listen: false)
-                        .scrollController
-                        .animateTo(
-                            bloc
-                                .storyPageData
-                                .data
-                                .words[int.parse(bloc.highLightIndex)]
-                                .scrollHight,
-                            duration: Duration(milliseconds: 500),
-                            curve: Curves.linear);
-                  }
-                } catch (e) {}
-
-                return RequestHandler<SuccessState, StoryscreenBloc>(
-                    main: Container(),
-                    other: blocListener.storyPageData != null
-                        ? Container(
-                            alignment: Alignment.topLeft,
-                            key: stoyryKey,
-                            child: HighlighText(
-                                storyString:
-                                    blocListener.storyPageData.data.story ?? "",
-                                words:
-                                    blocListener.storyPageData.data.words ?? [],
-                                marginX: w * 0.15,
-                                marginY: h * 0.45 - 10),
-                          )
-                        : Container(),
-                    bloc: bloc);
+                scroll();
+                return requsetHandlerStory();
               },
             ),
           ),
@@ -253,5 +221,37 @@ class _StoryScreenState extends State<StoryScreen> {
         );
       },
     );
+  }
+
+  void scroll() {
+    try {
+      if (bloc
+          .storyPageData.data.words[int.parse(bloc.highLightIndex)].newLine) {
+        Provider.of<TextSelectionProvider>(context, listen: false)
+            .scrollController
+            .animateTo(
+                bloc.storyPageData.data.words[int.parse(bloc.highLightIndex)]
+                    .scrollHight,
+                duration: Duration(milliseconds: 500),
+                curve: Curves.linear);
+      }
+    } catch (e) {}
+  }
+  Widget requsetHandlerStory(){
+    return RequestHandler<SuccessState, StoryscreenBloc>(
+                    main: Container(),
+                    other: blocListener.storyPageData != null
+                        ? Container(
+                            alignment: Alignment.topLeft,
+                            child: HighlighText(
+                                storyString:
+                                    blocListener.storyPageData.data.story ?? "",
+                                words:
+                                    blocListener.storyPageData.data.words ?? [],
+                                marginX: w * 0.15,
+                                marginY: h * 0.45),
+                          )
+                        : Container(),
+                    bloc: bloc);
   }
 }

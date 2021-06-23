@@ -120,9 +120,10 @@ class MyTextSelectionControls extends TextSelectionControls {
           ),
           onPressed: () {
             BlocProvider.of<StoryscreenBloc>(context).add(SeekToWordEvent(
-                index: Provider.of<TextSelectionProvider>(context , listen: false)
-                    .selection
-                    .start));
+                index:
+                    Provider.of<TextSelectionProvider>(context, listen: false)
+                        .selection
+                        .start));
           },
         )
       ];

@@ -18,10 +18,10 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
   AudioPlayer audioPlayer;
   Duration duration;
   Duration progress;
+  double deviceWidth = 0.0, deviceHight = 0.0;
   int wordProgressIndex = 0;
   AudioPlayerState audioPlayerState;
   Data<StoryPage> storyPageData;
-  var context;
   StoryRepository storyRepository;
   StoryscreenBloc() : super(InitialState()) {
     audioPlayer = AudioPlayer();
@@ -37,30 +37,7 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
     if (event is FetchStoryPage) {
       yield LoadingState();
       storyPageData = await storyRepository.fetchStoryPage();
-      await Future.delayed(Duration(seconds: 1));
-      var words = storyPageData.data.words;
-      Size size = Size(0, 0);
-      double scrollValue = 0;
-      String currentString = "";
-      words[0].newLine = true;
-      words[0].scrollHight = 0;
-      for (int i = 0; i < words.length; i++) {
-        currentString = currentString + words[i].word + " ";
-        size = calcTextSize(currentString, TextStyle(fontSize: 20));
-
-        if (size.width >= (391 * 0.7)) {
-          words[i - 1].newLine = true;
-          scrollValue = scrollValue + size.height.toInt();
-          words[i - 1].scrollHight = scrollValue;
-          size = Size(0, 0);
-          currentString = " ";
-        }
-      }
-      storyPageData.data.words = words;
-      for (Words word in storyPageData.data.words) {
-        print(
-            "word : ${word.word} , time : ${word.time} , newline : ${word.newLine} , hight : ${word.scrollHight}");
-      }
+      storyPageData.data.words = initWordEndLine(storyPageData.data.words);
       yield LoadedState(data: storyPageData);
       play(storyPageData.data.audioURL);
       yield PlayerState(AudioPlayerState.PLAYING);
@@ -138,16 +115,16 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
       audioPlayer.onDurationChanged.drain();
       duratoionStream.cancel();
     });
-    // audioPlayer.onPlayerStateChanged.listen((event) {
-    //   audioPlayerState = event;
-    // });
+    audioPlayer.onPlayerStateChanged.listen((event) {
+      audioPlayerState = event;
+    });
     audioPlayer.onAudioPositionChanged.listen((event) {
       progress = event;
       for (int i = 0; i < storyPageData.data.words.length; i++) {
         if (storyPageData.data.words[i].time > progress.inMilliseconds) {
           int x = i - 1;
           highLightIndex = x.toString();
-          
+
           break;
         }
       }
@@ -198,5 +175,29 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
       textScaleFactor: WidgetsBinding.instance.window.textScaleFactor,
     )..layout();
     return textPainter.size;
+  }
+
+  initWordEndLine(words) {
+    // Find the last word in the sentence for scroll
+    Size size = Size(0, 0);
+    double scrollValue = 0;
+    String currentString = "";
+    words[0].newLine = true;
+    words[0].scrollHight = 0.0;
+    for (int i = 0; i < words.length; i++) {
+      currentString = currentString + words[i].word + " ";
+      size = calcTextSize(currentString, TextStyle(fontSize: 20));
+      // print("${size.width} >= ${deviceWidth * 0.7}");
+      if (size.width >= (deviceWidth * 0.7)) {
+        // print("=================== $currentString ========================");
+        words[i - 1].newLine = true;
+        scrollValue = scrollValue + size.height.toInt();
+        words[i - 1].scrollHight = scrollValue;
+        size = Size(0, 0);
+        currentString = " ";
+        i--;
+      }
+    }
+    return words;
   }
 }
