@@ -115,6 +115,7 @@ class _DrawingWidgetState extends State<DrawingWidget> {
                 onPressed: () {
                   setState(() {
                     _bloc.deletePolygon(index);
+                    closed = false;
                   });
                 })
           ],
