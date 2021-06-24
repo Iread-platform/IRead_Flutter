@@ -50,6 +50,9 @@ class RecordBloc extends Bloc<BlocEvent, BlocState> {
       case PauseRecordPlayingEvent:
         yield pauseRecordPlaying();
         break;
+      case DeleteRecordEvent:
+        yield await _delete((event as DeleteRecordEvent).path);
+        break;
       default:
         yield InitialState();
     }
@@ -76,8 +79,14 @@ class RecordBloc extends Bloc<BlocEvent, BlocState> {
     return StopRecordingState(recordPath);
   }
 
+  Future<InitialState> _delete(String path) async {
+    _audioPlayer.stop();
+    io.File recordFile = io.File(path);
+    await recordFile.delete();
+    return InitialState();
+  }
+
   void playRecord(String path) async {
-    print("Audio file path is $path");
     _audioPlayer.play(path, isLocal: true);
     _audioPlayer.resume();
     _audioPlayer.onPlayerCompletion.listen((event) {
@@ -88,5 +97,9 @@ class RecordBloc extends Bloc<BlocEvent, BlocState> {
   StopRecordingState pauseRecordPlaying() {
     _audioPlayer.pause();
     return StopRecordingState(_current.path);
+  }
+
+  void dispose() {
+    _audioPlayer.dispose();
   }
 }

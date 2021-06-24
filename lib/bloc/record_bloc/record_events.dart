@@ -12,3 +12,11 @@ class PlayRecordEvent extends BlocEvent {
 }
 
 class PauseRecordPlayingEvent extends BlocEvent {}
+
+class DeleteRecordEvent extends BlocEvent {
+  String _path;
+
+  DeleteRecordEvent(this._path);
+
+  get path => _path;
+}

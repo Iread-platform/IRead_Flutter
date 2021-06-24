@@ -170,6 +170,11 @@ class _DrawingWidgetState extends State<DrawingWidget> {
                 icon: Icon(IReadIcons.delete),
                 onPressed: () {
                   setState(() {
+                    final polygonPath =
+                        _drawBloc.selectedPolygon.localRecordPath;
+                    if (polygonPath != null) {
+                      _recordBloc.add(DeleteRecordEvent(polygonPath));
+                    }
                     _drawBloc.deletePolygon(index);
                     closed = false;
                   });
@@ -209,6 +214,12 @@ class _DrawingWidgetState extends State<DrawingWidget> {
       addPoint(renderBox, start);
       closed = true;
     }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _recordBloc.dispose();
   }
 }
 
