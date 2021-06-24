@@ -80,9 +80,14 @@ class RecordBloc extends Bloc<BlocEvent, BlocState> {
   }
 
   Future<InitialState> _delete(String path) async {
+    _recorder.stop();
     _audioPlayer.stop();
-    io.File recordFile = io.File(path);
-    await recordFile.delete();
+
+    if (path != null) {
+      io.File recordFile = io.File(path);
+      await recordFile.delete();
+    }
+
     return InitialState();
   }
 

@@ -172,9 +172,7 @@ class _DrawingWidgetState extends State<DrawingWidget> {
                   setState(() {
                     final polygonPath =
                         _drawBloc.selectedPolygon.localRecordPath;
-                    if (polygonPath != null) {
-                      _recordBloc.add(DeleteRecordEvent(polygonPath));
-                    }
+                    _recordBloc.add(DeleteRecordEvent(polygonPath));
                     _drawBloc.deletePolygon(index);
                     closed = false;
                   });
