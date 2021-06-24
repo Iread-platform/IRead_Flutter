@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iread_flutter/bloc/base/base_bloc.dart';
 import 'package:iread_flutter/bloc/drawing_bloc/drawing_bloc.dart';
+import 'package:iread_flutter/bloc/record_bloc/record_bloc.dart';
 import 'package:iread_flutter/config/themes/theme.dart';
 import 'package:iread_flutter/views/widgets/story/drawing_widget.dart';
 
@@ -14,6 +15,9 @@ void main() {
     providers: [
       BlocProvider(
         create: (context) => DrawingBloc(InitialState()),
+      ),
+      BlocProvider(
+        create: (context) => RecordBloc(InitialState()),
       )
     ],
     child: MyApp(),

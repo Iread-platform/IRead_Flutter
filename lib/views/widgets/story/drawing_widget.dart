@@ -4,7 +4,11 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:iread_flutter/bloc/base/base_bloc.dart';
 import 'package:iread_flutter/bloc/drawing_bloc/drawing_bloc.dart';
+import 'package:iread_flutter/bloc/record_bloc/record_bloc.dart';
+import 'package:iread_flutter/bloc/record_bloc/record_events.dart';
+import 'package:iread_flutter/bloc/record_bloc/record_state.dart';
 import 'package:iread_flutter/config/themes/border_radius.dart';
 import 'package:iread_flutter/config/themes/shadows.dart';
 import 'package:iread_flutter/models/draw/polygon.dart';
@@ -20,7 +24,8 @@ class DrawingWidget extends StatefulWidget {
 class _DrawingWidgetState extends State<DrawingWidget> {
   List<Offset> points = [];
   double maxY, minY, maxX, minX;
-  DrawingBloc _bloc;
+  DrawingBloc _drawBloc;
+  RecordBloc _recordBloc;
   // Paint style
   Paint paint = Paint()
     ..strokeWidth = 4
@@ -33,7 +38,8 @@ class _DrawingWidgetState extends State<DrawingWidget> {
   @override
   void initState() {
     super.initState();
-    _bloc = BlocProvider.of<DrawingBloc>(context);
+    _drawBloc = BlocProvider.of<DrawingBloc>(context);
+    _recordBloc = BlocProvider.of<RecordBloc>(context);
   }
 
   @override
@@ -42,8 +48,8 @@ class _DrawingWidgetState extends State<DrawingWidget> {
       children: [
         _customPaint(),
         _gestureDetector(),
-        _bloc.polygons.length > 0
-            ? _drawActions(context, _bloc.polygons[0], 0)
+        _drawBloc.polygons.length > 0
+            ? _drawActions(context, _drawBloc.polygons[0], 0)
             : SizedBox()
       ],
     );
@@ -52,7 +58,7 @@ class _DrawingWidgetState extends State<DrawingWidget> {
   Widget _customPaint() => CustomPaint(
       size: Size.infinite,
       painter: FingerPainter(
-          polygons: _bloc.polygons,
+          polygons: _drawBloc.polygons,
           points: points,
           closed: closed,
           paint: paint));
@@ -82,7 +88,7 @@ class _DrawingWidgetState extends State<DrawingWidget> {
             RenderBox renderBox = context.findRenderObject();
             closed = true;
             addPoint(renderBox, points[0]);
-            _bloc.addPolygon(Polygon(
+            _drawBloc.addPolygon(Polygon(
                 points: List<Offset>.from(points),
                 maxY: maxY,
                 minY: minY,
@@ -109,12 +115,26 @@ class _DrawingWidgetState extends State<DrawingWidget> {
         child: Row(
           children: [
             IconButton(icon: Icon(Icons.save_alt), onPressed: () {}),
-            IconButton(icon: Icon(IReadIcons.microphone), onPressed: () {}),
+            BlocBuilder<RecordBloc, BlocState>(builder: (context, state) {
+              switch (state.runtimeType) {
+                case RecordingState:
+                  {
+                    return IconButton(
+                        icon: Icon(Icons.pause), onPressed: () {});
+                  }
+                  break;
+              }
+              return IconButton(
+                  icon: Icon(IReadIcons.microphone),
+                  onPressed: () {
+                    _recordBloc.add(RecordEvent());
+                  });
+            }),
             IconButton(
                 icon: Icon(IReadIcons.delete),
                 onPressed: () {
                   setState(() {
-                    _bloc.deletePolygon(index);
+                    _drawBloc.deletePolygon(index);
                     closed = false;
                   });
                 })
