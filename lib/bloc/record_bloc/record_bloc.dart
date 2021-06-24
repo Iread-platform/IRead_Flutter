@@ -53,6 +53,9 @@ class RecordBloc extends Bloc<BlocEvent, BlocState> {
       case DeleteRecordEvent:
         yield await _delete((event as DeleteRecordEvent).path);
         break;
+      case ResetEvent:
+        yield _reset();
+        break;
       default:
         yield InitialState();
     }
@@ -80,7 +83,9 @@ class RecordBloc extends Bloc<BlocEvent, BlocState> {
   }
 
   Future<InitialState> _delete(String path) async {
-    _recorder.stop();
+    if (_recorder != null) {
+      _recorder.stop();
+    }
     _audioPlayer.stop();
 
     if (path != null) {
@@ -106,5 +111,12 @@ class RecordBloc extends Bloc<BlocEvent, BlocState> {
 
   void dispose() {
     _audioPlayer.dispose();
+  }
+
+  InitialState _reset() {
+    _current = null;
+    _recorder = null;
+    _audioPlayer.release();
+    return InitialState();
   }
 }

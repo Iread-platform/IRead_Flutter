@@ -6,6 +6,7 @@ class Polygon extends Model {
   double _maxY, _minY, _maxX, _minX;
   bool saved = false;
   String localRecordPath;
+  String comment;
 
   Polygon(
       {@required List<Offset> points,

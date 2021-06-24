@@ -70,6 +70,7 @@ class _DrawingWidgetState extends State<DrawingWidget> {
               if (closed) {
                 return;
               }
+              _recordBloc.add(ResetEvent());
               RenderBox renderBox = context.findRenderObject();
               addPoint(renderBox, details.globalPosition);
             },

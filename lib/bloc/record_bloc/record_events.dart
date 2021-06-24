@@ -20,3 +20,5 @@ class DeleteRecordEvent extends BlocEvent {
 
   get path => _path;
 }
+
+class ResetEvent extends BlocEvent {}
