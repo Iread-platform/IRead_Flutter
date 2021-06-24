@@ -28,6 +28,7 @@ class _DrawingWidgetState extends State<DrawingWidget> {
   double maxY, minY, maxX, minX;
   DrawingBloc _drawBloc;
   RecordBloc _recordBloc;
+  CommentBloc _commentBloc;
   // Paint style
   Paint paint = Paint()
     ..strokeWidth = 4
@@ -42,6 +43,7 @@ class _DrawingWidgetState extends State<DrawingWidget> {
     super.initState();
     _drawBloc = BlocProvider.of<DrawingBloc>(context);
     _recordBloc = BlocProvider.of<RecordBloc>(context);
+    _commentBloc = BlocProvider.of<CommentBloc>(context);
   }
 
   @override

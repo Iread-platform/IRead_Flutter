@@ -6,6 +6,7 @@ import 'package:iread_flutter/bloc/record_bloc/record_bloc.dart';
 import 'package:iread_flutter/config/themes/theme.dart';
 import 'package:iread_flutter/views/widgets/story/drawing_widget.dart';
 
+import 'bloc/comment_bloc/comment_bloc.dart';
 import 'models/stories_section_model.dart';
 import 'models/story.dart';
 import 'models/user.dart';
@@ -18,6 +19,9 @@ void main() {
       ),
       BlocProvider(
         create: (context) => RecordBloc(InitialState()),
+      ),
+      BlocProvider(
+        create: (context) => CommentBloc(InitialState()),
       )
     ],
     child: MyApp(),
