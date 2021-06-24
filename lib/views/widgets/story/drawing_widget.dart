@@ -100,8 +100,20 @@ class _DrawingWidgetState extends State<DrawingWidget> {
       );
 
   Widget _drawActions(BuildContext context, Polygon polygon, int index) {
+    double offsetX = 150;
+    double offsetY = 50;
     double x = (polygon.maxX + polygon.minX) / 2;
     double y = polygon.minY;
+
+    final size = MediaQuery.of(context).size;
+
+    if (y <= offsetY) {
+      y = offsetY;
+    }
+
+    if (x > size.width - offsetX) {
+      x = size.width - offsetX;
+    }
 
     return Positioned(
       top: y,
