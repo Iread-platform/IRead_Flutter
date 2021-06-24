@@ -118,6 +118,25 @@ class _DrawingWidgetState extends State<DrawingWidget> {
             BlocBuilder<RecordBloc, BlocState>(builder: (context, state) {
               String path;
               switch (state.runtimeType) {
+                case LoadingState:
+                  {
+                    return Container(
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
+                  }
+                  break;
+                case PlayingRecordState:
+                  {
+                    return IconButton(
+                        icon: Icon(Icons.pause),
+                        onPressed: () {
+                          path = (state as RecordState).recordPath;
+                          _recordBloc.add(PauseRecordPlayingEvent());
+                        });
+                  }
+                  break;
                 case RecordingState:
                   {
                     return IconButton(
@@ -134,9 +153,11 @@ class _DrawingWidgetState extends State<DrawingWidget> {
                         icon: Icon(Icons.play_arrow),
                         onPressed: () {
                           path = (state as RecordState).recordPath;
+                          _drawBloc.selectedPolygon.localRecordPath = path;
                           _recordBloc.add(PlayRecordEvent(path));
                         });
                   }
+                  break;
               }
 
               return IconButton(

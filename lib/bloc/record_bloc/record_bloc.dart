@@ -47,6 +47,9 @@ class RecordBloc extends Bloc<BlocEvent, BlocState> {
           yield PlayingRecordState(playRecordEvent.recordPath);
         }
         break;
+      case PauseRecordPlayingEvent:
+        yield pauseRecordPlaying();
+        break;
       default:
         yield InitialState();
     }
@@ -77,5 +80,13 @@ class RecordBloc extends Bloc<BlocEvent, BlocState> {
     print("Audio file path is $path");
     _audioPlayer.play(path, isLocal: true);
     _audioPlayer.resume();
+    _audioPlayer.onPlayerCompletion.listen((event) {
+      this.add(PauseRecordPlayingEvent());
+    });
+  }
+
+  StopRecordingState pauseRecordPlaying() {
+    _audioPlayer.pause();
+    return StopRecordingState(_current.path);
   }
 }

@@ -10,3 +10,5 @@ class PlayRecordEvent extends BlocEvent {
 
   get recordPath => _recordPath;
 }
+
+class PauseRecordPlayingEvent extends BlocEvent {}

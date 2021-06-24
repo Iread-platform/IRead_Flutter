@@ -4,6 +4,7 @@ import 'package:iread_flutter/models/draw/polygon.dart';
 
 class DrawingBloc extends Bloc<BlocEvent, BlocState> {
   List<Polygon> _polygons = [];
+  int _selectedPolygonIndex = 0;
 
   DrawingBloc(BlocState initialState) : super(initialState);
 
@@ -20,4 +21,5 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
   }
 
   get polygons => _polygons;
+  get selectedPolygon => _polygons[_selectedPolygonIndex];
 }
