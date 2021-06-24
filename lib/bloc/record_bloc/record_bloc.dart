@@ -40,6 +40,13 @@ class RecordBloc extends Bloc<BlocEvent, BlocState> {
       case StopRecordingEvent:
         yield await _stop();
         break;
+      case PlayRecordEvent:
+        {
+          PlayRecordEvent playRecordEvent = event as PlayRecordEvent;
+          playRecord(playRecordEvent.recordPath);
+          yield PlayingRecordState(playRecordEvent.recordPath);
+        }
+        break;
       default:
         yield InitialState();
     }
@@ -49,8 +56,8 @@ class RecordBloc extends Bloc<BlocEvent, BlocState> {
     final length = _records.length;
     String recordName = _appDirectory.path +
         "/record-" +
-        DateTime.now().toIso8601String() +
-        "-$length.mp4";
+        DateTime.now().millisecondsSinceEpoch.toString() +
+        "-$length";
 
     _recorder = FlutterAudioRecorder(recordName);
     await _recorder.initialized;
@@ -67,6 +74,8 @@ class RecordBloc extends Bloc<BlocEvent, BlocState> {
   }
 
   void playRecord(String path) async {
+    print("Audio file path is $path");
     _audioPlayer.play(path, isLocal: true);
+    _audioPlayer.resume();
   }
 }

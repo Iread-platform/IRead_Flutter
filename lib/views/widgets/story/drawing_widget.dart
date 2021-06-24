@@ -116,14 +116,29 @@ class _DrawingWidgetState extends State<DrawingWidget> {
           children: [
             IconButton(icon: Icon(Icons.save_alt), onPressed: () {}),
             BlocBuilder<RecordBloc, BlocState>(builder: (context, state) {
+              String path;
               switch (state.runtimeType) {
                 case RecordingState:
                   {
                     return IconButton(
-                        icon: Icon(Icons.pause), onPressed: () {});
+                        icon: Icon(Icons.pause),
+                        onPressed: () {
+                          path = (state as RecordState).recordPath;
+                          _recordBloc.add(StopRecordingEvent());
+                        });
                   }
                   break;
+                case StopRecordingState:
+                  {
+                    return IconButton(
+                        icon: Icon(Icons.play_arrow),
+                        onPressed: () {
+                          path = (state as RecordState).recordPath;
+                          _recordBloc.add(PlayRecordEvent(path));
+                        });
+                  }
               }
+
               return IconButton(
                   icon: Icon(IReadIcons.microphone),
                   onPressed: () {
