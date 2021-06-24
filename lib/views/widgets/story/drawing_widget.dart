@@ -5,6 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iread_flutter/bloc/base/base_bloc.dart';
+import 'package:iread_flutter/bloc/comment_bloc/comment_bloc.dart';
+import 'package:iread_flutter/bloc/comment_bloc/comment_states.dart';
 import 'package:iread_flutter/bloc/drawing_bloc/drawing_bloc.dart';
 import 'package:iread_flutter/bloc/record_bloc/record_bloc.dart';
 import 'package:iread_flutter/bloc/record_bloc/record_events.dart';
@@ -128,72 +130,8 @@ class _DrawingWidgetState extends State<DrawingWidget> {
         child: Row(
           children: [
             IconButton(icon: Icon(Icons.save_alt), onPressed: () {}),
-            BlocBuilder<RecordBloc, BlocState>(builder: (context, state) {
-              String path;
-              switch (state.runtimeType) {
-                case LoadingState:
-                  {
-                    return Container(
-                      child: Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    );
-                  }
-                  break;
-                case PlayingRecordState:
-                  {
-                    return IconButton(
-                        icon: Icon(Icons.pause),
-                        tooltip: "Pause",
-                        onPressed: () {
-                          path = (state as RecordState).recordPath;
-                          _recordBloc.add(PauseRecordPlayingEvent());
-                        });
-                  }
-                  break;
-                case RecordingState:
-                  {
-                    return IconButton(
-                        icon: Icon(Icons.pause),
-                        onPressed: () {
-                          path = (state as RecordState).recordPath;
-                          _recordBloc.add(StopRecordingEvent());
-                        });
-                  }
-                  break;
-                case StopRecordingState:
-                  {
-                    path = (state as RecordState).recordPath;
-                    return DropdownButton(
-                      hint: Icon(IReadIcons.microphone),
-                      items: [
-                        DropdownMenuItem(
-                            child: Center(child: Icon(Icons.play_arrow)),
-                            value: 'play'),
-                        DropdownMenuItem(
-                          child: Center(child: Icon(IReadIcons.delete)),
-                          value: 'delete',
-                        ),
-                      ],
-                      elevation: 1,
-                      onChanged: (value) {
-                        if (value == 'delete') {
-                          _recordBloc.add(DeleteRecordEvent(path));
-                        } else if (value == 'play') {
-                          _recordBloc.add(PlayRecordEvent(path));
-                        }
-                      },
-                    );
-                  }
-                  break;
-              }
-
-              return IconButton(
-                  icon: Icon(IReadIcons.microphone),
-                  onPressed: () {
-                    _recordBloc.add(RecordEvent());
-                  });
-            }),
+            _recordingBuilder(context),
+            _commentBuilder(context),
             IconButton(
                 icon: Icon(IReadIcons.delete),
                 onPressed: () {
@@ -210,6 +148,84 @@ class _DrawingWidgetState extends State<DrawingWidget> {
       ),
     );
   }
+
+  Widget _commentBuilder(BuildContext context) {
+    return BlocBuilder<CommentBloc, BlocState>(
+      builder: (context, state) {
+        if (state is CommentStates) {}
+
+        return IconButton(icon: Icon(Icons.edit), onPressed: () {});
+      },
+    );
+  }
+
+  Widget _recordingBuilder(BuildContext context) =>
+      BlocBuilder<RecordBloc, BlocState>(builder: (context, state) {
+        String path;
+        switch (state.runtimeType) {
+          case LoadingState:
+            {
+              return Container(
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            }
+            break;
+          case PlayingRecordState:
+            {
+              return IconButton(
+                  icon: Icon(Icons.pause),
+                  tooltip: "Pause",
+                  onPressed: () {
+                    path = (state as RecordState).recordPath;
+                    _recordBloc.add(PauseRecordPlayingEvent());
+                  });
+            }
+            break;
+          case RecordingState:
+            {
+              return IconButton(
+                  icon: Icon(Icons.pause),
+                  onPressed: () {
+                    path = (state as RecordState).recordPath;
+                    _recordBloc.add(StopRecordingEvent());
+                  });
+            }
+            break;
+          case StopRecordingState:
+            {
+              path = (state as RecordState).recordPath;
+              return DropdownButton(
+                hint: Icon(IReadIcons.microphone),
+                items: [
+                  DropdownMenuItem(
+                      child: Center(child: Icon(Icons.play_arrow)),
+                      value: 'play'),
+                  DropdownMenuItem(
+                    child: Center(child: Icon(IReadIcons.delete)),
+                    value: 'delete',
+                  ),
+                ],
+                elevation: 1,
+                onChanged: (value) {
+                  if (value == 'delete') {
+                    _recordBloc.add(DeleteRecordEvent(path));
+                  } else if (value == 'play') {
+                    _recordBloc.add(PlayRecordEvent(path));
+                  }
+                },
+              );
+            }
+            break;
+        }
+
+        return IconButton(
+            icon: Icon(IReadIcons.microphone),
+            onPressed: () {
+              _recordBloc.add(RecordEvent());
+            });
+      });
 
   DropdownButton<T> _dropDownButton<T extends Widget>(
       BuildContext context, List<T> elements, T mainElement) {
