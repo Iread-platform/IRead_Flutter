@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iread_flutter/bloc/base/base_bloc.dart';
 import 'package:iread_flutter/bloc/comment_bloc/comment_bloc.dart';
-import 'package:iread_flutter/bloc/comment_bloc/comment_states.dart';
+import 'package:iread_flutter/bloc/comment_bloc/comment_events.dart';
 import 'package:iread_flutter/bloc/drawing_bloc/drawing_bloc.dart';
 import 'package:iread_flutter/bloc/record_bloc/record_bloc.dart';
 import 'package:iread_flutter/bloc/record_bloc/record_events.dart';
@@ -17,6 +17,7 @@ import 'package:iread_flutter/models/draw/polygon.dart';
 import 'package:iread_flutter/utils/i_read_icons.dart';
 
 class DrawingWidget extends StatefulWidget {
+  final TextEditingController _comment = new TextEditingController();
   DrawingWidget({Key key}) : super(key: key);
 
   @override
@@ -105,7 +106,7 @@ class _DrawingWidgetState extends State<DrawingWidget> {
       );
 
   Widget _drawActions(BuildContext context, Polygon polygon, int index) {
-    double offsetX = 150;
+    double offsetX = 200;
     double offsetY = 50;
     double x = (polygon.maxX + polygon.minX) / 2;
     double y = polygon.minY;
@@ -154,11 +155,125 @@ class _DrawingWidgetState extends State<DrawingWidget> {
   Widget _commentBuilder(BuildContext context) {
     return BlocBuilder<CommentBloc, BlocState>(
       builder: (context, state) {
-        if (state is CommentStates) {}
+        if (_drawBloc.selectedPolygon.comment != null) {
+          return DropdownButton(
+            hint: Icon(Icons.edit),
+            items: [
+              DropdownMenuItem(child: Icon(Icons.open_in_new), value: "show"),
+              DropdownMenuItem(child: Icon(IReadIcons.delete), value: "delete")
+            ],
+            onChanged: (value) {
+              if (value == "show") {
+                _showCommentDialog(context);
+              } else if (value == "delete") {
+                _deleteComment();
+              }
+            },
+          );
+        }
 
-        return IconButton(icon: Icon(Icons.edit), onPressed: () {});
+        return IconButton(
+            icon: Icon(Icons.edit),
+            onPressed: () {
+              _showAddCommentDialog(context);
+            });
       },
     );
+  }
+
+  Future<void> _showCommentDialog(BuildContext buildContext) {
+    widget._comment.text = _drawBloc.selectedPolygon.comment;
+    return showDialog<String>(
+        barrierDismissible: true,
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(
+              "Your comment",
+              style: Theme.of(context).textTheme.headline4,
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: widget._comment,
+                  onSubmitted: _addComment,
+                ),
+                SizedBox(
+                  height: 12,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    ElevatedButton(
+                        onPressed: () =>
+                            _addComment(widget._comment.value.text),
+                        child: Text(
+                          "Update",
+                          style: Theme.of(context).textTheme.subtitle1.copyWith(
+                              color: Theme.of(context).colorScheme.surface),
+                        )),
+                    SizedBox(
+                      width: 12,
+                    ),
+                    ElevatedButton(
+                        onPressed: _deleteComment,
+                        child: Text(
+                          "Delete",
+                          style: Theme.of(context).textTheme.subtitle1.copyWith(
+                              color: Theme.of(context).colorScheme.surface),
+                        ))
+                  ],
+                )
+              ],
+            ),
+          );
+        });
+  }
+
+  Future<void> _showAddCommentDialog(BuildContext context) async {
+    return showDialog<String>(
+        barrierDismissible: true,
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(
+              "Your comment",
+              style: Theme.of(context).textTheme.headline4,
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: widget._comment,
+                  onSubmitted: _addComment,
+                ),
+                SizedBox(
+                  height: 12,
+                ),
+                ElevatedButton(
+                    onPressed: () => _addComment(widget._comment.value.text),
+                    child: Text(
+                      "Add",
+                      style: Theme.of(context).textTheme.subtitle1.copyWith(
+                          color: Theme.of(context).colorScheme.surface),
+                    ))
+              ],
+            ),
+          );
+        });
+  }
+
+  void _addComment(String comment) {
+    _commentBloc.add(AddCommentEvent());
+    _drawBloc.selectedPolygon.comment = comment;
+    Navigator.pop(context);
+  }
+
+  void _deleteComment() {
+    _commentBloc.add(DeleteCommentEvent());
+    _drawBloc.selectedPolygon.comment = null;
+    Navigator.pop(context);
   }
 
   Widget _recordingBuilder(BuildContext context) =>
@@ -229,14 +344,6 @@ class _DrawingWidgetState extends State<DrawingWidget> {
             });
       });
 
-  DropdownButton<T> _dropDownButton<T extends Widget>(
-      BuildContext context, List<T> elements, T mainElement) {
-    return DropdownButton(
-      items: elements.map((e) => DropdownMenuItem<T>(child: e)),
-      value: mainElement,
-    );
-  }
-
   void addPoint(RenderBox renderBox, Offset offset) {
     Offset point = renderBox.globalToLocal(offset);
     // Store min/max X and Y for a polygon.
@@ -271,6 +378,7 @@ class _DrawingWidgetState extends State<DrawingWidget> {
   @override
   void dispose() {
     super.dispose();
+    widget._comment.dispose();
     _recordBloc.dispose();
   }
 }

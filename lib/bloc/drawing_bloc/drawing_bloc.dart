@@ -22,4 +22,5 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
 
   get polygons => _polygons;
   Polygon get selectedPolygon => _polygons[_selectedPolygonIndex];
+  get selectedPolygonIndex => _selectedPolygonIndex;
 }

@@ -5,8 +5,7 @@ class CommentBloc extends Bloc<BlocEvent, BlocState> {
   CommentBloc(BlocState initialState) : super(initialState);
 
   @override
-  Stream<BlocState> mapEventToState(BlocEvent event) {
-    // TODO: implement mapEventToState
-    throw UnimplementedError();
+  Stream<BlocState> mapEventToState(BlocEvent event) async* {
+    yield InitialState();
   }
 }
