@@ -144,6 +144,7 @@ class _DrawingWidgetState extends State<DrawingWidget> {
                   {
                     return IconButton(
                         icon: Icon(Icons.pause),
+                        tooltip: "Pause",
                         onPressed: () {
                           path = (state as RecordState).recordPath;
                           _recordBloc.add(PauseRecordPlayingEvent());
@@ -162,13 +163,27 @@ class _DrawingWidgetState extends State<DrawingWidget> {
                   break;
                 case StopRecordingState:
                   {
-                    return IconButton(
-                        icon: Icon(Icons.play_arrow),
-                        onPressed: () {
-                          path = (state as RecordState).recordPath;
-                          _drawBloc.selectedPolygon.localRecordPath = path;
+                    path = (state as RecordState).recordPath;
+                    return DropdownButton(
+                      hint: Icon(IReadIcons.microphone),
+                      items: [
+                        DropdownMenuItem(
+                            child: Center(child: Icon(Icons.play_arrow)),
+                            value: 'play'),
+                        DropdownMenuItem(
+                          child: Center(child: Icon(IReadIcons.delete)),
+                          value: 'delete',
+                        ),
+                      ],
+                      elevation: 1,
+                      onChanged: (value) {
+                        if (value == 'delete') {
+                          _recordBloc.add(DeleteRecordEvent(path));
+                        } else if (value == 'play') {
                           _recordBloc.add(PlayRecordEvent(path));
-                        });
+                        }
+                      },
+                    );
                   }
                   break;
               }
@@ -193,6 +208,14 @@ class _DrawingWidgetState extends State<DrawingWidget> {
           ],
         ),
       ),
+    );
+  }
+
+  DropdownButton<T> _dropDownButton<T extends Widget>(
+      BuildContext context, List<T> elements, T mainElement) {
+    return DropdownButton(
+      items: elements.map((e) => DropdownMenuItem<T>(child: e)),
+      value: mainElement,
     );
   }
 
