@@ -159,8 +159,8 @@ class _DrawingWidgetState extends State<DrawingWidget> {
           return DropdownButton(
             hint: Icon(Icons.edit),
             items: [
-              DropdownMenuItem(child: Icon(Icons.open_in_new), value: "show"),
-              DropdownMenuItem(child: Icon(IReadIcons.delete), value: "delete")
+              DropdownMenuItem(child: Center(child: Icon(Icons.open_in_new)), value: "show"),
+              DropdownMenuItem(child: Center(child: Icon(IReadIcons.delete)), value: "delete")
             ],
             onChanged: (value) {
               if (value == "show") {
