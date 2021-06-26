@@ -34,7 +34,11 @@ class ConfirmAlert extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               TextButton(
-                  onPressed: _onConfirm, child: Text(_confirmButtonLabel)),
+                  onPressed: () {
+                    _onConfirm();
+                    Navigator.pop(context);
+                  },
+                  child: Text(_confirmButtonLabel)),
               SizedBox(
                 width: 12,
               ),

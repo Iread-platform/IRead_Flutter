@@ -15,6 +15,7 @@ import 'package:iread_flutter/config/themes/border_radius.dart';
 import 'package:iread_flutter/config/themes/shadows.dart';
 import 'package:iread_flutter/models/draw/polygon.dart';
 import 'package:iread_flutter/utils/i_read_icons.dart';
+import 'package:iread_flutter/views/widgets/shared/confirm_alert.dart';
 
 class DrawingWidget extends StatefulWidget {
   final TextEditingController _comment = new TextEditingController();
@@ -139,17 +140,28 @@ class _DrawingWidgetState extends State<DrawingWidget> {
                 icon: Icon(IReadIcons.delete),
                 onPressed: () {
                   setState(() {
-                    final polygonPath =
-                        _drawBloc.selectedPolygon.localRecordPath;
-                    _recordBloc.add(DeleteRecordEvent(polygonPath));
-                    _drawBloc.deletePolygon(index);
-                    closed = false;
+                    showDialog<void>(
+                        context: context,
+                        builder: (context) {
+                          return ConfirmAlert(
+                            onConfirm: _deletePolygon,
+                          );
+                        });
                   });
                 })
           ],
         ),
       ),
     );
+  }
+
+  _deletePolygon() {
+    setState(() {
+      final polygonPath = _drawBloc.selectedPolygon.localRecordPath;
+      _recordBloc.add(DeleteRecordEvent(polygonPath));
+      _drawBloc.deletePolygon(_drawBloc.selectedPolygonIndex);
+      closed = false;
+    });
   }
 
   Widget _commentBuilder(BuildContext context) {
