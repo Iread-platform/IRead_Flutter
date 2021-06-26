@@ -12,7 +12,7 @@ class StoryDetails extends StatelessWidget {
   final Story _story;
   final double _verticalSpacing;
 
-  StoryDetails({@required Story story, double verticalSpacing, Key key})
+  StoryDetails({Story story, double verticalSpacing, Key key})
       : _story = story,
         _verticalSpacing = verticalSpacing ?? 48,
         super(key: key);

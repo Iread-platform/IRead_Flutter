@@ -5,8 +5,10 @@ import 'package:iread_flutter/bloc/base/base_bloc.dart';
 import 'package:iread_flutter/bloc/search_stories_by_tag_bloc/search_stories_by_tag.dart';
 import 'package:iread_flutter/bloc/search_stories_by_tag_bloc/search_stories_by_tag_event.dart';
 import 'package:iread_flutter/bloc/story/story_details_bloc/story_details_bloc.dart';
+import 'package:iread_flutter/bloc/story/story_details_bloc/story_details_events.dart';
 import 'package:iread_flutter/main.dart';
 import 'package:iread_flutter/views/Screens/stories_search_list.dart';
+import 'package:iread_flutter/views/Screens/story_details.dart';
 import 'package:iread_flutter/views/widgets/story/story_assignment_card.dart';
 
 class AppRoutes {
@@ -36,7 +38,9 @@ class AppRoutes {
         Handler(
             handlerFunc: (BuildContext context, Map<String, dynamic> params) =>
                 BlocProvider(
-                    create: (context) =>
-                        StoryDetailsBloc(InitialState()).add(LoadingS))))
+                  create: (context) => StoryDetailsBloc(InitialState())
+                    ..add(FetchStoryDetailsEvent(params['id'][0])),
+                  child: StoryDetails(),
+                )))
   ];
 }
