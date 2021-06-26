@@ -237,8 +237,8 @@ class _DrawingWidgetState extends State<DrawingWidget> {
                     ),
                     ElevatedButton(
                         onPressed: () {
-                          _deleteComment();
                           Navigator.pop(context);
+                          _deleteComment();
                         },
                         child: Text(
                           "Delete",
@@ -293,8 +293,20 @@ class _DrawingWidgetState extends State<DrawingWidget> {
   }
 
   void _deleteComment() {
-    _commentBloc.add(DeleteCommentEvent());
-    _drawBloc.selectedPolygon.comment = null;
+    showDialog<void>(
+        context: context,
+        builder: (context) {
+          return ConfirmAlert(
+            title: 'Delete comment',
+            onConfirm: () {
+              _commentBloc.add(DeleteCommentEvent());
+              _drawBloc.selectedPolygon.comment = null;
+            },
+            confirmButtonLabel: 'Delete',
+            message:
+                'Do you want to delete the comment that you have written ?',
+          );
+        });
   }
 
   Widget _recordingBuilder(BuildContext context) =>
