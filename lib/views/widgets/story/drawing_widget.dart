@@ -194,6 +194,8 @@ class _DrawingWidgetState extends State<DrawingWidget> {
         return IconButton(
             icon: Icon(Icons.edit),
             onPressed: () {
+              widget._comment.clear();
+
               _showAddCommentDialog(context);
             });
       },
