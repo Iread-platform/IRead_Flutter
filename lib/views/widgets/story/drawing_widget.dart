@@ -144,7 +144,11 @@ class _DrawingWidgetState extends State<DrawingWidget> {
                         context: context,
                         builder: (context) {
                           return ConfirmAlert(
+                            title: 'Delete the polygon',
                             onConfirm: _deletePolygon,
+                            confirmButtonLabel: 'Delete',
+                            message:
+                                'Do you want to delete the polygon that you have painted ?',
                           );
                         });
                   });
