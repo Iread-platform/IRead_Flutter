@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iread_flutter/config/themes/theme.dart';
-import 'package:iread_flutter/views/widgets/story/drawing_widget.dart';
+import 'package:iread_flutter/views/Screens/story_details.dart';
 import 'package:provider/provider.dart';
 
 import 'bloc/StoryScreenBloc/storyscreen_bloc.dart';
@@ -32,8 +32,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Iread',
       theme: mainTheme,
-      home:
-          Scaffold(body: Container(color: Colors.red, child: DrawingWidget())),
+      home: Scaffold(
+          body: Container(
+        child: StoryDetails(
+          story: story,
+        ),
+      )),
     );
   }
 }
