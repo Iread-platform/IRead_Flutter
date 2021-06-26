@@ -133,7 +133,7 @@ class _DrawingWidgetState extends State<DrawingWidget> {
         ),
         child: Row(
           children: [
-            IconButton(icon: Icon(Icons.save_alt), onPressed: () {}),
+            IconButton(icon: Icon(Icons.add_circle), onPressed: () {}),
             _recordingBuilder(context),
             _commentBuilder(context),
             IconButton(
