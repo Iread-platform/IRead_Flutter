@@ -301,6 +301,7 @@ class _DrawingWidgetState extends State<DrawingWidget> {
             onConfirm: () {
               _commentBloc.add(DeleteCommentEvent());
               _drawBloc.selectedPolygon.comment = null;
+              widget._comment.clear();
             },
             confirmButtonLabel: 'Delete',
             message:
