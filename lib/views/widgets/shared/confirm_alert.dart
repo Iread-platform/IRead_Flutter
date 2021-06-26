@@ -14,7 +14,7 @@ class ConfirmAlert extends StatelessWidget {
       String cancelButtonLabel,
       Key key})
       : _onConfirm = onConfirm,
-        _message = message ?? 'Do you want to confirm th operation ?',
+        _message = message ?? 'Do you want to confirm the operation ?',
         _title = title ?? 'Confirm',
         _confirmButtonLabel = confirmButtonLabel ?? 'Confirm',
         _cancelButtonLabel = cancelButtonLabel ?? 'Cancel',
@@ -22,34 +22,46 @@ class ConfirmAlert extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text('Confirm'),
-      content: Column(
-        children: [
-          Text(
-            _message,
-            style: Theme.of(context).textTheme.subtitle1,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              TextButton(
-                  onPressed: () {
-                    _onConfirm();
-                    Navigator.pop(context);
-                  },
-                  child: Text(_confirmButtonLabel)),
-              SizedBox(
-                width: 12,
-              ),
-              TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text(_cancelButtonLabel)),
-            ],
-          )
-        ],
+    return Center(
+      child: AlertDialog(
+        title: Text('Confirm'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              _message,
+              style: Theme.of(context).textTheme.subtitle1,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                    onPressed: () {
+                      _onConfirm();
+                      Navigator.pop(context);
+                    },
+                    child: Text(
+                      _confirmButtonLabel,
+                      style: Theme.of(context)
+                          .textTheme
+                          .subtitle2
+                          .copyWith(color: Theme.of(context).colorScheme.error),
+                    )),
+                SizedBox(
+                  width: 12,
+                ),
+                TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text(_cancelButtonLabel,
+                        style: Theme.of(context).textTheme.subtitle2.copyWith(
+                              color: Theme.of(context).colorScheme.primary,
+                            ))),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
