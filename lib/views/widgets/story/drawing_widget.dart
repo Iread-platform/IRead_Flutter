@@ -363,7 +363,7 @@ class _DrawingWidgetState extends State<DrawingWidget> {
                 elevation: 1,
                 onChanged: (value) {
                   if (value == 'delete') {
-                    _recordBloc.add(DeleteRecordEvent(path));
+                    return _deleteRecord(context, path);
                   } else if (value == 'play') {
                     _recordBloc.add(PlayRecordEvent(path));
                   }
@@ -379,6 +379,22 @@ class _DrawingWidgetState extends State<DrawingWidget> {
               _recordBloc.add(RecordEvent());
             });
       });
+
+  void _deleteRecord(BuildContext context, String path) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return ConfirmAlert(
+            title: 'Delete record',
+            onConfirm: () {
+              _recordBloc.add(DeleteRecordEvent(path));
+            },
+            message:
+                'Do you want to delete the record that you have recorded ?',
+            confirmButtonLabel: 'Delete',
+          );
+        });
+  }
 
   void addPoint(RenderBox renderBox, Offset offset) {
     Offset point = renderBox.globalToLocal(offset);
