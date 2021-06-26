@@ -4,6 +4,7 @@ import 'package:iread_flutter/bloc/base/base_bloc.dart';
 import 'package:iread_flutter/bloc/drawing_bloc/drawing_bloc.dart';
 import 'package:iread_flutter/bloc/record_bloc/record_bloc.dart';
 import 'package:iread_flutter/config/themes/theme.dart';
+import 'package:iread_flutter/services/permissions_service.dart';
 import 'package:iread_flutter/views/widgets/story/drawing_widget.dart';
 
 import 'bloc/comment_bloc/comment_bloc.dart';
@@ -32,6 +33,8 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    PermissionService.checkPermissions();
+
     return MaterialApp(
       title: 'Iread',
       theme: mainTheme,
