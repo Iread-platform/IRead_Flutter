@@ -159,8 +159,11 @@ class _DrawingWidgetState extends State<DrawingWidget> {
           return DropdownButton(
             hint: Icon(Icons.edit),
             items: [
-              DropdownMenuItem(child: Center(child: Icon(Icons.open_in_new)), value: "show"),
-              DropdownMenuItem(child: Center(child: Icon(IReadIcons.delete)), value: "delete")
+              DropdownMenuItem(
+                  child: Center(child: Icon(Icons.open_in_new)), value: "show"),
+              DropdownMenuItem(
+                  child: Center(child: Icon(IReadIcons.delete)),
+                  value: "delete")
             ],
             onChanged: (value) {
               if (value == "show") {
@@ -217,7 +220,10 @@ class _DrawingWidgetState extends State<DrawingWidget> {
                       width: 12,
                     ),
                     ElevatedButton(
-                        onPressed: _deleteComment,
+                        onPressed: () {
+                          _deleteComment();
+                          Navigator.pop(context);
+                        },
                         child: Text(
                           "Delete",
                           style: Theme.of(context).textTheme.subtitle1.copyWith(
@@ -273,7 +279,6 @@ class _DrawingWidgetState extends State<DrawingWidget> {
   void _deleteComment() {
     _commentBloc.add(DeleteCommentEvent());
     _drawBloc.selectedPolygon.comment = null;
-    Navigator.pop(context);
   }
 
   Widget _recordingBuilder(BuildContext context) =>
