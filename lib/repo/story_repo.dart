@@ -9,8 +9,9 @@ import 'package:iread_flutter/utils/data.dart';
 class StoryRepo extends MainRepo {
   static final StoryRepo _instance = StoryRepo._internal();
 
+  final baseStoryPath = "story";
   final tagSearchEndPoint = "";
-  final getStoryByIdEndpoint = "/api/i"
+  final getStoryByIdEndpoint = "story/get";
 
   factory StoryRepo() => _instance;
   StoryRepo._internal();
@@ -110,9 +111,10 @@ class StoryRepo extends MainRepo {
     }
   }
 
-  Future<Data<Story>> fetchStoryById() async {
+  Future<Data<Story>> fetchStoryById(int id) async {
+    final url = "$getStoryByIdEndpoint/$id";
     final jsonText = await apiService.request(
-          requestType: RequestType.GET, endPoint: tagSearchEndPoint);
+        requestType: RequestType.GET, endPoint: tagSearchEndPoint);
     final json = jsonDecode(jsonText);
   }
 }
