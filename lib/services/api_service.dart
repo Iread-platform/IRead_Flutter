@@ -10,7 +10,7 @@ enum RequestType { GET, POST, DELETE }
 
 class ApiService {
   static final ApiService _instance = ApiService._internal();
-  final String baseUrl = "http://codavia-001-site1.dtempurl.com/api";
+  final String baseUrl = "http://46.227.254.20:5014/api/iread";
 
   factory ApiService() => _instance;
 
