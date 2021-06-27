@@ -249,7 +249,7 @@ class _StoryScreenState extends State<StoryScreen> {
                                 words:
                                     blocListener.storyPageData.data.words ?? [],
                                 marginX: w * 0.15,
-                                marginY: h * 0.45),
+                                marginY: h * 0.44),
                           )
                         : Container(),
                     bloc: bloc);

@@ -40,9 +40,16 @@ class MyTextSelectionControls extends TextSelectionControls {
     return Consumer<TextSelectionProvider>(
       builder: (context, cart, child) {
         return TextSelectionToolbar(
-            anchorAbove: Offset(position.dx + marginX, position.dy + marginY),
-            anchorBelow: Offset(0, 0),
+            anchorAbove: Offset(
+                position.dx + marginX,
+                position.dy +
+                    marginY -
+                    Provider.of<TextSelectionProvider>(context, listen: false)
+                        .scrollController
+                        .offset),
+            anchorBelow: Offset(-140, -140),
             toolbarBuilder: (context, _) {
+              print(position.dy);
               return FittedBox(
                 child: Container(
                   decoration: BoxDecoration(
@@ -74,7 +81,7 @@ class MyTextSelectionControls extends TextSelectionControls {
 
               // return (position.dy > 30 && position.dy < 250)
               //     ?
-              //     : Container();
+              // : Container();
             },
             children: [Container()]);
       },
