@@ -1,8 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'dart:convert';
-import 'settings.dart' as appSettings;
 import 'package:iread_flutter/utils/exception.dart';
+
+import 'settings.dart' as appSettings;
 
 enum RequestType { GET, POST, DELETE }
 
