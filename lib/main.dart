@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:iread_flutter/config/routing/app_router.dart';
 import 'package:iread_flutter/config/themes/theme.dart';
+import 'package:iread_flutter/services/permissions_service.dart';
 
 import 'config/http/httpOverrides.dart';
 import 'models/stories_section_model.dart';
@@ -20,6 +21,8 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    PermissionService.checkPermissions();
+
     return MaterialApp(
       title: 'Iread',
       theme: mainTheme,
