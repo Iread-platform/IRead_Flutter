@@ -1,32 +1,20 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:iread_flutter/bloc/base/base_bloc.dart';
-import 'package:iread_flutter/bloc/drawing_bloc/drawing_bloc.dart';
-import 'package:iread_flutter/bloc/record_bloc/record_bloc.dart';
+import 'package:iread_flutter/config/routing/app_router.dart';
 import 'package:iread_flutter/config/themes/theme.dart';
 import 'package:iread_flutter/services/permissions_service.dart';
-import 'package:iread_flutter/views/widgets/story/drawing_widget.dart';
 
-import 'bloc/comment_bloc/comment_bloc.dart';
+import 'config/http/httpOverrides.dart';
 import 'models/stories_section_model.dart';
 import 'models/story.dart';
 import 'models/user.dart';
 
 void main() {
-  runApp(MultiBlocProvider(
-    providers: [
-      BlocProvider(
-        create: (context) => DrawingBloc(InitialState()),
-      ),
-      BlocProvider(
-        create: (context) => RecordBloc(InitialState()),
-      ),
-      BlocProvider(
-        create: (context) => CommentBloc(InitialState()),
-      )
-    ],
-    child: MyApp(),
-  ));
+  // Override server certificate
+  HttpOverrides.global = new IreadHttpOverrides();
+
+  AppRouter().init().then((value) => runApp(MyApp()));
 }
 
 // ignore: must_be_immutable
@@ -38,8 +26,19 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Iread',
       theme: mainTheme,
-      home:
-          Scaffold(body: Container(color: Colors.red, child: DrawingWidget())),
+      onGenerateRoute: AppRouter().appRouterGenerator,
+      home: Scaffold(
+        body: Center(
+          child: Builder(
+            builder: (context) => TextButton(
+              child: Text("Click me !"),
+              onPressed: () {
+                AppRouter().navigate(context, '/story/1');
+              },
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
