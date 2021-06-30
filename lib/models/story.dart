@@ -82,7 +82,10 @@ class Story extends Model {
     }
 
     // TODO remove dummy tags
-    _tags +=
+    _tags = [];
+    _tags.add('story');
+    _tags.add('action');
+    _tags.add('nature');
   }
 
   get title => _title;
