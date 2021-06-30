@@ -32,7 +32,7 @@ class RequestHandler<T extends SuccessState,
       Widget inProgress,
       Widget other,
       bool isDismissible,
-      @required B bloc})
+      bloc})
       : _mainContent = main,
         _onSuccess = onSuccess,
         _onFailBuilder = onFailBuilder,
