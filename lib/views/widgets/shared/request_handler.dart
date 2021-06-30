@@ -83,7 +83,7 @@ class _RequestHandlerState<T extends SuccessState,
                     return Stack(
                       alignment: Alignment.topRight,
                       children: [
-                        widget._onFailBuilder(context, failState) ??
+                        widget._onFailBuilder ??
                             widget._onFailed ??
                             _InfoWidget.failed(message: failState.message),
                         widget._isDismissible
