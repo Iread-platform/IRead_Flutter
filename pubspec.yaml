@@ -60,6 +60,7 @@ flutter:
     - assets/images/shared/curve_bottom_right.svg
     - assets/images/shared/curve_top_left.svg
     - assets/images/shared/curve_top_right.svg
+    - assets/images/shared/error.svg
     - lib/Repository/dummyData.json
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
