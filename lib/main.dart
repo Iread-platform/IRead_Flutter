@@ -1,29 +1,19 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:iread_flutter/bloc/base/base_bloc.dart';
-import 'package:iread_flutter/bloc/story/story_details_bloc/story_details_bloc.dart';
-import 'package:iread_flutter/config/themes/theme.dart';
-import 'package:iread_flutter/views/Screens/story_details.dart';
-import 'package:provider/provider.dart';
+import 'dart:io';
 
-import 'bloc/story_bloc.dart';
-import 'bloc/text_selection_provider.dart';
+import 'package:flutter/material.dart';
+import 'package:iread_flutter/config/routing/app_router.dart';
+import 'package:iread_flutter/config/themes/theme.dart';
+
+import 'config/http/httpOverrides.dart';
 import 'models/stories_section_model.dart';
 import 'models/story.dart';
 import 'models/user.dart';
 
 void main() {
-  runApp(MultiBlocProvider(
-    providers: [
-      BlocProvider(
-        create: (context) => StoryDetailsBloc(InitialState()),
-      )
-    ],
-    child: MultiProvider(providers: [
-      ChangeNotifierProvider(create: (context) => TextSelectionProvider()),
-      ChangeNotifierProvider(create: (context) => StoryBloc()),
-    ], child: MyApp()),
-  ));
+  // Override server certificate
+  HttpOverrides.global = new IreadHttpOverrides();
+
+  AppRouter().init().then((value) => runApp(MyApp()));
 }
 
 // ignore: must_be_immutable
@@ -33,12 +23,19 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Iread',
       theme: mainTheme,
+      onGenerateRoute: AppRouter().appRouterGenerator,
       home: Scaffold(
-          body: Container(
-        child: StoryDetails(
-          story: story,
+        body: Center(
+          child: Builder(
+            builder: (context) => TextButton(
+              child: Text("Click me !"),
+              onPressed: () {
+                AppRouter().navigate(context, '/story/1');
+              },
+            ),
+          ),
         ),
-      )),
+      ),
     );
   }
 }

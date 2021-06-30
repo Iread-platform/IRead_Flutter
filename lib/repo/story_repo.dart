@@ -112,9 +112,15 @@ class StoryRepo extends MainRepo {
   }
 
   Future<Data<Story>> fetchStoryById(int id) async {
-    final url = "$getStoryByIdEndpoint/$id";
-    final jsonText = await apiService.request(
-        requestType: RequestType.GET, endPoint: tagSearchEndPoint);
-    final json = jsonDecode(jsonText);
+    try {
+      final url = "$getStoryByIdEndpoint/$id";
+      final jsonText =
+          await apiService.request(requestType: RequestType.GET, endPoint: url);
+      final json = jsonDecode(jsonText);
+
+      return Data.success(Story.fromJson(json));
+    } catch (e) {
+      return Data.handleException(e);
+    }
   }
 }

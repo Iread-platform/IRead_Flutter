@@ -56,23 +56,33 @@ class Story extends Model {
     _description = json['description'];
     _storyLevel = json['storyLevel'];
     _writer = json['writer'];
-    _rating = json['rating'];
-    _color = Color(int.parse(json['color'], radix: 16));
-    _imageUrl = json['imageUrl'];
+    _rating = json['rating'].toDouble();
+    _color = json['color'] != null
+        ? Color(int.parse(json['color'], radix: 16))
+        : Colors.lightGreenAccent;
+    _imageUrl = json['imageUrl'] ??
+        'https://images.unsplash.com/photo-1553060146-71667aa3f223?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80';
     _flippedPages = json['flippedPages'];
     _readingTime = json['readingTime'];
     _progress = json['progress'];
     _pages = json['pages'];
 
-    _keyWords = [];
-    for (int i = 0; i < json['keyWords'].length; i++) {
-      _keyWords.add(json['keyWords'][i]);
+    if (json['keyWords'] != null) {
+      _keyWords = [];
+      for (int i = 0; i < json['keyWords'].length; i++) {
+        _keyWords.add(json['keyWords'][i]);
+      }
     }
 
-    _tags = [];
-    for (int i = 0; i < json['tags'].length; i++) {
-      _tags.add(json['tags'][i]);
+    if (json['tags'] != null) {
+      _tags = [];
+      for (int i = 0; i < json['tags'].length; i++) {
+        _tags.add(json['tags'][i]);
+      }
     }
+
+    // TODO remove dummy tags
+    _tags +=
   }
 
   get title => _title;

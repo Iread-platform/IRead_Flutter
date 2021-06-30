@@ -33,14 +33,15 @@ class AppRoutes {
                     ..add(SearchStoriesByTagEvent(params['tag'][0])),
                   child: StoriesSearchList(),
                 ))),
-    AppRoute(
-        '/story/:id ',
-        Handler(
-            handlerFunc: (BuildContext context, Map<String, dynamic> params) =>
-                BlocProvider(
-                  create: (context) => StoryDetailsBloc(InitialState())
-                    ..add(FetchStoryDetailsEvent(params['id'][0])),
-                  child: StoryDetails(),
-                )))
+    AppRoute('/story/:id ', Handler(
+        handlerFunc: (BuildContext context, Map<String, dynamic> params) {
+      print(params);
+      var id = params.entries.elementAt(0).value[0];
+      return BlocProvider(
+        create: (context) => StoryDetailsBloc(InitialState())
+          ..add(FetchStoryDetailsEvent(int.parse(id))),
+        child: StoryDetails(),
+      );
+    }))
   ];
 }
