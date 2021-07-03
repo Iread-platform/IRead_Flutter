@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iread_flutter/bloc/base/base_bloc.dart';
+import 'package:iread_flutter/bloc/drawing_bloc/drawing_events.dart';
 import 'package:iread_flutter/bloc/drawing_bloc/drawing_states.dart';
 import 'package:iread_flutter/models/draw/polygon.dart';
 import 'package:iread_flutter/repo/main_repo.dart';
@@ -13,12 +14,16 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
   DrawingBloc(BlocState initialState) : super(initialState);
 
   @override
-  Stream<BlocState> mapEventToState(BlocEvent event) {
-    // TODO: implement mapEventToState
-    throw UnimplementedError();
+  Stream<BlocState> mapEventToState(BlocEvent event) async* {
+    yield LoadingState();
+
+    switch (event.runtimeType) {
+      case SavePolygonEvent:
+        yield _savePolygon(selectedPolygon);
+    }
   }
 
-  PolygonSavedState savePolygon(Polygon polygon) {
+  PolygonSavedState _savePolygon(Polygon polygon) {
     Data data = _mainRepo.savePolygon(polygon);
     return PolygonSavedState(data);
   }

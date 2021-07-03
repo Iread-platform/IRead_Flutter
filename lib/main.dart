@@ -1,10 +1,15 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:iread_flutter/bloc/base/base_bloc.dart';
+import 'package:iread_flutter/bloc/comment_bloc/comment_bloc.dart';
+import 'package:iread_flutter/bloc/drawing_bloc/drawing_bloc.dart';
+import 'package:iread_flutter/bloc/record_bloc/record_bloc.dart';
 import 'package:iread_flutter/config/http/httpOverrides.dart';
 import 'package:iread_flutter/config/routing/app_router.dart';
 import 'package:iread_flutter/services/permissions_service.dart';
 import 'package:iread_flutter/views/widgets/story/drawing_widget.dart';
+import 'package:provider/provider.dart';
 
 import 'config/themes/theme.dart';
 import 'models/story.dart';
@@ -28,7 +33,11 @@ class MyApp extends StatelessWidget {
       title: 'Iread',
       onGenerateRoute: AppRouter().appRouterGenerator,
       home: Scaffold(
-        body: DrawingWidget(),
+        body: MultiProvider(providers: [
+          Provider(create: (context) => DrawingBloc(InitialState())),
+          Provider(create: (context) => RecordBloc(InitialState())),
+          Provider(create: (context) => CommentBloc(InitialState()))
+        ], child: DrawingWidget()),
       ),
     );
   }
