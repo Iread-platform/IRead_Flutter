@@ -8,6 +8,7 @@ import 'package:iread_flutter/bloc/base/base_bloc.dart';
 import 'package:iread_flutter/bloc/comment_bloc/comment_bloc.dart';
 import 'package:iread_flutter/bloc/comment_bloc/comment_events.dart';
 import 'package:iread_flutter/bloc/drawing_bloc/drawing_bloc.dart';
+import 'package:iread_flutter/bloc/drawing_bloc/drawing_events.dart';
 import 'package:iread_flutter/bloc/record_bloc/record_bloc.dart';
 import 'package:iread_flutter/bloc/record_bloc/record_events.dart';
 import 'package:iread_flutter/bloc/record_bloc/record_state.dart';
@@ -122,41 +123,70 @@ class _DrawingWidgetState extends State<DrawingWidget> {
       x = size.width - offsetX;
     }
 
-    return Positioned(
-      top: y,
-      left: x,
-      child: Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
-          borderRadius: BorderRadius.circular(storyBorderRadius),
-          boxShadow: [mediumBottomRightShadow],
+    return BlocBuilder<DrawingBloc, BlocState>(builder: (context, state) {
+      if (state is LoadingState) {
+        return Positioned(
+          top: y,
+          left: x,
+          child: Container(
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          ),
+        );
+      }
+
+      return Positioned(
+        top: y,
+        left: x,
+        child: Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surface,
+            borderRadius: BorderRadius.circular(storyBorderRadius),
+            boxShadow: [mediumBottomRightShadow],
+          ),
+          child: Row(
+            children: [
+              // Save the selected polygon with attachments
+              _drawBloc.selectedPolygon.saved
+                  ? Tooltip(
+                      message: 'Your polygon is synchronized',
+                      child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          child: Icon(
+                            Icons.check,
+                            color: Colors.green,
+                          )),
+                    )
+                  : IconButton(
+                      icon: Icon(Icons.add_circle),
+                      onPressed: () {
+                        _drawBloc.add(SavePolygonEvent());
+                      }),
+              _recordingBuilder(context),
+              _commentBuilder(context),
+              IconButton(
+                  icon: Icon(IReadIcons.delete),
+                  onPressed: () {
+                    setState(() {
+                      showDialog<void>(
+                          context: context,
+                          builder: (context) {
+                            return ConfirmAlert(
+                              title: 'Delete the polygon',
+                              onConfirm: _deletePolygon,
+                              confirmButtonLabel: 'Delete',
+                              message:
+                                  'Do you want to delete the polygon that you have painted ?',
+                            );
+                          });
+                    });
+                  })
+            ],
+          ),
         ),
-        child: Row(
-          children: [
-            IconButton(icon: Icon(Icons.add_circle), onPressed: () {}),
-            _recordingBuilder(context),
-            _commentBuilder(context),
-            IconButton(
-                icon: Icon(IReadIcons.delete),
-                onPressed: () {
-                  setState(() {
-                    showDialog<void>(
-                        context: context,
-                        builder: (context) {
-                          return ConfirmAlert(
-                            title: 'Delete the polygon',
-                            onConfirm: _deletePolygon,
-                            confirmButtonLabel: 'Delete',
-                            message:
-                                'Do you want to delete the polygon that you have painted ?',
-                          );
-                        });
-                  });
-                })
-          ],
-        ),
-      ),
-    );
+      );
+    });
   }
 
   _deletePolygon() {

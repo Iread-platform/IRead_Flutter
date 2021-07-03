@@ -25,6 +25,7 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
 
   PolygonSavedState _savePolygon(Polygon polygon) {
     Data data = _mainRepo.savePolygon(polygon);
+    selectedPolygon.saved = true;
     return PolygonSavedState(data);
   }
 
