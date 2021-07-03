@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:iread_flutter/config/routing/app_router.dart';
 import 'package:iread_flutter/config/themes/theme.dart';
 import 'package:iread_flutter/services/permissions_service.dart';
+import 'package:iread_flutter/views/widgets/vocabulary_dialog.dart';
 
 import 'config/http/httpOverrides.dart';
 import 'models/stories_section_model.dart';
@@ -28,16 +29,7 @@ class MyApp extends StatelessWidget {
       theme: mainTheme,
       onGenerateRoute: AppRouter().appRouterGenerator,
       home: Scaffold(
-        body: Center(
-          child: Builder(
-            builder: (context) => TextButton(
-              child: Text("Click me !"),
-              onPressed: () {
-                AppRouter().navigate(context, '/story/1');
-              },
-            ),
-          ),
-        ),
+        body: VocabularyDialog(),
       ),
     );
   }
