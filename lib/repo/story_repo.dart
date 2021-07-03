@@ -10,7 +10,7 @@ class StoryRepo extends MainRepo {
   static final StoryRepo _instance = StoryRepo._internal();
 
   final baseStoryPath = "story";
-  final tagSearchEndPoint = "";
+  final searchByTagEndPoint = "Story/GetStoriesByTagTitle";
   final getStoryByIdEndpoint = "story/get";
 
   factory StoryRepo() => _instance;
@@ -100,12 +100,17 @@ class StoryRepo extends MainRepo {
   };
 
   Future<Data<StoriesSectionModel>> searchByTag(String tag) async {
-    /*final jsonText = await apiService.request(
-          requestType: RequestType.GET, endPoint: tagSearchEndPoint);
-      final json = jsonDecode(jsonText);*/
-    // TODO get real data
     try {
-      return Data.success(StoriesSectionModel.fromJson(storySectionJson));
+      final url = '$searchByTagEndPoint/$tag';
+      final jsonText =
+          await apiService.request(requestType: RequestType.GET, endPoint: url);
+      final stories = jsonDecode(jsonText);
+      // Construct json data to consume.
+      Map<String, dynamic> json = {"stories": [], "title": ""};
+      json['stories'] = stories;
+      json['title'] = tag;
+
+      return Data.success(StoriesSectionModel.fromJson(json));
     } catch (e) {
       return Data.handleException<StoriesSectionModel>(e);
     }

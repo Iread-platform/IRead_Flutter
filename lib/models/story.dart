@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iread_flutter/models/tag.dart';
 
 import 'model.dart';
 
@@ -14,9 +15,8 @@ class Story extends Model {
   Color _color;
   int _flippedPages;
   double _readingTime;
-  List<String> _keyWords;
   double _rating;
-  List<String> _tags;
+  List<Tag> _tags;
 
   Story(
       {@required String title,
@@ -29,8 +29,7 @@ class Story extends Model {
       double progress,
       int flippedPages,
       double readingTime,
-      List<String> keyWords,
-      List<String> tags,
+      List<Tag> tags,
       double rating,
       int pages,
       int id})
@@ -44,7 +43,6 @@ class Story extends Model {
         _flippedPages = flippedPages,
         _readingTime = readingTime,
         _progress = progress,
-        _keyWords = keyWords,
         _rating = rating,
         _pages = pages,
         _tags = tags,
@@ -56,7 +54,7 @@ class Story extends Model {
     _description = json['description'];
     _storyLevel = json['storyLevel'];
     _writer = json['writer'];
-    _rating = json['rating'].toDouble();
+    _rating = json['rating']?.toDouble();
     _color = json['color'] != null
         ? Color(int.parse(json['color'], radix: 16))
         : Colors.lightGreenAccent;
@@ -68,9 +66,9 @@ class Story extends Model {
     _pages = json['pages'];
 
     if (json['keyWords'] != null) {
-      _keyWords = [];
+      _tags = [];
       for (int i = 0; i < json['keyWords'].length; i++) {
-        _keyWords.add(json['keyWords'][i]);
+        _tags.add(Tag.fromJson(json['keyWords'][i]));
       }
     }
 
@@ -80,12 +78,6 @@ class Story extends Model {
         _tags.add(json['tags'][i]);
       }
     }
-
-    // TODO remove dummy tags
-    _tags = [];
-    _tags.add('story');
-    _tags.add('action');
-    _tags.add('nature');
   }
 
   get title => _title;

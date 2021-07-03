@@ -54,7 +54,6 @@ Story story = Story(
     description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sit amet lacus tincidunt, consequat lorem ac, consectetur ligula. Sed non nunc vehicula, pretium arcu a, faucibus eros. Cras lacinia magna sed enim malesuada finibus. Nulla et varius neque. Etiam dolor erat, dictum sodales facilisis ac, cursus vehicula lacus. Vestibulum et ante lorem. Pellentesque pretium arcu felis, nec efficitur lacus ultricies quis. Morbi eu tortor facilisis, porta elit quis, varius diam.',
     writer: 'Motasem Ghozlan',
-    tags: ['Anger', 'Love', 'Feelings', 'Generous', 'Learning', 'Effective'],
     pages: 1300,
     progress: 0.45,
     flippedPages: 53,

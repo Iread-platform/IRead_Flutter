@@ -31,7 +31,9 @@ class AppRoutes {
                 BlocProvider(
                   create: (_) => SearchStoriesByTagBloc(LoadingState())
                     ..add(SearchStoriesByTagEvent(params['tag'][0])),
-                  child: StoriesSearchList(),
+                  child: Container(
+                      color: Theme.of(context).colorScheme.surface,
+                      child: StoriesSearchList()),
                 ))),
     AppRoute('/story/:id ', Handler(
         handlerFunc: (BuildContext context, Map<String, dynamic> params) {
@@ -40,7 +42,9 @@ class AppRoutes {
       return BlocProvider(
         create: (context) => StoryDetailsBloc(InitialState())
           ..add(FetchStoryDetailsEvent(int.parse(id))),
-        child: StoryDetails(),
+        child: Container(
+            color: Theme.of(context).colorScheme.surface,
+            child: StoryDetails()),
       );
     }))
   ];
