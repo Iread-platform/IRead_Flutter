@@ -38,6 +38,9 @@ dependencies:
   audio_video_progress_bar: ^0.4.0
   fluro: ^2.0.3
   http: ^0.13.3
+  dio: ^4.0.0
+  flutter_audio_recorder: ^0.5.5
+  permission_handler: ^8.0.0+2
 
 dev_dependencies:
   flutter_test:
@@ -61,6 +64,8 @@ flutter:
     - assets/images/shared/curve_bottom_left.svg
     - assets/images/shared/curve_bottom_right.svg
     - assets/images/shared/star.png
+    - assets/images/shared/error.svg
+    - lib/Repository/dummyData.json
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 
