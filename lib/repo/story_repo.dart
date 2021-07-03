@@ -106,7 +106,7 @@ class StoryRepo extends MainRepo {
           await apiService.request(requestType: RequestType.GET, endPoint: url);
       final stories = jsonDecode(jsonText);
       // Construct json data to consume.
-      var json = {};
+      Map<String, dynamic> json = {"stories": [], "title": ""};
       json['stories'] = stories;
       json['title'] = tag;
 
