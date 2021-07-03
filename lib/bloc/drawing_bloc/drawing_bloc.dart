@@ -18,9 +18,9 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
     throw UnimplementedError();
   }
 
-  DrawSavedState savePolygon(Polygon polygon) {
+  PolygonSavedState savePolygon(Polygon polygon) {
     Data data = _mainRepo.savePolygon(polygon);
-    return DrawSavedState(data);
+    return PolygonSavedState(data);
   }
 
   void addPolygon(Polygon polygon) => _polygons.add(polygon);
