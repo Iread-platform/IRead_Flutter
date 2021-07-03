@@ -150,7 +150,7 @@ class _DrawingWidgetState extends State<DrawingWidget> {
               // Save the selected polygon with attachments
               _drawBloc.selectedPolygon.saved
                   ? Tooltip(
-                      message: 'Your polygon is synchronized',
+                      message: 'Your polygon has synchronized',
                       child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 12),
                           child: Icon(
