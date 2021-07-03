@@ -1,3 +1,4 @@
+import 'package:iread_flutter/models/draw/polygon.dart';
 import 'package:iread_flutter/services/api_service.dart';
 import 'package:iread_flutter/utils/data.dart';
 
@@ -11,7 +12,7 @@ class InteractionRepo {
   final String baseEndpoint = 'interaction';
   final String savePolygonEndpoint = 'polygon/add';
 
-  Data savePolygon() {
+  Data savePolygon(Polygon polygon) {
     return Data.success(1);
   }
 }
