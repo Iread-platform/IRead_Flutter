@@ -5,10 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iread_flutter/Repository/story_repository.dart';
 import 'package:iread_flutter/bloc/base/base_bloc.dart';
-import 'package:iread_flutter/bloc/text_selection_provider.dart';
 import 'package:iread_flutter/models/Data.dart';
 import 'package:iread_flutter/models/story_page_model.dart';
-import 'package:provider/provider.dart';
 
 part 'storyscreen_event.dart';
 part 'storyscreen_state.dart';
