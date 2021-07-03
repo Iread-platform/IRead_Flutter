@@ -6,4 +6,6 @@ class AddCommentState extends CommentStates {
   String _comment;
 
   AddCommentState(this._comment);
+
+  get comment => _comment;
 }

@@ -24,7 +24,7 @@ class ConfirmAlert extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: AlertDialog(
-        title: Text('Confirm'),
+        title: Text(_title),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
