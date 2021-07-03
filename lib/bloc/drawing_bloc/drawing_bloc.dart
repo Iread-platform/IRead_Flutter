@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iread_flutter/bloc/base/base_bloc.dart';
+import 'package:iread_flutter/bloc/drawing_bloc/drawing_states.dart';
 import 'package:iread_flutter/models/draw/polygon.dart';
 
 class DrawingBloc extends Bloc<BlocEvent, BlocState> {
@@ -14,13 +15,15 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
     throw UnimplementedError();
   }
 
-  addPolygon(Polygon polygon) => _polygons.add(polygon);
+  DrawSavedState savePolygon(Polygon polygon) {}
 
-  deletePolygon(int index) {
+  void addPolygon(Polygon polygon) => _polygons.add(polygon);
+
+  void deletePolygon(int index) {
     _polygons.removeAt(index);
   }
 
-  get polygons => _polygons;
+  List<Polygon> get polygons => _polygons;
   Polygon get selectedPolygon => _polygons[_selectedPolygonIndex];
   get selectedPolygonIndex => _selectedPolygonIndex;
 }

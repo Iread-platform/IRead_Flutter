@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:iread_flutter/config/http/httpOverrides.dart';
 import 'package:iread_flutter/config/routing/app_router.dart';
 import 'package:iread_flutter/services/permissions_service.dart';
+import 'package:iread_flutter/views/widgets/story/drawing_widget.dart';
 
 import 'config/themes/theme.dart';
 import 'models/story.dart';
 import 'models/user.dart';
-import 'views/Screens/login_screen.dart';
 
 void main() {
   // Override server certificate
@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
       title: 'Iread',
       onGenerateRoute: AppRouter().appRouterGenerator,
       home: Scaffold(
-        body: LoginScreen(),
+        body: DrawingWidget(),
       ),
     );
   }
