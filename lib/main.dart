@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:iread_flutter/config/http/httpOverrides.dart';
 import 'package:iread_flutter/config/routing/app_router.dart';
 import 'package:iread_flutter/services/permissions_service.dart';
+
 import 'config/themes/theme.dart';
+import 'models/story.dart';
 import 'models/user.dart';
 import 'views/Screens/login_screen.dart';
-import 'models/stories_section_model.dart';
-import 'models/story.dart';
 
 void main() {
   // Override server certificate
@@ -26,7 +26,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: mainTheme,
       title: 'Iread',
-      
       onGenerateRoute: AppRouter().appRouterGenerator,
       home: Scaffold(
         body: LoginScreen(),
@@ -34,18 +33,6 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-// ignore: todo
-// TODO clear static stories
-List<StoriesSectionModel> storiesSection = [
-  StoriesSectionModel('Continue Reading', [story, story, story, story]),
-  StoriesSectionModel('Continue Reading', [story, story, story, story]),
-  StoriesSectionModel('Continue Reading', [story, story, story, story]),
-  StoriesSectionModel('Continue Reading', [story, story, story, story]),
-  StoriesSectionModel('Continue Reading', [story, story, story, story]),
-  StoriesSectionModel('Continue Reading', [story, story, story, story]),
-  StoriesSectionModel('Continue Reading', [story, story, story, story]),
-];
 
 Story story = Story(
     title: 'Wood, Wire, Wings',
