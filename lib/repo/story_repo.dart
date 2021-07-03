@@ -104,7 +104,12 @@ class StoryRepo extends MainRepo {
       final url = '$searchByTagEndPoint/$tag';
       final jsonText =
           await apiService.request(requestType: RequestType.GET, endPoint: url);
-      final json = jsonDecode(jsonText);
+      final stories = jsonDecode(jsonText);
+      // Construct json data to consume.
+      var json = {};
+      json['stories'] = stories;
+      json['title'] = tag;
+
       return Data.success(StoriesSectionModel.fromJson(json));
     } catch (e) {
       return Data.handleException<StoriesSectionModel>(e);

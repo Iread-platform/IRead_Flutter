@@ -83,9 +83,10 @@ class _RequestHandlerState<T extends SuccessState,
                     return Stack(
                       alignment: Alignment.topRight,
                       children: [
-                        widget._onFailBuilder ??
-                            widget._onFailed ??
-                            _InfoWidget.failed(message: failState.message),
+                        widget._onFailBuilder != null
+                            ? widget._onFailBuilder(context, state)
+                            : widget._onFailed ??
+                                _InfoWidget.failed(message: failState.message),
                         widget._isDismissible
                             ? Positioned(
                                 top: 0,
@@ -141,7 +142,7 @@ class _InfoWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Theme.of(context).colorScheme.background,
+      color: Theme.of(context).colorScheme.surface,
       child: Center(
         child: Container(
           decoration: BoxDecoration(
