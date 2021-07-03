@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:iread_flutter/models/tag.dart' as TagModel;
 import 'package:iread_flutter/views/widgets/tag/tag.dart';
 
 class StoryRelatedTags extends StatelessWidget {
   final String _relatedTagsHeader = 'Related Tags';
-  final List<String> _tags;
+  final List<TagModel.Tag> _tags;
 
-  const StoryRelatedTags({List<String> tags, Key key})
+  const StoryRelatedTags({List<TagModel.Tag> tags, Key key})
       : _tags = tags,
         super(key: key);
 
@@ -38,7 +39,7 @@ class StoryRelatedTags extends StatelessWidget {
 
   List _buildTags(BuildContext context) => _tags
       .map((e) => Tag(
-            title: e,
+            title: e.title,
           ))
       .toList();
 }
