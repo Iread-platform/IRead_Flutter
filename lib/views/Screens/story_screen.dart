@@ -28,7 +28,7 @@ class _StoryScreenState extends State<StoryScreen> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<StoryscreenBloc>(context).add(FetchStoryPage());
+    BlocProvider.of<StoryscreenBloc>(context).add(FetchStoryPage(stotyID: 0));
   }
 
   @override
@@ -107,10 +107,17 @@ class _StoryScreenState extends State<StoryScreen> {
         children: [
           Container(
             width: w * 0.15,
-            child: Icon(
-              IReadIcons.arrow_back,
-              color: Colors.purple,
-              size: 40,
+            child: InkWell(
+              child: Icon(
+                IReadIcons.arrow_back,
+                color: Colors.purple,
+                size: 40,
+              ),
+              onTap: () {
+                bloc.pageController.previousPage(
+                    duration: Duration(milliseconds: 500),
+                    curve: Curves.linear);
+              },
             ),
           ),
           Container(
@@ -124,10 +131,17 @@ class _StoryScreenState extends State<StoryScreen> {
           ),
           Container(
             width: w * 0.15,
-            child: Icon(
-              IReadIcons.arrow,
-              color: Colors.purple,
-              size: 40,
+            child: InkWell(
+              child: Icon(
+                IReadIcons.arrow,
+                color: Colors.purple,
+                size: 40,
+              ),
+              onTap: () {
+                bloc.pageController.nextPage(
+                    duration: Duration(milliseconds: 500),
+                    curve: Curves.linear);
+              },
             ),
           ),
         ],
@@ -237,21 +251,38 @@ class _StoryScreenState extends State<StoryScreen> {
       }
     } catch (e) {}
   }
-  Widget requsetHandlerStory(){
+
+  Widget requsetHandlerStory() {
     return RequestHandler<SuccessState, StoryscreenBloc>(
-                    main: Container(),
-                    other: blocListener.storyPageData != null
-                        ? Container(
-                            alignment: Alignment.topLeft,
-                            child: HighlighText(
-                                storyString:
-                                    blocListener.storyPageData.data.story ?? "",
-                                words:
-                                    blocListener.storyPageData.data.words ?? [],
-                                marginX: w * 0.15,
-                                marginY: h * 0.44),
-                          )
-                        : Container(),
-                    bloc: bloc);
+        main: Container(),
+        other: blocListener.storyPageData != null
+            ? Container(
+                alignment: Alignment.topLeft,
+                child: PageView(
+                  controller: bloc.pageController,
+                  children: [
+                    HighlighText(
+                        storyString:
+                            blocListener.storyPageData.data.story ?? "",
+                        words: blocListener.storyPageData.data.words ?? [],
+                        marginX: w * 0.15,
+                        marginY: h * 0.44),
+                    HighlighText(
+                        storyString:
+                            blocListener.storyPageData.data.story ?? "",
+                        words: blocListener.storyPageData.data.words ?? [],
+                        marginX: w * 0.15,
+                        marginY: h * 0.44),
+                    HighlighText(
+                        storyString:
+                            blocListener.storyPageData.data.story ?? "",
+                        words: blocListener.storyPageData.data.words ?? [],
+                        marginX: w * 0.15,
+                        marginY: h * 0.44),
+                  ],
+                ),
+              )
+            : Container(),
+        bloc: bloc);
   }
 }

@@ -16,13 +16,13 @@ part 'storyscreen_state.dart';
 class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
   String url;
   AudioPlayer audioPlayer;
-  Duration duration;
-  Duration progress;
+  Duration duration, progress;
   double deviceWidth = 0.0, deviceHight = 0.0;
   int wordProgressIndex = 0;
   AudioPlayerState audioPlayerState;
   Data<StoryPage> storyPageData;
   StoryRepository storyRepository;
+  PageController pageController = PageController();
   StoryscreenBloc() : super(InitialState()) {
     audioPlayer = AudioPlayer();
     audioPlayerState = AudioPlayerState.PLAYING;
@@ -36,7 +36,7 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
     // ======== GetStoryEvent ==========
     if (event is FetchStoryPage) {
       yield LoadingState();
-      storyPageData = await storyRepository.fetchStoryPage();
+      storyPageData = await storyRepository.fetchStoryPage(event.stotyID);
       storyPageData.data.words = initWordEndLine(storyPageData.data.words);
       yield LoadedState(data: storyPageData);
       play(storyPageData.data.audioURL);
@@ -102,6 +102,9 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
       }
       if (event is HighlightWordEvent) {
         yield HighLightWordState(index: event.index);
+      } else if (event is NextPageEvent) {
+        pageController.nextPage(
+            duration: Duration(milliseconds: 1000), curve: Curves.linear);
       } else {}
     }
   }
@@ -127,6 +130,12 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
 
           break;
         }
+      }
+
+      if (int.parse(highLightIndex) == 25) {
+        // storyPageData.data.words.length - 1
+        highLightIndex = "-1";
+        this.add(NextPageEvent());
       }
 
       this.add(ChangeProgressEvent(progress));
