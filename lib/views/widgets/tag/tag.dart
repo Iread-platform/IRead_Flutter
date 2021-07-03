@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iread_flutter/config/routing/app_router.dart';
 import 'package:iread_flutter/config/themes/border_radius.dart';
 
 class Tag extends StatelessWidget {
@@ -18,7 +19,9 @@ class Tag extends StatelessWidget {
             .subtitle2
             .copyWith(color: Theme.of(context).colorScheme.primary),
       ),
-      onPressed: () {},
+      onPressed: () {
+        AppRouter().navigate(context, '/searchByTag/$_title');
+      },
       style: ElevatedButton.styleFrom(
           primary: Theme.of(context).colorScheme.surface,
           shape: RoundedRectangleBorder(

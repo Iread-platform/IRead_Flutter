@@ -34,7 +34,7 @@ class StoryDescription extends StatelessWidget {
             height: 6,
           ),
           Text(
-            _description,
+            _description ?? '',
             style: Theme.of(context)
                 .textTheme
                 .bodyText1
