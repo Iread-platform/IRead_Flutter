@@ -1,7 +1,9 @@
-import 'package:iread_flutter/repo/main_repo.dart';
+import 'package:iread_flutter/services/api_service.dart';
 import 'package:iread_flutter/utils/data.dart';
 
-class InteractionRepo extends MainRepo {
+class InteractionRepo {
+  final ApiService _apiService = ApiService();
+
   static InteractionRepo _instance = InteractionRepo._internal();
   factory InteractionRepo() => _instance;
   InteractionRepo._internal();

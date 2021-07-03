@@ -1,5 +1,7 @@
-import 'package:iread_flutter/services/api_service.dart';
+import 'package:iread_flutter/repo/interaction_repo.dart';
+import 'package:iread_flutter/repo/story_repo.dart';
 
 class MainRepo {
-  final ApiService apiService = ApiService();
+  final StoryRepo _storyRepo = StoryRepo();
+  final InteractionRepo _interactionRepo = InteractionRepo();
 }
