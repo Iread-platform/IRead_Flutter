@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:iread_flutter/models/draw/polygon.dart';
 import 'package:iread_flutter/services/api_service.dart';
 import 'package:iread_flutter/utils/data.dart';
@@ -12,7 +14,12 @@ class InteractionRepo {
   final String baseEndpoint = 'interaction';
   final String savePolygonEndpoint = 'polygon/add';
 
-  Data savePolygon(Polygon polygon) {
-    return Data.success(1);
+  Future<Data> savePolygon(Polygon polygon) async {
+    final response = await _apiService.request(
+        requestType: RequestType.POST,
+        endPoint: '$baseEndpoint/$savePolygonEndpoint',
+        parameter: polygon);
+
+    final json = jsonDecode(response);
   }
 }
