@@ -8,8 +8,8 @@ class AttachmentRepo {
 
   final String baseUrl = 'attachment';
 
-  /// Upload audio then store uploading data in the [UploadingAudio] model.
-  Future<UploadingAudio> saveAudio(String path, int storyId) async {
+  /// Upload audio then store uploading data in the [UploadingFile] model.
+  Future<UploadingFile> saveFile(String path, int storyId) async {
     final taskId = await _uploader.enqueue(
         url: '$baseUrl',
         files: [
@@ -19,6 +19,6 @@ class AttachmentRepo {
         showNotification: true,
         method: UploadMethod.POST);
 
-    return UploadingAudio(taskId, _uploader.result);
+    return UploadingFile(taskId, _uploader.result);
   }
 }

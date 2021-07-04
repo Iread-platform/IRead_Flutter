@@ -1,9 +1,9 @@
 import 'dart:async';
 
-/// [UploadingAudio] represent uploading audio data
-class UploadingAudio {
+/// [UploadingFile] represent uploading audio data
+class UploadingFile {
   final String taskId;
   final Stream stream;
 
-  UploadingAudio(this.taskId, this.stream);
+  UploadingFile(this.taskId, this.stream);
 }
