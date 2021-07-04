@@ -13,5 +13,5 @@ class MainRepo {
   final InteractionRepo _interactionRepo = InteractionRepo();
 
   /// Save a polygon with attachments.
-  Data savePolygon(Polygon polygon) {}
+  Data savePolygon(Polygon polygon, int storyId) {}
 }

@@ -1,7 +1,6 @@
 import 'package:flutter_uploader/flutter_uploader.dart';
-import 'package:iread_flutter/models/attachments/uploadingAudio.dart';
+import 'package:iread_flutter/models/attachments/uploading_audio.dart';
 import 'package:iread_flutter/services/api_service.dart';
-import 'package:iread_flutter/utils/data.dart';
 
 class AttachmentRepo {
   ApiService _apiService = ApiService();
@@ -9,12 +8,17 @@ class AttachmentRepo {
 
   final String baseUrl = 'attachment';
 
-  Future<Data<UploadingAudio>> saveAudio(String path) async {
-    final taskId = await _uploader.enqueue(url: '$baseUrl', files: [
-      FileItem(savedDir: '$path', filename: '$path', fieldname: 'file')
-    ]);
+  /// Upload audio then store uploading data in the [UploadingAudio] model.
+  Future<UploadingAudio> saveAudio(String path, int storyId) async {
+    final taskId = await _uploader.enqueue(
+        url: '$baseUrl',
+        files: [
+          FileItem(savedDir: '$path', filename: '$path', fieldname: 'file'),
+        ],
+        data: {"storyId": storyId.toString()},
+        showNotification: true,
+        method: UploadMethod.POST);
 
-    return Data<UploadingAudio>.success(
-        UploadingAudio(taskId, _uploader.result));
+    return UploadingAudio(taskId, _uploader.result);
   }
 }

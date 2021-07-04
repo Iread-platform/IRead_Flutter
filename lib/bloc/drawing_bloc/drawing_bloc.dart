@@ -7,6 +7,8 @@ import 'package:iread_flutter/repo/main_repo.dart';
 import 'package:iread_flutter/utils/data.dart';
 
 class DrawingBloc extends Bloc<BlocEvent, BlocState> {
+  // TODO replace dummy story id;
+  final storyId = 1;
   MainRepo _mainRepo = MainRepo();
   List<Polygon> _polygons = [];
   int _selectedPolygonIndex = 0;
@@ -24,7 +26,7 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
   }
 
   PolygonSavedState _savePolygon(Polygon polygon) {
-    Data data = _mainRepo.savePolygon(polygon);
+    Data data = _mainRepo.savePolygon(polygon, storyId);
     selectedPolygon.saved = true;
     return PolygonSavedState(data);
   }
