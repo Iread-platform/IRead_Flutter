@@ -27,6 +27,7 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
   PolygonSavedState _savePolygon(Polygon polygon) {
     _mainRepo.savePolygon(polygon, storyId).listen((event) {
       selectedPolygon.saved = true;
+      print('Listening to rep $event');
     });
 
     return PolygonSavedState(null);

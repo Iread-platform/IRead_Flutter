@@ -1,4 +1,6 @@
-import 'package:flutter_uploader/flutter_uploader.dart';
+import 'dart:convert';
+
+import 'package:iread_flutter/models/attachment/attachment.dart';
 import 'package:iread_flutter/models/draw/polygon.dart';
 import 'package:iread_flutter/repo/attachment_repo.dart';
 import 'package:iread_flutter/repo/interaction_repo.dart';
@@ -17,17 +19,26 @@ class MainRepo {
 
   /// Save a polygon with attachments.
   Stream<Data> savePolygon(Polygon polygon, int storyId) async* {
-    final uploadingFileData =
-        await _attachmentRepo.saveFile(polygon.localRecordPath, storyId);
-    // Handle upload result
-    uploadingFileData.stream.listen((result) {
-      UploadTaskResponse response = result;
+    try {
+      final stream = await _saveAttachment(polygon, storyId);
+      stream.listen((event) {
+        final res = event.response;
+        final json = jsonDecode(res);
 
-      print('File upload result is ${response.response}');
-    });
-
-    try {} catch (e) {
+        Attachment.fromJson(json);
+      });
+    } catch (e) {
       Data.handleException(e);
     }
   }
+
+  // Store file then return stream
+  Future<Stream> _saveAttachment(Polygon polygon, int storyId) async {
+    final uploadingFileData =
+        await _attachmentRepo.saveFile(polygon.localRecordPath, storyId);
+    // Handle upload result
+    return uploadingFileData.stream;
+  }
+
+  Future<Stream> _savePolygon() {}
 }
