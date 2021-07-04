@@ -13,7 +13,7 @@ class Attachment extends Model {
     _downloadUrl = json['downloadUrl'];
     _type = json['type'];
     _extension = json['extension'];
-    _size = json['size'];
+    _size = json['size'].toDouble();
     _uploadDate = DateTime.parse(json['uploadDate']);
   }
 }
