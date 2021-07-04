@@ -1,3 +1,4 @@
+import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:iread_flutter/models/draw/polygon.dart';
 import 'package:iread_flutter/repo/attachment_repo.dart';
 import 'package:iread_flutter/repo/interaction_repo.dart';
@@ -20,8 +21,11 @@ class MainRepo {
         await _attachmentRepo.saveFile(polygon.localRecordPath, storyId);
     // Handle upload result
     uploadingFileData.stream.listen((result) {
-      print('File upload result is $result.');
+      UploadTaskResponse response = result;
+
+      print('File upload result is ${response.response}');
     });
+
     try {} catch (e) {
       Data.handleException(e);
     }
