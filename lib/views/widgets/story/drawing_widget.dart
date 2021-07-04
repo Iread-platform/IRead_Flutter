@@ -378,7 +378,8 @@ class _DrawingWidgetState extends State<DrawingWidget> {
             break;
           case StopRecordingState:
             {
-              path = (state as RecordState).recordPath;
+              _drawBloc.selectedPolygon.localRecordPath =
+                  path = (state as RecordState).recordPath;
               return DropdownButton(
                 hint: Icon(IReadIcons.microphone),
                 items: [

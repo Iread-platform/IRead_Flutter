@@ -4,7 +4,6 @@ import 'package:iread_flutter/bloc/drawing_bloc/drawing_events.dart';
 import 'package:iread_flutter/bloc/drawing_bloc/drawing_states.dart';
 import 'package:iread_flutter/models/draw/polygon.dart';
 import 'package:iread_flutter/repo/main_repo.dart';
-import 'package:iread_flutter/utils/data.dart';
 
 class DrawingBloc extends Bloc<BlocEvent, BlocState> {
   // TODO replace dummy story id;
@@ -26,9 +25,11 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
   }
 
   PolygonSavedState _savePolygon(Polygon polygon) {
-    Data data = _mainRepo.savePolygon(polygon, storyId);
-    selectedPolygon.saved = true;
-    return PolygonSavedState(data);
+    _mainRepo.savePolygon(polygon, storyId).listen((event) {
+      selectedPolygon.saved = true;
+    });
+
+    return PolygonSavedState(null);
   }
 
   void addPolygon(Polygon polygon) => _polygons.add(polygon);
