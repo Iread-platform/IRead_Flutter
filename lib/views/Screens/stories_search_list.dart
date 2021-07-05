@@ -30,7 +30,9 @@ class _StoriesSearchListState extends State<StoriesSearchList> {
   @override
   Widget build(BuildContext context) {
     return RequestHandler<SearchStoriesByTagState, SearchStoriesByTagBloc>(
-        main: Container(),
+        main: Container(
+          color: Theme.of(context).colorScheme.surface,
+        ),
         onSuccess: (context, data) {
           WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
             _init(context, data.data);

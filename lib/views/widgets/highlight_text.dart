@@ -42,8 +42,11 @@ class _HighlighTextState extends State<HighlighText> {
                             .highLightIndex
                             .toString() ==
                         i.toString()
-                    ? TextStyle(backgroundColor: Colors.purple)
-                    : TextStyle(),
+                    ? TextStyle(
+                        fontSize: 20,
+                        backgroundColor: Colors.red,
+                        color: Colors.white)
+                    : TextStyle(fontSize: 20),
               )
           ],
         ),

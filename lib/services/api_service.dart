@@ -1,14 +1,16 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'dart:convert';
-import 'settings.dart' as appSettings;
 import 'package:iread_flutter/utils/exception.dart';
+
+import 'settings.dart' as appSettings;
 
 enum RequestType { GET, POST, DELETE }
 
 class ApiService {
   static final ApiService _instance = ApiService._internal();
-  final String baseUrl = "http://codavia-001-site1.dtempurl.com/api";
+  final String baseUrl = "https://46.227.254.20:5020/api/iread";
 
   factory ApiService() => _instance;
 

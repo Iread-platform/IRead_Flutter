@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iread_flutter/models/tag.dart';
 
 import 'model.dart';
 
@@ -14,9 +15,8 @@ class Story extends Model {
   Color _color;
   int _flippedPages;
   double _readingTime;
-  List<String> _keyWords;
   double _rating;
-  List<String> _tags;
+  List<Tag> _tags;
 
   Story(
       {@required String title,
@@ -29,8 +29,7 @@ class Story extends Model {
       double progress,
       int flippedPages,
       double readingTime,
-      List<String> keyWords,
-      List<String> tags,
+      List<Tag> tags,
       double rating,
       int pages,
       int id})
@@ -44,7 +43,6 @@ class Story extends Model {
         _flippedPages = flippedPages,
         _readingTime = readingTime,
         _progress = progress,
-        _keyWords = keyWords,
         _rating = rating,
         _pages = pages,
         _tags = tags,
@@ -56,22 +54,29 @@ class Story extends Model {
     _description = json['description'];
     _storyLevel = json['storyLevel'];
     _writer = json['writer'];
-    _rating = json['rating'];
-    _color = Color(int.parse(json['color'], radix: 16));
-    _imageUrl = json['imageUrl'];
+    _rating = json['rating']?.toDouble();
+    _color = json['color'] != null
+        ? Color(int.parse(json['color'], radix: 16))
+        : Colors.lightGreenAccent;
+    _imageUrl = json['imageUrl'] ??
+        'https://images.unsplash.com/photo-1553060146-71667aa3f223?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80';
     _flippedPages = json['flippedPages'];
     _readingTime = json['readingTime'];
     _progress = json['progress'];
     _pages = json['pages'];
 
-    _keyWords = [];
-    for (int i = 0; i < json['keyWords'].length; i++) {
-      _keyWords.add(json['keyWords'][i]);
+    if (json['keyWords'] != null) {
+      _tags = [];
+      for (int i = 0; i < json['keyWords'].length; i++) {
+        _tags.add(Tag.fromJson(json['keyWords'][i]));
+      }
     }
 
-    _tags = [];
-    for (int i = 0; i < json['tags'].length; i++) {
-      _tags.add(json['tags'][i]);
+    if (json['tags'] != null) {
+      _tags = [];
+      for (int i = 0; i < json['tags'].length; i++) {
+        _tags.add(json['tags'][i]);
+      }
     }
   }
 

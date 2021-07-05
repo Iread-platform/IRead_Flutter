@@ -195,6 +195,7 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
       currentString = currentString + words[i].word + " ";
       size = calcTextSize(currentString, TextStyle(fontSize: 20));
       // print("${size.width} >= ${deviceWidth * 0.7}");
+      // 0.7 is text continer width
       if (size.width >= (deviceWidth * 0.7)) {
         // print("=================== $currentString ========================");
         words[i - 1].newLine = true;
