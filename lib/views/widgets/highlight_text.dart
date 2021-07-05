@@ -59,17 +59,25 @@ class _HighlighTextState extends State<HighlighText> {
         textAlign: TextAlign.center,
         showCursor: true,
         onSelectionChanged: (selection, cause) {
-          String textSelected =
-              widget.storyString.substring(selection.start, selection.end);
-          if (cause == SelectionChangedCause.longPress) {
+          try {
             BlocProvider.of<StoryscreenBloc>(context).add(PauseEvent());
-          } else {
-            BlocProvider.of<StoryscreenBloc>(context)
-                .add(SeekToWordEvent(index: selection.start));
+
+            String textSelected =
+                widget.storyString.substring(selection.start, selection.end);
+            // ================ on word click =>> seek to word ===============
+            // if (cause == SelectionChangedCause.longPress) {
+            //   BlocProvider.of<StoryscreenBloc>(context).add(PauseEvent());
+            // } else {
+            //   BlocProvider.of<StoryscreenBloc>(context)
+            //       .add(SeekToWordEvent(index: selection.start));
+            // }
+            //===============================================================
+            Provider.of<TextSelectionProvider>(context, listen: false)
+                .changeSelection(
+                    selection: selection, textSelected: textSelected);
+          } catch (e) {
+            print("onSelectionChanged EXCEPTION ");
           }
-          Provider.of<TextSelectionProvider>(context, listen: false)
-              .changeSelection(
-                  selection: selection, textSelected: textSelected);
         },
       ),
     );

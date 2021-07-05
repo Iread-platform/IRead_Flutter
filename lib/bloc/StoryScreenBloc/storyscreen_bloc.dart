@@ -162,6 +162,7 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
 
   void seek(Duration duration) async {
     await audioPlayer.seek(duration);
+   
   }
 
   String highLightIndex;
