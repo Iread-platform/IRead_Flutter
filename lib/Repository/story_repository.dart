@@ -17,8 +17,22 @@ class StoryRepository {
   response: 
     audio , text , image, 
   */
+  /*
+   =======interAction========
+   {
+    "commentType": "string",
+    "value": "string",
+    "interaction": {
+      "storyId": 0,
+      "studentId": "string",
+      "pageId": 0
+    },
+    "wordTimesTamp": "string",
+    "word": "string"
+  }
+  */
 
-  Future<Data<StoryPage>> fetchStoryPage() async {
+  Future<Data<StoryPage>> fetchStoryPage(int id) async {
     // try {
     // final responseText = await apiService.request(
     //     requestType: RequestType.GET, endPoint: "", parameter: "");

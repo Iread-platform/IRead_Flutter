@@ -2,7 +2,10 @@ part of 'storyscreen_bloc.dart';
 
 abstract class StoryscreenEvent extends BlocEvent {}
 
-class FetchStoryPage extends StoryscreenEvent {}
+class FetchStoryPage extends StoryscreenEvent {
+  int stotyID;
+  FetchStoryPage({this.stotyID});
+}
 
 class PlayEvent extends StoryscreenEvent {
   String url;
@@ -34,6 +37,10 @@ class SeekToWordEvent extends StoryscreenEvent {
   int index;
   SeekToWordEvent({this.index});
 }
+
+class NextPageEvent extends StoryscreenEvent {}
+
+class PreviousPageEvent extends StoryscreenEvent {}
 
 class HighlightWordEvent extends StoryscreenEvent {
   int index;

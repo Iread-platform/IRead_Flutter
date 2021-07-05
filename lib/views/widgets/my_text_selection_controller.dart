@@ -39,10 +39,18 @@ class MyTextSelectionControls extends TextSelectionControls {
       Offset lastSecondaryTapDownPosition) {
     return Consumer<TextSelectionProvider>(
       builder: (context, cart, child) {
+        print("scroll offset :  ${Provider.of<TextSelectionProvider>(context, listen: false).scrollController.offset}");
         return TextSelectionToolbar(
-            anchorAbove: Offset(position.dx + marginX, position.dy + marginY),
-            anchorBelow: Offset(0, 0),
+            anchorAbove: Offset(
+                position.dx + marginX,
+                position.dy +
+                    marginY -
+                    Provider.of<TextSelectionProvider>(context, listen: false)
+                        .scrollController
+                        .offset),
+            anchorBelow: Offset(-140, -140),
             toolbarBuilder: (context, _) {
+              print(position.dy);
               return FittedBox(
                 child: Container(
                   decoration: BoxDecoration(
@@ -63,6 +71,7 @@ class MyTextSelectionControls extends TextSelectionControls {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: popupMenu(
                         context: context,
+                        delegate: delegate,
                         isWord: cart.textSelectedIsWord,
                         highlighted: cart.highlighted,
                         playButton: cart.playButton,
@@ -74,7 +83,7 @@ class MyTextSelectionControls extends TextSelectionControls {
 
               // return (position.dy > 30 && position.dy < 250)
               //     ?
-              //     : Container();
+              // : Container();
             },
             children: [Container()]);
       },
@@ -92,7 +101,11 @@ class MyTextSelectionControls extends TextSelectionControls {
   }
 
   List<Widget> popupMenu(
-      {context, bool isWord, bool highlighted, bool playButton}) {
+      {context,
+      bool isWord,
+      bool highlighted,
+      bool playButton,
+      TextSelectionDelegate delegate}) {
     // If a word where selected, There will be two options: Vocabulary and highlight.
     if (isWord && !highlighted) {
       return [
@@ -102,7 +115,9 @@ class MyTextSelectionControls extends TextSelectionControls {
             "Shading",
             style: TextStyle(color: Colors.purple, fontWeight: FontWeight.bold),
           ),
-          onPressed: () {},
+          onPressed: () {
+            delegate.hideToolbar();
+          },
         ),
         TextSelectionToolbarTextButton(
           padding: EdgeInsets.symmetric(horizontal: 10),
@@ -110,7 +125,9 @@ class MyTextSelectionControls extends TextSelectionControls {
             "Vocabulary",
             style: TextStyle(color: Colors.purple, fontWeight: FontWeight.bold),
           ),
-          onPressed: () {},
+          onPressed: () {
+            delegate.hideToolbar();
+          },
         ),
         TextSelectionToolbarTextButton(
           padding: EdgeInsets.symmetric(horizontal: 10),
@@ -120,9 +137,11 @@ class MyTextSelectionControls extends TextSelectionControls {
           ),
           onPressed: () {
             BlocProvider.of<StoryscreenBloc>(context).add(SeekToWordEvent(
-                index: Provider.of<TextSelectionProvider>(context , listen: false)
-                    .selection
-                    .start));
+                index:
+                    Provider.of<TextSelectionProvider>(context, listen: false)
+                        .selection
+                        .start));
+            delegate.hideToolbar();
           },
         )
       ];
@@ -145,7 +164,9 @@ class MyTextSelectionControls extends TextSelectionControls {
             "Vocabulary",
             style: TextStyle(color: Colors.purple, fontWeight: FontWeight.bold),
           ),
-          onPressed: () {},
+          onPressed: () {
+            delegate.hideToolbar();
+          },
         ),
         TextSelectionToolbarTextButton(
           padding: EdgeInsets.symmetric(horizontal: 10),
@@ -153,7 +174,14 @@ class MyTextSelectionControls extends TextSelectionControls {
             IReadIcons.play,
             color: Colors.purple,
           ),
-          onPressed: () {},
+          onPressed: () {
+            BlocProvider.of<StoryscreenBloc>(context).add(SeekToWordEvent(
+                index:
+                    Provider.of<TextSelectionProvider>(context, listen: false)
+                        .selection
+                        .start));
+            delegate.hideToolbar();
+          },
         )
       ];
     }
@@ -166,7 +194,9 @@ class MyTextSelectionControls extends TextSelectionControls {
             "Shading",
             style: TextStyle(color: Colors.purple, fontWeight: FontWeight.bold),
           ),
-          onPressed: () {},
+          onPressed: () {
+            delegate.hideToolbar();
+          },
         ),
         TextSelectionToolbarTextButton(
           padding: EdgeInsets.symmetric(horizontal: 10),
@@ -174,7 +204,14 @@ class MyTextSelectionControls extends TextSelectionControls {
             IReadIcons.play,
             color: Colors.purple,
           ),
-          onPressed: () {},
+          onPressed: () {
+            BlocProvider.of<StoryscreenBloc>(context).add(SeekToWordEvent(
+                index:
+                    Provider.of<TextSelectionProvider>(context, listen: false)
+                        .selection
+                        .start));
+            delegate.hideToolbar();
+          },
         )
       ];
     }
@@ -196,7 +233,14 @@ class MyTextSelectionControls extends TextSelectionControls {
             IReadIcons.play,
             color: Colors.purple,
           ),
-          onPressed: () {},
+          onPressed: () {
+            BlocProvider.of<StoryscreenBloc>(context).add(SeekToWordEvent(
+                index:
+                    Provider.of<TextSelectionProvider>(context, listen: false)
+                        .selection
+                        .start));
+            delegate.hideToolbar();
+          },
         )
       ];
     }
