@@ -29,4 +29,16 @@ class Polygon extends Model {
   double get maxY => _maxY;
 
   List<Offset> get points => _points;
+
+  List<Map<String, dynamic>> pointsToJson() {
+    List<Map<String, dynamic>> jsonPoints = [];
+
+    points.forEach((element) {
+      final point = {"x": element.dx, "Y": element.dy};
+
+      jsonPoints.add(point);
+    });
+
+    return jsonPoints;
+  }
 }

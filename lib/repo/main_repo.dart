@@ -20,7 +20,7 @@ class MainRepo {
 
   /// Save a polygon with attachments.
   Stream<Data> savePolygon(Polygon polygon, int storyId) async* {
-    savePolygon(polygon, storyId);
+    _savePolygon(polygon, storyId);
     yield Data.fail('Fail');
 
     try {
@@ -49,7 +49,7 @@ class MainRepo {
     Interaction interaction = Interaction(studentId, 0, storyId);
 
     Map<String, dynamic> json = {
-      "points": jsonEncode(polygon.points),
+      "points": jsonEncode(polygon.pointsToJson()),
       "interaction": interaction,
       "audioId": 0,
       "comment": polygon.comment
