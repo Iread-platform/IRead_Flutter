@@ -1,10 +1,15 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:iread_flutter/bloc/StoryScreenBloc/storyscreen_bloc.dart';
+import 'package:iread_flutter/bloc/text_selection_provider.dart';
 import 'package:iread_flutter/config/routing/app_router.dart';
 import 'package:iread_flutter/config/themes/theme.dart';
 import 'package:iread_flutter/services/permissions_service.dart';
+import 'package:iread_flutter/views/Screens/story_screen.dart';
 import 'package:iread_flutter/views/widgets/vocabulary_dialog.dart';
+import 'package:provider/provider.dart';
 
 import 'config/http/httpOverrides.dart';
 import 'models/stories_section_model.dart';
@@ -15,7 +20,21 @@ void main() {
   // Override server certificate
   HttpOverrides.global = new IreadHttpOverrides();
 
-  AppRouter().init().then((value) => runApp(MyApp()));
+  AppRouter().init().then(
+        (value) => runApp(
+          MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) => StoryscreenBloc(),
+              ),
+            ],
+            child: ChangeNotifierProvider(
+              create: (context) => TextSelectionProvider(),
+              child: MyApp(),
+            ),
+          ),
+        ),
+      );
 }
 
 // ignore: must_be_immutable
@@ -29,7 +48,7 @@ class MyApp extends StatelessWidget {
       theme: mainTheme,
       onGenerateRoute: AppRouter().appRouterGenerator,
       home: Scaffold(
-        body: VocabularyDialog(),
+        body: StoryScreen(),
       ),
     );
   }

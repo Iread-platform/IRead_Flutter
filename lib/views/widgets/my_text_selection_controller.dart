@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iread_flutter/bloc/StoryScreenBloc/storyscreen_bloc.dart';
 import 'package:iread_flutter/bloc/text_selection_provider.dart';
 import 'package:iread_flutter/utils/i_read_icons.dart';
+import 'package:iread_flutter/views/widgets/vocabulary_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:speech_bubble/speech_bubble.dart';
 
@@ -110,7 +111,9 @@ class MyTextSelectionControls extends TextSelectionControls {
             "Vocabulary",
             style: TextStyle(color: Colors.purple, fontWeight: FontWeight.bold),
           ),
-          onPressed: () {},
+          onPressed: () {
+            return VocabularyDialog.VocDialog(context: context);
+          },
         ),
         TextSelectionToolbarTextButton(
           padding: EdgeInsets.symmetric(horizontal: 10),
@@ -120,9 +123,10 @@ class MyTextSelectionControls extends TextSelectionControls {
           ),
           onPressed: () {
             BlocProvider.of<StoryscreenBloc>(context).add(SeekToWordEvent(
-                index: Provider.of<TextSelectionProvider>(context , listen: false)
-                    .selection
-                    .start));
+                index:
+                    Provider.of<TextSelectionProvider>(context, listen: false)
+                        .selection
+                        .start));
           },
         )
       ];
@@ -145,7 +149,9 @@ class MyTextSelectionControls extends TextSelectionControls {
             "Vocabulary",
             style: TextStyle(color: Colors.purple, fontWeight: FontWeight.bold),
           ),
-          onPressed: () {},
+          onPressed: () {
+            return VocabularyDialog.VocDialog(context: context);
+          },
         ),
         TextSelectionToolbarTextButton(
           padding: EdgeInsets.symmetric(horizontal: 10),
