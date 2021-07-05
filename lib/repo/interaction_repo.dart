@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:iread_flutter/models/draw/polygon.dart';
 import 'package:iread_flutter/models/interaction/interaction.dart';
 import 'package:iread_flutter/services/api_service.dart';
+import 'package:iread_flutter/utils/data.dart';
 
 class InteractionRepo {
   final ApiService _apiService = ApiService();
@@ -14,7 +15,7 @@ class InteractionRepo {
   final String baseEndpoint = 'interaction';
   final String savePolygonEndpoint = 'polygon/add';
 
-  Future<Stream> savePolygon(Polygon polygon, int storyId) async {
+  Future<Data> savePolygon(Polygon polygon, int storyId) async {
     String studentId;
     Interaction interaction = Interaction(studentId, 0, storyId);
 
@@ -24,5 +25,18 @@ class InteractionRepo {
       "audioId": 0,
       "comment": polygon.comment
     };
+
+    try {
+      final response = await _apiService.request(
+          requestType: RequestType.POST,
+          endPoint: '$baseEndpoint/$savePolygonEndpoint',
+          parameter: json);
+      final jsonRes = jsonDecode(response);
+      print('Json response is $jsonRes');
+
+      return Data.success(jsonRes);
+    } catch (e) {
+      Data.handleException(e);
+    }
   }
 }
