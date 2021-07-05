@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:iread_flutter/models/attachment/attachment.dart';
 import 'package:iread_flutter/models/draw/polygon.dart';
-import 'package:iread_flutter/models/interaction/interaction.dart';
 import 'package:iread_flutter/repo/attachment_repo.dart';
 import 'package:iread_flutter/repo/interaction_repo.dart';
 import 'package:iread_flutter/repo/story_repo.dart';
@@ -21,7 +20,7 @@ class MainRepo {
   /// Save a polygon with attachments.
   Stream<Data> savePolygon(Polygon polygon, int storyId) async* {
     try {
-      _savePolygon(polygon, storyId);
+      _interactionRepo.savePolygon(polygon, storyId);
 
       if (polygon.localRecordPath != null) {
         final stream = await _saveAttachment(polygon, storyId);
@@ -43,19 +42,5 @@ class MainRepo {
         await _attachmentRepo.saveFile(polygon.localRecordPath, storyId);
     // Handle upload result
     return uploadingFileData.stream;
-  }
-
-  Future<Stream> _savePolygon(Polygon polygon, int storyId) async {
-    String studentId;
-    Interaction interaction = Interaction(studentId, 0, storyId);
-
-    Map<String, dynamic> json = {
-      "points": jsonEncode(polygon.pointsToJson()),
-      "interaction": interaction.json,
-      "audioId": 0,
-      "comment": polygon.comment
-    };
-
-    print('Polygon data ${jsonEncode(json)}');
   }
 }
