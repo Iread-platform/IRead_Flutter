@@ -4,10 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iread_flutter/bloc/StoryScreenBloc/storyscreen_bloc.dart';
 import 'package:iread_flutter/bloc/base/base_bloc.dart';
+import 'package:iread_flutter/bloc/text_selection_provider.dart';
 import 'package:iread_flutter/utils/i_read_icons.dart';
 import 'package:iread_flutter/views/Widgets/highlight_text.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:iread_flutter/views/Widgets/shared/request_handler.dart';
+import 'package:provider/provider.dart';
 
 class StoryScreen extends StatefulWidget {
   @override
@@ -19,58 +21,63 @@ class _StoryScreenState extends State<StoryScreen> {
   var w;
   var h;
   var bloc;
-  var blocListener;
-
+  GlobalKey stoyryKey = GlobalKey();
+  //============== Fetch Story Data =========================
   @override
   void initState() {
     super.initState();
-
-    BlocProvider.of<StoryscreenBloc>(context).add(FetchStoryPage());
+    BlocProvider.of<StoryscreenBloc>(context).add(FetchStoryPage(stotyID: 0));
   }
 
+  //=============== Build screen (Header - textStory - player) ===================
   @override
   Widget build(BuildContext context) {
+    print("re build");
     w = MediaQuery.of(context).size.width;
     h = MediaQuery.of(context).size.height;
-
-    bloc = BlocProvider.of<StoryscreenBloc>(context);
-    blocListener = BlocProvider.of<StoryscreenBloc>(context, listen: true);
-    return Column(
-      children: [
-        header(), // HomeButton - backArrow - ImageStory
-        textStory(), // Selectable text Story
-        player(), // progress - playPauseButton
-      ],
+    print(w);
+    print(h);
+    bloc = BlocProvider.of<StoryscreenBloc>(context, listen: false);
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          header(), // HomeButton - backArrow - ImageStory
+          textStory(), // Selectable text Story
+          player(), // progress - playPauseButton
+        ],
+      ),
     );
   }
 
+  //============ header =============
   Widget header() {
     return Container(
       height: h * 0.45,
       child: Stack(
+        alignment: Alignment.bottomCenter,
         children: [
+          // ========= Story Image ==============
           Container(
-            height: h * 0.45,
+            alignment: Alignment.bottomCenter,
+            height: (h * 0.45),
             child: Image.network(
               "https://www.jotform.com/blog/wp-content/uploads/2018/07/photos-with-story-featured-15.jpg",
-              alignment: Alignment.bottomCenter,
+              alignment: Alignment.topLeft,
             ),
           ),
+          // ========== curve_top_right ==============
           Transform.translate(
-            offset: Offset(200, -140),
+            offset: Offset(w * 0.3, -h * 0.2),
             child: Container(
-              child: Container(
-                child: Transform.scale(
-                  scale: 1.2,
-                  child: SvgPicture.asset(
-                    "assets/images/shared/curve_top_right.svg",
-                    color: Colors.orange[200],
-                    alignment: Alignment.topLeft,
-                  ),
-                ),
+              alignment: Alignment.topRight,
+              child: SvgPicture.asset(
+                "assets/images/shared/curve_top_right.svg",
+                color: Colors.orange[200],
+                alignment: Alignment.topLeft,
               ),
             ),
           ),
+          // ========== arrow Icon ==============
           Container(
             height: h * 0.45,
             margin: EdgeInsets.all(40),
@@ -81,14 +88,15 @@ class _StoryScreenState extends State<StoryScreen> {
               color: Colors.purple,
             ),
           ),
+          // ========== home Icon ==============
           Container(
-            height: 120,
-            width: 120,
-            alignment: Alignment.center,
+            height: h * 0.45,
+            margin: EdgeInsets.all(40),
+            alignment: Alignment.topLeft,
             child: Icon(
-              IReadIcons.home,
+              Icons.home,
               color: Colors.purple,
-              size: 40,
+              size: 60,
             ),
           )
         ],
@@ -96,6 +104,7 @@ class _StoryScreenState extends State<StoryScreen> {
     );
   }
 
+  // ===================== Text Story ===============
   Widget textStory() {
     return Container(
       height: h * 0.30,
@@ -103,42 +112,46 @@ class _StoryScreenState extends State<StoryScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            flex: 1,
-            child: Container(
+          // ========= arrow Icon to go previous page =============
+          Container(
+            width: w * 0.15,
+            child: InkWell(
               child: Icon(
                 IReadIcons.arrow_back,
                 color: Colors.purple,
                 size: 40,
               ),
-            ),
-          ),
-          Expanded(
-            flex: 5,
-            child: BlocBuilder<StoryscreenBloc, BlocState>(
-              builder: (context, state) {
-                return RequestHandler<SuccessState, StoryscreenBloc>(
-                    main: Container(),
-                    other: blocListener.storyPageData != null
-                        ? HighlighText(
-                            storyString:
-                                blocListener.storyPageData.data.story ?? "",
-                            words: blocListener.storyPageData.data.words ?? [],
-                            marginX: w * 0.15,
-                            marginY: h * 0.45 - 10)
-                        : Container(),
-                    bloc: bloc);
+              onTap: () {
+                bloc.pageController.previousPage(
+                    duration: Duration(milliseconds: 500),
+                    curve: Curves.linear);
               },
             ),
           ),
-          Expanded(
-            flex: 1,
-            child: Container(
+          // =========== Bloc builder Story Text Data ===============
+          Container(
+            width: w * 0.7,
+            child: BlocBuilder<StoryscreenBloc, BlocState>(
+              builder: (context, state) {
+                scroll();
+                return requsetHandlerStory();
+              },
+            ),
+          ),
+          // ========= arrow Icon to go next page =============
+          Container(
+            width: w * 0.15,
+            child: InkWell(
               child: Icon(
                 IReadIcons.arrow,
                 color: Colors.purple,
                 size: 40,
               ),
+              onTap: () {
+                bloc.pageController.nextPage(
+                    duration: Duration(milliseconds: 500),
+                    curve: Curves.linear);
+              },
             ),
           ),
         ],
@@ -146,23 +159,27 @@ class _StoryScreenState extends State<StoryScreen> {
     );
   }
 
+  // ============== player ( Progress - play Pause Icon ) ===============
   Widget player() {
     return Container(
         height: h * 0.25,
         child: Stack(
-          alignment: Alignment.center,
           children: [
+            //================= Curve Bottom Left ===============
             Transform.translate(
-              offset: Offset(-w * 0.5, h * 0.1),
-              child: Transform.scale(
-                scale: 1.6,
-                child: SvgPicture.asset(
-                  "assets/images/shared/curve_bottom_left.svg",
-                  color: Colors.pink[200],
-                  alignment: Alignment.topRight,
+              offset: Offset(-w * 0.2, h * 0.2),
+              child: Container(
+                alignment: Alignment.bottomLeft,
+                child: Transform.scale(
+                  scale: 1.6,
+                  child: SvgPicture.asset(
+                    "assets/images/shared/curve_bottom_left.svg",
+                    color: Colors.pink[200],
+                  ),
                 ),
               ),
             ),
+            //================= Player ===============
             BlocBuilder<StoryscreenBloc, BlocState>(
               builder: (context, state) {
                 if (state is LoadingState) {
@@ -171,11 +188,13 @@ class _StoryScreenState extends State<StoryScreen> {
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      // ========= progress =============
                       Container(
                         width: w * 0.8,
                         alignment: Alignment.center,
                         child: progress(),
                       ),
+                      // ========= Play Pause Icon =============
                       Container(
                         alignment: Alignment.bottomCenter,
                         child: InkWell(
@@ -185,13 +204,13 @@ class _StoryScreenState extends State<StoryScreen> {
                               return Icon(
                                 IReadIcons.play,
                                 color: Colors.purple,
-                                size: 70,
+                                size: 40,
                               );
                             } else {
                               return Icon(
                                 Icons.pause,
                                 color: Colors.purple,
-                                size: 70,
+                                size: 40,
                               );
                             }
                           }),
@@ -230,7 +249,70 @@ class _StoryScreenState extends State<StoryScreen> {
             duration,
           ),
         );
+        print(bloc.storyPageData.data.words[int.parse(bloc.highLightIndex)]
+            .scrollHight);
+        Provider.of<TextSelectionProvider>(context, listen: false)
+            .scrollController
+            .animateTo(
+                bloc.storyPageData.data.words[int.parse(bloc.highLightIndex)]
+                    .scrollHight,
+                duration: Duration(milliseconds: 500),
+                curve: Curves.linear);
       },
+    );
+  }
+
+  // this funcation call every 200 millisecound if word is hideen => scroll
+  void scroll() {
+    try {
+      if (bloc
+          .storyPageData.data.words[int.parse(bloc.highLightIndex)].newLine) {
+        Provider.of<TextSelectionProvider>(context, listen: false)
+            .scrollController
+            .animateTo(
+                bloc.storyPageData.data.words[int.parse(bloc.highLightIndex)]
+                    .scrollHight,
+                duration: Duration(milliseconds: 500),
+                curve: Curves.linear);
+      }
+    } catch (e) {
+      print("scroll to word EXCEPTION ");
+    }
+  }
+
+  Widget requsetHandlerStory() {
+    return RequestHandler<SuccessState, StoryscreenBloc>(
+        main: Container(),
+        onSuccess: (context, data) {
+          return bloc.storyPageData != null ? stoyryPages() : Container();
+        },
+        other: bloc.storyPageData != null ? stoyryPages() : Container(),
+        bloc: bloc);
+  }
+
+  Widget stoyryPages() {
+    return Container(
+      alignment: Alignment.topLeft,
+      child: PageView(
+        controller: bloc.pageController,
+        children: [
+          HighlighText(
+              storyString: bloc.storyPageData.data.story ?? "",
+              words: bloc.storyPageData.data.words ?? [],
+              marginX: w * 0.15,
+              marginY: h * 0.44),
+          HighlighText(
+              storyString: bloc.storyPageData.data.story ?? "",
+              words: bloc.storyPageData.data.words ?? [],
+              marginX: w * 0.15,
+              marginY: h * 0.44),
+          HighlighText(
+              storyString: bloc.storyPageData.data.story ?? "",
+              words: bloc.storyPageData.data.words ?? [],
+              marginX: w * 0.15,
+              marginY: h * 0.44),
+        ],
+      ),
     );
   }
 }

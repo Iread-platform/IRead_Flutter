@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iread_flutter/bloc/StoryScreenBloc/storyscreen_bloc.dart';
@@ -14,6 +13,7 @@ class HighlighText extends StatefulWidget {
   var marginY = 0.0;
   var storyString = "";
   List<Words> words;
+  GlobalKey globalKey = GlobalKey();
   HighlighText({this.storyString, this.words, this.marginX, this.marginY});
 
   @override
@@ -24,24 +24,29 @@ class _HighlighTextState extends State<HighlighText> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<StoryscreenBloc>(context).init(widget.storyString);
+    BlocProvider.of<StoryscreenBloc>(context , listen: false).init(widget.storyString);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return SingleChildScrollView(
+      controller: Provider.of<TextSelectionProvider>(context, listen: false)
+          .scrollController,
       child: SelectableText.rich(
         TextSpan(
           children: [
             for (int i = 0; i < widget.words.length; i++)
               TextSpan(
                 text: widget.words[i].word + " ",
-                style: BlocProvider.of<StoryscreenBloc>(context, listen: true)
+                style: BlocProvider.of<StoryscreenBloc>(context, listen: false)
                             .highLightIndex
                             .toString() ==
                         i.toString()
-                    ? TextStyle(backgroundColor: Colors.purple)
-                    : TextStyle(),
+                    ? TextStyle(
+                        fontSize: 20,
+                        backgroundColor: Colors.red,
+                        color: Colors.white)
+                    : TextStyle(fontSize: 20),
               )
           ],
         ),
@@ -54,22 +59,25 @@ class _HighlighTextState extends State<HighlighText> {
         textAlign: TextAlign.center,
         showCursor: true,
         onSelectionChanged: (selection, cause) {
-          print("selection $selection");
-          print("cause $cause");
-
-          String textSelected =
-              widget.storyString.substring(selection.start, selection.end);
-          if (cause == SelectionChangedCause.longPress) {
+          try {
             BlocProvider.of<StoryscreenBloc>(context).add(PauseEvent());
-          } else if (cause == SelectionChangedCause.drag) {
-            print("draggggggg");
-          } else {
-            BlocProvider.of<StoryscreenBloc>(context)
-                .add(SeekToWordEvent(index: selection.start));
+
+            String textSelected =
+                widget.storyString.substring(selection.start, selection.end);
+            // ================ on word click =>> seek to word ===============
+            // if (cause == SelectionChangedCause.longPress) {
+            //   BlocProvider.of<StoryscreenBloc>(context).add(PauseEvent());
+            // } else {
+            //   BlocProvider.of<StoryscreenBloc>(context)
+            //       .add(SeekToWordEvent(index: selection.start));
+            // }
+            //===============================================================
+            Provider.of<TextSelectionProvider>(context, listen: false)
+                .changeSelection(
+                    selection: selection, textSelected: textSelected);
+          } catch (e) {
+            print("onSelectionChanged EXCEPTION ");
           }
-          Provider.of<TextSelectionProvider>(context, listen: false)
-              .changeSelection(
-                  selection: selection, textSelected: textSelected);
         },
       ),
     );

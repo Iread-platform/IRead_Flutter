@@ -44,11 +44,24 @@ class MyApp extends StatelessWidget {
     PermissionService.checkPermissions();
 
     return MaterialApp(
-      title: 'Iread',
       theme: mainTheme,
-      onGenerateRoute: AppRouter().appRouterGenerator,
-      home: Scaffold(
-        body: StoryScreen(),
+      title: 'Iread',
+      home: IReadApp(),
+    );
+  }
+}
+
+class IReadApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    var w = MediaQuery.of(context).size.width;
+    var h = MediaQuery.of(context).size.height;
+    BlocProvider.of<StoryscreenBloc>(context, listen: false).deviceWidth = w;
+    BlocProvider.of<StoryscreenBloc>(context, listen: false).deviceHight = h;
+    print(w);
+    return Scaffold(
+      body: Center(
+        child: StoryScreen(),
       ),
     );
   }

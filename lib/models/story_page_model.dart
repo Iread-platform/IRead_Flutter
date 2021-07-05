@@ -3,7 +3,7 @@ class StoryPage {
   int pageCount;
   String story = "";
   String audioURL;
-  List<Words> words =[];
+  List<Words> words = [];
 
   StoryPage(
       {this.pageNumber, this.pageCount, this.story, this.audioURL, this.words});
@@ -14,12 +14,10 @@ class StoryPage {
     story = json['story'];
     audioURL = json['audioURL'];
     if (json['words'] != null) {
-      
       json['words'].forEach((v) {
         print("word");
         words.add(new Words.fromJson(v));
       });
-      
     }
   }
 
@@ -40,6 +38,8 @@ class Words {
   String word;
   int startIndex;
   double time;
+  bool newLine = false;
+  double scrollHight = 0;
 
   Words({this.word, this.startIndex, this.time});
 
