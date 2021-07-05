@@ -9,6 +9,8 @@ class Interaction {
     _pageId = json['pageId'];
   }
 
+  Interaction(this._studentId, this._pageId, this._storyId);
+
   int get storyId => _storyId;
 
   int get pageId => _pageId;
