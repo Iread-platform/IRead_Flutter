@@ -20,17 +20,18 @@ class MainRepo {
 
   /// Save a polygon with attachments.
   Stream<Data> savePolygon(Polygon polygon, int storyId) async* {
-    _savePolygon(polygon, storyId);
-    yield Data.fail('Fail');
-
     try {
-      final stream = await _saveAttachment(polygon, storyId);
-      stream.listen((event) {
-        final res = event.response;
-        final json = jsonDecode(res);
+      _savePolygon(polygon, storyId);
 
-        Attachment.fromJson(json);
-      });
+      if (polygon.localRecordPath != null) {
+        final stream = await _saveAttachment(polygon, storyId);
+        stream.listen((event) {
+          final res = event.response;
+          final json = jsonDecode(res);
+
+          Attachment.fromJson(json);
+        });
+      }
     } catch (e) {
       Data.handleException(e);
     }
@@ -50,7 +51,7 @@ class MainRepo {
 
     Map<String, dynamic> json = {
       "points": jsonEncode(polygon.pointsToJson()),
-      "interaction": interaction,
+      "interaction": interaction.json,
       "audioId": 0,
       "comment": polygon.comment
     };

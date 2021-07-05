@@ -15,5 +15,8 @@ class Interaction {
 
   int get pageId => _pageId;
 
+  Map<String, dynamic> get json =>
+      {"storyId": _storyId, "studentId": _studentId, "pageId": _pageId};
+
   String get studentId => _studentId;
 }
