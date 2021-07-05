@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_uploader/flutter_uploader.dart';
-import 'package:iread_flutter/models/attachments/uploading_audio.dart';
+import 'package:iread_flutter/models/attachment/uploading_audio.dart';
 import 'package:iread_flutter/services/api_service.dart';
 import 'package:path/path.dart';
 
