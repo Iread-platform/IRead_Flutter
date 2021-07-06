@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:iread_flutter/models/attachment/attachment.dart';
 import 'package:iread_flutter/models/draw/polygon.dart';
 import 'package:iread_flutter/repo/attachment_repo.dart';
 import 'package:iread_flutter/repo/interaction_repo.dart';
@@ -16,14 +19,25 @@ class MainRepo {
 
   /// Save a polygon with attachments.
   Stream<Data> savePolygon(Polygon polygon, int storyId) async* {
-    try {
-      await _interactionRepo.savePolygon(polygon, storyId);
+    final polygonResponse =
+        await _interactionRepo.savePolygon(polygon, storyId);
+    yield polygonResponse;
 
+    if (polygonResponse.state == DataState.Success) {
       if (polygon.localRecordPath != null) {
         final stream = await _saveAttachment(polygon, storyId);
-        await for (final snapshot in stream) {}
+        await for (final snapshot in stream) {
+          final response = jsonDecode(snapshot.response);
+          Attachment attachment = Attachment.fromJson(response);
+          polygonResponse.data.audioId = attachment.id;
+          Data polygonAfterAddingAudio = await _interactionRepo.updatePolygon(
+              polygonResponse.data, storyId);
+          print('Update polygon');
+          yield polygonAfterAddingAudio;
+        }
       }
-    } catch (e) {
+    }
+    try {} catch (e) {
       Data.handleException(e);
     }
   }
@@ -33,6 +47,9 @@ class MainRepo {
     final uploadingFileData =
         await _attachmentRepo.saveFile(polygon.localRecordPath, storyId);
     // Handle upload result
+    uploadingFileData.stream.listen((event) {
+      print(event.toString());
+    });
     return uploadingFileData.stream;
   }
 }

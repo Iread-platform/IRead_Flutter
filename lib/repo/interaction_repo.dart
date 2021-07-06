@@ -17,14 +17,12 @@ class InteractionRepo {
   final String updatePolygonEndpoint = 'drawing/@id/update';
 
   Future<Data<Polygon>> savePolygon(Polygon polygon, int storyId) async {
-    final json = _constructPolygonData(polygon, storyId);
-
     try {
+      final json = _constructPolygonData(polygon, storyId);
       final url = '$baseEndpoint/$savePolygonEndpoint';
       final response = await _apiService.request(
           requestType: RequestType.POST, endPoint: url, parameter: json);
       final jsonRes = jsonDecode(response);
-
       return Data.success(Polygon.fromJson(jsonRes));
     } catch (e) {
       Data.handleException(e);
@@ -33,16 +31,14 @@ class InteractionRepo {
 
   Future<Data<Polygon>> updatePolygon(Polygon polygon, int storyId) async {
     final json = _constructPolygonData(polygon, storyId);
+    final url =
+        '$baseEndpoint/${updatePolygonEndpoint.replaceAll('@id', polygon.id.toString())}';
+    final response = await _apiService.request(
+        requestType: RequestType.PUT, endPoint: url, parameter: json);
+    final jsonRes = jsonDecode(response);
 
-    try {
-      final url =
-          '$baseEndpoint/${updatePolygonEndpoint.replaceAll('@id', polygon.id)}';
-      final response = await _apiService.request(
-          requestType: RequestType.PUT, endPoint: url);
-      final json = jsonDecode(response);
-
-      return Data.success(Polygon.fromJson(json));
-    } catch (e) {
+    return Data.success(Polygon.fromJson(jsonRes));
+    try {} catch (e) {
       Data.handleException(e);
     }
   }
@@ -52,10 +48,16 @@ class InteractionRepo {
     String studentId = 'a6ffd485-86fc-4901-99b1-fa66dd948ac2';
     Interaction interaction = Interaction(studentId, 1, storyId);
 
-    return {
+    final json = {
       "points": jsonEncode(polygon.pointsToJson()),
       "interaction": interaction.json,
-      "comment": polygon.comment
+      "comment": polygon.comment,
     };
+
+    if (polygon.audioId != null) {
+      json['audioId'] = polygon.audioId;
+    }
+
+    return json;
   }
 }

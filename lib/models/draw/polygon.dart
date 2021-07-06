@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:iread_flutter/models/model.dart';
 
@@ -5,7 +7,7 @@ class Polygon extends Model {
   List<Offset> _points;
   double _maxY, _minY, _maxX, _minX;
   bool saved = false;
-  int _audioId;
+  int audioId;
   String localRecordPath;
   String comment;
 
@@ -21,8 +23,8 @@ class Polygon extends Model {
         _maxX = maxX,
         _minX = minX;
 
-  Polygon.fromJson(Map<String, dynamic> json) {
-    final pointsString = json['points'];
+  Polygon.fromJson(Map<String, dynamic> json) : super(id: json['drawingId']) {
+    final pointsString = jsonDecode(json['points']);
 
     _points = _pointsFromJson(pointsString);
     _maxX = json['maxX'];
@@ -30,7 +32,7 @@ class Polygon extends Model {
     _minX = json['minX'];
     _minY = json['minY'];
     comment = json['comment'];
-    _audioId = json['audioId'];
+    audioId = json['audioId'].runtimeType == int ? json['audioId'] : null;
 
     saved = true;
   }
@@ -43,8 +45,6 @@ class Polygon extends Model {
 
   get minY => _minY;
 
-  get audioId => _audioId;
-
   double get maxY => _maxY;
 
   List<Offset> get points => _points;
@@ -53,7 +53,7 @@ class Polygon extends Model {
     List<Map<String, dynamic>> jsonPoints = [];
 
     points.forEach((element) {
-      final point = {"x": element.dx, "Y": element.dy};
+      final point = {"x": element.dx, "y": element.dy};
 
       jsonPoints.add(point);
     });
@@ -61,7 +61,7 @@ class Polygon extends Model {
     return jsonPoints;
   }
 
-  List<Offset> _pointsFromJson(List<Map<String, dynamic>> json) {
+  List<Offset> _pointsFromJson(List<dynamic> json) {
     List<Offset> points = [];
 
     for (final point in json) {
