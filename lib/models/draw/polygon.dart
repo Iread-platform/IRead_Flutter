@@ -20,6 +20,8 @@ class Polygon extends Model {
         _maxX = maxX,
         _minX = minX;
 
+  set setId(int id) => this.id = id;
+
   get minX => _minX;
 
   get maxX => _maxX;
