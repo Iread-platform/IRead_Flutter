@@ -5,6 +5,7 @@ class Polygon extends Model {
   List<Offset> _points;
   double _maxY, _minY, _maxX, _minX;
   bool saved = false;
+  int _audioId;
   String localRecordPath;
   String comment;
 
@@ -20,6 +21,20 @@ class Polygon extends Model {
         _maxX = maxX,
         _minX = minX;
 
+  Polygon.fromJson(Map<String, dynamic> json) {
+    final pointsString = json['points'];
+
+    _points = _pointsFromJson(pointsString);
+    _maxX = json['maxX'];
+    _maxY = json['maxX'];
+    _minX = json['minX'];
+    _minY = json['minY'];
+    comment = json['comment'];
+    _audioId = json['audioId'];
+
+    saved = true;
+  }
+
   set setId(int id) => this.id = id;
 
   get minX => _minX;
@@ -27,6 +42,8 @@ class Polygon extends Model {
   get maxX => _maxX;
 
   get minY => _minY;
+
+  get audioId => _audioId;
 
   double get maxY => _maxY;
 
@@ -42,5 +59,15 @@ class Polygon extends Model {
     });
 
     return jsonPoints;
+  }
+
+  List<Offset> _pointsFromJson(List<Map<String, dynamic>> json) {
+    List<Offset> points = [];
+
+    for (final point in json) {
+      points.add(Offset(point['x'], point['y']));
+    }
+
+    return points;
   }
 }
