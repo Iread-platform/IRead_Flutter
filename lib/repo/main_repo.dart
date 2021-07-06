@@ -1,6 +1,3 @@
-import 'dart:convert';
-
-import 'package:iread_flutter/models/attachment/attachment.dart';
 import 'package:iread_flutter/models/draw/polygon.dart';
 import 'package:iread_flutter/repo/attachment_repo.dart';
 import 'package:iread_flutter/repo/interaction_repo.dart';
@@ -20,16 +17,11 @@ class MainRepo {
   /// Save a polygon with attachments.
   Stream<Data> savePolygon(Polygon polygon, int storyId) async* {
     try {
-      _interactionRepo.savePolygon(polygon, storyId);
+      await _interactionRepo.savePolygon(polygon, storyId);
 
       if (polygon.localRecordPath != null) {
         final stream = await _saveAttachment(polygon, storyId);
-        stream.listen((event) {
-          final res = event.response;
-          final json = jsonDecode(res);
-
-          Attachment.fromJson(json);
-        });
+        await for (final snapshot in stream) {}
       }
     } catch (e) {
       Data.handleException(e);

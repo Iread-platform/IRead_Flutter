@@ -7,7 +7,7 @@ import 'package:iread_flutter/repo/main_repo.dart';
 
 class DrawingBloc extends Bloc<BlocEvent, BlocState> {
   // TODO replace dummy story id;
-  final storyId = 1;
+  int storyId = 4;
   MainRepo _mainRepo = MainRepo();
   List<Polygon> _polygons = [];
   int _selectedPolygonIndex = 0;

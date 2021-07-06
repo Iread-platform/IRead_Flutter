@@ -18,19 +18,16 @@ class InteractionRepo {
   Future<Data> savePolygon(Polygon polygon, int storyId) async {
     // Dummy studentId
     String studentId = 'a6ffd485-86fc-4901-99b1-fa66dd948ac2';
-    Interaction interaction = Interaction(studentId, 0, storyId);
+    Interaction interaction = Interaction(studentId, 1, storyId);
 
     Map<String, dynamic> json = {
       "points": jsonEncode(polygon.pointsToJson()),
       "interaction": interaction.json,
-      // Dummy audioId
-      "audioId": 1,
       "comment": polygon.comment
     };
 
     try {
       final url = '$baseEndpoint/$savePolygonEndpoint';
-      print('Request path is $url');
       final response = await _apiService.request(
           requestType: RequestType.POST, endPoint: url, parameter: json);
       final jsonRes = jsonDecode(response);
