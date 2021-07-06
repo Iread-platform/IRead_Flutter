@@ -15,7 +15,7 @@ class InteractionRepo {
   final String baseEndpoint = 'interaction';
   final String savePolygonEndpoint = 'drawing/add';
 
-  Future<Data<int>> savePolygon(Polygon polygon, int storyId) async {
+  Future<Data<Polygon>> savePolygon(Polygon polygon, int storyId) async {
     // Dummy studentId
     String studentId = 'a6ffd485-86fc-4901-99b1-fa66dd948ac2';
     Interaction interaction = Interaction(studentId, 1, storyId);
@@ -30,10 +30,9 @@ class InteractionRepo {
       final url = '$baseEndpoint/$savePolygonEndpoint';
       final response = await _apiService.request(
           requestType: RequestType.POST, endPoint: url, parameter: json);
-      final jsonRes = jsonDecode(response['id']);
-      print('Json response is $jsonRes');
+      final jsonRes = jsonDecode(response);
 
-      return Data.success(jsonRes);
+      return Data.success(Polygon.fromJson(jsonRes));
     } catch (e) {
       Data.handleException(e);
     }
