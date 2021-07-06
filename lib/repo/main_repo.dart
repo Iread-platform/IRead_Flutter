@@ -29,11 +29,12 @@ class MainRepo {
         await for (final snapshot in stream) {
           final response = jsonDecode(snapshot.response);
           Attachment attachment = Attachment.fromJson(response);
+          yield Data.success(attachment);
           polygonResponse.data.audioId = attachment.id;
-          Data polygonAfterAddingAudio = await _interactionRepo.updatePolygon(
+          Data updateResult = await _interactionRepo.updatePolygon(
               polygonResponse.data, storyId);
-          print('Update polygon');
-          yield polygonAfterAddingAudio;
+
+          yield updateResult;
         }
       }
     }

@@ -29,16 +29,17 @@ class InteractionRepo {
     }
   }
 
-  Future<Data<Polygon>> updatePolygon(Polygon polygon, int storyId) async {
-    final json = _constructPolygonData(polygon, storyId);
-    final url =
-        '$baseEndpoint/${updatePolygonEndpoint.replaceAll('@id', polygon.id.toString())}';
-    final response = await _apiService.request(
-        requestType: RequestType.PUT, endPoint: url, parameter: json);
-    final jsonRes = jsonDecode(response);
+  Future<Data<bool>> updatePolygon(Polygon polygon, int storyId) async {
+    try {
+      final json = _constructPolygonData(polygon, storyId);
+      final url =
+          '$baseEndpoint/${updatePolygonEndpoint.replaceAll('@id', polygon.id.toString())}';
+      final response = await _apiService.request(
+          requestType: RequestType.PUT, endPoint: url, parameter: json);
+      final jsonRes = jsonDecode(response);
 
-    return Data.success(Polygon.fromJson(jsonRes));
-    try {} catch (e) {
+      return Data.success(true);
+    } catch (e) {
       Data.handleException(e);
     }
   }
