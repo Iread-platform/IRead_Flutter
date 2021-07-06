@@ -6,7 +6,7 @@ import 'package:iread_flutter/utils/exception.dart';
 
 import 'settings.dart' as appSettings;
 
-enum RequestType { GET, POST, DELETE }
+enum RequestType { GET, POST, PUT, DELETE }
 
 class ApiService {
   static final ApiService _instance = ApiService._internal();
@@ -30,6 +30,13 @@ class ApiService {
         return await _processResponse(await _client.get(url));
       case RequestType.POST:
         return await _processResponse(await _client.post(url,
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": testAuthKey
+            },
+            body: json.encode(parameter)));
+      case RequestType.PUT:
+        return await _processResponse(await _client.put(url,
             headers: {
               "Content-Type": "application/json",
               "Authorization": testAuthKey
