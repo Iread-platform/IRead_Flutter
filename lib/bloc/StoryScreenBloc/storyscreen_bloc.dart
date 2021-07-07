@@ -34,9 +34,7 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
     // ======== GetStoryEvent ==========
     if (event is FetchStoryPage) {
       yield LoadingState();
-      print("111111111111111111");
       storyPageData = await storyRepository.fetchStoryPage(event.stotyID);
-      print("${storyPageData.data.words[0].word}");
       storyPageData.data.words = initWordEndLine(storyPageData.data.words);
       yield LoadedState(data: storyPageData);
       play(storyPageData.data.audioURL);
@@ -195,12 +193,9 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
     for (int i = 0; i < words.length; i++) {
       currentString = currentString + words[i].word + " ";
       size = calcTextSize(currentString, TextStyle(fontSize: 20));
-      print(size);
       // print("${size.width} >= ${deviceWidth * 0.7}");
       // 0.7 is text continer width
-      print(deviceWidth);
       if (size.width >= (deviceWidth * 0.7)) {
-        // print("=================== $currentString ========================");
         words[i - 1].newLine = true;
         scrollValue = scrollValue + size.height.toInt();
         words[i - 1].scrollHight = scrollValue;

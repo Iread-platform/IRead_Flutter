@@ -58,7 +58,6 @@ class IReadApp extends StatelessWidget {
     var h = MediaQuery.of(context).size.height;
     BlocProvider.of<StoryscreenBloc>(context, listen: false).deviceWidth = w;
     BlocProvider.of<StoryscreenBloc>(context, listen: false).deviceHight = h;
-    print(w);
     return Scaffold(
       body: Center(
         child: StoryScreen(),

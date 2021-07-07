@@ -35,8 +35,7 @@ class _StoryScreenState extends State<StoryScreen> {
     print("re build");
     w = MediaQuery.of(context).size.width;
     h = MediaQuery.of(context).size.height;
-    print(w);
-    print(h);
+
     bloc = BlocProvider.of<StoryscreenBloc>(context, listen: false);
     return SingleChildScrollView(
       child: Column(
@@ -249,8 +248,7 @@ class _StoryScreenState extends State<StoryScreen> {
             duration,
           ),
         );
-        print(bloc.storyPageData.data.words[int.parse(bloc.highLightIndex)]
-            .scrollHight);
+        
         Provider.of<TextSelectionProvider>(context, listen: false)
             .scrollController
             .animateTo(
