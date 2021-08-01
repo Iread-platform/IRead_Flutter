@@ -19,28 +19,24 @@ class MainRepo {
 
   /// Save a polygon with attachments.
   Stream<Data> savePolygon(Polygon polygon, int storyId) async* {
-    try {
-      final polygonResponse =
-          await _interactionRepo.savePolygon(polygon, storyId);
-      yield polygonResponse;
+    final polygonResponse =
+        await _interactionRepo.savePolygon(polygon, storyId);
+    yield polygonResponse;
 
-      if (polygonResponse.state == DataState.Success) {
-        if (polygon.localRecordPath != null) {
-          final stream = await _saveAttachment(polygon, storyId);
-          await for (final snapshot in stream) {
-            final response = jsonDecode(snapshot.response);
-            Attachment attachment = Attachment.fromJson(response);
-            yield Data.success(attachment);
-            polygonResponse.data.audioId = attachment.id;
-            Data updateResult = await _interactionRepo.updatePolygon(
-                polygonResponse.data, storyId);
+    if (polygonResponse.state == DataState.Success) {
+      if (polygon.localRecordPath != null) {
+        final stream = await _saveAttachment(polygon, storyId);
+        await for (final snapshot in stream) {
+          final response = jsonDecode(snapshot.response);
+          Attachment attachment = Attachment.fromJson(response);
+          yield Data.success(attachment);
+          polygonResponse.data.audioId = attachment.id;
+          Data updateResult = await _interactionRepo.updatePolygon(
+              polygonResponse.data, storyId);
 
-            yield updateResult;
-          }
+          yield updateResult;
         }
       }
-    } catch (e) {
-      Data.handleException(e);
     }
   }
 

@@ -87,6 +87,11 @@ class ApiService {
           throw NetworkException(
               message: appSettings.Settings.HTTP_REQUEST_STATE_CODE[408]);
         }
+      case 500:
+        {
+          throw NetworkException(
+              message: appSettings.Settings.HTTP_REQUEST_STATE_CODE[500]);
+        }
       default:
         {
           throw NetworkException(message: "Unknown Error");

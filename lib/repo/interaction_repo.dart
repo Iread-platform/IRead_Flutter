@@ -15,6 +15,7 @@ class InteractionRepo {
   final String baseEndpoint = 'interaction';
   final String savePolygonEndpoint = 'drawing/add';
   final String updatePolygonEndpoint = 'drawing/@id/update';
+  final String deletePolygonEndpoint = 'drawing/@id/delete';
 
   Future<Data<Polygon>> savePolygon(Polygon polygon, int storyId) async {
     try {
@@ -25,7 +26,7 @@ class InteractionRepo {
       final jsonRes = jsonDecode(response);
       return Data.success(Polygon.fromJson(jsonRes));
     } catch (e) {
-      Data.handleException(e);
+      return Data.handleException(e);
     }
   }
 
@@ -36,11 +37,23 @@ class InteractionRepo {
           '$baseEndpoint/${updatePolygonEndpoint.replaceAll('@id', polygon.id.toString())}';
       final response = await _apiService.request(
           requestType: RequestType.PUT, endPoint: url, parameter: json);
-      final jsonRes = jsonDecode(response);
 
       return Data.success(true);
     } catch (e) {
-      Data.handleException(e);
+      return Data.handleException(e);
+    }
+  }
+
+  Future<Data<bool>> deletePolygon(Polygon polygon) async {
+    try {
+      final url =
+          '$baseEndpoint/${deletePolygonEndpoint.replaceAll('@id', polygon.id)}';
+      final response = await _apiService.request(
+          requestType: RequestType.DELETE, endPoint: url);
+
+      return Data.success(true);
+    } catch (e) {
+      return Data.handleException<bool>(e);
     }
   }
 
