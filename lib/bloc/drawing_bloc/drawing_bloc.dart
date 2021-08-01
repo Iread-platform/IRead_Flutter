@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iread_flutter/bloc/base/base_bloc.dart';
 import 'package:iread_flutter/bloc/drawing_bloc/drawing_events.dart';
 import 'package:iread_flutter/bloc/drawing_bloc/drawing_states.dart';
+import 'package:iread_flutter/models/attachment/attachment.dart';
 import 'package:iread_flutter/models/draw/polygon.dart';
 import 'package:iread_flutter/repo/main_repo.dart';
 
@@ -20,17 +21,20 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
 
     switch (event.runtimeType) {
       case SavePolygonEvent:
-        yield _savePolygon(selectedPolygon);
+        yield* _savePolygon(selectedPolygon);
     }
   }
 
-  PolygonSavedState _savePolygon(Polygon polygon) {
-    _mainRepo.savePolygon(polygon, storyId).listen((event) {
-      selectedPolygon.saved = true;
-      print('Listening to rep $event');
-    });
-
-    return PolygonSavedState(null);
+  Stream<PolygonState> _savePolygon(Polygon polygon) async* {
+    yield PolygonSavingState();
+    await for (final item in _mainRepo.savePolygon(polygon, storyId)) {
+      if (item.data is Attachment) {
+        yield PolygonRecordSaved();
+      } else {
+        selectedPolygon.saved = true;
+        yield PolygonSavedState(item);
+      }
+    }
   }
 
   void addPolygon(Polygon polygon) => _polygons.add(polygon);

@@ -9,6 +9,7 @@ import 'package:iread_flutter/bloc/comment_bloc/comment_bloc.dart';
 import 'package:iread_flutter/bloc/comment_bloc/comment_events.dart';
 import 'package:iread_flutter/bloc/drawing_bloc/drawing_bloc.dart';
 import 'package:iread_flutter/bloc/drawing_bloc/drawing_events.dart';
+import 'package:iread_flutter/bloc/drawing_bloc/drawing_states.dart';
 import 'package:iread_flutter/bloc/record_bloc/record_bloc.dart';
 import 'package:iread_flutter/bloc/record_bloc/record_events.dart';
 import 'package:iread_flutter/bloc/record_bloc/record_state.dart';
@@ -20,6 +21,7 @@ import 'package:iread_flutter/views/widgets/shared/confirm_alert.dart';
 
 class DrawingWidget extends StatefulWidget {
   final TextEditingController _comment = new TextEditingController();
+
   DrawingWidget({Key key}) : super(key: key);
 
   @override
@@ -32,6 +34,7 @@ class _DrawingWidgetState extends State<DrawingWidget> {
   DrawingBloc _drawBloc;
   RecordBloc _recordBloc;
   CommentBloc _commentBloc;
+
   // Paint style
   Paint paint = Paint()
     ..strokeWidth = 4
@@ -147,22 +150,7 @@ class _DrawingWidgetState extends State<DrawingWidget> {
           ),
           child: Row(
             children: [
-              // Save the selected polygon with attachments
-              _drawBloc.selectedPolygon.saved
-                  ? Tooltip(
-                      message: 'Your polygon has synchronized',
-                      child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          child: Icon(
-                            Icons.check,
-                            color: Colors.green,
-                          )),
-                    )
-                  : IconButton(
-                      icon: Icon(Icons.add_circle),
-                      onPressed: () {
-                        _drawBloc.add(SavePolygonEvent());
-                      }),
+              _showSaveButton(context, state),
               _recordingBuilder(context),
               _commentBuilder(context),
               IconButton(
@@ -187,6 +175,40 @@ class _DrawingWidgetState extends State<DrawingWidget> {
         ),
       );
     });
+  }
+
+  _showSaveButton(BuildContext context, BlocState state) {
+    if (state.runtimeType == PolygonRecordSaved) {
+      return Tooltip(
+        message: 'Your record has saved',
+        child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: CircularProgressIndicator()),
+      );
+    } else if (state.runtimeType == PolygonSavingState) {
+      return Tooltip(
+        message: 'Saving your draw',
+        child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: CircularProgressIndicator()),
+      );
+    }
+    // Save the selected polygon with attachments
+    return _drawBloc.selectedPolygon.saved
+        ? Tooltip(
+            message: 'Your draw has been saved',
+            child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Icon(
+                  Icons.check,
+                  color: Colors.green,
+                )),
+          )
+        : IconButton(
+            icon: Icon(Icons.add_circle),
+            onPressed: () {
+              _drawBloc.add(SavePolygonEvent());
+            });
   }
 
   _deletePolygon() {

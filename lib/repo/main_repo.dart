@@ -31,7 +31,7 @@ class MainRepo {
           Attachment attachment = Attachment.fromJson(response);
           yield Data.success(attachment);
           polygonResponse.data.audioId = attachment.id;
-          Data updateResult = await _interactionRepo.updatePolygon(
+          Data<bool> updateResult = await _interactionRepo.updatePolygon(
               polygonResponse.data, storyId);
 
           yield updateResult;
