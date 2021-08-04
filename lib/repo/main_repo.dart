@@ -47,6 +47,10 @@ class MainRepo {
     return data.data;
   }
 
+  Future<Data<Polygon>> fetchPolygon(int id) {
+    return _interactionRepo.fetchPolygon(id);
+  }
+
   // Store file then return stream
   Future<Stream> _saveAttachment(Polygon polygon, int storyId) async {
     final uploadingFileData =

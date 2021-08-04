@@ -27,10 +27,10 @@ class Polygon extends Model {
     final pointsString = jsonDecode(json['points']);
 
     _points = _pointsFromJson(pointsString);
-    _maxX = json['maxX'];
-    _maxY = json['maxX'];
-    _minX = json['minX'];
-    _minY = json['minY'];
+    _maxX = json['maxX'].toDouble();
+    _maxY = json['maxX'].toDouble();
+    _minX = json['minX'].toDouble();
+    _minY = json['minY'].toDouble();
     comment = json['comment'];
     audioId = json['audioId'].runtimeType == int ? json['audioId'] : null;
 

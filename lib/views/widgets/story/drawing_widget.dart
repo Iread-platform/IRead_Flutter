@@ -55,6 +55,11 @@ class _DrawingWidgetState extends State<DrawingWidget> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<DrawingBloc, BlocState>(builder: (context, state) {
+      if (state.runtimeType == LoadingState) {
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      }
       return Stack(
         children: [
           _customPaint(),

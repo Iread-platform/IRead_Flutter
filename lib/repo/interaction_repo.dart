@@ -16,6 +16,7 @@ class InteractionRepo {
   final String savePolygonEndpoint = 'drawing/add';
   final String updatePolygonEndpoint = 'drawing/@id/update';
   final String deletePolygonEndpoint = 'drawing/@id/delete';
+  final String fetchPolygonById = 'drawing/@id/get';
 
   Future<Data<Polygon>> savePolygon(Polygon polygon, int storyId) async {
     try {
@@ -57,6 +58,19 @@ class InteractionRepo {
     }
   }
 
+  Future<Data<Polygon>> fetchPolygon(int id) async {
+    try {
+      final url =
+          '$baseEndpoint/${fetchPolygonById.replaceAll('@id', id.toString())}';
+      final response = await _apiService.request(
+          requestType: RequestType.GET, endPoint: url);
+      final json = jsonDecode(response);
+      return Data.success(Polygon.fromJson(json));
+    } catch (e) {
+      return Data.handleException(e);
+    }
+  }
+
   Map<String, dynamic> _constructPolygonData(Polygon polygon, int storyId) {
     // Dummy studentId
     String studentId = 'a6ffd485-86fc-4901-99b1-fa66dd948ac2';
@@ -66,6 +80,10 @@ class InteractionRepo {
       "points": jsonEncode(polygon.pointsToJson()),
       "interaction": interaction.json,
       "comment": polygon.comment,
+      "maxX": polygon.maxX,
+      "minX": polygon.minX,
+      "maxY": polygon.maxY,
+      "minY": polygon.minY
     };
 
     if (polygon.audioId != null) {

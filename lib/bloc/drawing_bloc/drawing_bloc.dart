@@ -22,10 +22,11 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
 
   @override
   Stream<BlocState> mapEventToState(BlocEvent event) async* {
-    print('event is ${event.runtimeType}');
-    yield LoadingState();
-
     switch (event.runtimeType) {
+      case FetchPolygonEvent:
+        yield LoadingState();
+        yield await fetchPolygon((event as FetchPolygonEvent).id);
+        break;
       case SavePolygonEvent:
         yield _savePolygon(selectedPolygon);
         break;
@@ -79,6 +80,16 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
     }
 
     return state;
+  }
+
+  Future<DrawPolygonState> fetchPolygon(int id) async {
+    final polygonData = await _mainRepo.fetchPolygon(id);
+    // Close draw area
+    closed = true;
+
+    _polygons.add(polygonData.data);
+    _selectedPolygonIndex = 0;
+    return DrawPolygonState();
   }
 
   List<Polygon> get polygons => _polygons;

@@ -4,6 +4,11 @@ abstract class DrawEvents extends BlocEvent {}
 
 class DrawEvent extends DrawEvents {}
 
+class FetchPolygonEvent extends DrawEvents {
+  int id;
+  FetchPolygonEvent(this.id);
+}
+
 class SavePolygonEvent extends DrawEvents {}
 
 class RecordSavedEvent extends DrawEvents {}
