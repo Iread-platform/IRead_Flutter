@@ -24,4 +24,9 @@ class FailState extends BlocState {
 
 abstract class BlocEvent {}
 
+class FailEvent extends BlocEvent {
+  String message;
+  FailEvent({String message}) : this.message = message;
+}
+
 class CloseEvent extends BlocEvent {}

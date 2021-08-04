@@ -40,6 +40,9 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
         yield PolygonDeletingState();
         yield await deletePolygon();
         break;
+      case FailEvent:
+        yield FailState(message: (event as FailEvent).message);
+        break;
     }
   }
 
@@ -47,7 +50,7 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
     Stream saveStream = _mainRepo.savePolygon(polygon, storyId);
     saveStream.listen((item) {
       if (item.state == DataState.Fail) {
-        return FailState(message: item.message);
+        add(FailEvent(message: item.message));
       }
       if (item.data is Polygon) {
         selectedPolygon.id = item.data.id;

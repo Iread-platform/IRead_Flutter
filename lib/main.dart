@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
         body: MultiProvider(providers: [
           Provider(
               create: (context) =>
-                  DrawingBloc(InitialState())..add(FetchPolygonEvent(24))),
+                  DrawingBloc(InitialState())..add(FetchPolygonEvent(25))),
           Provider(create: (context) => RecordBloc(InitialState())),
           Provider(create: (context) => CommentBloc(InitialState()))
         ], child: DrawingWidget()),
