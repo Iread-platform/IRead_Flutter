@@ -92,7 +92,7 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
     final polygonData = await _mainRepo.fetchPolygon(id);
 
     if (polygonData.state == DataState.Fail) {
-      return NoPolygonState();
+      return FailState(message: polygonData.message);
     }
     // Close draw area
     closed = true;

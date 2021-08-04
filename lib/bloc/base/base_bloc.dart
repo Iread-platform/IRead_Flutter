@@ -4,7 +4,7 @@ abstract class BlocState {
   String message = "Success";
 
   BlocState({String message}) {
-    message = message ?? "Success";
+    this.message = message ?? "Success";
   }
 }
 

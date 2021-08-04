@@ -80,7 +80,8 @@ class ApiService {
       case 404:
         {
           throw NetworkException(
-              message: appSettings.Settings.HTTP_REQUEST_STATE_CODE[404]);
+              message: appSettings.Settings.HTTP_REQUEST_STATE_CODE[404],
+              logMessage: appSettings.Settings.HTTP_REQUEST_STATE_CODE[404]);
         }
       case 408:
         {
