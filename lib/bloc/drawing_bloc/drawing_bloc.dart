@@ -70,6 +70,10 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
 
   void updateRecord(String path) {
     selectedPolygon.localRecordPath = path;
+
+    if (selectedPolygon.saved) {
+      _mainRepo.savePolygonRecord(selectedPolygon, storyId);
+    }
   }
 
   Future<PolygonDeletedState> deletePolygon() async {

@@ -24,12 +24,14 @@ class MainRepo {
 
     yield polygonResponse;
 
+    polygon.id = polygonResponse.data.id;
+
     if (polygonResponse.state == DataState.Success) {
-      yield* _savePolygonRecord(polygon, storyId);
+      yield* savePolygonRecord(polygon, storyId);
     }
   }
 
-  Stream<Data> _savePolygonRecord(Polygon polygon, int storyId) async* {
+  Stream<Data> savePolygonRecord(Polygon polygon, int storyId) async* {
     if (polygon.localRecordPath != null) {
       final stream = await _saveAttachment(polygon, storyId);
       await for (final snapshot in stream) {

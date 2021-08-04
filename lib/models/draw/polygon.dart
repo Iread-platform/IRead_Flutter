@@ -39,11 +39,11 @@ class Polygon extends Model {
 
   set setId(int id) => this.id = id;
 
-  get minX => _minX;
+  double get minX => _minX;
 
-  get maxX => _maxX;
+  double get maxX => _maxX;
 
-  get minY => _minY;
+  double get minY => _minY;
 
   double get maxY => _maxY;
 

@@ -58,7 +58,10 @@ class _DrawingWidgetState extends State<DrawingWidget> {
     return RequestHandler(
       bloc: _drawBloc,
       isDismissible: true,
-      main: Container(),
+      main: Container(
+        height: double.infinity,
+        width: double.infinity,
+      ),
       onSuccess: (context, state) => Stack(
         children: [
           _customPaint(),
