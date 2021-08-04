@@ -47,7 +47,7 @@ class InteractionRepo {
   Future<Data<bool>> deletePolygon(Polygon polygon) async {
     try {
       final url =
-          '$baseEndpoint/${deletePolygonEndpoint.replaceAll('@id', polygon.id)}';
+          '$baseEndpoint/${deletePolygonEndpoint.replaceAll('@id', polygon.id.toString())}';
       final response = await _apiService.request(
           requestType: RequestType.DELETE, endPoint: url);
 

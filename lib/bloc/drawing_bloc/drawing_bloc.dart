@@ -5,6 +5,7 @@ import 'package:iread_flutter/bloc/drawing_bloc/drawing_states.dart';
 import 'package:iread_flutter/models/attachment/attachment.dart';
 import 'package:iread_flutter/models/draw/polygon.dart';
 import 'package:iread_flutter/repo/main_repo.dart';
+import 'package:iread_flutter/utils/data.dart';
 
 class DrawingBloc extends Bloc<BlocEvent, BlocState> {
   // TODO replace dummy story id;
@@ -17,33 +18,63 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
 
   @override
   Stream<BlocState> mapEventToState(BlocEvent event) async* {
+    print('event is ${event.runtimeType}');
     yield LoadingState();
 
     switch (event.runtimeType) {
       case SavePolygonEvent:
-        yield* _savePolygon(selectedPolygon);
+        yield _savePolygon(selectedPolygon);
+        break;
+      case RecordSavedEvent:
+        yield PolygonRecordSaved();
+        break;
+      case PolygonSavedEvent:
+        yield PolygonSavedState(Data.success(true));
+        break;
+      case DeletePolygonEvent:
+        yield PolygonDeletingState();
+        yield await deletePolygon();
+        break;
     }
   }
 
-  Stream<PolygonState> _savePolygon(Polygon polygon) async* {
-    yield PolygonSavingState();
-    await for (final item in _mainRepo.savePolygon(polygon, storyId)) {
+  PolygonSavingState _savePolygon(Polygon polygon) {
+    Stream saveStream = _mainRepo.savePolygon(polygon, storyId);
+    saveStream.listen((item) {
+      if (item.data is Polygon) {
+        selectedPolygon.id = item.data.id;
+      }
       if (item.data is Attachment) {
-        yield PolygonRecordSaved();
+        add(RecordSavedEvent());
       } else {
         selectedPolygon.saved = true;
-        yield PolygonSavedState(item);
+        add(PolygonSavedEvent());
       }
-    }
+    });
+
+    return PolygonSavingState();
   }
 
   void addPolygon(Polygon polygon) => _polygons.add(polygon);
 
-  void deletePolygon(int index) {
-    _polygons.removeAt(index);
+  Future<PolygonDeletedState> deletePolygon() async {
+    if (!selectedPolygon.saved) {
+      return PolygonDeletedState(true);
+    }
+
+    final deleteState = await _mainRepo.deletePolygon(selectedPolygon);
+
+    if (deleteState) {
+      _polygons.removeAt(_selectedPolygonIndex);
+    }
+
+    return PolygonDeletedState(deleteState);
   }
 
   List<Polygon> get polygons => _polygons;
-  Polygon get selectedPolygon => _polygons[_selectedPolygonIndex];
+
+  Polygon get selectedPolygon =>
+      _polygons.length > 0 ? _polygons[_selectedPolygonIndex] : null;
+
   get selectedPolygonIndex => _selectedPolygonIndex;
 }

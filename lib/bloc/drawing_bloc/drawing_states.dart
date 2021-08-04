@@ -7,8 +7,21 @@ class PolygonState extends SuccessState<Data> {
 
 class PolygonRecordSaved extends PolygonState {}
 
+class PolygonSavingStreamState extends PolygonState {
+  Stream stream;
+  PolygonSavingStreamState(this.stream);
+}
+
 class PolygonSavingState extends PolygonState {}
 
 class PolygonSavedState extends PolygonState {
   PolygonSavedState(Data success) : super(data: success);
+}
+
+class PolygonDeletingState extends PolygonState {}
+
+class PolygonDeletedState extends PolygonState {
+  bool _isDone;
+
+  PolygonDeletedState(bool isDone) : _isDone = isDone;
 }

@@ -127,6 +127,11 @@ class _DrawingWidgetState extends State<DrawingWidget> {
     }
 
     return BlocBuilder<DrawingBloc, BlocState>(builder: (context, state) {
+      if (state.runtimeType == PolygonDeletedState) {
+        _deletePolygon();
+        return SizedBox();
+      }
+
       if (state is LoadingState) {
         return Positioned(
           top: y,
@@ -153,23 +158,7 @@ class _DrawingWidgetState extends State<DrawingWidget> {
               _showSaveButton(context, state),
               _recordingBuilder(context),
               _commentBuilder(context),
-              IconButton(
-                  icon: Icon(IReadIcons.delete),
-                  onPressed: () {
-                    setState(() {
-                      showDialog<void>(
-                          context: context,
-                          builder: (context) {
-                            return ConfirmAlert(
-                              title: 'Delete the polygon',
-                              onConfirm: _deletePolygon,
-                              confirmButtonLabel: 'Delete',
-                              message:
-                                  'Do you want to delete the polygon that you have painted ?',
-                            );
-                          });
-                    });
-                  })
+              _deleteButton(context, state)
             ],
           ),
         ),
@@ -212,12 +201,12 @@ class _DrawingWidgetState extends State<DrawingWidget> {
   }
 
   _deletePolygon() {
-    setState(() {
-      final polygonPath = _drawBloc.selectedPolygon.localRecordPath;
-      _recordBloc.add(DeleteRecordEvent(polygonPath));
-      _drawBloc.deletePolygon(_drawBloc.selectedPolygonIndex);
-      closed = false;
-    });
+    if (closed || _drawBloc.selectedPolygonIndex == null) {
+      return;
+    }
+    final polygonPath = _drawBloc.selectedPolygon.localRecordPath;
+    _recordBloc.add(DeleteRecordEvent(polygonPath));
+    closed = false;
   }
 
   Widget _commentBuilder(BuildContext context) {
@@ -485,6 +474,34 @@ class _DrawingWidgetState extends State<DrawingWidget> {
     super.dispose();
     widget._comment.dispose();
     _recordBloc.dispose();
+  }
+
+  _deleteButton(BuildContext context, BlocState state) {
+    if (state.runtimeType == PolygonDeletingState) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    } else {
+      return IconButton(
+          icon: Icon(IReadIcons.delete),
+          onPressed: () {
+            setState(() {
+              showDialog<void>(
+                  context: context,
+                  builder: (context) {
+                    return ConfirmAlert(
+                      title: 'Delete the polygon',
+                      onConfirm: () {
+                        _drawBloc.add(DeletePolygonEvent());
+                      },
+                      confirmButtonLabel: 'Delete',
+                      message:
+                          'Do you want to delete the polygon that you have painted ?',
+                    );
+                  });
+            });
+          });
+    }
   }
 }
 

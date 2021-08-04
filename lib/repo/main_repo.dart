@@ -35,19 +35,23 @@ class MainRepo {
               polygonResponse.data, storyId);
 
           yield updateResult;
+          break;
         }
       }
     }
+  }
+
+  Future<bool> deletePolygon(Polygon polygon) async {
+    final data = await _interactionRepo.deletePolygon(polygon);
+
+    return data.data;
   }
 
   // Store file then return stream
   Future<Stream> _saveAttachment(Polygon polygon, int storyId) async {
     final uploadingFileData =
         await _attachmentRepo.saveFile(polygon.localRecordPath, storyId);
-    // Handle upload result
-    uploadingFileData.stream.listen((event) {
-      print(event.toString());
-    });
+
     return uploadingFileData.stream;
   }
 }
