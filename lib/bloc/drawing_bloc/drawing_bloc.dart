@@ -68,6 +68,10 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
 
   void addPolygon(Polygon polygon) => _polygons.add(polygon);
 
+  void updateRecord(String path) {
+    selectedPolygon.localRecordPath = path;
+  }
+
   Future<PolygonDeletedState> deletePolygon() async {
     if (!selectedPolygon.saved) {
       return PolygonDeletedState(true);
