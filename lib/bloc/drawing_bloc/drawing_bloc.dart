@@ -2,6 +2,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iread_flutter/bloc/base/base_bloc.dart';
 import 'package:iread_flutter/bloc/drawing_bloc/drawing_events.dart';
 import 'package:iread_flutter/bloc/drawing_bloc/drawing_states.dart';
+import 'package:iread_flutter/bloc/record_bloc/record_bloc.dart';
+import 'package:iread_flutter/bloc/record_bloc/record_events.dart';
 import 'package:iread_flutter/models/attachment/attachment.dart';
 import 'package:iread_flutter/models/draw/polygon.dart';
 import 'package:iread_flutter/repo/main_repo.dart';
@@ -13,6 +15,8 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
   MainRepo _mainRepo = MainRepo();
   List<Polygon> _polygons = [];
   int _selectedPolygonIndex = 0;
+  bool closed = false;
+  RecordBloc recordBloc;
 
   DrawingBloc(BlocState initialState) : super(initialState);
 
@@ -63,12 +67,18 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
     }
 
     final deleteState = await _mainRepo.deletePolygon(selectedPolygon);
+    // Delete associated record
+    final polygonPath = selectedPolygon.localRecordPath;
+    recordBloc.add(DeleteRecordEvent(polygonPath));
+    // Make user able to paint
+    closed = false;
 
+    final state = PolygonDeletedState(deleteState)..polygon = selectedPolygon;
     if (deleteState) {
       _polygons.removeAt(_selectedPolygonIndex);
     }
 
-    return PolygonDeletedState(deleteState);
+    return state;
   }
 
   List<Polygon> get polygons => _polygons;

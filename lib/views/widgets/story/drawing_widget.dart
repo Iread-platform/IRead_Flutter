@@ -41,7 +41,6 @@ class _DrawingWidgetState extends State<DrawingWidget> {
     ..color = Colors.black45.withOpacity(0.5)
     ..isAntiAlias = true
     ..style = PaintingStyle.fill;
-  bool closed = false;
   double minimalDistance = 2;
 
   @override
@@ -50,19 +49,22 @@ class _DrawingWidgetState extends State<DrawingWidget> {
     _drawBloc = BlocProvider.of<DrawingBloc>(context);
     _recordBloc = BlocProvider.of<RecordBloc>(context);
     _commentBloc = BlocProvider.of<CommentBloc>(context);
+    _drawBloc.recordBloc = _recordBloc;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        _customPaint(),
-        _gestureDetector(),
-        _drawBloc.polygons.length > 0
-            ? _drawActions(context, _drawBloc.polygons[0], 0)
-            : SizedBox()
-      ],
-    );
+    return BlocBuilder<DrawingBloc, BlocState>(builder: (context, state) {
+      return Stack(
+        children: [
+          _customPaint(),
+          _gestureDetector(),
+          _drawBloc.polygons.length > 0 || state.runtimeType == DrawPolygonState
+              ? _drawActions(context, _drawBloc.selectedPolygon, 0, state)
+              : SizedBox()
+        ],
+      );
+    });
   }
 
   Widget _customPaint() => CustomPaint(
@@ -70,14 +72,14 @@ class _DrawingWidgetState extends State<DrawingWidget> {
       painter: FingerPainter(
           polygons: _drawBloc.polygons,
           points: points,
-          closed: closed,
+          closed: _drawBloc.closed,
           paint: paint));
 
   GestureDetector _gestureDetector() => GestureDetector(
         onPanStart: (details) {
           setState(
             () {
-              if (closed) {
+              if (_drawBloc.closed) {
                 return;
               }
               _recordBloc.add(ResetEvent());
@@ -87,7 +89,7 @@ class _DrawingWidgetState extends State<DrawingWidget> {
           );
         },
         onPanUpdate: (details) {
-          if (closed) return;
+          if (_drawBloc.closed) return;
           setState(() {
             RenderBox renderBox = context.findRenderObject();
             addPoint(renderBox, details.globalPosition);
@@ -97,7 +99,7 @@ class _DrawingWidgetState extends State<DrawingWidget> {
         onPanEnd: (details) {
           setState(() {
             RenderBox renderBox = context.findRenderObject();
-            closed = true;
+            _drawBloc.closed = true;
             addPoint(renderBox, points[0]);
             _drawBloc.addPolygon(Polygon(
                 points: List<Offset>.from(points),
@@ -110,7 +112,8 @@ class _DrawingWidgetState extends State<DrawingWidget> {
         },
       );
 
-  Widget _drawActions(BuildContext context, Polygon polygon, int index) {
+  Widget _drawActions(
+      BuildContext context, Polygon polygon, int index, BlocState state) {
     double offsetX = 200;
     double offsetY = 50;
     double x = (polygon.maxX + polygon.minX) / 2;
@@ -126,44 +129,37 @@ class _DrawingWidgetState extends State<DrawingWidget> {
       x = size.width - offsetX;
     }
 
-    return BlocBuilder<DrawingBloc, BlocState>(builder: (context, state) {
-      if (state.runtimeType == PolygonDeletedState) {
-        _deletePolygon();
-        return SizedBox();
-      }
-
-      if (state is LoadingState) {
-        return Positioned(
-          top: y,
-          left: x,
-          child: Container(
-            child: Center(
-              child: CircularProgressIndicator(),
-            ),
-          ),
-        );
-      }
-
+    if (state is LoadingState) {
       return Positioned(
         top: y,
         left: x,
         child: Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
-            borderRadius: BorderRadius.circular(storyBorderRadius),
-            boxShadow: [mediumBottomRightShadow],
-          ),
-          child: Row(
-            children: [
-              _showSaveButton(context, state),
-              _recordingBuilder(context),
-              _commentBuilder(context),
-              _deleteButton(context, state)
-            ],
+          child: Center(
+            child: CircularProgressIndicator(),
           ),
         ),
       );
-    });
+    }
+
+    return Positioned(
+      top: y,
+      left: x,
+      child: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
+          borderRadius: BorderRadius.circular(storyBorderRadius),
+          boxShadow: [mediumBottomRightShadow],
+        ),
+        child: Row(
+          children: [
+            _showSaveButton(context, state),
+            _recordingBuilder(context),
+            _commentBuilder(context),
+            _deleteButton(context, state)
+          ],
+        ),
+      ),
+    );
   }
 
   _showSaveButton(BuildContext context, BlocState state) {
@@ -198,15 +194,6 @@ class _DrawingWidgetState extends State<DrawingWidget> {
             onPressed: () {
               _drawBloc.add(SavePolygonEvent());
             });
-  }
-
-  _deletePolygon() {
-    if (closed || _drawBloc.selectedPolygonIndex == null) {
-      return;
-    }
-    final polygonPath = _drawBloc.selectedPolygon.localRecordPath;
-    _recordBloc.add(DeleteRecordEvent(polygonPath));
-    closed = false;
   }
 
   Widget _commentBuilder(BuildContext context) {
@@ -465,7 +452,7 @@ class _DrawingWidgetState extends State<DrawingWidget> {
 
     if (distance < minimalDistance && length > 5) {
       addPoint(renderBox, start);
-      closed = true;
+      _drawBloc.closed = true;
     }
   }
 
@@ -478,8 +465,11 @@ class _DrawingWidgetState extends State<DrawingWidget> {
 
   _deleteButton(BuildContext context, BlocState state) {
     if (state.runtimeType == PolygonDeletingState) {
-      return Center(
-        child: CircularProgressIndicator(),
+      return Container(
+        padding: const EdgeInsets.all(8),
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
       );
     } else {
       return IconButton(
