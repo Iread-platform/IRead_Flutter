@@ -2,7 +2,7 @@ import 'package:iread_flutter/bloc/base/base_bloc.dart';
 import 'package:iread_flutter/models/draw/polygon.dart';
 import 'package:iread_flutter/utils/data.dart';
 
-class NoPolygonState extends BlocState {}
+class NoPolygonState extends SuccessState {}
 
 class PolygonDeletedState extends NoPolygonState {
   bool _isDone;

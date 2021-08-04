@@ -21,6 +21,7 @@ class MainRepo {
   Stream<Data> savePolygon(Polygon polygon, int storyId) async* {
     final polygonResponse =
         await _interactionRepo.savePolygon(polygon, storyId);
+
     yield polygonResponse;
 
     if (polygonResponse.state == DataState.Success) {

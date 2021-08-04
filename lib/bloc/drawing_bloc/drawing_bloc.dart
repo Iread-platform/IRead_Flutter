@@ -46,6 +46,9 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
   PolygonSavingState _savePolygon(Polygon polygon) {
     Stream saveStream = _mainRepo.savePolygon(polygon, storyId);
     saveStream.listen((item) {
+      if (item.state == DataState.Fail) {
+        return FailState(message: item.message);
+      }
       if (item.data is Polygon) {
         selectedPolygon.id = item.data.id;
       }
@@ -82,8 +85,12 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
     return state;
   }
 
-  Future<DrawPolygonState> fetchPolygon(int id) async {
+  Future<BlocState> fetchPolygon(int id) async {
     final polygonData = await _mainRepo.fetchPolygon(id);
+
+    if (polygonData.state == DataState.Fail) {
+      return NoPolygonState();
+    }
     // Close draw area
     closed = true;
 

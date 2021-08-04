@@ -18,6 +18,7 @@ import 'package:iread_flutter/config/themes/shadows.dart';
 import 'package:iread_flutter/models/draw/polygon.dart';
 import 'package:iread_flutter/utils/i_read_icons.dart';
 import 'package:iread_flutter/views/widgets/shared/confirm_alert.dart';
+import 'package:iread_flutter/views/widgets/shared/request_handler.dart';
 
 class DrawingWidget extends StatefulWidget {
   final TextEditingController _comment = new TextEditingController();
@@ -54,13 +55,11 @@ class _DrawingWidgetState extends State<DrawingWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<DrawingBloc, BlocState>(builder: (context, state) {
-      if (state.runtimeType == LoadingState) {
-        return Center(
-          child: CircularProgressIndicator(),
-        );
-      }
-      return Stack(
+    return RequestHandler(
+      bloc: _drawBloc,
+      isDismissible: true,
+      main: Container(),
+      onSuccess: (context, state) => Stack(
         children: [
           _customPaint(),
           _gestureDetector(),
@@ -68,8 +67,8 @@ class _DrawingWidgetState extends State<DrawingWidget> {
               ? _drawActions(context, _drawBloc.selectedPolygon, 0, state)
               : SizedBox()
         ],
-      );
-    });
+      ),
+    );
   }
 
   Widget _customPaint() => CustomPaint(
