@@ -95,7 +95,9 @@ class ApiService {
         }
       default:
         {
-          throw NetworkException(message: "Unknown Error");
+          throw NetworkException(
+              message:
+                  "Unknown Error, status code is ${response.statusCode}\n\nMessage is $response");
         }
     }
   }
