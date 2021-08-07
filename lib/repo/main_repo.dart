@@ -5,6 +5,7 @@ import 'package:iread_flutter/models/draw/polygon.dart';
 import 'package:iread_flutter/repo/attachment_repo.dart';
 import 'package:iread_flutter/repo/interaction_repo.dart';
 import 'package:iread_flutter/repo/story_repo.dart';
+import 'package:iread_flutter/services/settings.dart';
 import 'package:iread_flutter/utils/data.dart';
 
 class MainRepo {
@@ -24,10 +25,12 @@ class MainRepo {
 
     yield polygonResponse;
 
-    polygon.id = polygonResponse.data.id;
+    if (polygonResponse.state == DataStatus.succeed) {
+      polygon.id = polygonResponse.data.id;
 
-    if (polygonResponse.state == DataState.Success) {
-      yield* savePolygonRecord(polygon, storyId);
+      if (polygonResponse.state == DataState.Success) {
+        yield* savePolygonRecord(polygon, storyId);
+      }
     }
   }
 

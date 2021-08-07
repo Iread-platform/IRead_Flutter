@@ -51,11 +51,9 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
     saveStream.listen((item) {
       if (item.state == DataState.Fail) {
         add(FailEvent(message: item.message));
-      }
-      if (item.data is Polygon) {
+      } else if (item.data is Polygon) {
         selectedPolygon.id = item.data.id;
-      }
-      if (item.data is Attachment) {
+      } else if (item.data is Attachment) {
         add(RecordSavedEvent());
       } else {
         selectedPolygon.saved = true;
@@ -72,7 +70,14 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
     selectedPolygon.localRecordPath = path;
 
     if (selectedPolygon.saved) {
-      _mainRepo.savePolygonRecord(selectedPolygon, storyId);
+      _mainRepo.savePolygonRecord(selectedPolygon, storyId).listen((event) {
+        if (event.data is Attachment) {
+          add(RecordSavedEvent());
+        } else {
+          selectedPolygon.saved = true;
+          add(PolygonSavedEvent());
+        }
+      });
     }
   }
 

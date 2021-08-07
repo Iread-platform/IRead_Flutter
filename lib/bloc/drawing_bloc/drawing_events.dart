@@ -16,3 +16,9 @@ class RecordSavedEvent extends DrawEvents {}
 class PolygonSavedEvent extends DrawEvents {}
 
 class DeletePolygonEvent extends DrawEvents {}
+
+class RecordUpdateEvent extends DrawEvents {
+  String path;
+
+  RecordUpdateEvent(this.path);
+}
