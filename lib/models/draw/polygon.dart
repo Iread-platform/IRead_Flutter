@@ -7,6 +7,8 @@ class Polygon extends Model {
   List<Offset> _points;
   double _maxY, _minY, _maxX, _minX;
   bool saved = false;
+  bool recordSaved = false;
+  bool needToUpdate = false;
   int audioId;
   String localRecordPath;
   String comment;

@@ -5,7 +5,6 @@ import 'package:iread_flutter/models/draw/polygon.dart';
 import 'package:iread_flutter/repo/attachment_repo.dart';
 import 'package:iread_flutter/repo/interaction_repo.dart';
 import 'package:iread_flutter/repo/story_repo.dart';
-import 'package:iread_flutter/services/settings.dart';
 import 'package:iread_flutter/utils/data.dart';
 
 class MainRepo {
@@ -25,12 +24,9 @@ class MainRepo {
 
     yield polygonResponse;
 
-    if (polygonResponse.state == DataStatus.succeed) {
+    if (polygonResponse.state == DataState.Success) {
       polygon.id = polygonResponse.data.id;
-
-      if (polygonResponse.state == DataState.Success) {
-        yield* savePolygonRecord(polygon, storyId);
-      }
+      yield* savePolygonRecord(polygon, storyId);
     }
   }
 
@@ -59,6 +55,10 @@ class MainRepo {
 
   Future<Data<Polygon>> fetchPolygon(int id) {
     return _interactionRepo.fetchPolygon(id);
+  }
+
+  Future<Data<bool>> updatePolygon(Polygon polygon, int storyId) async {
+    return await _interactionRepo.updatePolygon(polygon, storyId);
   }
 
   // Store file then return stream

@@ -22,3 +22,11 @@ class RecordUpdateEvent extends DrawEvents {
 
   RecordUpdateEvent(this.path);
 }
+
+class CommentUpdateEvent extends DrawEvents {
+  String comment;
+
+  CommentUpdateEvent(this.comment);
+}
+
+class PolygonSyncEvent extends DrawEvents {}

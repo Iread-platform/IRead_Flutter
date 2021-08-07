@@ -43,6 +43,16 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
       case FailEvent:
         yield FailState(message: (event as FailEvent).message);
         break;
+      case RecordUpdateEvent:
+        updateRecord((event as RecordUpdateEvent).path);
+        break;
+      case CommentUpdateEvent:
+        yield await updateComment(
+            selectedPolygon, storyId, (event as CommentUpdateEvent).comment);
+        break;
+      case PolygonSyncEvent:
+        yield PolygonSavingState();
+        break;
     }
   }
 
@@ -53,6 +63,10 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
         add(FailEvent(message: item.message));
       } else if (item.data is Polygon) {
         selectedPolygon.id = item.data.id;
+        if (polygon.localRecordPath == null) {
+          selectedPolygon.saved = true;
+          add(PolygonSavedEvent());
+        }
       } else if (item.data is Attachment) {
         add(RecordSavedEvent());
       } else {
@@ -67,7 +81,9 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
   void addPolygon(Polygon polygon) => _polygons.add(polygon);
 
   void updateRecord(String path) {
+    selectedPolygon.recordSaved = true;
     selectedPolygon.localRecordPath = path;
+    add(PolygonSyncEvent());
 
     if (selectedPolygon.saved) {
       _mainRepo.savePolygonRecord(selectedPolygon, storyId).listen((event) {
@@ -113,6 +129,22 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
     _polygons.add(polygonData.data);
     _selectedPolygonIndex = 0;
     return DrawPolygonState();
+  }
+
+  Future<BlocState> updatePolygon(Polygon polygon, int storyId) async {
+    add(PolygonSyncEvent());
+    final data = await _mainRepo.updatePolygon(polygon, storyId);
+
+    if (data.state == DataState.Success) {
+      return PolygonSavedState(data);
+    } else {
+      return FailState(message: data.message);
+    }
+  }
+
+  updateComment(Polygon polygon, int storyId, comment) {
+    selectedPolygon.comment = comment;
+    updatePolygon(polygon, storyId);
   }
 
   List<Polygon> get polygons => _polygons;

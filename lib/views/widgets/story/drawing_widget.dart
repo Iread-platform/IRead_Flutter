@@ -325,7 +325,7 @@ class _DrawingWidgetState extends State<DrawingWidget> {
 
   void _addComment(String comment) {
     _commentBloc.add(AddCommentEvent());
-    _drawBloc.selectedPolygon.comment = comment;
+    _drawBloc.add(CommentUpdateEvent(comment));
     Navigator.pop(context);
   }
 
@@ -384,7 +384,9 @@ class _DrawingWidgetState extends State<DrawingWidget> {
           case StopRecordingState:
             {
               path = (state as RecordState).recordPath;
-              _drawBloc.updateRecord(path);
+              if (!_drawBloc.selectedPolygon.recordSaved) {
+                _drawBloc.add(RecordUpdateEvent(path));
+              }
               return DropdownButton(
                 hint: Icon(IReadIcons.microphone),
                 items: [
