@@ -1,9 +1,12 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:iread_flutter/bloc/base/base_bloc.dart';
 import 'package:iread_flutter/bloc/drawing_bloc/drawing_events.dart';
 import 'package:iread_flutter/bloc/drawing_bloc/drawing_states.dart';
 import 'package:iread_flutter/bloc/record_bloc/record_bloc.dart';
 import 'package:iread_flutter/bloc/record_bloc/record_events.dart';
+import 'package:iread_flutter/config/app_config.dart';
 import 'package:iread_flutter/models/attachment/attachment.dart';
 import 'package:iread_flutter/models/draw/polygon.dart';
 import 'package:iread_flutter/repo/main_repo.dart';
@@ -41,7 +44,7 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
         yield await deletePolygon();
         break;
       case FailEvent:
-        yield FailState(message: (event as FailEvent).message);
+        yield throwFailState((event as FailEvent).message);
         break;
       case RecordUpdateEvent:
         updateRecord((event as RecordUpdateEvent).path);
@@ -101,6 +104,7 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
   Future<PolygonDeletedState> deletePolygon() async {
     if (!selectedPolygon.saved) {
       _polygons.removeAt(_selectedPolygonIndex);
+      closed = false;
       return PolygonDeletedState(true);
     }
 
@@ -123,7 +127,7 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
     final polygonData = await _mainRepo.fetchPolygon(id);
 
     if (polygonData.state == DataState.Fail) {
-      return FailState(message: polygonData.message);
+      return throwFailState(polygonData.message);
     }
     // Close draw area
     closed = true;
@@ -140,7 +144,7 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
     if (data.state == DataState.Success) {
       return PolygonSavedState(data);
     } else {
-      return FailState(message: data.message);
+      return throwFailState(data.message);
     }
   }
 
@@ -159,4 +163,15 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
       _polygons.length > 0 ? _polygons[_selectedPolygonIndex] : null;
 
   get selectedPolygonIndex => _selectedPolygonIndex;
+
+  throwFailState(String message) {
+    Fluttertoast.showToast(
+        msg: message,
+        backgroundColor:
+            Theme.of(AppConfigs.instance().navigationKey.currentContext)
+                .colorScheme
+                .error);
+
+    return PolygonFailStat();
+  }
 }

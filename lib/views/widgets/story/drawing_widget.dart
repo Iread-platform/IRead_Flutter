@@ -121,7 +121,7 @@ class _DrawingWidgetState extends State<DrawingWidget> {
 
   Widget _drawActions(
       BuildContext context, Polygon polygon, int index, BlocState state) {
-    double offsetX = 200;
+    double offsetX = 225;
     double offsetY = 50;
     double x = (polygon.maxX + polygon.minX) / 2;
     double y = polygon.minY;
@@ -184,6 +184,17 @@ class _DrawingWidgetState extends State<DrawingWidget> {
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: CircularProgressIndicator()),
       );
+    } else if (state.runtimeType == PolygonFailStat) {
+      return Tooltip(
+          message: 'Can not sync your polygon, press to retry',
+          child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: IconButton(
+                  icon: Icon(Icons.refresh),
+                  color: Theme.of(context).colorScheme.primaryVariant,
+                  onPressed: () {
+                    _drawBloc.add(SavePolygonEvent());
+                  })));
     }
     // Save the selected polygon with attachments
     return _drawBloc.selectedPolygon.saved
