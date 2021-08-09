@@ -50,7 +50,7 @@ class ApiService {
   }
 
   Future<String> _processResponse(Response response) async {
-    print(response.body);
+    print('status is ${response.statusCode}\nresponse is \n${response.body}');
     switch (response.statusCode) {
       case 204:
       case 201:

@@ -27,6 +27,7 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
   Stream<BlocState> mapEventToState(BlocEvent event) async* {
     switch (event.runtimeType) {
       case FetchPolygonEvent:
+        showSuccessToast("Getting your draw ^_^");
         yield LoadingState();
         yield await fetchPolygon((event as FetchPolygonEvent).id);
         break;
@@ -34,12 +35,15 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
         yield _savePolygon(selectedPolygon);
         break;
       case RecordSavedEvent:
+        showSuccessToast("Your record has been stored");
         yield PolygonRecordSaved();
         break;
       case PolygonSavedEvent:
+        showSuccessToast("Your draw has been saved");
         yield PolygonSavedState(Data.success(true));
         break;
       case DeletePolygonEvent:
+        showSuccessToast("Deleting your draw");
         yield PolygonDeletingState();
         yield await deletePolygon();
         break;
@@ -105,6 +109,7 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
     if (!selectedPolygon.saved) {
       _polygons.removeAt(_selectedPolygonIndex);
       closed = false;
+      showSuccessToast("Your draw has been deleted");
       return PolygonDeletedState(true);
     }
 
@@ -142,6 +147,7 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
     final data = await _mainRepo.updatePolygon(polygon, storyId);
 
     if (data.state == DataState.Success) {
+      showSuccessToast("Your draw has been updated");
       return PolygonSavedState(data);
     } else {
       return throwFailState(data.message);
@@ -154,6 +160,7 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
     }
     selectedPolygon.comment = comment;
     updatePolygon(polygon, storyId);
+    showSuccessToast("Your comment has been added");
     return PolygonSavedState(Data.success(comment));
   }
 
@@ -165,13 +172,17 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
   get selectedPolygonIndex => _selectedPolygonIndex;
 
   throwFailState(String message) {
-    Fluttertoast.showToast(
-        msg: message,
-        backgroundColor:
-            Theme.of(AppConfigs.instance().navigationKey.currentContext)
-                .colorScheme
-                .error);
+    Fluttertoast.showToast(msg: message, backgroundColor: Colors.red);
 
     return PolygonFailStat();
+  }
+
+  showSuccessToast(String message) {
+    Fluttertoast.showToast(
+        msg: message,
+        backgroundColor: Colors.greenAccent,
+        textColor: Theme.of(AppConfigs.instance().navigationKey.currentContext)
+            .colorScheme
+            .primaryVariant);
   }
 }
