@@ -47,6 +47,7 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
         updateRecord((event as RecordUpdateEvent).path);
         break;
       case CommentUpdateEvent:
+        yield PolygonSavingState();
         yield await updateComment(
             selectedPolygon, storyId, (event as CommentUpdateEvent).comment);
         break;
@@ -99,6 +100,7 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
 
   Future<PolygonDeletedState> deletePolygon() async {
     if (!selectedPolygon.saved) {
+      _polygons.removeAt(_selectedPolygonIndex);
       return PolygonDeletedState(true);
     }
 
@@ -143,8 +145,12 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
   }
 
   updateComment(Polygon polygon, int storyId, comment) {
+    if (comment == polygon.comment) {
+      return PolygonSavedState(Data.success(comment));
+    }
     selectedPolygon.comment = comment;
     updatePolygon(polygon, storyId);
+    return PolygonSavedState(Data.success(comment));
   }
 
   List<Polygon> get polygons => _polygons;
