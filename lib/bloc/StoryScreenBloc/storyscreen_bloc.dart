@@ -123,16 +123,15 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
       progress = event;
       for (int i = 0; i < storyPageData.data.words.length; i++) {
         if (storyPageData.data.words[i].time > progress.inMilliseconds) {
-          int x = i - 1;
+          int x = i - 1 < 0 ? 0 : i - 1;
           highLightIndex = x.toString();
 
           break;
         }
       }
-
+      // 25 is tha last index of word // replace it
       if (int.parse(highLightIndex) == 25) {
-        // storyPageData.data.words.length - 1
-        highLightIndex = "-1";
+        highLightIndex = "0";
         this.add(NextPageEvent());
       }
 
@@ -162,10 +161,9 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
 
   void seek(Duration duration) async {
     await audioPlayer.seek(duration);
-   
   }
 
-  String highLightIndex;
+  String highLightIndex = "0";
   String storyString;
   List<TextSpan> spans = [];
   List<TextStyle> styles = [];
@@ -198,7 +196,6 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
       // print("${size.width} >= ${deviceWidth * 0.7}");
       // 0.7 is text continer width
       if (size.width >= (deviceWidth * 0.7)) {
-        // print("=================== $currentString ========================");
         words[i - 1].newLine = true;
         scrollValue = scrollValue + size.height.toInt();
         words[i - 1].scrollHight = scrollValue;

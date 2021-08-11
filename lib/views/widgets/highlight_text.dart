@@ -24,7 +24,8 @@ class _HighlighTextState extends State<HighlighText> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<StoryscreenBloc>(context).init(widget.storyString);
+    BlocProvider.of<StoryscreenBloc>(context, listen: false)
+        .init(widget.storyString);
   }
 
   @override

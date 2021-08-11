@@ -1,26 +1,40 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:iread_flutter/bloc/StoryScreenBloc/storyscreen_bloc.dart';
 import 'package:iread_flutter/bloc/text_selection_provider.dart';
-import 'package:iread_flutter/views/Screens/story_screen.dart';
-import 'package:provider/provider.dart';
-import 'bloc/StoryScreenBloc/storyscreen_bloc.dart';
+import 'package:iread_flutter/config/routing/app_router.dart';
+import 'package:iread_flutter/config/themes/theme.dart';
 import 'package:iread_flutter/services/permissions_service.dart';
-import 'config/themes/theme.dart';
-import 'models/user.dart';
+import 'package:iread_flutter/views/Screens/story_screen.dart';
+import 'package:iread_flutter/views/widgets/vocabulary_dialog.dart';
+import 'package:provider/provider.dart';
+
+import 'config/http/httpOverrides.dart';
 import 'models/stories_section_model.dart';
 import 'models/story.dart';
+import 'models/user.dart';
 
 void main() {
-  runApp(MultiBlocProvider(
-    providers: [
-      BlocProvider(
-        create: (context) => StoryscreenBloc(),
-      )
-    ],
-    child: MultiProvider(providers: [
-      ChangeNotifierProvider(create: (context) => TextSelectionProvider()),
-    ], child: MyApp()),
-  ));
+  // Override server certificate
+  HttpOverrides.global = new IreadHttpOverrides();
+
+  AppRouter().init().then(
+        (value) => runApp(
+          MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) => StoryscreenBloc(),
+              ),
+            ],
+            child: ChangeNotifierProvider(
+              create: (context) => TextSelectionProvider(),
+              child: MyApp(),
+            ),
+          ),
+        ),
+      );
 }
 
 // ignore: must_be_immutable
@@ -44,7 +58,6 @@ class IReadApp extends StatelessWidget {
     var h = MediaQuery.of(context).size.height;
     BlocProvider.of<StoryscreenBloc>(context, listen: false).deviceWidth = w;
     BlocProvider.of<StoryscreenBloc>(context, listen: false).deviceHight = h;
-    print(w);
     return Scaffold(
       body: Center(
         child: StoryScreen(),

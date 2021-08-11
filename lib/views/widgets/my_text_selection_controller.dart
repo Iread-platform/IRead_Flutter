@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iread_flutter/bloc/StoryScreenBloc/storyscreen_bloc.dart';
 import 'package:iread_flutter/bloc/text_selection_provider.dart';
 import 'package:iread_flutter/utils/i_read_icons.dart';
+import 'package:iread_flutter/views/widgets/vocabulary_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:speech_bubble/speech_bubble.dart';
 
@@ -39,15 +40,15 @@ class MyTextSelectionControls extends TextSelectionControls {
       Offset lastSecondaryTapDownPosition) {
     return Consumer<TextSelectionProvider>(
       builder: (context, cart, child) {
-        print("scroll offset :  ${Provider.of<TextSelectionProvider>(context, listen: false).scrollController.offset}");
+        double x = 0;
+        try {
+          x = Provider.of<TextSelectionProvider>(context, listen: false)
+              .scrollController
+              .offset;
+        } catch (e) {}
         return TextSelectionToolbar(
-            anchorAbove: Offset(
-                position.dx + marginX,
-                position.dy +
-                    marginY -
-                    Provider.of<TextSelectionProvider>(context, listen: false)
-                        .scrollController
-                        .offset),
+            anchorAbove:
+                Offset(position.dx + marginX, position.dy + marginY - x),
             anchorBelow: Offset(-140, -140),
             toolbarBuilder: (context, _) {
               print(position.dy);
@@ -127,6 +128,7 @@ class MyTextSelectionControls extends TextSelectionControls {
           ),
           onPressed: () {
             delegate.hideToolbar();
+            return VocabularyDialog.VocDialog(context: context);
           },
         ),
         TextSelectionToolbarTextButton(
@@ -166,6 +168,7 @@ class MyTextSelectionControls extends TextSelectionControls {
           ),
           onPressed: () {
             delegate.hideToolbar();
+            return VocabularyDialog.VocDialog(context: context);
           },
         ),
         TextSelectionToolbarTextButton(

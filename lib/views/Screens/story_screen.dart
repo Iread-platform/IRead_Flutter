@@ -35,15 +35,16 @@ class _StoryScreenState extends State<StoryScreen> {
     print("re build");
     w = MediaQuery.of(context).size.width;
     h = MediaQuery.of(context).size.height;
-    print(w);
-    print(h);
+
     bloc = BlocProvider.of<StoryscreenBloc>(context, listen: false);
-    return Column(
-      children: [
-        header(), // HomeButton - backArrow - ImageStory
-        textStory(), // Selectable text Story
-        player(), // progress - playPauseButton
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          header(), // HomeButton - backArrow - ImageStory
+          textStory(), // Selectable text Story
+          player(), // progress - playPauseButton
+        ],
+      ),
     );
   }
 
@@ -247,8 +248,7 @@ class _StoryScreenState extends State<StoryScreen> {
             duration,
           ),
         );
-        print(bloc.storyPageData.data.words[int.parse(bloc.highLightIndex)]
-            .scrollHight);
+        
         Provider.of<TextSelectionProvider>(context, listen: false)
             .scrollController
             .animateTo(
@@ -273,7 +273,9 @@ class _StoryScreenState extends State<StoryScreen> {
                 duration: Duration(milliseconds: 500),
                 curve: Curves.linear);
       }
-    } catch (e) {}
+    } catch (e) {
+      print("scroll to word EXCEPTION ");
+    }
   }
 
   Widget requsetHandlerStory() {

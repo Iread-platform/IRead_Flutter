@@ -6,6 +6,7 @@ class TextSelectionProvider with ChangeNotifier {
   bool highlighted = false;
   bool playButton = true;
   ScrollController scrollController = new ScrollController();
+  
   TextSelection selection;
   void changeSelection({selection, textSelected}) {
     this.selection = selection;
