@@ -32,4 +32,4 @@ class PolygonSavedState extends PolygonState {
 
 class PolygonDeletingState extends PolygonState {}
 
-class PolygonFailStat extends PolygonState {}
+class PolygonFailState extends PolygonState {}

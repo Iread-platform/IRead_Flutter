@@ -16,6 +16,7 @@ import 'package:iread_flutter/bloc/record_bloc/record_state.dart';
 import 'package:iread_flutter/config/themes/border_radius.dart';
 import 'package:iread_flutter/config/themes/shadows.dart';
 import 'package:iread_flutter/models/draw/polygon.dart';
+import 'package:iread_flutter/utils/extensions.dart';
 import 'package:iread_flutter/utils/i_read_icons.dart';
 import 'package:iread_flutter/views/widgets/shared/confirm_alert.dart';
 import 'package:iread_flutter/views/widgets/shared/request_handler.dart';
@@ -184,7 +185,7 @@ class _DrawingWidgetState extends State<DrawingWidget> {
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: CircularProgressIndicator()),
       );
-    } else if (state.runtimeType == PolygonFailStat) {
+    } else if (state.runtimeType == PolygonFailState) {
       return Tooltip(
           message: 'Can not sync your polygon, press to retry',
           child: Padding(
@@ -242,7 +243,7 @@ class _DrawingWidgetState extends State<DrawingWidget> {
             onPressed: () {
               widget._comment.clear();
 
-              _showAddCommentDialog(context);
+              _showCommentDialog(context);
             });
       },
     );
@@ -276,7 +277,9 @@ class _DrawingWidgetState extends State<DrawingWidget> {
                         onPressed: () =>
                             _addComment(widget._comment.value.text),
                         child: Text(
-                          "Update",
+                          !_drawBloc.selectedPolygon.comment.isNullOrEmpty()
+                              ? "Update"
+                              : "Add",
                           style: Theme.of(context).textTheme.subtitle1.copyWith(
                               color: Theme.of(context).colorScheme.surface),
                         )),
@@ -286,48 +289,21 @@ class _DrawingWidgetState extends State<DrawingWidget> {
                     ElevatedButton(
                         onPressed: () {
                           Navigator.pop(context);
-                          _deleteComment();
+
+                          if (!_drawBloc.selectedPolygon.comment
+                              .isNullOrEmpty()) {
+                            _deleteComment();
+                          }
                         },
                         child: Text(
-                          "Delete",
+                          !_drawBloc.selectedPolygon.comment.isNullOrEmpty()
+                              ? "Delete"
+                              : "cancel",
                           style: Theme.of(context).textTheme.subtitle1.copyWith(
                               color: Theme.of(context).colorScheme.surface),
                         ))
                   ],
                 )
-              ],
-            ),
-          );
-        });
-  }
-
-  Future<void> _showAddCommentDialog(BuildContext context) async {
-    return showDialog<String>(
-        barrierDismissible: true,
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text(
-              "Your comment",
-              style: Theme.of(context).textTheme.headline4,
-            ),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                  controller: widget._comment,
-                  onSubmitted: _addComment,
-                ),
-                SizedBox(
-                  height: 12,
-                ),
-                ElevatedButton(
-                    onPressed: () => _addComment(widget._comment.value.text),
-                    child: Text(
-                      "Add",
-                      style: Theme.of(context).textTheme.subtitle1.copyWith(
-                          color: Theme.of(context).colorScheme.surface),
-                    ))
               ],
             ),
           );
@@ -348,7 +324,7 @@ class _DrawingWidgetState extends State<DrawingWidget> {
             title: 'Delete comment',
             onConfirm: () {
               _commentBloc.add(DeleteCommentEvent());
-              _drawBloc.selectedPolygon.comment = null;
+              _drawBloc.add(CommentUpdateEvent(null));
               widget._comment.clear();
             },
             confirmButtonLabel: 'Delete',

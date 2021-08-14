@@ -54,9 +54,17 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
         updateRecord((event as RecordUpdateEvent).path);
         break;
       case CommentUpdateEvent:
-        yield PolygonSavingState();
-        yield await updateComment(
-            selectedPolygon, storyId, (event as CommentUpdateEvent).comment);
+        // Behavior on comment add, update, and delete
+        if (selectedPolygon.saved) {
+          showSuccessToast("Syncing your comment");
+          yield PolygonSavingState();
+          yield await updateComment(
+              selectedPolygon, storyId, (event as CommentUpdateEvent).comment);
+        } else {
+          showSuccessToast(
+              "Your comment has added, please click on the save button to sync your changes with the server.");
+          selectedPolygon.comment = (event as CommentUpdateEvent).comment;
+        }
         break;
       case PolygonSyncEvent:
         yield PolygonSavingState();
@@ -83,17 +91,20 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
       }
     });
 
+    showSuccessToast("Syncing your draw");
+
     return PolygonSavingState();
   }
 
   void addPolygon(Polygon polygon) => _polygons.add(polygon);
 
   void updateRecord(String path) {
+    showSuccessToast("Your record has been saved locally");
     selectedPolygon.recordSaved = true;
     selectedPolygon.localRecordPath = path;
-    add(PolygonSyncEvent());
 
     if (selectedPolygon.saved) {
+      add(PolygonSyncEvent());
       _mainRepo.savePolygonRecord(selectedPolygon, storyId).listen((event) {
         if (event.data is Attachment) {
           add(RecordSavedEvent());
@@ -109,7 +120,7 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
     if (!selectedPolygon.saved) {
       _polygons.removeAt(_selectedPolygonIndex);
       closed = false;
-      showSuccessToast("Your draw has been deleted");
+      showSuccessToast("Your draw has been deleted, you can draw another one");
       return PolygonDeletedState(true);
     }
 
@@ -174,13 +185,17 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
   throwFailState(String message) {
     Fluttertoast.showToast(msg: message, backgroundColor: Colors.red);
 
-    return PolygonFailStat();
+    return PolygonFailState();
   }
 
   showSuccessToast(String message) {
     Fluttertoast.showToast(
         msg: message,
-        backgroundColor: Colors.greenAccent,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        fontSize: 16.0,
         textColor: Theme.of(AppConfigs.instance().navigationKey.currentContext)
             .colorScheme
             .primaryVariant);
