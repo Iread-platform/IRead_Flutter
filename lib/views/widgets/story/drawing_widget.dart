@@ -57,22 +57,30 @@ class _DrawingWidgetState extends State<DrawingWidget> {
   @override
   Widget build(BuildContext context) {
     return RequestHandler(
-      bloc: _drawBloc,
-      isDismissible: true,
-      main: Container(
-        height: double.infinity,
-        width: double.infinity,
-      ),
-      onSuccess: (context, state) => Stack(
-        children: [
-          _customPaint(),
-          _gestureDetector(),
-          _drawBloc.polygons.length > 0 || state.runtimeType == DrawPolygonState
-              ? _drawActions(context, _drawBloc.selectedPolygon, 0, state)
-              : SizedBox()
-        ],
-      ),
-    );
+        bloc: _drawBloc,
+        isDismissible: true,
+        main: Container(
+          height: double.infinity,
+          width: double.infinity,
+        ),
+        onSuccess: (context, state) {
+          if (state is PolygonSavingState) {
+            _drawBloc.canInteract = false;
+          } else if (state is PolygonSavedState || state is PolygonFailState) {
+            _drawBloc.canInteract = true;
+          }
+
+          return Stack(
+            children: [
+              _customPaint(),
+              _gestureDetector(),
+              _drawBloc.polygons.length > 0 ||
+                      state.runtimeType == DrawPolygonState
+                  ? _drawActions(context, _drawBloc.selectedPolygon, 0, state)
+                  : SizedBox()
+            ],
+          );
+        });
   }
 
   Widget _customPaint() => CustomPaint(
@@ -228,23 +236,27 @@ class _DrawingWidgetState extends State<DrawingWidget> {
                   child: Center(child: Icon(IReadIcons.delete)),
                   value: "delete")
             ],
-            onChanged: (value) {
-              if (value == "show") {
-                _showCommentDialog(context);
-              } else if (value == "delete") {
-                _deleteComment();
-              }
-            },
+            onChanged: _drawBloc.canInteract
+                ? (value) {
+                    if (value == "show") {
+                      _showCommentDialog(context);
+                    } else if (value == "delete") {
+                      _deleteComment();
+                    }
+                  }
+                : null,
           );
         }
 
         return IconButton(
             icon: Icon(Icons.edit),
-            onPressed: () {
-              widget._comment.clear();
+            onPressed: _drawBloc.canInteract
+                ? () {
+                    widget._comment.clear();
 
-              _showCommentDialog(context);
-            });
+                    _showCommentDialog(context);
+                  }
+                : null);
       },
     );
   }
@@ -386,13 +398,15 @@ class _DrawingWidgetState extends State<DrawingWidget> {
                   ),
                 ],
                 elevation: 1,
-                onChanged: (value) {
-                  if (value == 'delete') {
-                    return _deleteRecord(context, path);
-                  } else if (value == 'play') {
-                    _recordBloc.add(PlayRecordEvent(path));
-                  }
-                },
+                onChanged: _drawBloc.canInteract
+                    ? (value) {
+                        if (value == 'delete') {
+                          return _deleteRecord(context, path);
+                        } else if (value == 'play') {
+                          _recordBloc.add(PlayRecordEvent(path));
+                        }
+                      }
+                    : null,
               );
             }
             break;
@@ -400,9 +414,11 @@ class _DrawingWidgetState extends State<DrawingWidget> {
 
         return IconButton(
             icon: Icon(IReadIcons.microphone),
-            onPressed: () {
-              _recordBloc.add(RecordEvent());
-            });
+            onPressed: _drawBloc.canInteract
+                ? () {
+                    _recordBloc.add(RecordEvent());
+                  }
+                : null);
       });
 
   void _deleteRecord(BuildContext context, String path) {
@@ -471,23 +487,25 @@ class _DrawingWidgetState extends State<DrawingWidget> {
     } else {
       return IconButton(
           icon: Icon(IReadIcons.delete),
-          onPressed: () {
-            setState(() {
-              showDialog<void>(
-                  context: context,
-                  builder: (context) {
-                    return ConfirmAlert(
-                      title: 'Delete the polygon',
-                      onConfirm: () {
-                        _drawBloc.add(DeletePolygonEvent());
-                      },
-                      confirmButtonLabel: 'Delete',
-                      message:
-                          'Do you want to delete the polygon that you have painted ?',
-                    );
+          onPressed: _drawBloc.canInteract
+              ? () {
+                  setState(() {
+                    showDialog<void>(
+                        context: context,
+                        builder: (context) {
+                          return ConfirmAlert(
+                            title: 'Delete the polygon',
+                            onConfirm: () {
+                              _drawBloc.add(DeletePolygonEvent());
+                            },
+                            confirmButtonLabel: 'Delete',
+                            message:
+                                'Do you want to delete the polygon that you have painted ?',
+                          );
+                        });
                   });
-            });
-          });
+                }
+              : null);
     }
   }
 }

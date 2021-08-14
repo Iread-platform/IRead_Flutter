@@ -22,6 +22,7 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
   bool closed = false;
   RecordBloc recordBloc;
   BlocEvent lastEvent;
+  bool canInteract = true;
 
   DrawingBloc(BlocState initialState) : super(initialState);
 
