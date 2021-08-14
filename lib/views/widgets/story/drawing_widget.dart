@@ -194,7 +194,7 @@ class _DrawingWidgetState extends State<DrawingWidget> {
                   icon: Icon(Icons.refresh),
                   color: Theme.of(context).colorScheme.primaryVariant,
                   onPressed: () {
-                    _drawBloc.add(SavePolygonEvent());
+                    _drawBloc.add(_drawBloc.lastEvent);
                   })));
     }
     // Save the selected polygon with attachments
@@ -412,6 +412,7 @@ class _DrawingWidgetState extends State<DrawingWidget> {
           return ConfirmAlert(
             title: 'Delete record',
             onConfirm: () {
+              _drawBloc.add(PolygonRecordDeleteEvent());
               _recordBloc.add(DeleteRecordEvent(path));
             },
             message:

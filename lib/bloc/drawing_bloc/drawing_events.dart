@@ -30,3 +30,5 @@ class CommentUpdateEvent extends DrawEvents {
 }
 
 class PolygonSyncEvent extends DrawEvents {}
+
+class PolygonRecordDeleteEvent extends DrawEvents {}
