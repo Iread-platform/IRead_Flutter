@@ -74,7 +74,8 @@ class InteractionRepo {
   Map<String, dynamic> _constructPolygonData(Polygon polygon, int storyId) {
     // Dummy studentId
     String studentId = 'a6ffd485-86fc-4901-99b1-fa66dd948ac2';
-    Interaction interaction = Interaction(studentId, 1, storyId);
+    int pageId = 1;
+    Interaction interaction = Interaction(studentId, pageId, storyId);
 
     final json = {
       "points": jsonEncode(polygon.pointsToJson()),

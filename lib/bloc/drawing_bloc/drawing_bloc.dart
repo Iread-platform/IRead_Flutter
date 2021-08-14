@@ -165,14 +165,19 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
     }
   }
 
-  updateComment(Polygon polygon, int storyId, comment) {
+  updateComment(Polygon polygon, int storyId, comment) async {
     if (comment == polygon.comment) {
       return PolygonSavedState(Data.success(comment));
     }
     selectedPolygon.comment = comment;
-    updatePolygon(polygon, storyId);
-    showSuccessToast("Your comment has been added");
-    return PolygonSavedState(Data.success(comment));
+    final data = await _mainRepo.updatePolygon(polygon, storyId);
+
+    if (data.state == DataState.Success) {
+      showSuccessToast("Your comment has been added");
+      return PolygonSavedState(Data.success(comment));
+    } else {
+      return throwFailState("Can not update comment on server.");
+    }
   }
 
   List<Polygon> get polygons => _polygons;

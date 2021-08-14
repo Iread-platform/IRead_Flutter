@@ -9,7 +9,7 @@ class AttachmentRepo {
   ApiService _apiService = ApiService();
   FlutterUploader _uploader = FlutterUploader();
 
-  final String baseUrl = 'http://46.227.254.20:5014/api/iread/attachment/add';
+  final String baseUrl = 'http://46.227.254.20:5014/api/iread/Attachment/add';
 
   /// Upload audio then store uploading data in the [UploadingFile] model.
   Future<UploadingFile> saveFile(String path, int storyId) async {
