@@ -113,6 +113,10 @@ class _DrawingWidgetState extends State<DrawingWidget> {
           });
         },
         onPanEnd: (details) {
+          if (_drawBloc.closed) {
+            return;
+          }
+
           setState(() {
             RenderBox renderBox = context.findRenderObject();
             _drawBloc.closed = true;
