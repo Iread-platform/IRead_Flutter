@@ -222,11 +222,14 @@ class _DrawingWidgetState extends State<DrawingWidget> {
                   color: Colors.green,
                 )),
           )
-        : IconButton(
-            icon: Icon(Icons.add_circle),
-            onPressed: () {
-              _drawBloc.add(SavePolygonEvent());
-            });
+        : Tooltip(
+            message: "Save your draw",
+            child: IconButton(
+                icon: Icon(Icons.add_circle),
+                onPressed: () {
+                  _drawBloc.add(SavePolygonEvent());
+                }),
+          );
   }
 
   Widget _commentBuilder(BuildContext context) {
@@ -237,7 +240,7 @@ class _DrawingWidgetState extends State<DrawingWidget> {
             hint: Icon(Icons.edit),
             items: [
               DropdownMenuItem(
-                  child: Center(child: Icon(Icons.open_in_new)), value: "show"),
+                  child: Center(child: Icon(Icons.edit)), value: "show"),
               DropdownMenuItem(
                   child: Center(child: Icon(IReadIcons.delete)),
                   value: "delete")
@@ -254,15 +257,18 @@ class _DrawingWidgetState extends State<DrawingWidget> {
           );
         }
 
-        return IconButton(
-            icon: Icon(Icons.edit),
-            onPressed: _drawBloc.canInteract
-                ? () {
-                    widget._comment.clear();
+        return Tooltip(
+          message: "Add a comment",
+          child: IconButton(
+              icon: Icon(Icons.edit),
+              onPressed: _drawBloc.canInteract
+                  ? () {
+                      widget._comment.clear();
 
-                    _showCommentDialog(context);
-                  }
-                : null);
+                      _showCommentDialog(context);
+                    }
+                  : null),
+        );
       },
     );
   }
@@ -367,23 +373,29 @@ class _DrawingWidgetState extends State<DrawingWidget> {
             break;
           case PlayingRecordState:
             {
-              return IconButton(
-                  icon: Icon(Icons.pause),
-                  tooltip: "Pause",
-                  onPressed: () {
-                    path = (state as RecordState).recordPath;
-                    _recordBloc.add(PauseRecordPlayingEvent());
-                  });
+              return Tooltip(
+                message: "Pause",
+                child: IconButton(
+                    icon: Icon(Icons.pause),
+                    tooltip: "Pause",
+                    onPressed: () {
+                      path = (state as RecordState).recordPath;
+                      _recordBloc.add(PauseRecordPlayingEvent());
+                    }),
+              );
             }
             break;
           case RecordingState:
             {
-              return IconButton(
-                  icon: Icon(Icons.pause),
-                  onPressed: () {
-                    path = (state as RecordState).recordPath;
-                    _recordBloc.add(StopRecordingEvent());
-                  });
+              return Tooltip(
+                message: "Stop recording",
+                child: IconButton(
+                    icon: Icon(Icons.pause),
+                    onPressed: () {
+                      path = (state as RecordState).recordPath;
+                      _recordBloc.add(StopRecordingEvent());
+                    }),
+              );
             }
             break;
           case StopRecordingState:
@@ -418,13 +430,16 @@ class _DrawingWidgetState extends State<DrawingWidget> {
             break;
         }
 
-        return IconButton(
-            icon: Icon(IReadIcons.microphone),
-            onPressed: _drawBloc.canInteract
-                ? () {
-                    _recordBloc.add(RecordEvent());
-                  }
-                : null);
+        return Tooltip(
+          message: "Record",
+          child: IconButton(
+              icon: Icon(IReadIcons.microphone),
+              onPressed: _drawBloc.canInteract
+                  ? () {
+                      _recordBloc.add(RecordEvent());
+                    }
+                  : null),
+        );
       });
 
   void _deleteRecord(BuildContext context, String path) {
@@ -491,27 +506,30 @@ class _DrawingWidgetState extends State<DrawingWidget> {
         ),
       );
     } else {
-      return IconButton(
-          icon: Icon(IReadIcons.delete),
-          onPressed: _drawBloc.canInteract
-              ? () {
-                  setState(() {
-                    showDialog<void>(
-                        context: context,
-                        builder: (context) {
-                          return ConfirmAlert(
-                            title: 'Delete the polygon',
-                            onConfirm: () {
-                              _drawBloc.add(DeletePolygonEvent());
-                            },
-                            confirmButtonLabel: 'Delete',
-                            message:
-                                'Do you want to delete the polygon that you have painted ?',
-                          );
-                        });
-                  });
-                }
-              : null);
+      return Tooltip(
+        message: "Delete the draw",
+        child: IconButton(
+            icon: Icon(IReadIcons.delete),
+            onPressed: _drawBloc.canInteract
+                ? () {
+                    setState(() {
+                      showDialog<void>(
+                          context: context,
+                          builder: (context) {
+                            return ConfirmAlert(
+                              title: 'Delete the polygon',
+                              onConfirm: () {
+                                _drawBloc.add(DeletePolygonEvent());
+                              },
+                              confirmButtonLabel: 'Delete',
+                              message:
+                                  'Do you want to delete the polygon that you have painted ?',
+                            );
+                          });
+                    });
+                  }
+                : null),
+      );
     }
   }
 }
