@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -15,7 +17,7 @@ import 'package:iread_flutter/utils/extensions.dart';
 
 class DrawingBloc extends Bloc<BlocEvent, BlocState> {
   // TODO replace dummy story id;
-  int storyId = 4;
+  int storyId = 1;
   MainRepo _mainRepo = MainRepo();
   List<Polygon> _polygons = [];
   int _selectedPolygonIndex = 0;
@@ -28,6 +30,12 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
 
   @override
   Stream<BlocState> mapEventToState(BlocEvent event) async* {
+    if (event is SavePolygonEvent) {
+      lastEvent = event;
+    } else if (event is DrawSyncEvents && selectedPolygon.saved) {
+      lastEvent = event;
+    }
+
     switch (event.runtimeType) {
       case FetchPolygonEvent:
         showSuccessToast("Getting your draw ^_^");
@@ -35,7 +43,6 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
         yield await fetchPolygon((event as FetchPolygonEvent).id);
         break;
       case SavePolygonEvent:
-        lastEvent = event;
         yield _savePolygon(selectedPolygon);
         break;
       case RecordSavedEvent:
@@ -47,7 +54,6 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
         yield PolygonSavedState(Data.success(true));
         break;
       case DeletePolygonEvent:
-        lastEvent = event;
         showSuccessToast("Deleting your draw");
         yield PolygonDeletingState();
         yield await deletePolygon();
@@ -56,14 +62,13 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
         yield throwFailState((event as FailEvent).message);
         break;
       case RecordUpdateEvent:
-        lastEvent = event;
         updateRecord((event as RecordUpdateEvent).path);
         break;
       case CommentUpdateEvent:
-        lastEvent = event;
         String comment = (event as CommentUpdateEvent).comment;
         // Behavior on comment add, update, and delete
         if (selectedPolygon.saved) {
+          lastEvent = event;
           showSuccessToast("Syncing your comment");
           yield PolygonSavingState();
           yield await updateComment(selectedPolygon, storyId, comment);
@@ -83,7 +88,6 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
         yield PolygonSavingState();
         break;
       case PolygonRecordDeleteEvent:
-        lastEvent = event;
         yield* deleteRecordFromPolygon(storyId);
         break;
     }
@@ -105,6 +109,12 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
       } else {
         selectedPolygon.saved = true;
         add(PolygonSavedEvent());
+      }
+    }, onError: (ex, stacktrace) {
+      log("Exception $ex\n$stacktrace");
+      add(FailEvent(message: "Can not save the polygon."));
+      if (selectedPolygon.saved) {
+        _mainRepo.deletePolygon(selectedPolygon);
       }
     });
 
@@ -129,6 +139,9 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
           selectedPolygon.saved = true;
           add(PolygonSavedEvent());
         }
+      }, onError: (ex, stacktrace) {
+        log("exception $ex\n$stacktrace");
+        add(FailEvent(message: "Can not upload your record right now"));
       });
     }
   }
@@ -235,6 +248,11 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
     selectedPolygon.recordSaved = false;
     selectedPolygon.localRecordPath = null;
     selectedPolygon.audioId = null;
+
+    if (!selectedPolygon.saved) {
+      showSuccessToast("The record has been deleted");
+      yield PolygonSavedState(Data.success(true));
+    }
 
     final data = await _mainRepo.updatePolygon(selectedPolygon, storyId);
 
