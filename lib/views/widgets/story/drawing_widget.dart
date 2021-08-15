@@ -97,8 +97,7 @@ class _DrawingWidgetState extends State<DrawingWidget> {
           setState(
             () {
               if (_drawBloc.closed) {
-                Fluttertoast.showToast(
-                    msg: "You can not draw more than one draw.");
+                Fluttertoast.showToast(msg: "You can't draw another one.");
                 return;
               }
               _recordBloc.add(ResetEvent());
