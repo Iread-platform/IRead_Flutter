@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:iread_flutter/bloc/base/base_bloc.dart';
 import 'package:iread_flutter/bloc/comment_bloc/comment_bloc.dart';
 import 'package:iread_flutter/bloc/comment_bloc/comment_events.dart';
@@ -96,6 +97,8 @@ class _DrawingWidgetState extends State<DrawingWidget> {
           setState(
             () {
               if (_drawBloc.closed) {
+                Fluttertoast.showToast(
+                    msg: "You can not draw more than one draw.");
                 return;
               }
               _recordBloc.add(ResetEvent());
