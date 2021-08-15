@@ -14,13 +14,13 @@ part 'storyscreen_state.dart';
 class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
   String url;
   AudioPlayer audioPlayer;
-  Duration duration;
-  Duration progress;
+  Duration duration, progress;
+  double deviceWidth = 0.0, deviceHight = 0.0;
   int wordProgressIndex = 0;
   AudioPlayerState audioPlayerState;
   Data<StoryPage> storyPageData;
-  var context;
   StoryRepository storyRepository;
+  PageController pageController = PageController();
   StoryscreenBloc() : super(InitialState()) {
     audioPlayer = AudioPlayer();
     audioPlayerState = AudioPlayerState.PLAYING;
@@ -34,8 +34,8 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
     // ======== GetStoryEvent ==========
     if (event is FetchStoryPage) {
       yield LoadingState();
-      storyPageData = await storyRepository.fetchStoryPage();
-      await Future.delayed(Duration(seconds: 1));
+      storyPageData = await storyRepository.fetchStoryPage(event.stotyID);
+      storyPageData.data.words = initWordEndLine(storyPageData.data.words);
       yield LoadedState(data: storyPageData);
       play(storyPageData.data.audioURL);
       yield PlayerState(AudioPlayerState.PLAYING);
@@ -100,6 +100,9 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
       }
       if (event is HighlightWordEvent) {
         yield HighLightWordState(index: event.index);
+      } else if (event is NextPageEvent) {
+        pageController.nextPage(
+            duration: Duration(milliseconds: 1000), curve: Curves.linear);
       } else {}
     }
   }
@@ -113,17 +116,23 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
       audioPlayer.onDurationChanged.drain();
       duratoionStream.cancel();
     });
-    // audioPlayer.onPlayerStateChanged.listen((event) {
-    //   audioPlayerState = event;
-    // });
+    audioPlayer.onPlayerStateChanged.listen((event) {
+      audioPlayerState = event;
+    });
     audioPlayer.onAudioPositionChanged.listen((event) {
       progress = event;
       for (int i = 0; i < storyPageData.data.words.length; i++) {
         if (storyPageData.data.words[i].time > progress.inMilliseconds) {
-          int x = i - 1;
+          int x = i - 1 < 0 ? 0 : i - 1;
           highLightIndex = x.toString();
+
           break;
         }
+      }
+      // 25 is tha last index of word // replace it
+      if (int.parse(highLightIndex) == 25) {
+        highLightIndex = "0";
+        this.add(NextPageEvent());
       }
 
       this.add(ChangeProgressEvent(progress));
@@ -154,7 +163,7 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
     await audioPlayer.seek(duration);
   }
 
-  String highLightIndex;
+  String highLightIndex = "0";
   String storyString;
   List<TextSpan> spans = [];
   List<TextStyle> styles = [];
@@ -163,5 +172,38 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
   void init(String story) {
     storyString = story;
     wordsStory = storyString.split(" ");
+  }
+
+  Size calcTextSize(String text, TextStyle style) {
+    final TextPainter textPainter = TextPainter(
+      text: TextSpan(text: text, style: style),
+      textDirection: TextDirection.ltr,
+      textScaleFactor: WidgetsBinding.instance.window.textScaleFactor,
+    )..layout();
+    return textPainter.size;
+  }
+
+  initWordEndLine(words) {
+    // Find the last word in the sentence for scroll
+    Size size = Size(0, 0);
+    double scrollValue = 0;
+    String currentString = "";
+    words[0].newLine = true;
+    words[0].scrollHight = 0.0;
+    for (int i = 0; i < words.length; i++) {
+      currentString = currentString + words[i].word + " ";
+      size = calcTextSize(currentString, TextStyle(fontSize: 20));
+      // print("${size.width} >= ${deviceWidth * 0.7}");
+      // 0.7 is text continer width
+      if (size.width >= (deviceWidth * 0.7)) {
+        words[i - 1].newLine = true;
+        scrollValue = scrollValue + size.height.toInt();
+        words[i - 1].scrollHight = scrollValue;
+        size = Size(0, 0);
+        currentString = " ";
+        i--;
+      }
+    }
+    return words;
   }
 }

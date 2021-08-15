@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iread_flutter/bloc/StoryScreenBloc/storyscreen_bloc.dart';
 import 'package:iread_flutter/bloc/text_selection_provider.dart';
 import 'package:iread_flutter/utils/i_read_icons.dart';
+import 'package:iread_flutter/views/widgets/vocabulary_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:speech_bubble/speech_bubble.dart';
 
@@ -39,10 +40,18 @@ class MyTextSelectionControls extends TextSelectionControls {
       Offset lastSecondaryTapDownPosition) {
     return Consumer<TextSelectionProvider>(
       builder: (context, cart, child) {
+        double x = 0;
+        try {
+          x = Provider.of<TextSelectionProvider>(context, listen: false)
+              .scrollController
+              .offset;
+        } catch (e) {}
         return TextSelectionToolbar(
-            anchorAbove: Offset(position.dx + marginX, position.dy + marginY),
-            anchorBelow: Offset(0, 0),
+            anchorAbove:
+                Offset(position.dx + marginX, position.dy + marginY - x),
+            anchorBelow: Offset(-140, -140),
             toolbarBuilder: (context, _) {
+              print(position.dy);
               return FittedBox(
                 child: Container(
                   decoration: BoxDecoration(
@@ -63,6 +72,7 @@ class MyTextSelectionControls extends TextSelectionControls {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: popupMenu(
                         context: context,
+                        delegate: delegate,
                         isWord: cart.textSelectedIsWord,
                         highlighted: cart.highlighted,
                         playButton: cart.playButton,
@@ -74,7 +84,7 @@ class MyTextSelectionControls extends TextSelectionControls {
 
               // return (position.dy > 30 && position.dy < 250)
               //     ?
-              //     : Container();
+              // : Container();
             },
             children: [Container()]);
       },
@@ -92,7 +102,11 @@ class MyTextSelectionControls extends TextSelectionControls {
   }
 
   List<Widget> popupMenu(
-      {context, bool isWord, bool highlighted, bool playButton}) {
+      {context,
+      bool isWord,
+      bool highlighted,
+      bool playButton,
+      TextSelectionDelegate delegate}) {
     // If a word where selected, There will be two options: Vocabulary and highlight.
     if (isWord && !highlighted) {
       return [
@@ -102,7 +116,9 @@ class MyTextSelectionControls extends TextSelectionControls {
             "Shading",
             style: TextStyle(color: Colors.purple, fontWeight: FontWeight.bold),
           ),
-          onPressed: () {},
+          onPressed: () {
+            delegate.hideToolbar();
+          },
         ),
         TextSelectionToolbarTextButton(
           padding: EdgeInsets.symmetric(horizontal: 10),
@@ -110,7 +126,10 @@ class MyTextSelectionControls extends TextSelectionControls {
             "Vocabulary",
             style: TextStyle(color: Colors.purple, fontWeight: FontWeight.bold),
           ),
-          onPressed: () {},
+          onPressed: () {
+            delegate.hideToolbar();
+            return VocabularyDialog.VocDialog(context: context);
+          },
         ),
         TextSelectionToolbarTextButton(
           padding: EdgeInsets.symmetric(horizontal: 10),
@@ -120,9 +139,11 @@ class MyTextSelectionControls extends TextSelectionControls {
           ),
           onPressed: () {
             BlocProvider.of<StoryscreenBloc>(context).add(SeekToWordEvent(
-                index: Provider.of<TextSelectionProvider>(context , listen: false)
-                    .selection
-                    .start));
+                index:
+                    Provider.of<TextSelectionProvider>(context, listen: false)
+                        .selection
+                        .start));
+            delegate.hideToolbar();
           },
         )
       ];
@@ -145,7 +166,10 @@ class MyTextSelectionControls extends TextSelectionControls {
             "Vocabulary",
             style: TextStyle(color: Colors.purple, fontWeight: FontWeight.bold),
           ),
-          onPressed: () {},
+          onPressed: () {
+            delegate.hideToolbar();
+            return VocabularyDialog.VocDialog(context: context);
+          },
         ),
         TextSelectionToolbarTextButton(
           padding: EdgeInsets.symmetric(horizontal: 10),
@@ -153,7 +177,14 @@ class MyTextSelectionControls extends TextSelectionControls {
             IReadIcons.play,
             color: Colors.purple,
           ),
-          onPressed: () {},
+          onPressed: () {
+            BlocProvider.of<StoryscreenBloc>(context).add(SeekToWordEvent(
+                index:
+                    Provider.of<TextSelectionProvider>(context, listen: false)
+                        .selection
+                        .start));
+            delegate.hideToolbar();
+          },
         )
       ];
     }
@@ -166,7 +197,9 @@ class MyTextSelectionControls extends TextSelectionControls {
             "Shading",
             style: TextStyle(color: Colors.purple, fontWeight: FontWeight.bold),
           ),
-          onPressed: () {},
+          onPressed: () {
+            delegate.hideToolbar();
+          },
         ),
         TextSelectionToolbarTextButton(
           padding: EdgeInsets.symmetric(horizontal: 10),
@@ -174,7 +207,14 @@ class MyTextSelectionControls extends TextSelectionControls {
             IReadIcons.play,
             color: Colors.purple,
           ),
-          onPressed: () {},
+          onPressed: () {
+            BlocProvider.of<StoryscreenBloc>(context).add(SeekToWordEvent(
+                index:
+                    Provider.of<TextSelectionProvider>(context, listen: false)
+                        .selection
+                        .start));
+            delegate.hideToolbar();
+          },
         )
       ];
     }
@@ -196,7 +236,14 @@ class MyTextSelectionControls extends TextSelectionControls {
             IReadIcons.play,
             color: Colors.purple,
           ),
-          onPressed: () {},
+          onPressed: () {
+            BlocProvider.of<StoryscreenBloc>(context).add(SeekToWordEvent(
+                index:
+                    Provider.of<TextSelectionProvider>(context, listen: false)
+                        .selection
+                        .start));
+            delegate.hideToolbar();
+          },
         )
       ];
     }
