@@ -8,6 +8,8 @@ class User extends Model {
       : _name = name,
         _imageUrl = imageUrl;
 
+  User.fromJson(Map<String, dynamic> json) {}
+
   get name => _name;
   get imageUrl => _imageUrl;
 }
