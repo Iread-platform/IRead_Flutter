@@ -8,13 +8,12 @@ import 'package:iread_flutter/config/routing/app_router.dart';
 import 'package:iread_flutter/config/themes/theme.dart';
 import 'package:iread_flutter/services/permissions_service.dart';
 import 'package:iread_flutter/views/Screens/story_screen.dart';
-import 'package:iread_flutter/views/widgets/vocabulary_dialog.dart';
 import 'package:provider/provider.dart';
 
 import 'config/http/httpOverrides.dart';
 import 'models/stories_section_model.dart';
 import 'models/story.dart';
-import 'models/user.dart';
+import 'models/user/user.dart';
 
 void main() {
   // Override server certificate

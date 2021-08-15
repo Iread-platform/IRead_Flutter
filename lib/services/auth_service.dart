@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:iread_flutter/models/user.dart';
+import 'package:iread_flutter/models/user/user.dart';
 import 'package:iread_flutter/utils/extensions.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
