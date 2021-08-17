@@ -14,13 +14,13 @@ class FileUtils {
   }
 
   static Future<bool> checkIfFileExist(String path) async {
-    final basePath = await _localPath;
+    final basePath = await localPath;
 
     final file = File(path);
     return await file.exists();
   }
 
-  static Future<String> get _localPath async {
+  static Future<String> get localPath async {
     final directory = await getApplicationDocumentsDirectory();
 
     return directory.path;

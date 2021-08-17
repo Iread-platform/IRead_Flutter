@@ -38,6 +38,12 @@ class Polygon extends Model {
     comment = json['comment'];
     audioId = json['audioId'].runtimeType == int ? json['audioId'] : null;
 
+    if (audioId != null) {
+      recordSaved = true;
+      //TODO fetch attachment
+      //localRecordPath = FileUtils.localPath +
+    }
+
     saved = true;
   }
 
