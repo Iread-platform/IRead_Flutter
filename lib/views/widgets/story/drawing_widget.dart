@@ -421,7 +421,8 @@ class _DrawingWidgetState extends State<DrawingWidget> {
                         if (value == 'delete') {
                           return _deleteRecord(context, path);
                         } else if (value == 'play') {
-                          _recordBloc.add(PlayRecordEvent(path));
+                          _recordBloc.add(PlayRecordEvent(
+                              _drawBloc.selectedPolygon.record, path));
                         }
                       }
                     : null,

@@ -7,6 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:iread_flutter/bloc/base/base_bloc.dart';
 import 'package:iread_flutter/bloc/record_bloc/record_events.dart';
 import 'package:iread_flutter/bloc/record_bloc/record_state.dart';
+import 'package:iread_flutter/models/attachment/attachment.dart';
 import 'package:path_provider/path_provider.dart';
 
 class RecordBloc extends Bloc<BlocEvent, BlocState> {
@@ -44,8 +45,9 @@ class RecordBloc extends Bloc<BlocEvent, BlocState> {
       case PlayRecordEvent:
         {
           PlayRecordEvent playRecordEvent = event as PlayRecordEvent;
-          playRecord(playRecordEvent.recordPath);
-          yield PlayingRecordState(playRecordEvent.recordPath);
+          playRecord(playRecordEvent.record, playRecordEvent.localPath);
+          yield PlayingRecordState(
+              playRecordEvent.localPath, playRecordEvent.record);
         }
         break;
       case PauseRecordPlayingEvent:
@@ -98,9 +100,9 @@ class RecordBloc extends Bloc<BlocEvent, BlocState> {
     return InitialState();
   }
 
-  void playRecord(String path) async {
+  void playRecord(Attachment record, String localPath) async {
     Fluttertoast.showToast(msg: "Playing your record");
-    _audioPlayer.play(path, isLocal: true);
+    _audioPlayer.play(localPath, isLocal: true);
     _audioPlayer.resume();
     _audioPlayer.onPlayerCompletion.listen((event) {
       this.add(PauseRecordPlayingEvent());

@@ -10,4 +10,12 @@ class FileUtils {
 
     return result;
   }
+
+  static bool checkIfFileExist() {}
+
+  Future<String> get _localPath async {
+    final directory = await getApplicationDocumentsDirectory();
+
+    return directory.path;
+  }
 }
