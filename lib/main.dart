@@ -8,6 +8,7 @@ import 'package:iread_flutter/config/routing/app_router.dart';
 import 'package:iread_flutter/config/themes/theme.dart';
 import 'package:iread_flutter/services/permissions_service.dart';
 import 'package:iread_flutter/views/Screens/story_screen.dart';
+import 'package:iread_flutter/views/Screens/student_screen.dart';
 import 'package:iread_flutter/views/widgets/vocabulary_dialog.dart';
 import 'package:provider/provider.dart';
 
@@ -60,7 +61,7 @@ class IReadApp extends StatelessWidget {
     BlocProvider.of<StoryscreenBloc>(context, listen: false).deviceHight = h;
     return Scaffold(
       body: Center(
-        child: StoryScreen(),
+        child: StudentScreen(),
       ),
     );
   }
