@@ -43,7 +43,7 @@ dependencies:
   permission_handler: ^8.0.0+2
   flutter_uploader: ^1.2.1
   fluttertoast: 7.1.8
-  path_provider: ^2.0.2
+  path_provider: ^1.5.1
 
 dev_dependencies:
   flutter_test:

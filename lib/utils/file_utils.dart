@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
 
 class FileUtils {
   static Future<Map<String, dynamic>> readAssetJson(String assetFile) async {
@@ -11,9 +13,14 @@ class FileUtils {
     return result;
   }
 
-  static bool checkIfFileExist() {}
+  static Future<bool> checkIfFileExist(String path) async {
+    final basePath = await _localPath;
 
-  Future<String> get _localPath async {
+    final file = File(path);
+    return await file.exists();
+  }
+
+  static Future<String> get _localPath async {
     final directory = await getApplicationDocumentsDirectory();
 
     return directory.path;
