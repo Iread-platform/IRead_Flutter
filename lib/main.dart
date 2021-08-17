@@ -7,12 +7,17 @@ import 'package:iread_flutter/bloc/text_selection_provider.dart';
 import 'package:iread_flutter/config/routing/app_router.dart';
 import 'package:iread_flutter/config/themes/theme.dart';
 import 'package:iread_flutter/services/permissions_service.dart';
-import 'package:iread_flutter/views/Screens/story_screen.dart';
-import 'package:iread_flutter/views/widgets/vocabulary_dialog.dart';
+import 'package:iread_flutter/views/widgets/story/drawing_widget.dart';
 import 'package:provider/provider.dart';
 
+import 'bloc/base/base_bloc.dart';
+import 'bloc/comment_bloc/comment_bloc.dart';
+import 'bloc/drawing_bloc/drawing_bloc.dart';
+import 'bloc/drawing_bloc/drawing_states.dart';
+import 'bloc/record_bloc/record_bloc.dart';
+import 'config/app_config.dart';
 import 'config/http/httpOverrides.dart';
-import 'models/stories_section_model.dart';
+import 'config/themes/theme.dart';
 import 'models/story.dart';
 import 'models/user.dart';
 
@@ -44,10 +49,11 @@ class MyApp extends StatelessWidget {
     PermissionService.checkPermissions();
 
     return MaterialApp(
-      theme: mainTheme,
-      title: 'Iread',
-      home: IReadApp(),
-    );
+        theme: mainTheme,
+        title: 'Iread',
+        onGenerateRoute: AppRouter().appRouterGenerator,
+        navigatorKey: AppConfigs.instance().navigationKey,
+        home: Scaffold(body: IReadApp()));
   }
 }
 
@@ -60,23 +66,15 @@ class IReadApp extends StatelessWidget {
     BlocProvider.of<StoryscreenBloc>(context, listen: false).deviceHight = h;
     return Scaffold(
       body: Center(
-        child: StoryScreen(),
+        child: MultiProvider(providers: [
+          Provider(create: (context) => DrawingBloc(NoPolygonState())),
+          Provider(create: (context) => RecordBloc(InitialState())),
+          Provider(create: (context) => CommentBloc(InitialState()))
+        ], child: DrawingWidget()),
       ),
     );
   }
 }
-
-// ignore: todo
-// TODO clear static stories
-List<StoriesSectionModel> storiesSection = [
-  StoriesSectionModel('Continue Reading', [story, story, story, story]),
-  StoriesSectionModel('Continue Reading', [story, story, story, story]),
-  StoriesSectionModel('Continue Reading', [story, story, story, story]),
-  StoriesSectionModel('Continue Reading', [story, story, story, story]),
-  StoriesSectionModel('Continue Reading', [story, story, story, story]),
-  StoriesSectionModel('Continue Reading', [story, story, story, story]),
-  StoriesSectionModel('Continue Reading', [story, story, story, story]),
-];
 
 Story story = Story(
     title: 'Wood, Wire, Wings',
