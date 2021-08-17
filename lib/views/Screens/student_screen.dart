@@ -69,6 +69,7 @@ class _StudentScreenState extends State<StudentScreen> {
                     Directionality(
                       textDirection: TextDirection.rtl,
                       child: Container(
+                        margin: EdgeInsets.only(right: 20),
                         alignment: Alignment.center,
                         child: Ranking(
                           name: "Mohamad",
@@ -87,6 +88,7 @@ class _StudentScreenState extends State<StudentScreen> {
           margin: EdgeInsets.all(20),
           child: Text("Level 5", style: Theme.of(context).textTheme.headline3),
         ),
+        
         for (int i = 0; i < _items.length; i++)
           Container(
             margin: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
@@ -112,8 +114,12 @@ class _StudentScreenState extends State<StudentScreen> {
           child: GridView.builder(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
+            
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 3,
+              mainAxisExtent: 180
+              
+              
             ),
             itemCount: 12,
             itemBuilder: (BuildContext context, int index) {
