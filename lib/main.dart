@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iread_flutter/bloc/StoryScreenBloc/storyscreen_bloc.dart';
@@ -7,9 +6,8 @@ import 'package:iread_flutter/bloc/text_selection_provider.dart';
 import 'package:iread_flutter/config/routing/app_router.dart';
 import 'package:iread_flutter/config/themes/theme.dart';
 import 'package:iread_flutter/services/permissions_service.dart';
-import 'package:iread_flutter/views/widgets/story/drawing_widget.dart';
+import 'package:iread_flutter/views/Screens/student_screen.dart';
 import 'package:provider/provider.dart';
-
 import 'bloc/base/base_bloc.dart';
 import 'bloc/comment_bloc/comment_bloc.dart';
 import 'bloc/drawing_bloc/drawing_bloc.dart';
@@ -70,7 +68,7 @@ class IReadApp extends StatelessWidget {
           Provider(create: (context) => DrawingBloc(NoPolygonState())),
           Provider(create: (context) => RecordBloc(InitialState())),
           Provider(create: (context) => CommentBloc(InitialState()))
-        ], child: DrawingWidget()),
+        ], child: StudentScreen()),
       ),
     );
   }
