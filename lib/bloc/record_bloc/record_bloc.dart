@@ -3,6 +3,7 @@ import 'dart:io' as io;
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter_audio_recorder/flutter_audio_recorder.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:iread_flutter/bloc/base/base_bloc.dart';
 import 'package:iread_flutter/bloc/record_bloc/record_events.dart';
 import 'package:iread_flutter/bloc/record_bloc/record_state.dart';
@@ -62,6 +63,7 @@ class RecordBloc extends Bloc<BlocEvent, BlocState> {
   }
 
   Future<String> _record() async {
+    Fluttertoast.showToast(msg: "Start recording.");
     final length = _records.length;
     String recordName = _appDirectory.path +
         "/record-" +
@@ -97,6 +99,7 @@ class RecordBloc extends Bloc<BlocEvent, BlocState> {
   }
 
   void playRecord(String path) async {
+    Fluttertoast.showToast(msg: "Playing your record");
     _audioPlayer.play(path, isLocal: true);
     _audioPlayer.resume();
     _audioPlayer.onPlayerCompletion.listen((event) {
