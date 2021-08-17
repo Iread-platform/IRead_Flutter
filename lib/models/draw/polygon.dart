@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:iread_flutter/models/attachment/attachment.dart';
 import 'package:iread_flutter/models/model.dart';
 
 class Polygon extends Model {
@@ -12,6 +13,7 @@ class Polygon extends Model {
   int audioId;
   String localRecordPath;
   String comment;
+  Attachment record;
 
   Polygon(
       {@required List<Offset> points,

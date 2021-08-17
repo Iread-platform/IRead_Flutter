@@ -46,6 +46,7 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
         yield _savePolygon(selectedPolygon);
         break;
       case RecordSavedEvent:
+        selectedPolygon.record = (event as RecordSavedEvent).attachment;
         showSuccessToast("Your record has been stored");
         yield PolygonRecordSaved();
         break;
@@ -105,7 +106,7 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
           add(PolygonSavedEvent());
         }
       } else if (item.data is Attachment) {
-        add(RecordSavedEvent());
+        add(RecordSavedEvent(item.data));
       } else {
         selectedPolygon.saved = true;
         add(PolygonSavedEvent());
@@ -134,7 +135,7 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
       add(PolygonSyncEvent());
       _mainRepo.savePolygonRecord(selectedPolygon, storyId).listen((event) {
         if (event.data is Attachment) {
-          add(RecordSavedEvent());
+          add(RecordSavedEvent(event.data));
         } else {
           selectedPolygon.saved = true;
           add(PolygonSavedEvent());
