@@ -70,7 +70,7 @@ class IReadApp extends StatelessWidget {
         child: MultiProvider(providers: [
           Provider(
               create: (context) =>
-                  DrawingBloc(NoPolygonState())..add(FetchPolygonEvent(23))),
+                  DrawingBloc(NoPolygonState())..add(FetchPolygonEvent(20))),
           Provider(create: (context) => RecordBloc(InitialState())),
           Provider(create: (context) => CommentBloc(InitialState()))
         ], child: DrawingWidget()),

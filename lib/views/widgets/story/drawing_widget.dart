@@ -400,7 +400,8 @@ class _DrawingWidgetState extends State<DrawingWidget> {
             break;
           case StopRecordingState:
             {
-              path = (state as RecordState).recordPath;
+              path = (state as RecordState).recordPath ??
+                  _drawBloc.selectedPolygon.localRecordPath;
               if (!_drawBloc.selectedPolygon.recordSaved) {
                 _drawBloc.add(RecordUpdateEvent(path));
               }

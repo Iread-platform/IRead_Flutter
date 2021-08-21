@@ -14,10 +14,11 @@ import 'package:iread_flutter/models/draw/polygon.dart';
 import 'package:iread_flutter/repo/main_repo.dart';
 import 'package:iread_flutter/utils/data.dart';
 import 'package:iread_flutter/utils/extensions.dart';
+import 'package:iread_flutter/utils/file_utils.dart';
 
 class DrawingBloc extends Bloc<BlocEvent, BlocState> {
   // TODO replace dummy story id;
-  int storyId = 1;
+  int storyId = 4;
   MainRepo _mainRepo = MainRepo();
   List<Polygon> _polygons = [];
   int _selectedPolygonIndex = 0;
@@ -157,8 +158,8 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
 
     final deleteState = await _mainRepo.deletePolygon(selectedPolygon);
     // Delete associated record
-    final polygonPath = selectedPolygon.localRecordPath;
-    recordBloc.add(DeleteRecordEvent(polygonPath));
+    final polygonRecordPath = selectedPolygon.localRecordPath;
+    recordBloc.add(DeleteRecordEvent(polygonRecordPath));
     // Make user able to paint
     closed = false;
 
@@ -174,13 +175,23 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
     final polygonData = await _mainRepo.fetchPolygon(id);
 
     if (polygonData.state == DataState.Fail) {
-      return throwFailState(polygonData.message);
+      return FailState(message: polygonData.message);
     }
     // Close draw area
     closed = true;
 
+    Polygon polygon = polygonData.data;
+
     _polygons.add(polygonData.data);
     _selectedPolygonIndex = 0;
+
+    // Check if there is a record
+    if (polygon.audioId != null && polygon.audioId > 0) {
+      final recordPath = await FileUtils.localPath + polygon.record.title;
+      polygon.localRecordPath = recordPath;
+      recordBloc.add(PlayRecordEvent(polygon.record, recordPath));
+    }
+
     return DrawPolygonState();
   }
 

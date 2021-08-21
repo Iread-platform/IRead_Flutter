@@ -14,6 +14,10 @@ class FileUtils {
   }
 
   static Future<bool> checkIfFileExist(String path) async {
+    if (path == null) {
+      return false;
+    }
+
     final basePath = await localPath;
 
     final file = File(path);

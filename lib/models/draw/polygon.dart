@@ -10,9 +10,9 @@ class Polygon extends Model {
   bool saved = false;
   bool recordSaved = false;
   bool needToUpdate = false;
-  int audioId;
   String localRecordPath;
   String comment;
+  int audioId;
   Attachment record;
 
   Polygon(
@@ -36,12 +36,11 @@ class Polygon extends Model {
     _minX = json['minX'].toDouble();
     _minY = json['minY'].toDouble();
     comment = json['comment'];
-    audioId = json['audioId'].runtimeType == int ? json['audioId'] : null;
 
-    if (audioId != null) {
+    if (json['audio'] != null) {
+      record = Attachment.fromJson(json['audio']);
+      audioId = record.id;
       recordSaved = true;
-      //TODO fetch attachment
-      //localRecordPath = FileUtils.localPath +
     }
 
     saved = true;

@@ -93,7 +93,7 @@ class RecordBloc extends Bloc<BlocEvent, BlocState> {
     }
     _audioPlayer.stop();
 
-    if (path != null) {
+    if (path != null && await FileUtils.checkIfFileExist(path)) {
       io.File recordFile = io.File(path);
       await recordFile.delete();
     }
@@ -118,7 +118,7 @@ class RecordBloc extends Bloc<BlocEvent, BlocState> {
 
   StopRecordingState pauseRecordPlaying() {
     _audioPlayer.pause();
-    return StopRecordingState(_current.path);
+    return StopRecordingState(null);
   }
 
   void dispose() {
