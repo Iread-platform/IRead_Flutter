@@ -567,7 +567,7 @@ class _DrawingWidgetState extends State<DrawingWidget> {
               ),
             ),
             style: ElevatedButton.styleFrom(
-                primary: _drawBloc.color, shape: CircleBorder()),
+                primary: _drawBloc.color, shape: CircleBorder(), elevation: 20),
           ),
         ),
       );
