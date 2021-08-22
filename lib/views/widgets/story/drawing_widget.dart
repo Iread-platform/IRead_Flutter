@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:iread_flutter/bloc/base/base_bloc.dart';
 import 'package:iread_flutter/bloc/comment_bloc/comment_bloc.dart';
@@ -73,7 +74,7 @@ class _DrawingWidgetState extends State<DrawingWidget> {
           }
 
           // Update color
-          paint.color = _drawBloc.selectedPolygon?.color ?? paint.color;
+          paint.color = _drawBloc.selectedPolygon?.color ?? _drawBloc.color;
 
           return Stack(
             children: [
@@ -84,6 +85,7 @@ class _DrawingWidgetState extends State<DrawingWidget> {
               )),
               _customPaint(),
               _gestureDetector(),
+              _colorPickerButton(),
               _drawBloc.polygons.length > 0 ||
                       state.runtimeType == DrawPolygonState
                   ? _drawActions(context, _drawBloc.selectedPolygon, 0, state)
@@ -137,7 +139,8 @@ class _DrawingWidgetState extends State<DrawingWidget> {
                 maxY: maxY,
                 minY: minY,
                 maxX: maxX,
-                minX: minX));
+                minX: minX,
+                color: _drawBloc.color));
             points.clear();
           });
         },
@@ -541,6 +544,31 @@ class _DrawingWidgetState extends State<DrawingWidget> {
       );
     }
   }
+
+  _colorPickerButton() => Positioned(
+        top: 24,
+        right: 24,
+        child: ElevatedButton(
+          onPressed: () {
+            _showColorPicker(context);
+          },
+          child: Container(
+            color: _drawBloc.color,
+          ),
+        ),
+      );
+
+  _showColorPicker(BuildContext context) => showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+            title: Text('Pick a draw color'),
+            content: SingleChildScrollView(
+              child: ColorPicker(
+                pickerColor: _drawBloc.color,
+                onColorChanged: _drawBloc.changeColor,
+              ),
+            ),
+          ));
 }
 
 class FingerPainter extends CustomPainter {

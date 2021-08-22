@@ -25,6 +25,7 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
   RecordBloc recordBloc;
   BlocEvent lastEvent;
   bool canInteract = true;
+  Color color = Colors.black87.withOpacity(0.5);
 
   DrawingBloc(BlocState initialState) : super(initialState);
 
@@ -262,5 +263,9 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
     } else {
       yield throwFailState("Can not delete the record right now.");
     }
+  }
+
+  void changeColor(Color value) {
+    color = value;
   }
 }

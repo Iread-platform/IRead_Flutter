@@ -27,7 +27,7 @@ class Polygon extends Model {
         _minY = minY,
         _maxX = maxX,
         _minX = minX,
-        color = color ?? Colors.redAccent.withOpacity(0.5);
+        color = color ?? Colors.black87.withOpacity(0.5);
 
   Polygon.fromJson(Map<String, dynamic> json) : super(id: json['drawingId']) {
     final pointsString = jsonDecode(json['points']);
