@@ -1,7 +1,5 @@
 import 'dart:io';
 
-import 'package:device_preview/device_preview.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iread_flutter/bloc/StoryScreenBloc/storyscreen_bloc.dart';
@@ -30,18 +28,15 @@ void main() {
 
   AppRouter().init().then(
         (value) => runApp(
-          DevicePreview(
-            enabled: !kReleaseMode,
-            child: MultiBlocProvider(
-              providers: [
-                BlocProvider(
-                  create: (context) => StoryscreenBloc(),
-                ),
-              ],
-              child: ChangeNotifierProvider(
-                create: (context) => TextSelectionProvider(),
-                child: MyApp(),
+          MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) => StoryscreenBloc(),
               ),
+            ],
+            child: ChangeNotifierProvider(
+              create: (context) => TextSelectionProvider(),
+              child: MyApp(),
             ),
           ),
         ),
