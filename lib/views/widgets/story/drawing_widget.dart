@@ -37,6 +37,7 @@ class _DrawingWidgetState extends State<DrawingWidget> {
   DrawingBloc _drawBloc;
   RecordBloc _recordBloc;
   CommentBloc _commentBloc;
+  String _imageUrl;
 
   // Paint style
   Paint paint = Paint()
@@ -71,8 +72,16 @@ class _DrawingWidgetState extends State<DrawingWidget> {
             _drawBloc.canInteract = true;
           }
 
+          // Update color
+          paint.color = _drawBloc.selectedPolygon?.color ?? paint.color;
+
           return Stack(
             children: [
+              Positioned.fill(
+                  child: Image.network(
+                'https://picsum.photos/200/300',
+                fit: BoxFit.cover,
+              )),
               _customPaint(),
               _gestureDetector(),
               _drawBloc.polygons.length > 0 ||
@@ -548,11 +557,12 @@ class FingerPainter extends CustomPainter {
       bool closed})
       : _polygons = polygons,
         pointsList = points,
-        paintData = paint ?? Paint()
-          ..style = PaintingStyle.fill
-          ..strokeCap = StrokeCap.butt
-          ..isAntiAlias = true
-          ..color = Colors.black12.withOpacity(0.5),
+        paintData = paint ??
+            (Paint()
+              ..style = PaintingStyle.fill
+              ..strokeCap = StrokeCap.butt
+              ..isAntiAlias = true
+              ..color = Colors.black12.withOpacity(0.5)),
         closed = closed;
 
   @override
@@ -599,6 +609,7 @@ class FingerPainter extends CustomPainter {
     _polygons.forEach((element) {
       path.addPolygon(element.points, true);
     });
+
     canvas.drawPath(path, paintData);
   }
 
