@@ -552,17 +552,23 @@ class _DrawingWidgetState extends State<DrawingWidget> {
   }
 
   _colorPickerButton() => Positioned(
-        top: 24,
+        bottom: 24,
         right: 24,
-        child: ElevatedButton(
-          onPressed: () {
-            _showColorPicker(context);
-          },
-          child: Container(
-            color: _drawBloc.color,
+        child: Tooltip(
+          message: 'Pick a color',
+          child: ElevatedButton(
+            onPressed: () {
+              _showColorPicker(context);
+            },
+            child: Container(
+              color: _drawBloc.color,
+              child: Center(
+                child: Icon(Icons.palette_outlined),
+              ),
+            ),
+            style: ElevatedButton.styleFrom(
+                primary: _drawBloc.color, shape: CircleBorder()),
           ),
-          style: ElevatedButton.styleFrom(
-              primary: _drawBloc.color, shape: CircleBorder()),
         ),
       );
 

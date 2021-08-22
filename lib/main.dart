@@ -71,7 +71,7 @@ class IReadApp extends StatelessWidget {
             providers: [
               Provider(
                   create: (context) => DrawingBloc(NoPolygonState())
-                    ..add(FetchPolygonEvent(36))),
+                    ..add(FetchPolygonEvent(33))),
               Provider(create: (context) => RecordBloc(InitialState())),
               Provider(create: (context) => CommentBloc(InitialState()))
             ],
