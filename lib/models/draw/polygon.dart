@@ -77,4 +77,30 @@ class Polygon extends Model {
 
     return points;
   }
+
+  Polygon toStandardScreen(double width, double height) {
+    List<Offset> standardPoints = [];
+    standardPoints =
+        points.map((e) => Offset(e.dx / width, e.dy / height)).toList();
+    return Polygon(
+        points: standardPoints,
+        maxY: maxY / height,
+        minY: minY / height,
+        maxX: maxX / width,
+        minX: minX / width)
+      ..color = color;
+  }
+
+  Polygon toCurrentScreen(double width, double height) {
+    List<Offset> drawPoints =
+        points.map((e) => Offset(e.dx * width, e.dy * height)).toList();
+
+    return Polygon(
+        points: drawPoints,
+        maxY: maxY * height,
+        minY: minY * height,
+        maxX: maxX * width,
+        minX: minX * width)
+      ..color = color;
+  }
 }

@@ -20,12 +20,16 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
   int storyId = 1;
   MainRepo _mainRepo = MainRepo();
   List<Polygon> _polygons = [];
+  List<Polygon> _polygonsToDraw = [];
+
   int _selectedPolygonIndex = 0;
   bool closed = false;
   RecordBloc recordBloc;
   BlocEvent lastEvent;
   bool canInteract = true;
   Color color = Colors.black87.withOpacity(0.5);
+  double screenWidth;
+  double screenHeight;
 
   DrawingBloc(BlocState initialState) : super(initialState);
 
@@ -127,7 +131,10 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
     return PolygonSavingState();
   }
 
-  void addPolygon(Polygon polygon) => _polygons.add(polygon);
+  void addPolygon(Polygon polygon) {
+    _polygons.add(polygon.toStandardScreen(screenWidth, screenHeight));
+    _polygonsToDraw.add(polygon);
+  }
 
   void updateRecord(String path) async {
     showSuccessToast("Your record has been saved locally");
@@ -153,9 +160,10 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
   Future<PolygonDeletedState> deletePolygon() async {
     if (!selectedPolygon.saved) {
       _polygons.removeAt(_selectedPolygonIndex);
+      _polygonsToDraw.removeAt(_selectedPolygonIndex);
       closed = false;
       showSuccessToast("Your draw has been deleted, you can draw another one");
-      return PolygonDeletedState(true);
+      return PolygonDeletedState();
     }
 
     final deleteState = await _mainRepo.deletePolygon(selectedPolygon);
@@ -165,9 +173,10 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
     // Make user able to paint
     closed = false;
 
-    final state = PolygonDeletedState(deleteState)..polygon = selectedPolygon;
+    final state = PolygonDeletedState()..polygon = selectedPolygon;
     if (deleteState) {
       _polygons.removeAt(_selectedPolygonIndex);
+      _polygonsToDraw.removeAt(_selectedPolygonIndex);
     }
 
     return state;
@@ -184,6 +193,8 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
 
     color = polygonData.data.color;
     _polygons.add(polygonData.data);
+    _polygonsToDraw
+        .add(polygonData.data.toCurrentScreen(screenWidth, screenHeight));
     _selectedPolygonIndex = 0;
     return DrawPolygonState();
   }
@@ -220,10 +231,13 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
     }
   }
 
-  List<Polygon> get polygons => _polygons;
+  List<Polygon> get polygons => _polygonsToDraw;
 
   Polygon get selectedPolygon =>
       _polygons.length > 0 ? _polygons[_selectedPolygonIndex] : null;
+
+  Polygon get selectedPolygonForDraw =>
+      _polygons.length > 0 ? _polygonsToDraw[_selectedPolygonIndex] : null;
 
   get selectedPolygonIndex => _selectedPolygonIndex;
 

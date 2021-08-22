@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:device_preview/device_preview.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iread_flutter/bloc/StoryScreenBloc/storyscreen_bloc.dart';
@@ -28,15 +30,18 @@ void main() {
 
   AppRouter().init().then(
         (value) => runApp(
-          MultiBlocProvider(
-            providers: [
-              BlocProvider(
-                create: (context) => StoryscreenBloc(),
+          DevicePreview(
+            enabled: !kReleaseMode,
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (context) => StoryscreenBloc(),
+                ),
+              ],
+              child: ChangeNotifierProvider(
+                create: (context) => TextSelectionProvider(),
+                child: MyApp(),
               ),
-            ],
-            child: ChangeNotifierProvider(
-              create: (context) => TextSelectionProvider(),
-              child: MyApp(),
             ),
           ),
         ),
@@ -67,13 +72,17 @@ class IReadApp extends StatelessWidget {
     BlocProvider.of<StoryscreenBloc>(context, listen: false).deviceHight = h;
     return Scaffold(
       body: Center(
-        child: MultiProvider(providers: [
-          Provider(
-              create: (context) =>
-                  DrawingBloc(NoPolygonState())..add(FetchPolygonEvent(32))),
-          Provider(create: (context) => RecordBloc(InitialState())),
-          Provider(create: (context) => CommentBloc(InitialState()))
-        ], child: DrawingWidget()),
+        child: MultiProvider(
+            providers: [
+              Provider(
+                  create: (context) => DrawingBloc(NoPolygonState())
+                    ..add(FetchPolygonEvent(36))),
+              Provider(create: (context) => RecordBloc(InitialState())),
+              Provider(create: (context) => CommentBloc(InitialState()))
+            ],
+            child: DrawingWidget(
+              imageUrl: 'https://picsum.photos/200/300',
+            )),
       ),
     );
   }

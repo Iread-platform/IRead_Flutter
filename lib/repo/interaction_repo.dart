@@ -36,7 +36,7 @@ class InteractionRepo {
       final json = _constructPolygonData(polygon, storyId);
       final url =
           '$baseEndpoint/${updatePolygonEndpoint.replaceAll('@id', polygon.id.toString())}';
-      final response = await _apiService.request(
+      await _apiService.request(
           requestType: RequestType.PUT, endPoint: url, parameter: json);
 
       return Data.success(true);
@@ -49,8 +49,7 @@ class InteractionRepo {
     try {
       final url =
           '$baseEndpoint/${deletePolygonEndpoint.replaceAll('@id', polygon.id.toString())}';
-      final response = await _apiService.request(
-          requestType: RequestType.DELETE, endPoint: url);
+      await _apiService.request(requestType: RequestType.DELETE, endPoint: url);
 
       return Data.success(true);
     } catch (e) {
@@ -81,10 +80,10 @@ class InteractionRepo {
       "points": jsonEncode(polygon.pointsToJson()),
       "interaction": interaction.json,
       "comment": polygon.comment,
-      "maxX": polygon.maxX.round(),
-      "minX": polygon.minX.round(),
-      "maxY": polygon.maxY.round(),
-      "minY": polygon.minY.round(),
+      "maxX": polygon.maxX,
+      "minX": polygon.minX,
+      "maxY": polygon.maxY,
+      "minY": polygon.minY,
       "color": polygon.color.value.toRadixString(16)
     };
 

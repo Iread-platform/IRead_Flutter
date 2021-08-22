@@ -28,7 +28,7 @@ class DrawingWidget extends StatefulWidget {
   final String _imageUrl;
 
   DrawingWidget({Key key, @required String imageUrl})
-      : _imageUrl = imageUrl ?? 'https://picsum.photos/200/300',
+      : _imageUrl = imageUrl,
         super(key: key);
 
   @override
@@ -61,6 +61,9 @@ class _DrawingWidgetState extends State<DrawingWidget> {
 
   @override
   Widget build(BuildContext context) {
+    _drawBloc.screenWidth = MediaQuery.of(context).size.width;
+    _drawBloc.screenHeight = MediaQuery.of(context).size.height;
+
     return RequestHandler(
         bloc: _drawBloc,
         isDismissible: true,
@@ -90,7 +93,8 @@ class _DrawingWidgetState extends State<DrawingWidget> {
               _drawBloc.polygons.length < 1 ? _colorPickerButton() : SizedBox(),
               _drawBloc.polygons.length > 0 ||
                       state.runtimeType == DrawPolygonState
-                  ? _drawActions(context, _drawBloc.selectedPolygon, 0, state)
+                  ? _drawActions(
+                      context, _drawBloc.selectedPolygonForDraw, 0, state)
                   : SizedBox()
             ],
           );
