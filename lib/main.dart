@@ -71,12 +71,13 @@ class IReadApp extends StatelessWidget {
             providers: [
               Provider(
                   create: (context) => DrawingBloc(NoPolygonState())
-                    ..add(FetchPolygonEvent(33))),
+                    ..add(FetchPolygonEvent(36))),
               Provider(create: (context) => RecordBloc(InitialState())),
               Provider(create: (context) => CommentBloc(InitialState()))
             ],
             child: DrawingWidget(
-              imageUrl: 'https://picsum.photos/200/300',
+              imageUrl:
+                  'https://images.unsplash.com/photo-1629593733199-a01d1902778c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80',
             )),
       ),
     );
