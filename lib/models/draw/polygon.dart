@@ -39,7 +39,7 @@ class Polygon extends Model {
     _minY = json['minY'].toDouble();
     comment = json['comment'];
     audioId = json['audioId'].runtimeType == int ? json['audioId'] : null;
-    color = json['color'] ?? color;
+    color = Color(int.parse(json['color'], radix: 16)) ?? color;
 
     saved = true;
   }

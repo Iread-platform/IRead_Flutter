@@ -85,6 +85,7 @@ class InteractionRepo {
       "minX": polygon.minX.round(),
       "maxY": polygon.maxY.round(),
       "minY": polygon.minY.round(),
+      "color": polygon.color.value.toRadixString(16)
     };
 
     if (polygon.audioId != null) {

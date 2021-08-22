@@ -25,8 +25,11 @@ import 'package:iread_flutter/views/widgets/shared/request_handler.dart';
 
 class DrawingWidget extends StatefulWidget {
   final TextEditingController _comment = new TextEditingController();
+  final String _imageUrl;
 
-  DrawingWidget({Key key}) : super(key: key);
+  DrawingWidget({Key key, @required String imageUrl})
+      : _imageUrl = imageUrl ?? 'https://picsum.photos/200/300',
+        super(key: key);
 
   @override
   _DrawingWidgetState createState() => _DrawingWidgetState();
@@ -38,7 +41,6 @@ class _DrawingWidgetState extends State<DrawingWidget> {
   DrawingBloc _drawBloc;
   RecordBloc _recordBloc;
   CommentBloc _commentBloc;
-  String _imageUrl;
 
   // Paint style
   Paint paint = Paint()
@@ -80,12 +82,12 @@ class _DrawingWidgetState extends State<DrawingWidget> {
             children: [
               Positioned.fill(
                   child: Image.network(
-                'https://picsum.photos/200/300',
+                widget._imageUrl,
                 fit: BoxFit.cover,
               )),
               _customPaint(),
               _gestureDetector(),
-              _colorPickerButton(),
+              _drawBloc.polygons.length < 1 ? _colorPickerButton() : SizedBox(),
               _drawBloc.polygons.length > 0 ||
                       state.runtimeType == DrawPolygonState
                   ? _drawActions(context, _drawBloc.selectedPolygon, 0, state)
@@ -555,6 +557,7 @@ class _DrawingWidgetState extends State<DrawingWidget> {
           child: Container(
             color: _drawBloc.color,
           ),
+          style: ElevatedButton.styleFrom(primary: _drawBloc.color),
         ),
       );
 

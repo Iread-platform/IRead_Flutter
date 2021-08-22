@@ -91,6 +91,9 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
       case PolygonRecordDeleteEvent:
         yield* deleteRecordFromPolygon(storyId);
         break;
+      case ColorUpdateEvent:
+        yield NoPolygonState();
+        break;
     }
   }
 
@@ -179,6 +182,7 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
     // Close draw area
     closed = true;
 
+    color = polygonData.data.color;
     _polygons.add(polygonData.data);
     _selectedPolygonIndex = 0;
     return DrawPolygonState();
@@ -267,5 +271,6 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
 
   void changeColor(Color value) {
     color = value;
+    add(ColorUpdateEvent());
   }
 }
