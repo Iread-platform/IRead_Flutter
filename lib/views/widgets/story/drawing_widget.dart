@@ -68,8 +68,10 @@ class _DrawingWidgetState extends State<DrawingWidget> {
         bloc: _drawBloc,
         isDismissible: true,
         main: Container(
-          height: double.infinity,
-          width: double.infinity,
+          child: Image.network(
+            widget._imageUrl,
+            fit: BoxFit.contain,
+          ),
         ),
         onSuccess: (context, state) {
           if (state is PolygonSavingState) {
@@ -81,22 +83,23 @@ class _DrawingWidgetState extends State<DrawingWidget> {
           // Update color
           paint.color = _drawBloc.selectedPolygon?.color ?? _drawBloc.color;
 
-          return Stack(
-            children: [
-              Positioned.fill(
-                  child: Image.network(
-                widget._imageUrl,
-                fit: BoxFit.contain,
-              )),
-              _customPaint(),
-              _gestureDetector(),
-              _drawBloc.polygons.length < 1 ? _colorPickerButton() : SizedBox(),
-              _drawBloc.polygons.length > 0 ||
-                      state.runtimeType == DrawPolygonState
-                  ? _drawActions(
-                      context, _drawBloc.selectedPolygonForDraw, 0, state)
-                  : SizedBox()
-            ],
+          return Container(
+            child: Stack(
+              clipBehavior: Clip.none,
+              alignment: Alignment.center,
+              children: [
+                Positioned.fill(child: _customPaint()),
+                Positioned.fill(child: _gestureDetector()),
+                _drawBloc.polygons.length < 1
+                    ? _colorPickerButton()
+                    : SizedBox(),
+                _drawBloc.polygons.length > 0 ||
+                        state.runtimeType == DrawPolygonState
+                    ? _drawActions(
+                        context, _drawBloc.selectedPolygonForDraw, 0, state)
+                    : SizedBox()
+              ],
+            ),
           );
         });
   }

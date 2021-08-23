@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iread_flutter/bloc/StoryScreenBloc/storyscreen_bloc.dart';
+import 'package:iread_flutter/bloc/drawing_bloc/drawing_events.dart';
 import 'package:iread_flutter/bloc/text_selection_provider.dart';
 import 'package:iread_flutter/config/routing/app_router.dart';
 import 'package:iread_flutter/config/themes/theme.dart';
@@ -65,18 +66,18 @@ class IReadApp extends StatelessWidget {
     BlocProvider.of<StoryscreenBloc>(context, listen: false).deviceWidth = w;
     BlocProvider.of<StoryscreenBloc>(context, listen: false).deviceHight = h;
     return Scaffold(
-      body: Center(
-        child: MultiProvider(
-            providers: [
-              Provider(create: (context) => DrawingBloc(NoPolygonState())),
-              Provider(create: (context) => RecordBloc(InitialState())),
-              Provider(create: (context) => CommentBloc(InitialState()))
-            ],
-            child: DrawingWidget(
-              imageUrl:
-                  'https://images.unsplash.com/photo-1629593733199-a01d1902778c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80',
-            )),
-      ),
+      body: MultiProvider(
+          providers: [
+            Provider(
+                create: (context) =>
+                    DrawingBloc(NoPolygonState())..add(FetchPolygonEvent(47))),
+            Provider(create: (context) => RecordBloc(InitialState())),
+            Provider(create: (context) => CommentBloc(InitialState()))
+          ],
+          child: DrawingWidget(
+            imageUrl:
+                'https://images.unsplash.com/photo-1629593733199-a01d1902778c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80',
+          )),
     );
   }
 }

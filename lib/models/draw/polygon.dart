@@ -33,10 +33,10 @@ class Polygon extends Model {
     final pointsString = jsonDecode(json['points']);
 
     _points = _pointsFromJson(pointsString);
-    _maxX = json['maxX'].toDouble();
-    _maxY = json['maxX'].toDouble();
-    _minX = json['minX'].toDouble();
-    _minY = json['minY'].toDouble();
+    _maxX = json['maxX']?.toDouble() ?? 0;
+    _maxY = json['maxX']?.toDouble() ?? 0;
+    _minX = json['minX']?.toDouble() ?? 0;
+    _minY = json['minY']?.toDouble() ?? 0;
     comment = json['comment'];
     audioId = json['audioId'].runtimeType == int ? json['audioId'] : null;
     color = Color(int.parse(json['color'], radix: 16)) ?? color;

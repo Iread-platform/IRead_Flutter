@@ -132,7 +132,7 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
   }
 
   void addPolygon(Polygon polygon) {
-    _polygons.add(polygon.toStandardScreen(screenWidth, screenHeight));
+    _polygons.add(polygon);
     _polygonsToDraw.add(polygon);
   }
 
@@ -193,8 +193,7 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
 
     color = polygonData.data.color;
     _polygons.add(polygonData.data);
-    _polygonsToDraw
-        .add(polygonData.data.toCurrentScreen(screenWidth, screenHeight));
+    _polygonsToDraw.add(polygonData.data);
     _selectedPolygonIndex = 0;
     return DrawPolygonState();
   }
