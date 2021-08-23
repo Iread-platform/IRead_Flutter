@@ -7,7 +7,7 @@ import 'package:iread_flutter/bloc/text_selection_provider.dart';
 import 'package:iread_flutter/config/routing/app_router.dart';
 import 'package:iread_flutter/config/themes/theme.dart';
 import 'package:iread_flutter/services/permissions_service.dart';
-import 'package:iread_flutter/views/Screens/student_screen.dart';
+import 'package:iread_flutter/views/Screens/main_screen.dart';
 import 'package:iread_flutter/views/widgets/drawer_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -72,7 +72,7 @@ class IReadApp extends StatelessWidget {
           Provider(create: (context) => DrawingBloc(NoPolygonState())),
           Provider(create: (context) => RecordBloc(InitialState())),
           Provider(create: (context) => CommentBloc(InitialState()))
-        ], child: StudentScreen()),
+        ], child: MainScreen()),
       ),
     );
   }
