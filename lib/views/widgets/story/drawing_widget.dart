@@ -4,21 +4,27 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:iread_flutter/bloc/base/base_bloc.dart';
 import 'package:iread_flutter/bloc/comment_bloc/comment_bloc.dart';
 import 'package:iread_flutter/bloc/comment_bloc/comment_events.dart';
 import 'package:iread_flutter/bloc/drawing_bloc/drawing_bloc.dart';
+import 'package:iread_flutter/bloc/drawing_bloc/drawing_events.dart';
+import 'package:iread_flutter/bloc/drawing_bloc/drawing_states.dart';
 import 'package:iread_flutter/bloc/record_bloc/record_bloc.dart';
 import 'package:iread_flutter/bloc/record_bloc/record_events.dart';
 import 'package:iread_flutter/bloc/record_bloc/record_state.dart';
 import 'package:iread_flutter/config/themes/border_radius.dart';
 import 'package:iread_flutter/config/themes/shadows.dart';
 import 'package:iread_flutter/models/draw/polygon.dart';
+import 'package:iread_flutter/utils/extensions.dart';
 import 'package:iread_flutter/utils/i_read_icons.dart';
 import 'package:iread_flutter/views/widgets/shared/confirm_alert.dart';
+import 'package:iread_flutter/views/widgets/shared/request_handler.dart';
 
 class DrawingWidget extends StatefulWidget {
   final TextEditingController _comment = new TextEditingController();
+
   DrawingWidget({Key key}) : super(key: key);
 
   @override
@@ -31,13 +37,13 @@ class _DrawingWidgetState extends State<DrawingWidget> {
   DrawingBloc _drawBloc;
   RecordBloc _recordBloc;
   CommentBloc _commentBloc;
+
   // Paint style
   Paint paint = Paint()
     ..strokeWidth = 4
     ..color = Colors.black45.withOpacity(0.5)
     ..isAntiAlias = true
     ..style = PaintingStyle.fill;
-  bool closed = false;
   double minimalDistance = 2;
 
   @override
@@ -46,19 +52,36 @@ class _DrawingWidgetState extends State<DrawingWidget> {
     _drawBloc = BlocProvider.of<DrawingBloc>(context);
     _recordBloc = BlocProvider.of<RecordBloc>(context);
     _commentBloc = BlocProvider.of<CommentBloc>(context);
+    _drawBloc.recordBloc = _recordBloc;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        _customPaint(),
-        _gestureDetector(),
-        _drawBloc.polygons.length > 0
-            ? _drawActions(context, _drawBloc.polygons[0], 0)
-            : SizedBox()
-      ],
-    );
+    return RequestHandler(
+        bloc: _drawBloc,
+        isDismissible: true,
+        main: Container(
+          height: double.infinity,
+          width: double.infinity,
+        ),
+        onSuccess: (context, state) {
+          if (state is PolygonSavingState) {
+            _drawBloc.canInteract = false;
+          } else if (state is PolygonSavedState || state is PolygonFailState) {
+            _drawBloc.canInteract = true;
+          }
+
+          return Stack(
+            children: [
+              _customPaint(),
+              _gestureDetector(),
+              _drawBloc.polygons.length > 0 ||
+                      state.runtimeType == DrawPolygonState
+                  ? _drawActions(context, _drawBloc.selectedPolygon, 0, state)
+                  : SizedBox()
+            ],
+          );
+        });
   }
 
   Widget _customPaint() => CustomPaint(
@@ -66,14 +89,15 @@ class _DrawingWidgetState extends State<DrawingWidget> {
       painter: FingerPainter(
           polygons: _drawBloc.polygons,
           points: points,
-          closed: closed,
+          closed: _drawBloc.closed,
           paint: paint));
 
   GestureDetector _gestureDetector() => GestureDetector(
         onPanStart: (details) {
           setState(
             () {
-              if (closed) {
+              if (_drawBloc.closed) {
+                Fluttertoast.showToast(msg: "You can't draw another one.");
                 return;
               }
               _recordBloc.add(ResetEvent());
@@ -83,7 +107,7 @@ class _DrawingWidgetState extends State<DrawingWidget> {
           );
         },
         onPanUpdate: (details) {
-          if (closed) return;
+          if (_drawBloc.closed) return;
           setState(() {
             RenderBox renderBox = context.findRenderObject();
             addPoint(renderBox, details.globalPosition);
@@ -91,9 +115,13 @@ class _DrawingWidgetState extends State<DrawingWidget> {
           });
         },
         onPanEnd: (details) {
+          if (_drawBloc.closed) {
+            return;
+          }
+
           setState(() {
             RenderBox renderBox = context.findRenderObject();
-            closed = true;
+            _drawBloc.closed = true;
             addPoint(renderBox, points[0]);
             _drawBloc.addPolygon(Polygon(
                 points: List<Offset>.from(points),
@@ -106,8 +134,9 @@ class _DrawingWidgetState extends State<DrawingWidget> {
         },
       );
 
-  Widget _drawActions(BuildContext context, Polygon polygon, int index) {
-    double offsetX = 200;
+  Widget _drawActions(
+      BuildContext context, Polygon polygon, int index, BlocState state) {
+    double offsetX = 225;
     double offsetY = 50;
     double x = (polygon.maxX + polygon.minX) / 2;
     double y = polygon.minY;
@@ -122,6 +151,18 @@ class _DrawingWidgetState extends State<DrawingWidget> {
       x = size.width - offsetX;
     }
 
+    if (state is LoadingState) {
+      return Positioned(
+        top: y,
+        left: x,
+        child: Container(
+          child: Center(
+            child: CircularProgressIndicator(),
+          ),
+        ),
+      );
+    }
+
     return Positioned(
       top: y,
       left: x,
@@ -133,39 +174,62 @@ class _DrawingWidgetState extends State<DrawingWidget> {
         ),
         child: Row(
           children: [
-            IconButton(icon: Icon(Icons.add_circle), onPressed: () {}),
+            _showSaveButton(context, state),
             _recordingBuilder(context),
             _commentBuilder(context),
-            IconButton(
-                icon: Icon(IReadIcons.delete),
-                onPressed: () {
-                  setState(() {
-                    showDialog<void>(
-                        context: context,
-                        builder: (context) {
-                          return ConfirmAlert(
-                            title: 'Delete the polygon',
-                            onConfirm: _deletePolygon,
-                            confirmButtonLabel: 'Delete',
-                            message:
-                                'Do you want to delete the polygon that you have painted ?',
-                          );
-                        });
-                  });
-                })
+            _deleteButton(context, state)
           ],
         ),
       ),
     );
   }
 
-  _deletePolygon() {
-    setState(() {
-      final polygonPath = _drawBloc.selectedPolygon.localRecordPath;
-      _recordBloc.add(DeleteRecordEvent(polygonPath));
-      _drawBloc.deletePolygon(_drawBloc.selectedPolygonIndex);
-      closed = false;
-    });
+  _showSaveButton(BuildContext context, BlocState state) {
+    if (state.runtimeType == PolygonRecordSaved) {
+      return Tooltip(
+        message: 'Your record has saved',
+        child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: CircularProgressIndicator()),
+      );
+    } else if (state.runtimeType == PolygonSavingState) {
+      return Tooltip(
+        message: 'Saving your draw',
+        child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: CircularProgressIndicator()),
+      );
+    } else if (state.runtimeType == PolygonFailState) {
+      return Tooltip(
+          message: 'Can not sync your polygon, press to retry',
+          child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: IconButton(
+                  icon: Icon(Icons.refresh),
+                  color: Theme.of(context).colorScheme.primaryVariant,
+                  onPressed: () {
+                    _drawBloc.add(_drawBloc.lastEvent);
+                  })));
+    }
+    // Save the selected polygon with attachments
+    return _drawBloc.selectedPolygon.saved
+        ? Tooltip(
+            message: 'Your draw has been saved',
+            child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Icon(
+                  Icons.check,
+                  color: Colors.green,
+                )),
+          )
+        : Tooltip(
+            message: "Save your draw",
+            child: IconButton(
+                icon: Icon(Icons.add_circle),
+                onPressed: () {
+                  _drawBloc.add(SavePolygonEvent());
+                }),
+          );
   }
 
   Widget _commentBuilder(BuildContext context) {
@@ -176,28 +240,35 @@ class _DrawingWidgetState extends State<DrawingWidget> {
             hint: Icon(Icons.edit),
             items: [
               DropdownMenuItem(
-                  child: Center(child: Icon(Icons.open_in_new)), value: "show"),
+                  child: Center(child: Icon(Icons.edit)), value: "show"),
               DropdownMenuItem(
                   child: Center(child: Icon(IReadIcons.delete)),
                   value: "delete")
             ],
-            onChanged: (value) {
-              if (value == "show") {
-                _showCommentDialog(context);
-              } else if (value == "delete") {
-                _deleteComment();
-              }
-            },
+            onChanged: _drawBloc.canInteract
+                ? (value) {
+                    if (value == "show") {
+                      _showCommentDialog(context);
+                    } else if (value == "delete") {
+                      _deleteComment();
+                    }
+                  }
+                : null,
           );
         }
 
-        return IconButton(
-            icon: Icon(Icons.edit),
-            onPressed: () {
-              widget._comment.clear();
+        return Tooltip(
+          message: "Add a comment",
+          child: IconButton(
+              icon: Icon(Icons.edit),
+              onPressed: _drawBloc.canInteract
+                  ? () {
+                      widget._comment.clear();
 
-              _showAddCommentDialog(context);
-            });
+                      _showCommentDialog(context);
+                    }
+                  : null),
+        );
       },
     );
   }
@@ -230,7 +301,9 @@ class _DrawingWidgetState extends State<DrawingWidget> {
                         onPressed: () =>
                             _addComment(widget._comment.value.text),
                         child: Text(
-                          "Update",
+                          !_drawBloc.selectedPolygon.comment.isNullOrEmpty()
+                              ? "Update"
+                              : "Add",
                           style: Theme.of(context).textTheme.subtitle1.copyWith(
                               color: Theme.of(context).colorScheme.surface),
                         )),
@@ -240,10 +313,16 @@ class _DrawingWidgetState extends State<DrawingWidget> {
                     ElevatedButton(
                         onPressed: () {
                           Navigator.pop(context);
-                          _deleteComment();
+
+                          if (!_drawBloc.selectedPolygon.comment
+                              .isNullOrEmpty()) {
+                            _deleteComment();
+                          }
                         },
                         child: Text(
-                          "Delete",
+                          !_drawBloc.selectedPolygon.comment.isNullOrEmpty()
+                              ? "Delete"
+                              : "cancel",
                           style: Theme.of(context).textTheme.subtitle1.copyWith(
                               color: Theme.of(context).colorScheme.surface),
                         ))
@@ -255,42 +334,9 @@ class _DrawingWidgetState extends State<DrawingWidget> {
         });
   }
 
-  Future<void> _showAddCommentDialog(BuildContext context) async {
-    return showDialog<String>(
-        barrierDismissible: true,
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text(
-              "Your comment",
-              style: Theme.of(context).textTheme.headline4,
-            ),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                  controller: widget._comment,
-                  onSubmitted: _addComment,
-                ),
-                SizedBox(
-                  height: 12,
-                ),
-                ElevatedButton(
-                    onPressed: () => _addComment(widget._comment.value.text),
-                    child: Text(
-                      "Add",
-                      style: Theme.of(context).textTheme.subtitle1.copyWith(
-                          color: Theme.of(context).colorScheme.surface),
-                    ))
-              ],
-            ),
-          );
-        });
-  }
-
   void _addComment(String comment) {
     _commentBloc.add(AddCommentEvent());
-    _drawBloc.selectedPolygon.comment = comment;
+    _drawBloc.add(CommentUpdateEvent(comment));
     Navigator.pop(context);
   }
 
@@ -302,7 +348,7 @@ class _DrawingWidgetState extends State<DrawingWidget> {
             title: 'Delete comment',
             onConfirm: () {
               _commentBloc.add(DeleteCommentEvent());
-              _drawBloc.selectedPolygon.comment = null;
+              _drawBloc.add(CommentUpdateEvent(null));
               widget._comment.clear();
             },
             confirmButtonLabel: 'Delete',
@@ -327,28 +373,37 @@ class _DrawingWidgetState extends State<DrawingWidget> {
             break;
           case PlayingRecordState:
             {
-              return IconButton(
-                  icon: Icon(Icons.pause),
-                  tooltip: "Pause",
-                  onPressed: () {
-                    path = (state as RecordState).recordPath;
-                    _recordBloc.add(PauseRecordPlayingEvent());
-                  });
+              return Tooltip(
+                message: "Pause",
+                child: IconButton(
+                    icon: Icon(Icons.pause),
+                    tooltip: "Pause",
+                    onPressed: () {
+                      path = (state as RecordState).recordPath;
+                      _recordBloc.add(PauseRecordPlayingEvent());
+                    }),
+              );
             }
             break;
           case RecordingState:
             {
-              return IconButton(
-                  icon: Icon(Icons.pause),
-                  onPressed: () {
-                    path = (state as RecordState).recordPath;
-                    _recordBloc.add(StopRecordingEvent());
-                  });
+              return Tooltip(
+                message: "Stop recording",
+                child: IconButton(
+                    icon: Icon(Icons.pause),
+                    onPressed: () {
+                      path = (state as RecordState).recordPath;
+                      _recordBloc.add(StopRecordingEvent());
+                    }),
+              );
             }
             break;
           case StopRecordingState:
             {
               path = (state as RecordState).recordPath;
+              if (!_drawBloc.selectedPolygon.recordSaved) {
+                _drawBloc.add(RecordUpdateEvent(path));
+              }
               return DropdownButton(
                 hint: Icon(IReadIcons.microphone),
                 items: [
@@ -361,23 +416,30 @@ class _DrawingWidgetState extends State<DrawingWidget> {
                   ),
                 ],
                 elevation: 1,
-                onChanged: (value) {
-                  if (value == 'delete') {
-                    return _deleteRecord(context, path);
-                  } else if (value == 'play') {
-                    _recordBloc.add(PlayRecordEvent(path));
-                  }
-                },
+                onChanged: _drawBloc.canInteract
+                    ? (value) {
+                        if (value == 'delete') {
+                          return _deleteRecord(context, path);
+                        } else if (value == 'play') {
+                          _recordBloc.add(PlayRecordEvent(path));
+                        }
+                      }
+                    : null,
               );
             }
             break;
         }
 
-        return IconButton(
-            icon: Icon(IReadIcons.microphone),
-            onPressed: () {
-              _recordBloc.add(RecordEvent());
-            });
+        return Tooltip(
+          message: "Record",
+          child: IconButton(
+              icon: Icon(IReadIcons.microphone),
+              onPressed: _drawBloc.canInteract
+                  ? () {
+                      _recordBloc.add(RecordEvent());
+                    }
+                  : null),
+        );
       });
 
   void _deleteRecord(BuildContext context, String path) {
@@ -387,6 +449,7 @@ class _DrawingWidgetState extends State<DrawingWidget> {
           return ConfirmAlert(
             title: 'Delete record',
             onConfirm: () {
+              _drawBloc.add(PolygonRecordDeleteEvent());
               _recordBloc.add(DeleteRecordEvent(path));
             },
             message:
@@ -423,7 +486,7 @@ class _DrawingWidgetState extends State<DrawingWidget> {
 
     if (distance < minimalDistance && length > 5) {
       addPoint(renderBox, start);
-      closed = true;
+      _drawBloc.closed = true;
     }
   }
 
@@ -432,6 +495,42 @@ class _DrawingWidgetState extends State<DrawingWidget> {
     super.dispose();
     widget._comment.dispose();
     _recordBloc.dispose();
+  }
+
+  _deleteButton(BuildContext context, BlocState state) {
+    if (state.runtimeType == PolygonDeletingState) {
+      return Container(
+        padding: const EdgeInsets.all(8),
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    } else {
+      return Tooltip(
+        message: "Delete the draw",
+        child: IconButton(
+            icon: Icon(IReadIcons.delete),
+            onPressed: _drawBloc.canInteract
+                ? () {
+                    setState(() {
+                      showDialog<void>(
+                          context: context,
+                          builder: (context) {
+                            return ConfirmAlert(
+                              title: 'Delete the polygon',
+                              onConfirm: () {
+                                _drawBloc.add(DeletePolygonEvent());
+                              },
+                              confirmButtonLabel: 'Delete',
+                              message:
+                                  'Do you want to delete the polygon that you have painted ?',
+                            );
+                          });
+                    });
+                  }
+                : null),
+      );
+    }
   }
 }
 

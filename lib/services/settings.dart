@@ -13,6 +13,7 @@ class Settings {
     403: "Forbidden",
     404: "Not Found",
     408: "Request Timeout",
+    500: "Sorry, Server is unavailable now"
   };
 }
 

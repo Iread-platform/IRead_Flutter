@@ -26,7 +26,7 @@ class Data<T> {
     }
   }
 
-  get data => _data;
-  get state => _dataState;
-  get message => _message;
+  T get data => _data;
+  DataState get state => _dataState;
+  String get message => _message;
 }
