@@ -86,7 +86,7 @@ class _DrawingWidgetState extends State<DrawingWidget> {
               Positioned.fill(
                   child: Image.network(
                 widget._imageUrl,
-                fit: BoxFit.cover,
+                fit: BoxFit.contain,
               )),
               _customPaint(),
               _gestureDetector(),

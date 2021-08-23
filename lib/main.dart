@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iread_flutter/bloc/StoryScreenBloc/storyscreen_bloc.dart';
-import 'package:iread_flutter/bloc/drawing_bloc/drawing_events.dart';
 import 'package:iread_flutter/bloc/text_selection_provider.dart';
 import 'package:iread_flutter/config/routing/app_router.dart';
 import 'package:iread_flutter/config/themes/theme.dart';
@@ -69,9 +68,7 @@ class IReadApp extends StatelessWidget {
       body: Center(
         child: MultiProvider(
             providers: [
-              Provider(
-                  create: (context) => DrawingBloc(NoPolygonState())
-                    ..add(FetchPolygonEvent(36))),
+              Provider(create: (context) => DrawingBloc(NoPolygonState())),
               Provider(create: (context) => RecordBloc(InitialState())),
               Provider(create: (context) => CommentBloc(InitialState()))
             ],
