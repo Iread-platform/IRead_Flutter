@@ -18,6 +18,7 @@ class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
+      padding: const EdgeInsets.only(bottom: 24),
       children: [
         IreadAppBar(),
         Container(
