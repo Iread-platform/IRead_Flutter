@@ -106,20 +106,22 @@ class _AutoCompleteTextFieldState<T extends Model>
         child: CompositedTransformFollower(
             link: this._layerLink,
             showWhenUnlinked: false,
-            offset: Offset(0.0, size.height * 0.4),
+            offset: Offset(size.height * 0.1, size.height * 0.8),
             child: Material(
                 elevation: 4.0,
                 child: products == null
                     ? Container()
                     : Column(children: [
                         Container(
+                          height: 16,
                           child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              Expanded(
-                                child: Text("${widget.listTitle ?? " "}"),
-                              ),
                               IconButton(
-                                icon: Icon(Icons.close),
+                                icon: Icon(
+                                  Icons.close,
+                                  size: 18,
+                                ),
                                 onPressed: () {
                                   this._overlayEntry.remove();
                                   _overlayEntry = null;
@@ -151,80 +153,74 @@ class _AutoCompleteTextFieldState<T extends Model>
   }
 
   @override
-  Widget build(BuildContext context) => Padding(
-      padding: EdgeInsets.symmetric(
-          vertical: MediaQuery.of(context).size.height * 0.02,
-          horizontal: MediaQuery.of(context).size.width * 0.05),
-      child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            CompositedTransformTarget(
-                link: _layerLink,
-                child: Container(
-                    height: 50,
-                    child: TextFormField(
-                      controller: _textEditingController,
-                      focusNode: _focusNode,
-                      onFieldSubmitted: (value) {},
-                      onEditingComplete: () {
-                        _textEditingController.text =
-                            widget.itemView(_value.value);
+  Widget build(BuildContext context) =>
+      Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+        CompositedTransformTarget(
+            link: _layerLink,
+            child: Container(
+                height: 50,
+                child: TextFormField(
+                  controller: _textEditingController,
+                  focusNode: _focusNode,
+                  onFieldSubmitted: (value) {},
+                  onEditingComplete: () {
+                    _textEditingController.text = widget.itemView(_value.value);
+                  },
+                  validator: widget.validator ??
+                      (value) {
+                        return _value.value == null
+                            ? "Please Select a product"
+                            : null;
                       },
-                      validator: widget.validator ??
-                          (value) {
-                            return _value.value == null
-                                ? "Please Select a product"
-                                : null;
-                          },
-                      decoration: widget.inputDecoration ??
-                          InputDecoration(
-                            enabled: true,
-                            filled: true,
-                            fillColor: Theme.of(context).colorScheme.secondary,
-                            helperText: " ",
-                            // suffix: ValueListenableBuilder<T>(
-                            //     valueListenable: _value,
-                            //     builder: (context, value, _) => Text(
-                            //         value != null
-                            //             ? "${widget.itemView(value)}"
-                            //             : "Selection ")),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(40.0),
-                              borderSide: BorderSide(color: Colors.white),
-                            ),
-                            errorBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(40.0),
-                              borderSide: BorderSide(color: Colors.red),
-                            ),
-                            focusedErrorBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(40.0),
-                              borderSide: BorderSide(color: Colors.red),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(40.0),
-                              borderSide: BorderSide(color: Colors.white),
-                            ),
-                          ),
-                      onTap: () {},
-                      onChanged: (String value) async {
-                        if (_searchTerm == value) {
-                          return;
-                        }
-                        _searchTerm = value;
-                        if (_searchTerm.isNullOrEmpty()) {
-                          deleteOverlay();
-                          return;
-                        }
-                        List<T> products = [];
-                        products = await widget.onSearchTextChanges(value);
-                        if (products != null) {
-                          _overlayEntry?.remove();
-                          _overlayEntry = _createOverlayEntry(products);
-                          Overlay.of(context).insert(this._overlayEntry);
-                        }
-                      },
-                    )))
-          ]));
+                  decoration: widget.inputDecoration ??
+                      InputDecoration(
+                        enabled: true,
+                        filled: true,
+                        fillColor: Theme.of(context).colorScheme.secondary,
+                        helperText: " ",
+                        // suffix: ValueListenableBuilder<T>(
+                        //     valueListenable: _value,
+                        //     builder: (context, value, _) => Text(
+                        //         value != null
+                        //             ? "${widget.itemView(value)}"
+                        //             : "Selection ")),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(40.0),
+                          borderSide: BorderSide(color: Colors.white),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(40.0),
+                          borderSide: BorderSide(color: Colors.red),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(40.0),
+                          borderSide: BorderSide(color: Colors.red),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(40.0),
+                          borderSide: BorderSide(color: Colors.white),
+                        ),
+                      ),
+                  onTap: () {},
+                  onChanged: (String value) async {
+                    if (_searchTerm == value) {
+                      return;
+                    }
+                    _searchTerm = value;
+                    if (_searchTerm.isNullOrEmpty()) {
+                      deleteOverlay();
+                      return;
+                    }
+                    List<T> products = [];
+                    products = await widget.onSearchTextChanges(value);
+                    if (products != null) {
+                      _overlayEntry?.remove();
+                      _overlayEntry = _createOverlayEntry(products);
+                      Overlay.of(context).insert(this._overlayEntry);
+                    }
+                  },
+                )))
+      ]);
 
   void deleteOverlay() {
     _overlayEntry?.remove();

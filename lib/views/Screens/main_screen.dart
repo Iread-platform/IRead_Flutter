@@ -21,17 +21,16 @@ class MainScreen extends StatelessWidget {
       children: [
         IreadAppBar(),
         Container(
-            margin: const EdgeInsets.symmetric(horizontal: 24),
             child: AutoCompleteTextField<Story>(
-              label: 'Search a story',
-              itemView: (Story story) => story.title,
-              inputDecoration: _inputDecoration(context),
-              onSearchTextChanges: (term) {
-                final c = Completer<List<Story>>()
-                  ..complete(DataGenerator.storyList(10));
-                return c.future;
-              },
-            )),
+          label: 'Search a story',
+          itemView: (Story story) => story.title,
+          inputDecoration: _inputDecoration(context),
+          onSearchTextChanges: (term) {
+            final c = Completer<List<Story>>()
+              ..complete(DataGenerator.storyList(10));
+            return c.future;
+          },
+        )),
         SizedBox(
           height: 24,
         ),
