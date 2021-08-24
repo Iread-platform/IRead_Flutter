@@ -15,9 +15,10 @@ class _IreadAppBarState extends State<IreadAppBar> {
   Widget build(BuildContext context) {
     var h = MediaQuery.of(context).size.height;
     var w = MediaQuery.of(context).size.width;
+    final height = h * 0.25;
 
     return Container(
-      height: h * 0.25,
+      height: height,
       child: Column(
         children: [
           Row(
@@ -36,7 +37,7 @@ class _IreadAppBarState extends State<IreadAppBar> {
                 ),
               ),
               Container(
-                height: h * 0.25,
+                height: h * 0.20,
                 width: w * 0.8,
                 child: Stack(
                   alignment: Alignment.topRight,

@@ -6,9 +6,9 @@ import 'package:iread_flutter/bloc/search_stories_by_tag_bloc/search_stories_by_
 import 'package:iread_flutter/bloc/search_stories_by_tag_bloc/search_stories_by_tag_event.dart';
 import 'package:iread_flutter/bloc/story/story_details_bloc/story_details_bloc.dart';
 import 'package:iread_flutter/bloc/story/story_details_bloc/story_details_events.dart';
-import 'package:iread_flutter/main.dart';
 import 'package:iread_flutter/models/user/user.dart';
 import 'package:iread_flutter/services/auth_service.dart';
+import 'package:iread_flutter/utils/data_generator.dart';
 import 'package:iread_flutter/views/Screens/login_screen.dart';
 import 'package:iread_flutter/views/Screens/stories_search_list.dart';
 import 'package:iread_flutter/views/Screens/story_details.dart';
@@ -26,7 +26,7 @@ class AppRoutes {
                   _routeAuthHandler(
                     context,
                     StoryAssignmentCard(
-                      story: story,
+                      story: DataGenerator.story(),
                     ),
                   )),
     ),
