@@ -71,7 +71,11 @@ class _AutoCompleteTextFieldState<T extends Model>
     _value = ValueNotifier<T>(widget.value);
 
     _textEditingController = TextEditingController();
-    _textEditingController.text = widget.itemView(widget.value);
+
+    if (widget.value != null) {
+      _textEditingController.text = widget.itemView(widget.value);
+    }
+
     _focusNode.addListener(() {
       if (_focusNode.hasFocus) {
         if (this._overlayEntry == null) {
@@ -154,34 +158,10 @@ class _AutoCompleteTextFieldState<T extends Model>
       child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            ValueListenableBuilder<T>(
-                valueListenable: _value,
-                builder: (context, value, _) => Row(children: [
-                      Expanded(
-                          flex: 10,
-                          child: Text(
-                            "${widget.label}",
-                            style: Theme.of(context).textTheme.headline6,
-                          )),
-                      Expanded(child: Container()),
-                      Expanded(
-                          flex: 10,
-                          child: Text(
-                            "${widget.itemView(value)}",
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context).textTheme.headline6,
-                          ))
-                    ])),
-            SizedBox(
-              child: Container(
-                height: 20.0,
-              ),
-            ),
             CompositedTransformTarget(
                 link: _layerLink,
                 child: Container(
-                    height: 70,
+                    height: 50,
                     child: TextFormField(
                       controller: _textEditingController,
                       focusNode: _focusNode,
