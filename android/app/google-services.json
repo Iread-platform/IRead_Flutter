@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "773218084459",
+    "project_id": "iread-f1227",
+    "storage_bucket": "iread-f1227.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:773218084459:android:08295aaf2b87b70b29b32e",
+        "android_client_info": {
+          "package_name": "com.example.iread_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "773218084459-7s6fa4khkti3lbv8hs93cmkv9v5f3pde.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAe7R-mRggVHZJcAPCFM7IfmQ6a6EmA-MA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "773218084459-7s6fa4khkti3lbv8hs93cmkv9v5f3pde.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
