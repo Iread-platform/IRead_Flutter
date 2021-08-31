@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iread_flutter/utils/i_read_icons.dart';
 
 class VocabularyDialog {
-  static Future VocDialog({@required context}) async {
+  static Future vocDialog({@required context}) async {
     var w = MediaQuery.of(context).size.width;
     var h = MediaQuery.of(context).size.height;
     return showDialog(
