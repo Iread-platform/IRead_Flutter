@@ -4,12 +4,12 @@ part of 'interactions_bloc.dart';
 abstract class InteractionsEvent {}
 
 class HightLightEvent extends InteractionsEvent {
-  int wordIndex;
+  final int wordIndex;
   HightLightEvent({this.wordIndex});
 }
 
 class VocabularyEvent extends InteractionsEvent {
-  int wordIndex;
+  final int wordIndex;
   VocabularyEvent({this.wordIndex});
 }
 

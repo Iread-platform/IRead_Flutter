@@ -57,8 +57,6 @@ class AppRoutes {
 
   static Widget _routeAuthHandler(BuildContext context, Widget defaultPage,
       {Widget onAdmin, Widget onTeacher, Widget onStudent, Widget onNoUser}) {
-    AuthService service = AuthService();
-    // AuthService service =  AuthService();
     print("=============================");
     print(AuthService().cU);
     return StreamBuilder<User>(

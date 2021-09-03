@@ -128,7 +128,7 @@ class MyTextSelectionControls extends TextSelectionControls {
           ),
           onPressed: () {
             delegate.hideToolbar();
-            return VocabularyDialog.VocDialog(context: context);
+            return VocabularyDialog.vocDialog(context: context);
           },
         ),
         TextSelectionToolbarTextButton(
@@ -168,7 +168,7 @@ class MyTextSelectionControls extends TextSelectionControls {
           ),
           onPressed: () {
             delegate.hideToolbar();
-            return VocabularyDialog.VocDialog(context: context);
+            return VocabularyDialog.vocDialog(context: context);
           },
         ),
         TextSelectionToolbarTextButton(
