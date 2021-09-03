@@ -27,6 +27,7 @@ class MainScreen extends StatelessWidget {
               label: 'Search a story',
               itemView: (Story story) => story.title,
               inputDecoration: _inputDecoration(context),
+              onResultSelected: (Story story) {},
               onSearchTextChanges: (term) {
                 final c = Completer<List<Story>>()
                   ..complete(DataGenerator.storyList(10));
