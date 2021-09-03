@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iread_flutter/utils/i_read_icons.dart';
 
 class SearchBar extends StatelessWidget {
   final TextEditingController search = TextEditingController();
@@ -15,7 +16,11 @@ class SearchBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(boxShadow: [
-        BoxShadow(blurRadius: 5, offset: Offset(0, 1), color: Colors.black12)
+        BoxShadow(
+            blurRadius: 5,
+            offset: Offset(-4, 2),
+            spreadRadius: -2,
+            color: Theme.of(context).colorScheme.primary)
       ], borderRadius: BorderRadius.circular(50)),
       child: TextField(
         decoration: _inputDecoration(context),
@@ -36,7 +41,10 @@ class SearchBar extends StatelessWidget {
         focusColor: Theme.of(context).colorScheme.secondary,
         prefixIcon: Padding(
           padding: const EdgeInsets.only(left: 32, right: 24),
-          child: Icon(Icons.search),
+          child: Icon(
+            IReadIcons.search,
+            color: Theme.of(context).colorScheme.primary,
+          ),
         ),
         hintText: _hintText,
       );
