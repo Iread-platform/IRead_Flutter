@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,9 +8,10 @@ import 'package:iread_flutter/bloc/text_selection_provider.dart';
 import 'package:iread_flutter/config/routing/app_router.dart';
 import 'package:iread_flutter/config/themes/theme.dart';
 import 'package:iread_flutter/services/permissions_service.dart';
-import 'package:iread_flutter/views/Screens/student_screen.dart';
+import 'package:iread_flutter/views/Screens/story_screen.dart';
 import 'package:provider/provider.dart';
 
+import 'Repository/story_repository.dart';
 import 'bloc/base/base_bloc.dart';
 import 'bloc/comment_bloc/comment_bloc.dart';
 import 'bloc/drawing_bloc/drawing_bloc.dart';
@@ -21,8 +23,9 @@ import 'config/themes/theme.dart';
 import 'models/story.dart';
 import 'models/user/user.dart';
 
-void main() {
+Future<void> main() async {
   // Override server certificate
+  await StoryRepository().fetchStoryPage(23);
   HttpOverrides.global = new IreadHttpOverrides();
 
   AppRouter().init().then(
@@ -66,11 +69,14 @@ class IReadApp extends StatelessWidget {
     BlocProvider.of<StoryscreenBloc>(context, listen: false).deviceHight = h;
     return Scaffold(
       body: Center(
-        child: MultiProvider(providers: [
-          Provider(create: (context) => DrawingBloc(NoPolygonState())),
-          Provider(create: (context) => RecordBloc(InitialState())),
-          Provider(create: (context) => CommentBloc(InitialState()))
-        ], child: StudentScreen()),
+        child: MultiProvider(
+          providers: [
+            Provider(create: (context) => DrawingBloc(NoPolygonState())),
+            Provider(create: (context) => RecordBloc(InitialState())),
+            Provider(create: (context) => CommentBloc(InitialState()))
+          ],
+          child: StoryScreen(),
+        ),
       ),
     );
   }

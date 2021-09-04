@@ -252,7 +252,7 @@ class _StoryScreenState extends State<StoryScreen> {
         Provider.of<TextSelectionProvider>(context, listen: false)
             .scrollController
             .animateTo(
-                bloc.storyPageData.data.words[int.parse(bloc.highLightIndex)]
+                bloc.storyPageData.data.pages[bloc.pageController.page.toInt()].words[int.parse(bloc.highLightIndex)]
                     .scrollHight,
                 duration: Duration(milliseconds: 500),
                 curve: Curves.linear);
@@ -264,11 +264,11 @@ class _StoryScreenState extends State<StoryScreen> {
   void scroll() {
     try {
       if (bloc
-          .storyPageData.data.words[int.parse(bloc.highLightIndex)].newLine) {
+          .storyPageData.data.pages[bloc.pageController.page.toInt()].words[int.parse(bloc.highLightIndex)].newLine) {
         Provider.of<TextSelectionProvider>(context, listen: false)
             .scrollController
             .animateTo(
-                bloc.storyPageData.data.words[int.parse(bloc.highLightIndex)]
+                bloc.storyPageData.data.pages[bloc.pageController.page.toInt()].words[int.parse(bloc.highLightIndex)]
                     .scrollHight,
                 duration: Duration(milliseconds: 500),
                 curve: Curves.linear);
@@ -294,21 +294,24 @@ class _StoryScreenState extends State<StoryScreen> {
       child: PageView(
         controller: bloc.pageController,
         children: [
-          HighlighText(
-              storyString: bloc.storyPageData.data.story ?? "",
-              words: bloc.storyPageData.data.words ?? [],
+          for (var i = 0; i < bloc.storyPageData.data.pages.length; i++) 
+            HighlighText(
+              storyString: bloc.storyPageData.data.pages[i].content ?? "",
+              words: bloc.storyPageData.data.pages[i].words ?? [],
               marginX: w * 0.15,
               marginY: h * 0.44),
-          HighlighText(
-              storyString: bloc.storyPageData.data.story ?? "",
-              words: bloc.storyPageData.data.words ?? [],
-              marginX: w * 0.15,
-              marginY: h * 0.44),
-          HighlighText(
-              storyString: bloc.storyPageData.data.story ?? "",
-              words: bloc.storyPageData.data.words ?? [],
-              marginX: w * 0.15,
-              marginY: h * 0.44),
+            
+          
+          // HighlighText(
+          //     storyString: bloc.storyPageData.data.pages[0].content ?? "",
+          //     words: bloc.storyPageData.data.pages[0].words ?? [],
+          //     marginX: w * 0.15,
+          //     marginY: h * 0.44),
+          // HighlighText(
+          //     storyString: bloc.storyPageData.data.pages[1].content ?? "",
+          //     words: bloc.storyPageData.data.pages[0].words ?? [],
+          //     marginX: w * 0.15,
+          //     marginY: h * 0.44),
         ],
       ),
     );

@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iread_flutter/Repository/story_repository.dart';
 import 'package:iread_flutter/bloc/base/base_bloc.dart';
 import 'package:iread_flutter/models/Data.dart';
-import 'package:iread_flutter/models/story_page_model.dart';
+import 'package:iread_flutter/models/story_model.dart';
 
 part 'storyscreen_event.dart';
 part 'storyscreen_state.dart';
@@ -18,7 +18,7 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
   double deviceWidth = 0.0, deviceHight = 0.0;
   int wordProgressIndex = 0;
   AudioPlayerState audioPlayerState;
-  Data<StoryPage> storyPageData;
+  Data<StoryModel> storyPageData;
   StoryRepository storyRepository;
   PageController pageController = PageController();
   StoryscreenBloc() : super(InitialState()) {
@@ -35,13 +35,17 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
     if (event is FetchStoryPage) {
       yield LoadingState();
       storyPageData = await storyRepository.fetchStoryPage(event.stotyID);
-      storyPageData.data.words = initWordEndLine(storyPageData.data.words);
+      for (var i = 0; i < storyPageData.data.pages.length; i++) {
+        storyPageData.data.pages[i].words =
+            initWordEndLine(storyPageData.data.pages[i].words);
+      }
+      // storyPageData.data.words = initWordEndLine(storyPageData.data.words);
       yield LoadedState(data: storyPageData);
-      play(storyPageData.data.audioURL);
+      play(storyPageData.data.audio.downloadUrl);
       yield PlayerState(AudioPlayerState.PLAYING);
     }
 
-    //==========  player Controller ==============
+    // ==========  player Controller ==============
     else {
       //======== Play ==========
       if (event is PlayEvent) {
@@ -77,11 +81,20 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
       //======== Seek to word ==========
 
       else if (event is SeekToWordEvent) {
-        for (int i = 0; i < storyPageData.data.words.length; i++) {
-          if (storyPageData.data.words[i].startIndex >= event.index) {
+        for (int i = 0;
+            i <
+                storyPageData
+                    .data.pages[pageController.page.toInt()].words.length;
+            i++) {
+          if (storyPageData.data.pages[pageController.page.toInt()].words[i]
+                  .startIndex >=
+              event.index) {
             seek(Duration(
                 milliseconds: storyPageData
-                    .data.words[i - 1 >= 0 ? i - 1 : i].time
+                    .data
+                    .pages[pageController.page.toInt()]
+                    .words[i - 1 >= 0 ? i - 1 : i]
+                    .timeStart
                     .toInt()));
             resume();
             audioPlayerState = AudioPlayerState.PLAYING;
@@ -121,16 +134,25 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
     });
     audioPlayer.onAudioPositionChanged.listen((event) {
       progress = event;
-      for (int i = 0; i < storyPageData.data.words.length; i++) {
-        if (storyPageData.data.words[i].time > progress.inMilliseconds) {
+      for (int i = 0;
+          i <
+              storyPageData
+                  .data.pages[pageController.page.toInt()].words.length;
+          i++) {
+        if (storyPageData
+                .data.pages[pageController.page.toInt()].words[i].timeStart >
+            progress.inMilliseconds) {
           int x = i - 1 < 0 ? 0 : i - 1;
           highLightIndex = x.toString();
-
           break;
         }
       }
       // 25 is tha last index of word // replace it
-      if (int.parse(highLightIndex) == 25) {
+      print("int.parse(highLightIndex) ${int.parse(highLightIndex)}");
+      print("words.length ${storyPageData.data.pages[pageController.page.toInt()].words.length}");
+
+      if (int.parse(highLightIndex) ==
+          storyPageData.data.pages[pageController.page.toInt()].words.length-2) {
         highLightIndex = "0";
         this.add(NextPageEvent());
       }
@@ -188,11 +210,16 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
     Size size = Size(0, 0);
     double scrollValue = 0;
     String currentString = "";
+    String wordQueue = "";
     words[0].newLine = true;
     words[0].scrollHight = 0.0;
+    int startIndex = 0;
     for (int i = 0; i < words.length; i++) {
-      currentString = currentString + words[i].word + " ";
-      size = calcTextSize(currentString, TextStyle(fontSize: 20));
+      currentString = currentString + words[i].content + " ";
+      words[i].startIndex = startIndex;
+      wordQueue = wordQueue + words[i].content + " ";
+      startIndex = wordQueue.length;
+      size = calcTextSize(currentString, TextStyle(fontSize: 40));
       // print("${size.width} >= ${deviceWidth * 0.7}");
       // 0.7 is text continer width
       if (size.width >= (deviceWidth * 0.7)) {

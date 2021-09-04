@@ -12,7 +12,6 @@ class TextSelectionProvider with ChangeNotifier {
     this.selection = selection;
     try {
       List<String> wordSelected = textSelected.split(" ");
-      print(wordSelected);
       if (wordSelected.length > 1) {
         this.textSelectedIsWord = false;
       } else {

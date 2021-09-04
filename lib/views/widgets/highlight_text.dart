@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iread_flutter/bloc/StoryScreenBloc/storyscreen_bloc.dart';
 import 'package:iread_flutter/bloc/text_selection_provider.dart';
-import 'package:iread_flutter/models/story_page_model.dart';
+import 'package:iread_flutter/models/story_model.dart';
 import 'package:provider/provider.dart';
 
 import 'my_text_selection_controller.dart';
@@ -12,7 +12,7 @@ class HighlighText extends StatefulWidget {
   var marginX = 0.0;
   var marginY = 0.0;
   var storyString = "";
-  List<Words> words;
+  List<Word> words;
   GlobalKey globalKey = GlobalKey();
   HighlighText({this.storyString, this.words, this.marginX, this.marginY});
 
@@ -38,16 +38,16 @@ class _HighlighTextState extends State<HighlighText> {
           children: [
             for (int i = 0; i < widget.words.length; i++)
               TextSpan(
-                text: widget.words[i].word + " ",
+                text: widget.words[i].content + " ",
                 style: BlocProvider.of<StoryscreenBloc>(context, listen: false)
                             .highLightIndex
                             .toString() ==
                         i.toString()
                     ? TextStyle(
-                        fontSize: 20,
+                        fontSize: 40,
                         backgroundColor: Colors.red,
                         color: Colors.white)
-                    : TextStyle(fontSize: 20),
+                    : TextStyle(fontSize: 40),
               )
           ],
         ),
