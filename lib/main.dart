@@ -75,7 +75,7 @@ class IReadApp extends StatelessWidget {
             Provider(create: (context) => RecordBloc(InitialState())),
             Provider(create: (context) => CommentBloc(InitialState()))
           ],
-          child: StoryScreen(),
+          child: StoryScreen(storyId : 23),
         ),
       ),
     );

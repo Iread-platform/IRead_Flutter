@@ -76,7 +76,8 @@ class Pages {
   int pageId;
   String content;
   List<Word> words;
-
+  double startPageTime = 0;
+  double endPageTime = 0;
   Pages({this.pageId, this.content, this.words});
 
   Pages.fromJson(Map<String, dynamic> json) {
@@ -87,9 +88,9 @@ class Pages {
       words = <Word>[];
       jsonWord.forEach((v) {
         words.add(new Word.fromJson(v));
-                print(words);
-
       });
+      startPageTime = words[0].timeStart;
+      endPageTime = words[words.length - 1].timeEnd;
     }
     // words = json['words'];
   }
