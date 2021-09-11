@@ -287,7 +287,7 @@ class _StoryScreenState extends State<StoryScreen> {
             .animateTo(
                 bloc.storyPageData.data.pages[bloc.pageController.page.toInt()]
                     .words[int.parse(bloc.highLightIndex)].scrollHight,
-                duration: Duration(milliseconds: 500),
+                duration: Duration(milliseconds: 400),
                 curve: Curves.linear);
       }
     } catch (e) {
@@ -310,6 +310,14 @@ class _StoryScreenState extends State<StoryScreen> {
       alignment: Alignment.topLeft,
       child: PageView(
         controller: bloc.pageController,
+        onPageChanged: (value) {
+          bloc.pageController.animateToPage(value,
+              duration: Duration(milliseconds: 1000), curve: Curves.linear);
+          bloc.add(SeekEvent(Duration(
+              milliseconds: bloc.storyPageData.data
+                  .pages[value].startPageTime
+                  .toInt())));
+        },
         children: [
           for (var i = 0; i < bloc.storyPageData.data.pages.length; i++)
             HighlighText(

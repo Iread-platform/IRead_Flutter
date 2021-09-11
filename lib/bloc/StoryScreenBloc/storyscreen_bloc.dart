@@ -104,16 +104,17 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
                 storyPageData
                     .data.pages[pageController.page.toInt()].words.length;
             i++) {
+          print(storyPageData
+              .data.pages[pageController.page.toInt()].words[i].startIndex);
+
           if (storyPageData.data.pages[pageController.page.toInt()].words[i]
                   .startIndex >=
               event.index) {
             seek(Duration(
-                milliseconds: storyPageData
-                    .data
-                    .pages[pageController.page.toInt()]
-                    .words[i - 1 >= 0 ? i - 1 : i]
-                    .timeStart
-                    .toInt()));
+                milliseconds: storyPageData.data
+                        .pages[pageController.page.toInt()].words[i].timeStart
+                        .toInt() +
+                    5));
             resume();
             audioPlayerState = AudioPlayerState.PLAYING;
             yield PlayerState(AudioPlayerState.PLAYING);
@@ -152,28 +153,30 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
     });
     audioPlayer.onAudioPositionChanged.listen((event) {
       progress = event;
-      for (int i = 0;
-          i <
-              storyPageData
-                  .data.pages[pageController.page.toInt()].words.length;
-          i++) {
-        if (storyPageData
-                .data.pages[pageController.page.toInt()].words[i].timeStart >
-            progress.inMilliseconds) {
+      var wordsTemp =
+          storyPageData.data.pages[pageController.page.toInt()].words;
+      for (int i = 0; i < wordsTemp.length; i++) {
+        if (wordsTemp[i].timeStart >= progress.inMilliseconds) {
           int x = i - 1 < 0 ? 0 : i - 1;
           highLightIndex = x.toString();
+          if (int.parse(highLightIndex) >=
+              storyPageData
+                      .data.pages[pageController.page.toInt()].words.length -
+                  1) {
+            this.add(NextPageEvent());
+
+            highLightIndex = "0";
+          }
           break;
         }
+        if (i ==
+            storyPageData.data.pages[pageController.page.toInt()].words.length -
+                1) {
+          highLightIndex = i.toString();
+          this.add(NextPageEvent());
+        }
       }
-      // 25 is tha last index of word // replace it
-
-      if (int.parse(highLightIndex) >=
-          storyPageData.data.pages[pageController.page.toInt()].words.length -
-             3) {
-        this.add(NextPageEvent());
-
-        highLightIndex = "0";
-      }
+      // 25 is tha last index of word // replace it;
 
       this.add(ChangeProgressEvent(progress));
     });
@@ -234,9 +237,7 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
     int startIndex = 0;
     for (int i = 0; i < words.length; i++) {
       //========= calculate start index of word =============
-      words[i].startIndex = startIndex;
-      wordQueue = wordQueue + words[i].content + " ";
-      startIndex = wordQueue.length;
+
       //=====================================================
       currentString = currentString + words[i].content + " ";
       size = calcTextSize(currentString, TextStyle(fontSize: 40));
@@ -248,6 +249,10 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
         size = Size(0, 0);
         currentString = " ";
         i--;
+      } else {
+        words[i].startIndex = startIndex;
+        wordQueue = wordQueue + words[i].content + " ";
+        startIndex = wordQueue.length;
       }
     }
     return words;
