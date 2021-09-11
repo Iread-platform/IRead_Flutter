@@ -56,13 +56,13 @@ class _HighlighTextState extends State<HighlighText> {
           marginY: widget.marginY,
         ),
         style: Theme.of(context).textTheme.headline6,
-        scrollPhysics: ScrollPhysics(parent: ScrollPhysics()),
+        // scrollPhysics: ScrollPhysics(parent: ScrollPhysics()),
         textAlign: TextAlign.center,
         showCursor: true,
         onSelectionChanged: (selection, cause) {
           try {
             BlocProvider.of<StoryscreenBloc>(context).add(PauseEvent());
-
+            
             String textSelected =
                 widget.storyString.substring(selection.start, selection.end);
             // ================ on word click =>> seek to word ===============
