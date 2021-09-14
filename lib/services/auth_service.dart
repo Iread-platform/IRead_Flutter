@@ -22,7 +22,7 @@ class AuthService {
   void saveUser(User user) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     // Save user as json
-    preferences.setString(_USER_SHARED_PREFERENCES_KEY, jsonEncode(user));
+    preferences.setString(_USER_SHARED_PREFERENCES_KEY, jsonEncode(user.toJson()));
     cU = user;
     _currentUserStream.sink.add(user);
   }

@@ -44,6 +44,8 @@ dependencies:
   shared_preferences:
   flutter_uploader: ^1.2.1
   fluttertoast: 7.1.8
+  progress_state_button: "^1.0.3"
+  restart_app: ^1.0.3
 
 dev_dependencies:
   flutter_test:
@@ -67,6 +69,7 @@ flutter:
     - assets/images/shared/curve_bottom_left.svg
     - assets/images/shared/curve_bottom_right.svg
     - assets/images/shared/star.png
+    - assets/images/shared/star.svg
     - assets/images/shared/error.svg
     - lib/Repository/dummyData.json
   # An image asset can refer to one or more resolution-specific "variants", see

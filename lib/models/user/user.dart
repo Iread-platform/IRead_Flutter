@@ -1,19 +1,46 @@
 import 'package:iread_flutter/models/model.dart';
 
-class User extends Model {
-  String _name;
+class User {
+  String _id;
+  String _email;
+  String _firstName;
+  String _lastName;
   String _imageUrl;
+  String _token;
   UserRole _userRole;
 
-  User({String name, String imageUrl})
-      : _name = name,
-        _imageUrl = imageUrl;
+  User({String id,String email,String firstName, String lastName, String imageUrl, String token, UserRole userRole})
+      : _firstName = firstName,
+        _lastName = lastName,
+        _imageUrl = imageUrl,
+        _token = token,
+        _id = id,
+        _email = email,
+        _userRole = userRole;
 
   User.fromJson(Map<String, dynamic> json);
 
-  get name => _name;
+  get firstName => _firstName;
+  get lastName => _lastName;
   get imageUrl => _imageUrl;
   get userRole => _userRole;
+  get token => _token;
+  get id => _id;
+  get email => _email;
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this._id;
+    data['firstName'] = this._firstName;
+    data['lastName'] = this._lastName;
+    data['imageUrl'] = this._imageUrl;
+    data['userRole'] = this._userRole.toString();
+    data['token'] = this._token;
+    data['email'] = this._email;
+    return data;
+  }
+
+
 }
 
-enum UserRole { Admin, Teacher, Student }
+enum UserRole { Admin, Teacher, Student, SchoolManager }

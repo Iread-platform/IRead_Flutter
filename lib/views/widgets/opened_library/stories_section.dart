@@ -20,7 +20,7 @@ class StoriesSection extends StatelessWidget {
       : _stories = storiesList,
         _title = title,
         _storyWidth = storyWidth ?? 150,
-        _titleBottomSpacing = titleBottomSpacing ?? 32,
+        _titleBottomSpacing = titleBottomSpacing ?? 20,
         _sectionHeight = sectionHeight ?? 250,
         _horizontalPadding = horizontalPadding ?? 12;
 
@@ -30,22 +30,23 @@ class StoriesSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(
-          _title,
-          style: Theme.of(context).textTheme.headline4,
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: _horizontalPadding),
+          child: Text(
+            _title,
+            style: Theme.of(context).textTheme.headline4,
+          ),
         ),
         SizedBox(
           height: _titleBottomSpacing,
         ),
         SizedBox(
           height: _sectionHeight,
-          child: Padding(
+          child: ListView(
             padding: EdgeInsets.symmetric(horizontal: _horizontalPadding),
-            child: ListView(
-              shrinkWrap: true,
-              scrollDirection: Axis.horizontal,
-              children: _storiesWidgets(context),
-            ),
+            shrinkWrap: true,
+            scrollDirection: Axis.horizontal,
+            children: _storiesWidgets(context),
           ),
         )
       ],
