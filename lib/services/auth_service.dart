@@ -22,7 +22,9 @@ class AuthService {
   void saveUser(User user) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     // Save user as json
-    preferences.setString(_USER_SHARED_PREFERENCES_KEY, jsonEncode(user.toJson()));
+    preferences.setString(_USER_SHARED_PREFERENCES_KEY, json.encode(user.toJson()));
+    User userdecode = User.fromJson(json.decode(preferences.getString(_USER_SHARED_PREFERENCES_KEY)));
+    print(userdecode.toJson());
     cU = user;
     _currentUserStream.sink.add(user);
   }
@@ -35,18 +37,23 @@ class AuthService {
     _currentUserStream.sink.add(null);
   }
 
+  String getUserFullName()
+  {
+    print(cU.toJson());
+    return cU.firstName + " " + cU.lastName;
+  }
   // Load user model
   Future<void> loadUser() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     // Load user json string
-    final json = preferences.getString(_USER_SHARED_PREFERENCES_KEY);
+    final userJson = preferences.getString(_USER_SHARED_PREFERENCES_KEY);
 
     // Return null if the user data is not stored.
-    if (json.isNullOrEmpty()) {
+    if (userJson.isNullOrEmpty()) {
       _currentUserStream.sink.add(null);
       return;
     }
-    User user = User.fromJson(jsonDecode(json));
+    User user = User.fromJson(json.decode(userJson));
     _currentUserStream.sink.add(user);
     cU = user;
   }

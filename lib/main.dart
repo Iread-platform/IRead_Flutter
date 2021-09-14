@@ -65,7 +65,7 @@ class MyApp extends StatelessWidget {
         title: 'Iread',
         onGenerateRoute: AppRouter().appRouterGenerator,
         navigatorKey: AppConfigs.instance().navigationKey,
-        home: AuthService().cU != null?
+        home: (AuthService().cU != null)?
             Scaffold(body: IReadApp())
             : Scaffold(
             body: BlocProvider(

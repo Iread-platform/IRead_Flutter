@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:iread_flutter/services/auth_service.dart';
 import 'package:iread_flutter/utils/colors_utils.dart';
 import 'package:iread_flutter/utils/i_read_icons.dart';
 import 'package:iread_flutter/views/widgets/user/ranking.dart';
@@ -57,7 +58,7 @@ class _IreadAppBarState extends State<IreadAppBar> {
                       margin: EdgeInsets.only(right: 20),
                       alignment: Alignment.center,
                       child: Ranking(
-                        name: "Mohamad Mohamad",
+                        name: AuthService().getUserFullName(),
                         progress: 5.0,
                         rank: 16,
                       )),

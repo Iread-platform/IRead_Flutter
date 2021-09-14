@@ -18,7 +18,16 @@ class User {
         _email = email,
         _userRole = userRole;
 
-  User.fromJson(Map<String, dynamic> json);
+  User.fromJson(Map<String, dynamic> json)
+  {
+    _id = json['id'];
+    _firstName = json['firstName'];
+    _lastName = json['lastName'];
+    _imageUrl = json['imageUrl'];
+    _token = json['token'];
+    _email = json['email'];
+    _userRole = UserRole.values.firstWhere((element) => element.toString() == json['userRole']);
+  }
 
   get firstName => _firstName;
   get lastName => _lastName;

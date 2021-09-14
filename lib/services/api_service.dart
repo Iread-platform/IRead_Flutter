@@ -44,7 +44,7 @@ class ApiService {
               headers: {
                 "Accept": "application/json",
                 "Content-Type": contentType ?? "application/json",
-                "Authorization": externalToken ?? testAuthKey
+                "Authorization": externalToken ?? AuthService().cU?.token ?? testAuthKey
               },
             )
         );
@@ -54,7 +54,7 @@ class ApiService {
             headers: {
               "Accept": "application/json",
               "Content-Type": contentType ?? "application/json",
-              "Authorization": externalToken ?? testAuthKey
+              "Authorization": externalToken ?? AuthService().cU?.token ?? testAuthKey
             },
             body: convertParametersToJson ? json.encode(parameter) : parameter,
           encoding: Encoding.getByName("utf-8")
@@ -64,7 +64,7 @@ class ApiService {
             headers: {
               "Accept": "application/json",
               "Content-Type": contentType ?? "application/json",
-              "Authorization": externalToken ?? testAuthKey
+              "Authorization": externalToken ?? AuthService().cU?.token ?? testAuthKey
             },
             body: convertParametersToJson ? json.encode(parameter) : parameter,
             encoding: Encoding.getByName("utf-8")));
