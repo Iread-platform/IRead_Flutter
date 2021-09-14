@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iread_flutter/config/themes/border_radius.dart';
+import 'package:iread_flutter/config/themes/colors.dart';
 import 'package:iread_flutter/views/widgets/shared/progress_bar.dart';
 import 'package:iread_flutter/views/widgets/story/story_image.dart';
 
@@ -63,5 +64,5 @@ class StoryCard extends StatelessWidget {
   }
 
   Widget _storyTitle(BuildContext context) => Text(_title,
-      style: Theme.of(context).textTheme.subtitle1.copyWith(color: _color));
+      style: Theme.of(context).textTheme.subtitle1.copyWith(color: colorScheme.primary));
 }
