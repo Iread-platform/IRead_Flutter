@@ -8,18 +8,21 @@ class StoriesSection extends StatelessWidget {
   final double _titleBottomSpacing;
   final double _storyWidth;
   final double _sectionHeight;
+  final double _horizontalPadding;
 
   StoriesSection(
       {storiesList,
       @required title,
-      storyWidth,
-      titleBottomSpacing,
-      sectionHeight})
+      double storyWidth,
+      double titleBottomSpacing,
+      double sectionHeight,
+      double horizontalPadding})
       : _stories = storiesList,
         _title = title,
         _storyWidth = storyWidth ?? 150,
         _titleBottomSpacing = titleBottomSpacing ?? 32,
-        _sectionHeight = sectionHeight ?? 150;
+        _sectionHeight = sectionHeight ?? 250,
+        _horizontalPadding = horizontalPadding ?? 12;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +40,7 @@ class StoriesSection extends StatelessWidget {
         SizedBox(
           height: _sectionHeight,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
+            padding: EdgeInsets.symmetric(horizontal: _horizontalPadding),
             child: ListView(
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,

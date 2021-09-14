@@ -2,11 +2,9 @@ import 'dart:io';
 
 import 'package:flutter_uploader/flutter_uploader.dart';
 import 'package:iread_flutter/models/attachment/uploading_audio.dart';
-import 'package:iread_flutter/services/api_service.dart';
 import 'package:path/path.dart';
 
 class AttachmentRepo {
-  ApiService _apiService = ApiService();
   FlutterUploader _uploader = FlutterUploader();
 
   final String baseUrl = 'http://192.168.1.118:5014/api/iread/Attachment/add';

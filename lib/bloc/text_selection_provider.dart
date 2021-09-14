@@ -9,11 +9,11 @@ class TextSelectionProvider with ChangeNotifier {
 
   TextSelection selection;
   void changeSelection({selection, textSelected}) {
-    print("scrollController.offset ${scrollController.offset}");
     // scrollController.animateTo(scrollController.offset.,
     //     duration: Duration(milliseconds: 1000), curve: Curves.linear);
     this.selection = selection;
     try {
+     
       List<String> wordSelected = textSelected.split(" ");
       if (wordSelected.length > 1) {
         this.textSelectedIsWord = false;

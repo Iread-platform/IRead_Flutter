@@ -127,7 +127,7 @@ class MyTextSelectionControls extends TextSelectionControls {
           ),
           onPressed: () {
             delegate.hideToolbar();
-            return VocabularyDialog.VocDialog(context: context);
+            return VocabularyDialog.vocDialog(context: context);
           },
         ),
         TextSelectionToolbarTextButton(
@@ -137,6 +137,9 @@ class MyTextSelectionControls extends TextSelectionControls {
             color: Colors.purple,
           ),
           onPressed: () {
+            print(Provider.of<TextSelectionProvider>(context, listen: false)
+                .selection
+                .start);
             BlocProvider.of<StoryscreenBloc>(context).add(SeekToWordEvent(
                 index:
                     Provider.of<TextSelectionProvider>(context, listen: false)
@@ -167,7 +170,7 @@ class MyTextSelectionControls extends TextSelectionControls {
           ),
           onPressed: () {
             delegate.hideToolbar();
-            return VocabularyDialog.VocDialog(context: context);
+            return VocabularyDialog.vocDialog(context: context);
           },
         ),
         TextSelectionToolbarTextButton(
@@ -207,6 +210,9 @@ class MyTextSelectionControls extends TextSelectionControls {
             color: Colors.purple,
           ),
           onPressed: () {
+             print(Provider.of<TextSelectionProvider>(context, listen: false)
+                .selection
+                .start);
             BlocProvider.of<StoryscreenBloc>(context).add(SeekToWordEvent(
                 index:
                     Provider.of<TextSelectionProvider>(context, listen: false)
@@ -236,6 +242,9 @@ class MyTextSelectionControls extends TextSelectionControls {
             color: Colors.purple,
           ),
           onPressed: () {
+             print(Provider.of<TextSelectionProvider>(context, listen: false)
+                .selection
+                .start);
             BlocProvider.of<StoryscreenBloc>(context).add(SeekToWordEvent(
                 index:
                     Provider.of<TextSelectionProvider>(context, listen: false)

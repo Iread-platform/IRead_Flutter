@@ -24,24 +24,16 @@ class StoryImage extends StatelessWidget {
             borderRadius: BorderRadius.circular(storyBorderRadius),
             color: _color,
             boxShadow: [mediumBottomRightShadow]),
-        child: ConstrainedBox(
-          constraints: BoxConstraints(minHeight: _minHeight),
-          child: Container(
-            decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primary,
-                borderRadius: BorderRadius.circular(storyBorderRadius),
-                boxShadow: [mediumBottomRightShadow]),
-            child: ClipRRect(
-              borderRadius:
-                  BorderRadius.all(Radius.circular(storyBorderRadius)),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: AnimatedNetworkImage(
-                      imageUrl: _imageUrl,
-                    ),
-                  ),
-                ],
+        child: ClipRRect(
+          borderRadius: BorderRadius.all(Radius.circular(storyBorderRadius)),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: _minHeight),
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary,
+                  boxShadow: [mediumBottomRightShadow]),
+              child: AnimatedNetworkImage(
+                imageUrl: _imageUrl,
               ),
             ),
           ),

@@ -4,7 +4,6 @@ import 'package:iread_flutter/models/attachment/attachment.dart';
 import 'package:iread_flutter/models/draw/polygon.dart';
 import 'package:iread_flutter/repo/attachment_repo.dart';
 import 'package:iread_flutter/repo/interaction_repo.dart';
-import 'package:iread_flutter/repo/story_repo.dart';
 import 'package:iread_flutter/utils/data.dart';
 
 class MainRepo {
@@ -13,7 +12,6 @@ class MainRepo {
   factory MainRepo() => _instance;
   MainRepo._internal();
 
-  final StoryRepo _storyRepo = StoryRepo();
   final InteractionRepo _interactionRepo = InteractionRepo();
   final AttachmentRepo _attachmentRepo = AttachmentRepo();
 

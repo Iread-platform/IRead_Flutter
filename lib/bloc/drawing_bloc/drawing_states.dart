@@ -5,10 +5,9 @@ import 'package:iread_flutter/utils/data.dart';
 class NoPolygonState extends SuccessState {}
 
 class PolygonDeletedState extends NoPolygonState {
-  bool _isDone;
   Polygon polygon;
 
-  PolygonDeletedState(bool isDone) : _isDone = isDone;
+  PolygonDeletedState(bool isDone);
 }
 
 class PolygonState extends SuccessState<Data> {

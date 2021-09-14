@@ -104,9 +104,7 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
                 storyPageData
                     .data.pages[pageController.page.toInt()].words.length;
             i++) {
-          print(storyPageData
-              .data.pages[pageController.page.toInt()].words[i].startIndex);
-
+         
           if (storyPageData.data.pages[pageController.page.toInt()].words[i]
                   .startIndex >=
               event.index) {
