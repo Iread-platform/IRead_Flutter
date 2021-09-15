@@ -62,4 +62,16 @@ class UserRepo {
       throw e;
     }
   }
+
+  Future<Data> profile() async {
+    try {
+      final response = await _apiService.request(
+          requestType: RequestType.GET, endPoint: myProfileEndPoint);
+      final json = jsonDecode(response);
+      print(json);
+      return Data.success(json);
+    } catch (e) {
+      return Data.handleException(e);
+    }
+  }
 }

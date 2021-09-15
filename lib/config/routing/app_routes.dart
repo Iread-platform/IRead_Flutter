@@ -2,6 +2,8 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iread_flutter/bloc/base/base_bloc.dart';
+import 'package:iread_flutter/bloc/profile_bloc/profile_bloc.dart';
+import 'package:iread_flutter/bloc/profile_bloc/profile_events.dart';
 import 'package:iread_flutter/bloc/search_stories_by_tag_bloc/search_stories_by_tag.dart';
 import 'package:iread_flutter/bloc/search_stories_by_tag_bloc/search_stories_by_tag_event.dart';
 import 'package:iread_flutter/bloc/story/story_details_bloc/story_details_bloc.dart';
@@ -13,6 +15,7 @@ import 'package:iread_flutter/views/Screens/login_screen.dart';
 import 'package:iread_flutter/views/Screens/stories_search_list.dart';
 import 'package:iread_flutter/views/Screens/story_details.dart';
 import 'package:iread_flutter/views/widgets/story/story_assignment_card.dart';
+import 'package:iread_flutter/views/widgets/user/profile-screen.dart';
 
 class AppRoutes {
   static final List<AppRoute> appRoutes = [
@@ -51,6 +54,13 @@ class AppRoutes {
         child: Container(
             color: Theme.of(context).colorScheme.surface,
             child: StoryDetails()),
+      );
+    })),
+    AppRoute('/profile', Handler(handlerFunc: (context, params) {
+      return BlocProvider(
+        create: (context) =>
+            ProfileBloc(InitialState())..add(FetchUserProfileEvent()),
+        child: ProfileScreen(),
       );
     }))
   ];
