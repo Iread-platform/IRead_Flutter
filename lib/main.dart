@@ -24,9 +24,7 @@ import 'config/http/httpOverrides.dart';
 import 'config/themes/theme.dart';
 import 'models/user/user.dart';
 
-
-Future<void> initApp() async
-{
+Future<void> initApp() async {
   await AppRouter().init();
   await AuthService().loadUser();
 }
@@ -37,20 +35,20 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
   initApp().then(
-        (value) => runApp(
-          MultiBlocProvider(
-            providers: [
-              BlocProvider(
-                create: (context) => StoryscreenBloc(),
-              ),
-            ],
-            child: ChangeNotifierProvider(
-              create: (context) => TextSelectionProvider(),
-              child: MyApp(),
-            ),
+    (value) => runApp(
+      MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => StoryscreenBloc(),
           ),
+        ],
+        child: ChangeNotifierProvider(
+          create: (context) => TextSelectionProvider(),
+          child: MyApp(),
         ),
-      );
+      ),
+    ),
+  );
 }
 
 // ignore: must_be_immutable
@@ -65,15 +63,11 @@ class MyApp extends StatelessWidget {
         title: 'Iread',
         onGenerateRoute: AppRouter().appRouterGenerator,
         navigatorKey: AppConfigs.instance().navigationKey,
-        home: (AuthService().cU != null)?
-            Scaffold(body: IReadApp())
-            : Scaffold(
-            body: BlocProvider(
-              create: (context) => LoginBloc(InitialState()),
-                child: LoginScreen()
-            )
-        )
-    );
+        home: (AuthService().cU != null)
+            ? Scaffold(body: IReadApp())
+            : BlocProvider(
+                create: (context) => LoginBloc(InitialState()),
+                child: LoginScreen()));
   }
 }
 
@@ -97,5 +91,7 @@ class IReadApp extends StatelessWidget {
   }
 }
 
-User user =
-    User(firstName: 'Motasem',lastName: 'Ghozlan', imageUrl: 'https://picsum.photos/200/300');
+User user = User(
+    firstName: 'Motasem',
+    lastName: 'Ghozlan',
+    imageUrl: 'https://picsum.photos/200/300');
