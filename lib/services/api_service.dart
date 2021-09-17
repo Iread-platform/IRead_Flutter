@@ -6,11 +6,11 @@ import 'package:iread_flutter/utils/exception.dart';
 
 import 'settings.dart' as appSettings;
 
-enum RequestType { GET, POST, DELETE }
+enum RequestType { GET, POST, PUT, DELETE }
 
 class ApiService {
   static final ApiService _instance = ApiService._internal();
-  final String baseUrl = "https://46.227.254.20:5020/api/iread";
+  final String baseUrl = "http://217.182.250.236:5014/api";
 
   factory ApiService() => _instance;
 
@@ -35,6 +35,13 @@ class ApiService {
               "Authorization": testAuthKey
             },
             body: json.encode(parameter)));
+      case RequestType.PUT:
+        return await _processResponse(await _client.put(url,
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": testAuthKey
+            },
+            body: json.encode(parameter)));
       case RequestType.DELETE:
         return await _processResponse(await _client.delete(url));
       default:
@@ -43,8 +50,10 @@ class ApiService {
   }
 
   Future<String> _processResponse(Response response) async {
-    print(response.body);
+    print('status is ${response.statusCode}\nresponse is \n${response.body}');
     switch (response.statusCode) {
+      case 204:
+      case 201:
       case 200:
         {
           return response.body;
@@ -71,16 +80,24 @@ class ApiService {
       case 404:
         {
           throw NetworkException(
-              message: appSettings.Settings.HTTP_REQUEST_STATE_CODE[404]);
+              message: appSettings.Settings.HTTP_REQUEST_STATE_CODE[404],
+              logMessage: appSettings.Settings.HTTP_REQUEST_STATE_CODE[404]);
         }
       case 408:
         {
           throw NetworkException(
               message: appSettings.Settings.HTTP_REQUEST_STATE_CODE[408]);
         }
+      case 500:
+        {
+          throw NetworkException(
+              message: appSettings.Settings.HTTP_REQUEST_STATE_CODE[500]);
+        }
       default:
         {
-          throw NetworkException(message: "Unknown Error");
+          throw NetworkException(
+              message:
+                  "Unknown Error, status code is ${response.statusCode}\n\nMessage is $response");
         }
     }
   }

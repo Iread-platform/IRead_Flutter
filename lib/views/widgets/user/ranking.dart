@@ -66,7 +66,7 @@ class Ranking extends StatelessWidget {
                 ),
                 Positioned(
                   top: 30,
-                  left: progressBarWidth - 12.0,
+                  left: progressBarWidth - 0.0,
                   child: Container(
                       width: 40,
                       height: 40,

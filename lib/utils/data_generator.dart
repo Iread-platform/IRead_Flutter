@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:iread_flutter/models/story.dart';
 
 class DataGenerator {
   /*static ProjectModel project() {
@@ -32,5 +34,29 @@ class DataGenerator {
     }
 
     return media;
+  }
+
+  static Story story() {
+    return Story(
+        title: 'Wood, Wire, Wings',
+        color: Colors.black38,
+        imageUrl: 'https://picsum.photos/200/300',
+        description:
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sit amet lacus tincidunt, consequat lorem ac, consectetur ligula. Sed non nunc vehicula, pretium arcu a, faucibus eros. Cras lacinia magna sed enim malesuada finibus. Nulla et varius neque. Etiam dolor erat, dictum sodales facilisis ac, cursus vehicula lacus. Vestibulum et ante lorem. Pellentesque pretium arcu felis, nec efficitur lacus ultricies quis. Morbi eu tortor facilisis, porta elit quis, varius diam.',
+        writer: 'Motasem Ghozlan',
+        pages: 1300,
+        progress: 0.45,
+        flippedPages: 53,
+        readingTime: 127.25);
+  }
+
+  static List<Story> storyList(int count) {
+    List<Story> stories = [];
+
+    for (int i = 0; i < count; i++) {
+      stories.add(story());
+    }
+
+    return stories;
   }
 }

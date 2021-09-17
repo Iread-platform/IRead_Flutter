@@ -1,7 +1,5 @@
 class Model {
-  int _id;
+  int id;
 
-  Model({int id}) : _id = id;
-
-  get id => _id;
+  Model({this.id});
 }

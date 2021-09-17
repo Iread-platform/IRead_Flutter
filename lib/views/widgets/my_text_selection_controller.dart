@@ -51,7 +51,6 @@ class MyTextSelectionControls extends TextSelectionControls {
                 Offset(position.dx + marginX, position.dy + marginY - x),
             anchorBelow: Offset(-140, -140),
             toolbarBuilder: (context, _) {
-              print(position.dy);
               return FittedBox(
                 child: Container(
                   decoration: BoxDecoration(
@@ -128,7 +127,7 @@ class MyTextSelectionControls extends TextSelectionControls {
           ),
           onPressed: () {
             delegate.hideToolbar();
-            return VocabularyDialog.VocDialog(context: context);
+            return VocabularyDialog.vocDialog(context: context);
           },
         ),
         TextSelectionToolbarTextButton(
@@ -138,6 +137,9 @@ class MyTextSelectionControls extends TextSelectionControls {
             color: Colors.purple,
           ),
           onPressed: () {
+            print(Provider.of<TextSelectionProvider>(context, listen: false)
+                .selection
+                .start);
             BlocProvider.of<StoryscreenBloc>(context).add(SeekToWordEvent(
                 index:
                     Provider.of<TextSelectionProvider>(context, listen: false)
@@ -168,7 +170,7 @@ class MyTextSelectionControls extends TextSelectionControls {
           ),
           onPressed: () {
             delegate.hideToolbar();
-            return VocabularyDialog.VocDialog(context: context);
+            return VocabularyDialog.vocDialog(context: context);
           },
         ),
         TextSelectionToolbarTextButton(
@@ -208,6 +210,9 @@ class MyTextSelectionControls extends TextSelectionControls {
             color: Colors.purple,
           ),
           onPressed: () {
+             print(Provider.of<TextSelectionProvider>(context, listen: false)
+                .selection
+                .start);
             BlocProvider.of<StoryscreenBloc>(context).add(SeekToWordEvent(
                 index:
                     Provider.of<TextSelectionProvider>(context, listen: false)
@@ -237,6 +242,9 @@ class MyTextSelectionControls extends TextSelectionControls {
             color: Colors.purple,
           ),
           onPressed: () {
+             print(Provider.of<TextSelectionProvider>(context, listen: false)
+                .selection
+                .start);
             BlocProvider.of<StoryscreenBloc>(context).add(SeekToWordEvent(
                 index:
                     Provider.of<TextSelectionProvider>(context, listen: false)

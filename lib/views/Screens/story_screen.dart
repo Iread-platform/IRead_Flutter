@@ -12,6 +12,8 @@ import 'package:iread_flutter/views/widgets/shared/request_handler.dart';
 import 'package:provider/provider.dart';
 
 class StoryScreen extends StatefulWidget {
+  int storyId;
+  StoryScreen({this.storyId});
   @override
   _StoryScreenState createState() => _StoryScreenState();
 }
@@ -26,7 +28,8 @@ class _StoryScreenState extends State<StoryScreen> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<StoryscreenBloc>(context).add(FetchStoryPage(stotyID: 0));
+    BlocProvider.of<StoryscreenBloc>(context)
+        .add(FetchStoryPage(stotyID: widget.storyId));
   }
 
   //=============== Build screen (Header - textStory - player) ===================
@@ -124,6 +127,13 @@ class _StoryScreenState extends State<StoryScreen> {
                 bloc.pageController.previousPage(
                     duration: Duration(milliseconds: 500),
                     curve: Curves.linear);
+                bloc.add(SeekEvent(Duration(
+                    milliseconds: bloc
+                        .storyPageData
+                        .data
+                        .pages[bloc.pageController.page.toInt() - 1]
+                        .startPageTime
+                        .toInt())));
               },
             ),
           ),
@@ -150,6 +160,13 @@ class _StoryScreenState extends State<StoryScreen> {
                 bloc.pageController.nextPage(
                     duration: Duration(milliseconds: 500),
                     curve: Curves.linear);
+                bloc.add(SeekEvent(Duration(
+                    milliseconds: bloc
+                        .storyPageData
+                        .data
+                        .pages[bloc.pageController.page.toInt() + 1]
+                        .startPageTime
+                        .toInt())));
               },
             ),
           ),
@@ -252,8 +269,8 @@ class _StoryScreenState extends State<StoryScreen> {
         Provider.of<TextSelectionProvider>(context, listen: false)
             .scrollController
             .animateTo(
-                bloc.storyPageData.data.words[int.parse(bloc.highLightIndex)]
-                    .scrollHight,
+                bloc.storyPageData.data.pages[bloc.pageController.page.toInt()]
+                    .words[int.parse(bloc.highLightIndex)].scrollHight,
                 duration: Duration(milliseconds: 500),
                 curve: Curves.linear);
       },
@@ -263,14 +280,14 @@ class _StoryScreenState extends State<StoryScreen> {
   // this funcation call every 200 millisecound if word is hideen => scroll
   void scroll() {
     try {
-      if (bloc
-          .storyPageData.data.words[int.parse(bloc.highLightIndex)].newLine) {
+      if (bloc.storyPageData.data.pages[bloc.pageController.page.toInt()]
+          .words[int.parse(bloc.highLightIndex)].newLine) {
         Provider.of<TextSelectionProvider>(context, listen: false)
             .scrollController
             .animateTo(
-                bloc.storyPageData.data.words[int.parse(bloc.highLightIndex)]
-                    .scrollHight,
-                duration: Duration(milliseconds: 500),
+                bloc.storyPageData.data.pages[bloc.pageController.page.toInt()]
+                    .words[int.parse(bloc.highLightIndex)].scrollHight,
+                duration: Duration(milliseconds: 400),
                 curve: Curves.linear);
       }
     } catch (e) {
@@ -293,22 +310,21 @@ class _StoryScreenState extends State<StoryScreen> {
       alignment: Alignment.topLeft,
       child: PageView(
         controller: bloc.pageController,
+        onPageChanged: (value) {
+          bloc.pageController.animateToPage(value,
+              duration: Duration(milliseconds: 1000), curve: Curves.linear);
+          bloc.add(SeekEvent(Duration(
+              milliseconds: bloc.storyPageData.data
+                  .pages[value].startPageTime
+                  .toInt())));
+        },
         children: [
-          HighlighText(
-              storyString: bloc.storyPageData.data.story ?? "",
-              words: bloc.storyPageData.data.words ?? [],
-              marginX: w * 0.15,
-              marginY: h * 0.44),
-          HighlighText(
-              storyString: bloc.storyPageData.data.story ?? "",
-              words: bloc.storyPageData.data.words ?? [],
-              marginX: w * 0.15,
-              marginY: h * 0.44),
-          HighlighText(
-              storyString: bloc.storyPageData.data.story ?? "",
-              words: bloc.storyPageData.data.words ?? [],
-              marginX: w * 0.15,
-              marginY: h * 0.44),
+          for (var i = 0; i < bloc.storyPageData.data.pages.length; i++)
+            HighlighText(
+                storyString: bloc.storyPageData.data.pages[i].content ?? "",
+                words: bloc.storyPageData.data.pages[i].words ?? [],
+                marginX: w * 0.15,
+                marginY: h * 0.44),
         ],
       ),
     );

@@ -2,7 +2,7 @@ part of 'storyscreen_bloc.dart';
 
 abstract class StoryscreenState extends BlocState {}
 
-class LoadedState extends SuccessState<Data<StoryPage>> {
+class LoadedState extends SuccessState<Data<StoryModel>> {
   LoadedState({data}) : super(data: data);
 }
 
