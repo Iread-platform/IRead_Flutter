@@ -8,6 +8,11 @@ class HightLightEvent extends InteractionsEvent {
   HightLightEvent({this.map});
 }
 
+class RemoveHighLightEvent extends InteractionsEvent {
+  int highlightID;
+  RemoveHighLightEvent({this.highlightID});
+}
+
 class VocabularyEvent extends InteractionsEvent {
   final int wordIndex;
   VocabularyEvent({this.wordIndex});

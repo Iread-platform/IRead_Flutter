@@ -143,6 +143,7 @@ class _StoryScreenState extends State<StoryScreen> {
             child: BlocBuilder<StoryscreenBloc, BlocState>(
               builder: (context, state) {
                 scroll();
+
                 return requsetHandlerStory();
               },
             ),
@@ -281,7 +282,9 @@ class _StoryScreenState extends State<StoryScreen> {
   void scroll() {
     try {
       if (bloc.storyPageData.data.pages[bloc.pageController.page.toInt()]
-          .words[int.parse(bloc.highLightIndex)].newLine) {
+              .words[int.parse(bloc.highLightIndex)].newLine &&
+          BlocProvider.of<StoryscreenBloc>(context).audioPlayer.state ==
+              AudioPlayerState.PLAYING) {
         Provider.of<TextSelectionProvider>(context, listen: false)
             .scrollController
             .animateTo(
@@ -314,9 +317,8 @@ class _StoryScreenState extends State<StoryScreen> {
           bloc.pageController.animateToPage(value,
               duration: Duration(milliseconds: 1000), curve: Curves.linear);
           bloc.add(SeekEvent(Duration(
-              milliseconds: bloc.storyPageData.data
-                  .pages[value].startPageTime
-                  .toInt())));
+              milliseconds:
+                  bloc.storyPageData.data.pages[value].startPageTime.toInt())));
         },
         children: [
           for (var i = 0; i < bloc.storyPageData.data.pages.length; i++)

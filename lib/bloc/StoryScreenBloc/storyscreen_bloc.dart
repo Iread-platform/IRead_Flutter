@@ -35,22 +35,26 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
     if (event is FetchStoryPage) {
       yield LoadingState();
       storyPageData = await storyRepository.fetchStoryPage(event.stotyID);
-      for (var i = 0; i < storyPageData.data.pages.length; i++) {
-        storyPageData.data.pages[i].words =
-            initWordEndLine(storyPageData.data.pages[i].words);
-        for (var highLight in storyPageData.data.pages[i].highLights) {
-          for (var word in storyPageData.data.pages[i].words) {
-            if ((word.startIndex >= highLight.firstWordIndex) &&
-                (word.startIndex <= highLight.endWordIndex)) {
-              word.isHighLighted = true;
+      try {
+        for (var i = 0; i < storyPageData.data.pages.length; i++) {
+          storyPageData.data.pages[i].words =
+              initWordEndLine(storyPageData.data.pages[i].words);
+          for (var highLight in storyPageData.data.pages[i].highLights) {
+            for (var word in storyPageData.data.pages[i].words) {
+              if ((word.startIndex >= highLight.firstWordIndex) &&
+                  (word.startIndex <= highLight.endWordIndex)) {
+                word.isHighLighted = true;
+                word.highLightID = highLight.highLightId;
+                print(" this is highlightID : ${word.highLightID}");
+              }
             }
           }
         }
-      }
-      yield LoadedState(data: storyPageData);
-      play(storyPageData.data.audio.downloadUrl);
+        yield LoadedState(data: storyPageData);
+        play(storyPageData.data.audio.downloadUrl);
 
-      yield PlayerState(AudioPlayerState.PLAYING);
+        yield PlayerState(AudioPlayerState.PLAYING);
+      } catch (e) {}
     }
 
     // ==========  player Controller ==============
@@ -240,6 +244,7 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
     words[0].newLine = true;
     words[0].scrollHight = 0.0;
     int startIndex = 0;
+    print("pageeeeeeeeeeeeeeeeeeeeeeeeeeeee");
     for (int i = 0; i < words.length; i++) {
       //========= calculate start index of word =============
 
@@ -251,6 +256,7 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
         words[i].newLine = true;
         scrollValue = scrollValue + size.height.toInt();
         words[i].scrollHight = scrollValue;
+        print(words[i].scrollHight);
         size = Size(0, 0);
         currentString = " ";
         i--;

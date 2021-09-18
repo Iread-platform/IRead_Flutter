@@ -23,7 +23,9 @@ import 'models/user/user.dart';
 
 Future<void> main() async {
   // Override server certificate
-  await StoryRepository().fetchStoryPage(23);
+      print("bbbbbbbbbbbbbbbbbuild");
+
+  // await StoryRepository().fetchStoryPage(23);
   HttpOverrides.global = new IreadHttpOverrides();
 
   AppRouter().init().then(
@@ -77,7 +79,7 @@ class IReadApp extends StatelessWidget {
             Provider(create: (context) => RecordBloc(InitialState())),
             Provider(create: (context) => CommentBloc(InitialState()))
           ],
-          child: StoryScreen(storyId : 23),
+          child: StoryScreen(storyId: 23),
         ),
       ),
     );

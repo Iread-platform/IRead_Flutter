@@ -42,11 +42,15 @@ class MyTextSelectionControls extends TextSelectionControls {
     return Consumer<TextSelectionProvider>(
       builder: (context, cart, child) {
         double x = 0;
-        try {
-          x = Provider.of<TextSelectionProvider>(context, listen: false)
+          try {
+            x = Provider.of<TextSelectionProvider>(context, listen: false)
               .scrollController
               .offset;
-        } catch (e) {}
+          print("xxxxxxxxxxxx : $x");
+       
+          } catch (e) {
+          }
+          
         return TextSelectionToolbar(
             anchorAbove:
                 Offset(position.dx + marginX, position.dy + marginY - x),
@@ -112,11 +116,25 @@ class MyTextSelectionControls extends TextSelectionControls {
       return [
         TextSelectionToolbarTextButton(
           padding: EdgeInsets.symmetric(horizontal: 10),
+          child: Icon(
+            Icons.remove_circle,
+            color: Colors.purple,
+            size: 25,
+          ),
+          onPressed: () {
+            removeHighlightWord(context);
+            BlocProvider.of<StoryscreenBloc>(context).add(ResumeEvent());
+
+            delegate.hideToolbar();
+          },
+        ),
+        TextSelectionToolbarTextButton(
+          padding: EdgeInsets.symmetric(horizontal: 10),
           child: Text(
             "Shading",
             style: TextStyle(color: Colors.purple, fontWeight: FontWeight.bold),
           ),
-          onPressed: () {
+          onPressed: () async {
             Map map = {
               "interaction": {
                 "storyId": 23,
@@ -141,8 +159,9 @@ class MyTextSelectionControls extends TextSelectionControls {
               "firstWord": "Bright",
               "endWord": "Charlotte"
             };
-            BlocProvider.of<InteractionsBloc>(context)
-                .add(HightLightEvent(map: map));
+            int highLightID = await BlocProvider.of<InteractionsBloc>(context)
+                .addHightLightWord(map);
+
             for (var word in BlocProvider.of<StoryscreenBloc>(context)
                 .storyPageData
                 .data
@@ -160,9 +179,12 @@ class MyTextSelectionControls extends TextSelectionControls {
                           .selection
                           .end)) {
                 word.isHighLighted = true;
+                word.highLightID = highLightID;
               }
             }
+
             delegate.hideToolbar();
+            BlocProvider.of<StoryscreenBloc>(context).add(ResumeEvent());
           },
         ),
         TextSelectionToolbarTextButton(
@@ -203,7 +225,12 @@ class MyTextSelectionControls extends TextSelectionControls {
             color: Colors.purple,
             size: 25,
           ),
-          onPressed: () {},
+          onPressed: () {
+            removeHighlightWord(context);
+            BlocProvider.of<StoryscreenBloc>(context).add(ResumeEvent());
+
+            delegate.hideToolbar();
+          },
         ),
         TextSelectionToolbarTextButton(
           padding: EdgeInsets.symmetric(horizontal: 10),
@@ -238,11 +265,25 @@ class MyTextSelectionControls extends TextSelectionControls {
       return [
         TextSelectionToolbarTextButton(
           padding: EdgeInsets.symmetric(horizontal: 10),
+          child: Icon(
+            Icons.remove_circle,
+            color: Colors.purple,
+            size: 25,
+          ),
+          onPressed: () {
+            removeHighlightWord(context);
+            BlocProvider.of<StoryscreenBloc>(context).add(ResumeEvent());
+
+            delegate.hideToolbar();
+          },
+        ),
+        TextSelectionToolbarTextButton(
+          padding: EdgeInsets.symmetric(horizontal: 10),
           child: Text(
             "Shading",
             style: TextStyle(color: Colors.purple, fontWeight: FontWeight.bold),
           ),
-          onPressed: () {
+          onPressed: () async {
             Map map = {
               "interaction": {
                 "storyId": 23,
@@ -267,8 +308,9 @@ class MyTextSelectionControls extends TextSelectionControls {
               "firstWord": "Bright",
               "endWord": "Charlotte"
             };
-            BlocProvider.of<InteractionsBloc>(context)
-                .add(HightLightEvent(map: map));
+            int highLightID = await BlocProvider.of<InteractionsBloc>(context)
+                .addHightLightWord(map);
+
             for (var word in BlocProvider.of<StoryscreenBloc>(context)
                 .storyPageData
                 .data
@@ -286,9 +328,12 @@ class MyTextSelectionControls extends TextSelectionControls {
                           .selection
                           .end)) {
                 word.isHighLighted = true;
+                word.highLightID = highLightID;
               }
             }
+
             delegate.hideToolbar();
+            BlocProvider.of<StoryscreenBloc>(context).add(ResumeEvent());
           },
         ),
         TextSelectionToolbarTextButton(
@@ -321,7 +366,12 @@ class MyTextSelectionControls extends TextSelectionControls {
             color: Colors.purple,
             size: 25,
           ),
-          onPressed: () {},
+          onPressed: () {
+            removeHighlightWord(context);
+            BlocProvider.of<StoryscreenBloc>(context).add(ResumeEvent());
+
+            delegate.hideToolbar();
+          },
         ),
         TextSelectionToolbarTextButton(
           padding: EdgeInsets.symmetric(horizontal: 10),
@@ -344,5 +394,45 @@ class MyTextSelectionControls extends TextSelectionControls {
       ];
     }
     return null;
+  }
+
+  removeHighlightWord(context) {
+    int start = Provider.of<TextSelectionProvider>(context, listen: false)
+        .selection
+        .start;
+    int end = Provider.of<TextSelectionProvider>(context, listen: false)
+        .selection
+        .end;
+    int id = -2;
+    for (var word in BlocProvider.of<StoryscreenBloc>(context)
+        .storyPageData
+        .data
+        .pages[BlocProvider.of<StoryscreenBloc>(context)
+            .pageController
+            .page
+            .toInt()]
+        .words) {
+      if (word.isHighLighted &&
+          word.startIndex >= start &&
+          word.startIndex <= end) {
+        BlocProvider.of<InteractionsBloc>(context)
+            .removeHighLightWord(word.highLightID);
+        id = word.highLightID;
+        break;
+      }
+    }
+    for (var word in BlocProvider.of<StoryscreenBloc>(context)
+        .storyPageData
+        .data
+        .pages[BlocProvider.of<StoryscreenBloc>(context)
+            .pageController
+            .page
+            .toInt()]
+        .words) {
+      if (word.highLightID == id) {
+        word.highLightID = -1;
+        word.isHighLighted = false;
+      }
+    }
   }
 }

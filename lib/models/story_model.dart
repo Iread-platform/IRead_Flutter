@@ -156,6 +156,7 @@ class Word {
   double timeStart;
   double timeEnd;
   bool isHighLighted = false;
+  int highLightID = -1;
   int startIndex;
   bool newLine = false;
   double scrollHight = 0;
