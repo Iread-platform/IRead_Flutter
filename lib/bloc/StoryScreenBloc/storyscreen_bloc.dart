@@ -38,6 +38,14 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
       for (var i = 0; i < storyPageData.data.pages.length; i++) {
         storyPageData.data.pages[i].words =
             initWordEndLine(storyPageData.data.pages[i].words);
+        for (var highLight in storyPageData.data.pages[i].highLights) {
+          for (var word in storyPageData.data.pages[i].words) {
+            if ((word.startIndex >= highLight.firstWordIndex) &&
+                (word.startIndex <= highLight.endWordIndex)) {
+              word.isHighLighted = true;
+            }
+          }
+        }
       }
       yield LoadedState(data: storyPageData);
       play(storyPageData.data.audio.downloadUrl);
@@ -104,7 +112,6 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
                 storyPageData
                     .data.pages[pageController.page.toInt()].words.length;
             i++) {
-         
           if (storyPageData.data.pages[pageController.page.toInt()].words[i]
                   .startIndex >=
               event.index) {
@@ -253,6 +260,7 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
         startIndex = wordQueue.length;
       }
     }
+
     return words;
   }
 }

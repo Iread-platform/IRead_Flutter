@@ -33,7 +33,9 @@ class StoryRepository {
 
   Future<Data<StoryModel>> fetchStoryPage(int id) async {
     try {
-      final url = "iread/Story/getStoryToListen/"+id.toString();
+      
+      final url = "http://217.182.250.236:5010/api/Story/getStoryToListen/" +
+          id.toString();
       final jsonText =
           await apiService.request(requestType: RequestType.GET, endPoint: url);
       final json = jsonDecode(jsonText);
@@ -43,4 +45,6 @@ class StoryRepository {
       return Data.faild(message: e.toString());
     }
   }
+
+  
 }

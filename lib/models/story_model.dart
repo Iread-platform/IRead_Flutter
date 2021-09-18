@@ -75,6 +75,7 @@ class Audio {
 class Pages {
   int pageId;
   String content;
+  List<HighLights> highLights;
   List<Word> words;
   double startPageTime = 0;
   double endPageTime = 0;
@@ -83,6 +84,14 @@ class Pages {
   Pages.fromJson(Map<String, dynamic> json) {
     pageId = json['pageId'];
     content = json['content'];
+
+    var jsonhighLights = json['highLights'];
+    if (jsonhighLights != null) {
+      highLights = <HighLights>[];
+      jsonhighLights.forEach((v) {
+        highLights.add(new HighLights.fromJson(v));
+      });
+    }
     var jsonWord = JSON.jsonDecode(json['words']);
     if (jsonWord != null) {
       words = <Word>[];
@@ -92,7 +101,6 @@ class Pages {
       startPageTime = words[0].timeStart;
       endPageTime = words[words.length - 1].timeEnd;
     }
-    // words = json['words'];
   }
 
   Map<String, dynamic> toJson() {
@@ -100,6 +108,39 @@ class Pages {
     data['pageId'] = this.pageId;
     data['content'] = this.content;
     data['words'] = this.words;
+    return data;
+  }
+}
+
+class HighLights {
+  int highLightId;
+  int firstWordIndex;
+  int endWordIndex;
+  String firstWord;
+  String endWord;
+
+  HighLights(
+      {this.highLightId,
+      this.firstWordIndex,
+      this.endWordIndex,
+      this.firstWord,
+      this.endWord});
+
+  HighLights.fromJson(Map<String, dynamic> json) {
+    highLightId = json['highLightId'];
+    firstWordIndex = json['firstWordIndex'];
+    endWordIndex = json['endWordIndex'];
+    firstWord = json['firstWord'];
+    endWord = json['endWord'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['highLightId'] = this.highLightId;
+    data['firstWordIndex'] = this.firstWordIndex;
+    data['endWordIndex'] = this.endWordIndex;
+    data['firstWord'] = this.firstWord;
+    data['endWord'] = this.endWord;
     return data;
   }
 }
@@ -114,7 +155,7 @@ class Word {
   bool elementError;
   double timeStart;
   double timeEnd;
-
+  bool isHighLighted = false;
   int startIndex;
   bool newLine = false;
   double scrollHight = 0;

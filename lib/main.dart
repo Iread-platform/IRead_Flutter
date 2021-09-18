@@ -1,6 +1,4 @@
 import 'dart:io';
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iread_flutter/bloc/StoryScreenBloc/storyscreen_bloc.dart';
@@ -9,15 +7,14 @@ import 'package:iread_flutter/config/routing/app_router.dart';
 import 'package:iread_flutter/config/themes/theme.dart';
 import 'package:iread_flutter/services/permissions_service.dart';
 import 'package:iread_flutter/views/Screens/story_screen.dart';
-import 'package:iread_flutter/views/Screens/main_screen.dart';
 import 'package:iread_flutter/views/widgets/drawer_widget.dart';
 import 'package:provider/provider.dart';
-
 import 'Repository/story_repository.dart';
 import 'bloc/base/base_bloc.dart';
 import 'bloc/comment_bloc/comment_bloc.dart';
 import 'bloc/drawing_bloc/drawing_bloc.dart';
 import 'bloc/drawing_bloc/drawing_states.dart';
+import 'bloc/interactions_bloc/interactions_bloc.dart';
 import 'bloc/record_bloc/record_bloc.dart';
 import 'config/app_config.dart';
 import 'config/http/httpOverrides.dart';
@@ -35,6 +32,9 @@ Future<void> main() async {
             providers: [
               BlocProvider(
                 create: (context) => StoryscreenBloc(),
+              ),
+              BlocProvider(
+                create: (context) => InteractionsBloc(),
               ),
             ],
             child: ChangeNotifierProvider(

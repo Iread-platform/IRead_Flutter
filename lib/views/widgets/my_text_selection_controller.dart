@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iread_flutter/bloc/StoryScreenBloc/storyscreen_bloc.dart';
+import 'package:iread_flutter/bloc/interactions_bloc/interactions_bloc.dart';
 import 'package:iread_flutter/bloc/text_selection_provider.dart';
 import 'package:iread_flutter/utils/i_read_icons.dart';
 import 'package:iread_flutter/views/widgets/vocabulary_dialog.dart';
@@ -116,6 +117,51 @@ class MyTextSelectionControls extends TextSelectionControls {
             style: TextStyle(color: Colors.purple, fontWeight: FontWeight.bold),
           ),
           onPressed: () {
+            Map map = {
+              "interaction": {
+                "storyId": 23,
+                "studentId": "d6d896bd-6d99-41ca-bd9f-3bf3a29db7f7",
+                "pageId": BlocProvider.of<StoryscreenBloc>(context)
+                    .storyPageData
+                    .data
+                    .pages[BlocProvider.of<StoryscreenBloc>(context)
+                        .pageController
+                        .page
+                        .toInt()]
+                    .pageId
+              },
+              "firstWordIndex":
+                  Provider.of<TextSelectionProvider>(context, listen: false)
+                      .selection
+                      .start,
+              "endWordIndex":
+                  Provider.of<TextSelectionProvider>(context, listen: false)
+                      .selection
+                      .end,
+              "firstWord": "Bright",
+              "endWord": "Charlotte"
+            };
+            BlocProvider.of<InteractionsBloc>(context)
+                .add(HightLightEvent(map: map));
+            for (var word in BlocProvider.of<StoryscreenBloc>(context)
+                .storyPageData
+                .data
+                .pages[BlocProvider.of<StoryscreenBloc>(context)
+                    .pageController
+                    .page
+                    .toInt()]
+                .words) {
+              if ((word.startIndex >=
+                      Provider.of<TextSelectionProvider>(context, listen: false)
+                          .selection
+                          .start) &&
+                  (word.startIndex <=
+                      Provider.of<TextSelectionProvider>(context, listen: false)
+                          .selection
+                          .end)) {
+                word.isHighLighted = true;
+              }
+            }
             delegate.hideToolbar();
           },
         ),
@@ -137,9 +183,6 @@ class MyTextSelectionControls extends TextSelectionControls {
             color: Colors.purple,
           ),
           onPressed: () {
-            print(Provider.of<TextSelectionProvider>(context, listen: false)
-                .selection
-                .start);
             BlocProvider.of<StoryscreenBloc>(context).add(SeekToWordEvent(
                 index:
                     Provider.of<TextSelectionProvider>(context, listen: false)
@@ -200,6 +243,51 @@ class MyTextSelectionControls extends TextSelectionControls {
             style: TextStyle(color: Colors.purple, fontWeight: FontWeight.bold),
           ),
           onPressed: () {
+            Map map = {
+              "interaction": {
+                "storyId": 23,
+                "studentId": "d6d896bd-6d99-41ca-bd9f-3bf3a29db7f7",
+                "pageId": BlocProvider.of<StoryscreenBloc>(context)
+                    .storyPageData
+                    .data
+                    .pages[BlocProvider.of<StoryscreenBloc>(context)
+                        .pageController
+                        .page
+                        .toInt()]
+                    .pageId
+              },
+              "firstWordIndex":
+                  Provider.of<TextSelectionProvider>(context, listen: false)
+                      .selection
+                      .start,
+              "endWordIndex":
+                  Provider.of<TextSelectionProvider>(context, listen: false)
+                      .selection
+                      .end,
+              "firstWord": "Bright",
+              "endWord": "Charlotte"
+            };
+            BlocProvider.of<InteractionsBloc>(context)
+                .add(HightLightEvent(map: map));
+            for (var word in BlocProvider.of<StoryscreenBloc>(context)
+                .storyPageData
+                .data
+                .pages[BlocProvider.of<StoryscreenBloc>(context)
+                    .pageController
+                    .page
+                    .toInt()]
+                .words) {
+              if ((word.startIndex >=
+                      Provider.of<TextSelectionProvider>(context, listen: false)
+                          .selection
+                          .start) &&
+                  (word.startIndex <=
+                      Provider.of<TextSelectionProvider>(context, listen: false)
+                          .selection
+                          .end)) {
+                word.isHighLighted = true;
+              }
+            }
             delegate.hideToolbar();
           },
         ),
@@ -210,7 +298,7 @@ class MyTextSelectionControls extends TextSelectionControls {
             color: Colors.purple,
           ),
           onPressed: () {
-             print(Provider.of<TextSelectionProvider>(context, listen: false)
+            print(Provider.of<TextSelectionProvider>(context, listen: false)
                 .selection
                 .start);
             BlocProvider.of<StoryscreenBloc>(context).add(SeekToWordEvent(
@@ -242,7 +330,7 @@ class MyTextSelectionControls extends TextSelectionControls {
             color: Colors.purple,
           ),
           onPressed: () {
-             print(Provider.of<TextSelectionProvider>(context, listen: false)
+            print(Provider.of<TextSelectionProvider>(context, listen: false)
                 .selection
                 .start);
             BlocProvider.of<StoryscreenBloc>(context).add(SeekToWordEvent(

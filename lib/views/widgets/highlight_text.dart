@@ -47,7 +47,11 @@ class _HighlighTextState extends State<HighlighText> {
                         fontSize: 40,
                         backgroundColor: Colors.red,
                         color: Colors.white)
-                    : TextStyle(fontSize: 40),
+                    : TextStyle(
+                        fontSize: 40,
+                        backgroundColor: widget.words[i].isHighLighted
+                            ? Colors.yellow
+                            : Colors.transparent),
               )
           ],
         ),
@@ -62,7 +66,7 @@ class _HighlighTextState extends State<HighlighText> {
         onSelectionChanged: (selection, cause) {
           try {
             BlocProvider.of<StoryscreenBloc>(context).add(PauseEvent());
-            
+
             String textSelected =
                 widget.storyString.substring(selection.start, selection.end);
             // ================ on word click =>> seek to word ===============

@@ -92,4 +92,12 @@ class InteractionRepo {
 
     return json;
   }
+
+  Future addHighLightWord(Map map) async {
+    final url = "http://217.182.250.236:5016/api/Interaction/HighLight/add";
+    final jsonText = await _apiService.request(
+        requestType: RequestType.POST, endPoint: url, parameter: map);
+    final json = jsonDecode(jsonText);
+    print(json);
+  }
 }

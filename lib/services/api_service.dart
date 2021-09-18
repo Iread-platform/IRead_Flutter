@@ -10,7 +10,7 @@ enum RequestType { GET, POST, PUT, DELETE }
 
 class ApiService {
   static final ApiService _instance = ApiService._internal();
-  final String baseUrl = "http://217.182.250.236:5014/api";
+  final String baseUrl = "http://217.182.250.236:5010/api";
 
   factory ApiService() => _instance;
 
@@ -24,7 +24,7 @@ class ApiService {
       {@required RequestType requestType,
       @required String endPoint,
       dynamic parameter}) async {
-    Uri url = Uri.parse("$baseUrl/$endPoint");
+    Uri url = Uri.parse("$endPoint");
     switch (requestType) {
       case RequestType.GET:
         return await _processResponse(await _client.get(url));
@@ -50,7 +50,7 @@ class ApiService {
   }
 
   Future<String> _processResponse(Response response) async {
-    print('status is ${response.statusCode}\nresponse is \n${response.body}');
+    print('status is ${response.statusCode}');
     switch (response.statusCode) {
       case 204:
       case 201:
