@@ -42,15 +42,13 @@ class MyTextSelectionControls extends TextSelectionControls {
     return Consumer<TextSelectionProvider>(
       builder: (context, cart, child) {
         double x = 0;
-          try {
-            x = Provider.of<TextSelectionProvider>(context, listen: false)
+        try {
+          x = Provider.of<TextSelectionProvider>(context, listen: false)
               .scrollController
               .offset;
           print("xxxxxxxxxxxx : $x");
-       
-          } catch (e) {
-          }
-          
+        } catch (e) {}
+
         return TextSelectionToolbar(
             anchorAbove:
                 Offset(position.dx + marginX, position.dy + marginY - x),
