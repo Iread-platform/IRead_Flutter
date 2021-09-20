@@ -27,7 +27,6 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     BlocProvider.of<LoginBloc>(context, listen: false).add(LoginInit());
-    //bloc.add(LoginInit());
     super.initState();
   }
 
