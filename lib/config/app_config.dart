@@ -6,11 +6,6 @@ class AppConfigs {
 
   factory AppConfigs.instance() => _instance;
 
-  /*Future<void> init() async {
-    await AuthService().loadUser();
-    await AppRouter().init();
-  }*/
-
   GlobalKey navigationKey;
   BuildContext appContext;
 

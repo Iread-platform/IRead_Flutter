@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iread_flutter/bloc/StoryScreenBloc/storyscreen_bloc.dart';
@@ -27,6 +28,7 @@ import 'models/user/user.dart';
 Future<void> initApp() async {
   await AppRouter().init();
   await AuthService().loadUser();
+  await Firebase.initializeApp();
 }
 
 void main() {
