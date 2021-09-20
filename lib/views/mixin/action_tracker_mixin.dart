@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:iread_flutter/services/action_track_service.dart';
+import 'package:iread_flutter/services/firebase/action_track_service.dart';
 
 mixin ActionTrackerMixin<T extends StatefulWidget> on State<T> {
   /// Story id

@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,8 +8,9 @@ import 'package:iread_flutter/bloc/login_bloc/login_bloc.dart';
 import 'package:iread_flutter/bloc/text_selection_provider.dart';
 import 'package:iread_flutter/config/routing/app_router.dart';
 import 'package:iread_flutter/config/themes/theme.dart';
-import 'package:iread_flutter/services/action_track_service.dart';
+import 'package:iread_flutter/services/firebase/action_track_service.dart';
 import 'package:iread_flutter/services/auth_service.dart';
+import 'package:iread_flutter/services/firebase/index.dart';
 import 'package:iread_flutter/services/permissions_service.dart';
 import 'package:iread_flutter/views/Screens/login_screen.dart';
 import 'package:iread_flutter/views/Screens/main_screen.dart';
@@ -29,8 +29,8 @@ import 'models/user/user.dart';
 
 Future<void> initApp() async {
   await AppRouter().init();
+  await FirebaseService().init();
   await AuthService().loadUser();
-  await Firebase.initializeApp();
 }
 
 void main() {

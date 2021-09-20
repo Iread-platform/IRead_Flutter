@@ -101,7 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     AnimatedOpacity(
-                      opacity: bloc.errorOpacity,
+                      opacity: bloc.errorOpacity ?? 1,
                       duration: Duration(milliseconds: 500),
                       child: Container(
                         padding: EdgeInsets.all(15),

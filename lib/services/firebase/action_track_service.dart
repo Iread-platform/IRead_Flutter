@@ -1,4 +1,5 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'firebase_base_service.dart';
 
 enum StoryEvents {
   storyPageRead,
@@ -6,7 +7,7 @@ enum StoryEvents {
   storyClose,
 }
 
-class ActionTrackService {
+class ActionTrackService extends FirebaseBaseService {
   // Events ids:
   //   Story page read event:
   static const Map<StoryEvents, String> _EVENTS = {
@@ -21,9 +22,7 @@ class ActionTrackService {
 
   factory ActionTrackService() => _instance;
 
-  ActionTrackService._internal() {
-    analytics.setAnalyticsCollectionEnabled(true);
-  }
+  ActionTrackService._internal() : super();
 
   Future<void> observeRoute(String name) async {
     analytics.setCurrentScreen(screenName: name);
@@ -35,5 +34,10 @@ class ActionTrackService {
     analytics.logEvent(
         name: "${_EVENTS[event]}",
         parameters: parameters ?? {'story': story, 'page': page});
+  }
+
+  @override
+  Future<void> init() async {
+    analytics.setAnalyticsCollectionEnabled(true);
   }
 }
