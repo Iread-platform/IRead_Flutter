@@ -46,6 +46,8 @@ dependencies:
   fluttertoast: 7.1.8
   progress_state_button: "^1.0.3"
   restart_app: ^1.0.3
+  firebase_messaging: ^10.0.7
+  firebase_core: ^1.6.0
 
 dev_dependencies:
   flutter_test:
