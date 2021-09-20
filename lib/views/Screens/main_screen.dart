@@ -10,6 +10,7 @@ import 'package:iread_flutter/views/widgets/opened_library/stories_section.dart'
 import 'package:iread_flutter/views/widgets/shared/app_bar.dart';
 
 class MainScreen extends StatelessWidget {
+  // ignore: unused_field
   final double _horizontalPadding;
   const MainScreen({double horizontalPadding, Key key})
       : _horizontalPadding = horizontalPadding ?? 12,
@@ -22,7 +23,7 @@ class MainScreen extends StatelessWidget {
       children: [
         IreadAppBar(),
         Container(
-            margin: const EdgeInsets.only(bottom: 12,right: 12,left: 12),
+            margin: const EdgeInsets.only(bottom: 12, right: 12, left: 12),
             child: Card(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(40.0),
@@ -40,8 +41,7 @@ class MainScreen extends StatelessWidget {
                   return c.future;
                 },
               ),
-            )
-        ),
+            )),
         StoriesSection(
           title: "Continue reading",
           storiesList: DataGenerator.storyList(10),
@@ -60,7 +60,7 @@ class MainScreen extends StatelessWidget {
   }
 
   _inputDecoration(BuildContext context) => InputDecoration(
-    contentPadding: EdgeInsets.all(10),
+        contentPadding: EdgeInsets.all(10),
         border: _inputBorder(Colors.transparent, 0),
         enabledBorder: _inputBorder(Colors.transparent, 0),
         focusedBorder: _inputBorder(Theme.of(context).colorScheme.primary, 0),
