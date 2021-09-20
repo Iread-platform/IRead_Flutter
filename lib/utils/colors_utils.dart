@@ -1,20 +1,52 @@
 import 'package:flutter/material.dart';
 
 class AppColors{
-  static const MaterialColor orange = MaterialColor(_orangePrimaryValue, <int, Color>{
-    50: Color(0xFFFCEEEA),
-    100: Color(0xFFF8D4CB),
-    200: Color(0xFFF3B7A8),
-    300: Color(0xFFEE9A85),
-    400: Color(0xFFEB856B),
-    500: Color(_orangePrimaryValue),
-    600: Color(0xFFE4674A),
-    700: Color(0xFFE05C40),
-    800: Color(0xFFDD5237),
-    900: Color(0xFFD74027),
+  static const MaterialColor IReadOrange = MaterialColor(_ireadorangePrimaryValue, <int, Color>{
+    50: Color(0xFFFFF7E0),
+    100: Color(0xFFFFEAB3),
+    200: Color(0xFFFFDD80),
+    300: Color(0xFFFFCF4D),
+    400: Color(0xFFFFC426),
+    500: Color(_ireadorangePrimaryValue),
+    600: Color(0xFFFFB300),
+    700: Color(0xFFFFAB00),
+    800: Color(0xFFFFA300),
+    900: Color(0xFFFF9400),
   });
-  static const int _orangePrimaryValue = 0xFFE76F51;
+  static const int _ireadorangePrimaryValue = 0xFFFFBA00;
 
+  static const MaterialColor IReadOrangeAccent = MaterialColor(_ireadorangeAccentValue, <int, Color>{
+    100: Color(0xFFFFFFFF),
+    200: Color(_ireadorangeAccentValue),
+    400: Color(0xFFFFE1BF),
+    700: Color(0xFFFFD5A6),
+  });
+  static const int _ireadorangeAccentValue = 0xFFFFDD80;
+
+  static const MaterialColor IReadBrown = MaterialColor(_ireadbrownPrimaryValue, <int, Color>{
+    50: Color(0xFFFDF1EC),
+    100: Color(0xFFFADBD0),
+    200: Color(0xFFF7C4B0),
+    300: Color(0xFFF3AC90),
+    400: Color(0xFFF19A79),
+    500: Color(_ireadbrownPrimaryValue),
+    600: Color(0xFFEC8059),
+    700: Color(0xFFE9754F),
+    800: Color(0xFFE76B45),
+    900: Color(0xFFE25833),
+  });
+  static const int _ireadbrownPrimaryValue = 0xFFEE8861;
+
+  static const MaterialColor IReadBrownAccent = MaterialColor(_ireadbrownAccentValue, <int, Color>{
+    100: Color(0xFFFFFFFF),
+    200: Color(_ireadbrownAccentValue),
+    400: Color(0xFFFFCEC2),
+    700: Color(0xFFFFB9A8),
+  });
+  static const int _ireadbrownAccentValue = 0xFFF7C4B0;
+
+
+  /*-----------------------------------------------------------------------------------------------------------*/
   static const MaterialColor gray = MaterialColor(_grayPrimaryValue, <int, Color>{
     50: Color(0xFFF0F0F0),
     100: Color(0xFFD9D9D9),

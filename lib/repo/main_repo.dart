@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:iread_flutter/models/attachment/attachment.dart';
 import 'package:iread_flutter/models/draw/polygon.dart';
 import 'package:iread_flutter/repo/attachment_repo.dart';

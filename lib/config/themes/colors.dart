@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 ColorScheme colorScheme = ColorScheme(
-    primary: Color(0xff845ec2),
+    primary: Color(0xFF845EC2),
     primaryVariant: Color(0xff500e74),
     secondary: Color(0xffff5e78),
     secondaryVariant: Color(0xff9e1d22),

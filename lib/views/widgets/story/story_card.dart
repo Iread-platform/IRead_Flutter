@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iread_flutter/config/themes/border_radius.dart';
+import 'package:iread_flutter/config/themes/colors.dart';
 import 'package:iread_flutter/views/widgets/shared/progress_bar.dart';
 import 'package:iread_flutter/views/widgets/story/story_image.dart';
 
@@ -17,10 +18,10 @@ class StoryCard extends StatelessWidget {
   final Color _color;
 
   StoryCard({
-    @required title,
-    @required imageUrl,
-    @required color,
-    progress,
+    @required String title,
+    @required String imageUrl,
+    @required Color color,
+    double progress,
   })  : _progress = progress ?? -1,
         _title = title,
         _color = color,
@@ -52,16 +53,16 @@ class StoryCard extends StatelessWidget {
         child: ProgressBar(
           borderRadius: storyBorderRadius,
           color: _color,
-          height: 12,
+          height: 12.0,
           progress: _progress,
-          borderWidth: 2,
-          padding: 1,
+          borderWidth: 2.0,
+          padding: 1.0,
           dropShadow: true,
           shadowOffset: Offset(1, 1),
-          shadowBlurRadius: 10,
+          shadowBlurRadius: 10.0,
         ));
   }
 
   Widget _storyTitle(BuildContext context) => Text(_title,
-      style: Theme.of(context).textTheme.subtitle1.copyWith(color: _color));
+      style: Theme.of(context).textTheme.subtitle1.copyWith(color: colorScheme.primary));
 }
