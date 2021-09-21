@@ -131,16 +131,16 @@ class StoryRepo {
     }
   }
 
-  Future<Data<StoriesSectionModel>> fetchMainScreenData() async {
-    try {
-      final response = await _apiService.request(
-          requestType: RequestType.GET, endPoint: this.mainScreenEndpoint);
+  Future<Data> fetchMainScreenData() async {
+    print('Fetching main screen data');
+    final response = await _apiService.request(
+        requestType: RequestType.GET, endPoint: this.mainScreenEndpoint);
 
-      final json = jsonDecode(response);
-      print("Main screen data is \n" + json);
+    final json = jsonDecode(response);
+    print("Main screen data is \n" + json);
 
-      return Data.success(json);
-    } catch (e) {
+    return Data.success(json);
+    try {} catch (e) {
       return Data.handleException(e);
     }
   }

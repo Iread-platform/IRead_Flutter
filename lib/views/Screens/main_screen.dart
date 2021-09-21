@@ -2,12 +2,15 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:iread_flutter/bloc/base/base_bloc.dart';
+import 'package:iread_flutter/bloc/main_screen/main_screen_bloc.dart';
 import 'package:iread_flutter/models/story.dart';
 import 'package:iread_flutter/utils/data_generator.dart';
 import 'package:iread_flutter/utils/i_read_icons.dart';
 import 'package:iread_flutter/views/widgets/input/auto_complete_search_field.dart';
 import 'package:iread_flutter/views/widgets/opened_library/stories_section.dart';
 import 'package:iread_flutter/views/widgets/shared/app_bar.dart';
+import 'package:iread_flutter/views/widgets/shared/request_handler.dart';
 
 class MainScreen extends StatelessWidget {
   // ignore: unused_field
@@ -18,44 +21,49 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.only(bottom: 24),
-      children: [
-        IreadAppBar(),
-        Container(
-            margin: const EdgeInsets.only(bottom: 12, right: 12, left: 12),
-            child: Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(40.0),
-              ),
-              shadowColor: Color(0XAA7A07BB),
-              elevation: 2,
-              child: AutoCompleteTextField<Story>(
-                label: 'Search a story',
-                itemView: (Story story) => story.title,
-                inputDecoration: _inputDecoration(context),
-                onResultSelected: (Story story) {},
-                onSearchTextChanges: (term) {
-                  final c = Completer<List<Story>>()
-                    ..complete(DataGenerator.storyList(10));
-                  return c.future;
-                },
-              ),
-            )),
-        StoriesSection(
-          title: "Continue reading",
-          storiesList: DataGenerator.storyList(10),
-          storyWidth: 100,
-        ),
-        SizedBox(
-          height: 25,
-        ),
-        StoriesSection(
-          title: "Continue reading",
-          storiesList: DataGenerator.storyList(10),
-          storyWidth: 100,
-        )
-      ],
+    return RequestHandler<SuccessState, MainScreenBloc>(
+      onSuccess: (context, state) {
+        return ListView(
+          padding: const EdgeInsets.only(bottom: 24),
+          children: [
+            IreadAppBar(),
+            Container(
+                margin: const EdgeInsets.only(bottom: 12, right: 12, left: 12),
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(40.0),
+                  ),
+                  shadowColor: Color(0XAA7A07BB),
+                  elevation: 2,
+                  child: AutoCompleteTextField<Story>(
+                    label: 'Search a story',
+                    itemView: (Story story) => story.title,
+                    inputDecoration: _inputDecoration(context),
+                    onResultSelected: (Story story) {},
+                    onSearchTextChanges: (term) {
+                      final c = Completer<List<Story>>()
+                        ..complete(DataGenerator.storyList(10));
+                      return c.future;
+                    },
+                  ),
+                )),
+            StoriesSection(
+              title: "Continue reading",
+              storiesList: DataGenerator.storyList(10),
+              storyWidth: 100,
+            ),
+            SizedBox(
+              height: 25,
+            ),
+            StoriesSection(
+              title: "Continue reading",
+              storiesList: DataGenerator.storyList(10),
+              storyWidth: 100,
+            )
+          ],
+        );
+      },
+      main: Container(),
     );
   }
 
