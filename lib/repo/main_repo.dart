@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:iread_flutter/models/attachment/attachment.dart';
 import 'package:iread_flutter/models/draw/polygon.dart';
 import 'package:iread_flutter/repo/attachment_repo.dart';
@@ -14,6 +15,7 @@ class MainRepo {
 
   final InteractionRepo _interactionRepo = InteractionRepo();
   final AttachmentRepo _attachmentRepo = AttachmentRepo();
+  final UserRepo _userRepo = UserRepo();
 
   /// Save a polygon with attachments.
   Stream<Data> savePolygon(Polygon polygon, int storyId) async* {
@@ -65,5 +67,9 @@ class MainRepo {
         await _attachmentRepo.saveFile(polygon.localRecordPath, storyId);
 
     return uploadingFileData.stream;
+  }
+
+  Future<Data> fetchUserProfile() {
+    return _userRepo.profile();
   }
 }

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:iread_flutter/bloc/profile_bloc/profile_bloc.dart';
+import 'package:iread_flutter/bloc/profile_bloc/profile_states.dart';
 import 'package:iread_flutter/views/widgets/shared/request_handler.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -7,7 +9,7 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: RequestHandler(
+      child: RequestHandler<ProfileDataFetched, ProfileBloc>(
         main: Container(
           child: Center(
             child: CircularProgressIndicator(),
