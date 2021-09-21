@@ -33,13 +33,13 @@ dependencies:
   flutter_bloc: ^7.0.1
   speech_bubble: ^0.0.9
   flutter_rating_bar: ^4.0.0
-  audioplayers: ^0.15.0
+  audioplayers: 
   rxdart: ^0.27.0
   audio_video_progress_bar: ^0.4.0
   fluro: ^2.0.3
   http: ^0.13.3
   dio: ^4.0.0
-  flutter_audio_recorder: ^0.5.5
+  flutter_audio_recorder: 
   permission_handler: ^8.0.0+2
   shared_preferences:
   flutter_uploader: ^1.2.1
@@ -49,6 +49,7 @@ dependencies:
   restart_app: ^1.0.3
   firebase_messaging: ^10.0.7
   firebase_core: ^1.6.0
+  flutter_local_notifications: 
 
 dev_dependencies:
   flutter_test:

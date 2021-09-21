@@ -11,6 +11,7 @@ import 'package:iread_flutter/config/themes/theme.dart';
 import 'package:iread_flutter/services/firebase/action_track_service.dart';
 import 'package:iread_flutter/services/auth_service.dart';
 import 'package:iread_flutter/services/firebase/index.dart';
+import 'package:iread_flutter/services/notifications_manager_service.dart';
 import 'package:iread_flutter/services/permissions_service.dart';
 import 'package:iread_flutter/views/Screens/login_screen.dart';
 import 'package:iread_flutter/views/Screens/main_screen.dart';
@@ -30,6 +31,7 @@ import 'models/user/user.dart';
 Future<void> initApp() async {
   await AppRouter().init();
   await FirebaseService().init();
+  await NotificationsManagerService.instance().init();
   await AuthService().loadUser();
 }
 
