@@ -12,6 +12,8 @@ class StoryRepo {
   final baseStoryPath = "story";
   final searchByTagEndPoint = "Story/GetStoriesByTagTitle";
   final getStoryByIdEndpoint = "story/get";
+  final mainScreenEndpoint =
+      'story/get-by-my-appropriated-level-and-not-read-yet';
 
   factory StoryRepo() => _instance;
   StoryRepo._internal();
@@ -124,6 +126,20 @@ class StoryRepo {
       final json = jsonDecode(jsonText);
 
       return Data.success(Story.fromJson(json));
+    } catch (e) {
+      return Data.handleException(e);
+    }
+  }
+
+  Future<Data<StoriesSectionModel>> fetchMainScreenData() async {
+    try {
+      final response = await _apiService.request(
+          requestType: RequestType.GET, endPoint: this.mainScreenEndpoint);
+
+      final json = jsonDecode(response);
+      print("Main screen data is \n" + json);
+
+      return Data.success(json);
     } catch (e) {
       return Data.handleException(e);
     }
