@@ -1,4 +1,5 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:iread_flutter/services/notifications_manager_service.dart';
 
 import 'firebase_base_service.dart';
 
@@ -21,6 +22,7 @@ class FirebaseMessagingService extends FirebaseBaseService {
       print('Message data: ${message.data}');
 
       if (message.notification != null) {
+        NotificationsManagerService.instance().showNotification();
         print('Message also contained a notification: ${message.notification}');
       }
     });
