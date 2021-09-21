@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:iread_flutter/themes/border_radius.dart';
+import 'package:iread_flutter/config/themes/border_radius.dart';
+import 'package:iread_flutter/config/themes/colors.dart';
+import 'package:iread_flutter/views/widgets/shared/progress_bar.dart';
 import 'package:iread_flutter/views/widgets/story/story_image.dart';
 
 /// [progress] determines progress bar value, if progress is not exist
@@ -16,10 +18,10 @@ class StoryCard extends StatelessWidget {
   final Color _color;
 
   StoryCard({
-    @required title,
-    @required imageUrl,
-    @required color,
-    progress,
+    @required String title,
+    @required String imageUrl,
+    @required Color color,
+    double progress,
   })  : _progress = progress ?? -1,
         _title = title,
         _color = color,
@@ -28,7 +30,7 @@ class StoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.max,
       children: [
         StoryImage(imageUrl: _imageUrl, color: _color),
         _studentProgress(context),
@@ -47,25 +49,20 @@ class StoryCard extends StatelessWidget {
     }
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
-      child: Container(
-        padding: EdgeInsets.all(2),
-        decoration: BoxDecoration(
-            border: Border.all(color: _color, width: 1),
-            borderRadius: BorderRadius.circular(storyBorderRadius)),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(storyBorderRadius),
-          child: LinearProgressIndicator(
-            backgroundColor: Theme.of(context).colorScheme.surface,
-            value: _progress,
-            valueColor: AlwaysStoppedAnimation<Color>(_color),
-            minHeight: 8,
-          ),
-        ),
-      ),
-    );
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
+        child: ProgressBar(
+          borderRadius: storyBorderRadius,
+          color: _color,
+          height: 12.0,
+          progress: _progress,
+          borderWidth: 2.0,
+          padding: 1.0,
+          dropShadow: true,
+          shadowOffset: Offset(1, 1),
+          shadowBlurRadius: 10.0,
+        ));
   }
 
   Widget _storyTitle(BuildContext context) => Text(_title,
-      style: Theme.of(context).textTheme.subtitle1.copyWith(color: _color));
+      style: Theme.of(context).textTheme.subtitle1.copyWith(color: colorScheme.primary));
 }
