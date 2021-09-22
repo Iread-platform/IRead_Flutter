@@ -2,8 +2,10 @@ import 'dart:convert';
 
 import 'package:iread_flutter/models/attachment/attachment.dart';
 import 'package:iread_flutter/models/draw/polygon.dart';
+import 'package:iread_flutter/models/user/user.dart';
 import 'package:iread_flutter/repo/attachment_repo.dart';
 import 'package:iread_flutter/repo/interaction_repo.dart';
+import 'package:iread_flutter/repo/user_repo.dart';
 import 'package:iread_flutter/utils/data.dart';
 
 class MainRepo {
@@ -68,7 +70,7 @@ class MainRepo {
     return uploadingFileData.stream;
   }
 
-  Future<Data> fetchUserProfile() {
+  Data<User> fetchUserProfile() {
     return _userRepo.profile();
   }
 }
