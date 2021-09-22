@@ -2,6 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:iread_flutter/bloc/profile_bloc/profile_bloc.dart';
+import 'package:iread_flutter/bloc/profile_bloc/profile_events.dart';
+import 'package:provider/provider.dart';
 
 //Example :
 /*
@@ -20,12 +23,19 @@ class _ImagePickerDialogState extends State<ImagePickerDialog> {
   File image;
   int indexAvatar = 0;
   List<String> avatars = [];
+  ProfileBloc _bloc;
   Future getImage() async {
     final img = await ImagePicker.pickImage(source: ImageSource.gallery);
     setState(() {
       image = img;
       indexAvatar = 0;
     });
+  }
+
+  @override
+  void initState() {
+    _bloc = context.read<ProfileBloc>();
+    super.initState();
   }
 
   @override
@@ -106,6 +116,10 @@ class _ImagePickerDialogState extends State<ImagePickerDialog> {
                       child: Text("Save"),
                       style: ElevatedButton.styleFrom(primary: Colors.purple),
                       onPressed: () {
+                        image != null
+                            ? _bloc.add(UpdateProfilePhotoEvent(image: image))
+                            : _bloc.add(UpdateProfilePhotoEvent(
+                                imageAssetPath: assetImagePath));
                         Navigator.pop(context);
                       }))
             ],
@@ -114,4 +128,6 @@ class _ImagePickerDialogState extends State<ImagePickerDialog> {
       ),
     );
   }
+
+  get assetImagePath => "assets/AvatarImages/$indexAvatar.png";
 }

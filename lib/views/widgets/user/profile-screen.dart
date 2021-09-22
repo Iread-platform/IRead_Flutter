@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:iread_flutter/bloc/profile_bloc/profile_bloc.dart';
 import 'package:iread_flutter/bloc/profile_bloc/profile_states.dart';
 import 'package:iread_flutter/models/user/user.dart';
+import 'package:iread_flutter/utils/data_generator.dart';
 import 'package:iread_flutter/utils/i_read_icons.dart';
 import 'package:iread_flutter/views/widgets/Image_picker_dialog.dart';
+import 'package:iread_flutter/views/widgets/opened_library/stories_section.dart';
 import 'package:iread_flutter/views/widgets/shared/request_handler.dart';
 import 'package:iread_flutter/views/widgets/user/avatar.dart';
 
@@ -35,6 +37,11 @@ class ProfileScreen extends StatelessWidget {
                     'Class Name',
                     'School Name',
                     'https://thumbs.dreamstime.com/b/man-hipster-avatar-cartoon-guy-black-hair-flat-icon-blue-background-user-person-character-vector-illustration-185480506.jpg',
+                  ),
+                  StoriesSection(
+                    title: 'Read Stories',
+                    storiesList: DataGenerator.storyList(5),
+                    storyWidth: 100,
                   )
                 ],
               ),
