@@ -29,7 +29,7 @@ class ProfileScreen extends StatelessWidget {
             return Container(
               padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 70),
               color: Theme.of(context).colorScheme.surface,
-              child: Column(
+              child: ListView(
                 children: [
                   userDetailsRow(
                     context,
