@@ -137,7 +137,7 @@ class StoryRepo {
         requestType: RequestType.GET, endPoint: this.mainScreenEndpoint);
 
     final json = jsonDecode(response);
-    print("Main screen data is \n" + json);
+    print("Main screen data is \n" + response);
 
     return Data.success(json);
     try {} catch (e) {
