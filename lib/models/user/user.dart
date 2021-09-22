@@ -1,5 +1,3 @@
-import 'package:iread_flutter/models/model.dart';
-
 class User {
   String _id;
   String _email;
@@ -9,7 +7,14 @@ class User {
   String _token;
   UserRole _userRole;
 
-  User({String id,String email,String firstName, String lastName, String imageUrl, String token, UserRole userRole})
+  User(
+      {String id,
+      String email,
+      String firstName,
+      String lastName,
+      String imageUrl,
+      String token,
+      UserRole userRole})
       : _firstName = firstName,
         _lastName = lastName,
         _imageUrl = imageUrl,
@@ -18,15 +23,15 @@ class User {
         _email = email,
         _userRole = userRole;
 
-  User.fromJson(Map<String, dynamic> json)
-  {
+  User.fromJson(Map<String, dynamic> json) {
     _id = json['id'];
     _firstName = json['firstName'];
     _lastName = json['lastName'];
     _imageUrl = json['imageUrl'];
     _token = json['token'];
     _email = json['email'];
-    _userRole = UserRole.values.firstWhere((element) => element.toString() == json['userRole']);
+    _userRole = UserRole.values
+        .firstWhere((element) => element.toString() == json['userRole']);
   }
 
   get firstName => _firstName;
@@ -48,8 +53,6 @@ class User {
     data['email'] = this._email;
     return data;
   }
-
-
 }
 
 enum UserRole { Admin, Teacher, Student, SchoolManager }

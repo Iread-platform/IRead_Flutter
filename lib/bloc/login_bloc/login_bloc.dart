@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iread_flutter/bloc/base/base_bloc.dart';
 import 'package:iread_flutter/bloc/login_bloc/login_events.dart';
 import 'package:iread_flutter/repo/user_repo.dart';
-import 'package:iread_flutter/utils/data.dart';
 import 'package:progress_state_button/progress_button.dart';
 
 class LoginBloc extends Bloc<BlocEvent, BlocState> {
@@ -28,8 +27,7 @@ class LoginBloc extends Bloc<BlocEvent, BlocState> {
         yield LoadingState();
 
         try {
-          Data<bool> result =
-              await UserRepo().login(event.email, event.password);
+          await UserRepo().login(event.email, event.password);
           buttonState = ButtonState.success;
           yield SuccessState();
         } catch (e) {

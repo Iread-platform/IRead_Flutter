@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iread_flutter/bloc/StoryScreenBloc/storyscreen_bloc.dart';
@@ -7,6 +8,7 @@ import 'package:iread_flutter/bloc/login_bloc/login_bloc.dart';
 import 'package:iread_flutter/bloc/text_selection_provider.dart';
 import 'package:iread_flutter/config/routing/app_router.dart';
 import 'package:iread_flutter/config/themes/theme.dart';
+import 'package:iread_flutter/services/action_track_service.dart';
 import 'package:iread_flutter/services/auth_service.dart';
 import 'package:iread_flutter/services/permissions_service.dart';
 import 'package:iread_flutter/views/Screens/login_screen.dart';
@@ -51,7 +53,6 @@ void main() {
   );
 }
 
-// ignore: must_be_immutable
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -63,6 +64,9 @@ class MyApp extends StatelessWidget {
         title: 'Iread',
         onGenerateRoute: AppRouter().appRouterGenerator,
         navigatorKey: AppConfigs.instance().navigationKey,
+        navigatorObservers: [
+          FirebaseAnalyticsObserver(analytics: ActionTrackService().analytics),
+        ],
         home: (AuthService().cU != null)
             ? Scaffold(body: IReadApp())
             : BlocProvider(
