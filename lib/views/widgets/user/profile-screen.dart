@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:iread_flutter/bloc/profile_bloc/profile_bloc.dart';
 import 'package:iread_flutter/bloc/profile_bloc/profile_states.dart';
 import 'package:iread_flutter/models/user/user.dart';
+import 'package:iread_flutter/utils/i_read_icons.dart';
+import 'package:iread_flutter/views/widgets/Image_picker_dialog.dart';
 import 'package:iread_flutter/views/widgets/shared/request_handler.dart';
 import 'package:iread_flutter/views/widgets/user/avatar.dart';
 
@@ -68,13 +70,30 @@ class ProfileScreen extends StatelessWidget {
         Container(
           height: 200,
           child: Stack(
+            clipBehavior: Clip.none,
             alignment: Alignment.center,
             children: [
               UserAvatar(
                 imageUrl: imageUrl,
                 radius: 60.0,
                 showShadow: true,
-              )
+              ),
+              Positioned(
+                  top: 30,
+                  right: 5,
+                  child: IconButton(
+                    icon: Icon(
+                      IReadIcons.camera_fill,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return ImagePickerDialog();
+                          });
+                    },
+                  ))
             ],
           ),
         )
