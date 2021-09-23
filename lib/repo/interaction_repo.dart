@@ -94,7 +94,7 @@ class InteractionRepo {
   }
 
   Future<int> addHighLightWord(Map map) async {
-    final url = "http://217.182.250.236:5016/api/Interaction/HighLight/add";
+    final url = "Interaction/HighLight/add";
     final jsonText = await _apiService.request(
         requestType: RequestType.POST, endPoint: url, parameter: map);
     final json = jsonDecode(jsonText);
@@ -103,10 +103,8 @@ class InteractionRepo {
   }
 
   removeHighLightWord(int id) async {
-    final url = "http://217.182.250.236:5016/api/Interaction/HighLight/" +
-        id.toString() +
-        "/delete";
-    final jsonText =
-        await _apiService.request(requestType: RequestType.DELETE, endPoint: url);
+    final url = "Interaction/HighLight/" + id.toString() + "/delete";
+    final jsonText = await _apiService.request(
+        requestType: RequestType.DELETE, endPoint: url);
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iread_flutter/models/story.dart';
+import 'package:iread_flutter/views/Screens/story_screen.dart';
 import 'package:iread_flutter/views/widgets/story/story_card.dart';
 
 class StoriesSection extends StatelessWidget {
@@ -63,11 +64,17 @@ class StoriesSection extends StatelessWidget {
       final story = Container(
         margin: EdgeInsets.only(right: 12),
         width: _storyWidth,
-        child: StoryCard(
-          title: element.title,
-          imageUrl: element.imageUrl,
-          color: element.color,
-          progress: element.progress,
+        child: InkWell(
+          onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => StoryScreen(storyId: 23))),
+          child: StoryCard(
+            title: element.title,
+            imageUrl: element.imageUrl,
+            color: element.color,
+            progress: element.progress,
+          ),
         ),
       );
 

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:iread_flutter/config/themes/border_radius.dart';
+import 'package:iread_flutter/services/auth_service.dart';
 import 'package:iread_flutter/utils/i_read_icons.dart';
 import 'package:iread_flutter/views/widgets/review/review_list.dart';
 import 'package:iread_flutter/views/widgets/user/avatar.dart';
-
-import '../../../main.dart';
 
 class StoryEvaluation extends StatelessWidget {
   final String _evaluationHeader = 'Evaluation';
@@ -23,11 +22,11 @@ class StoryEvaluation extends StatelessWidget {
             style: Theme.of(context).textTheme.headline4,
           ),
           UserAvatar(
-            imageUrl: user.imageUrl,
+            imageUrl: AuthService().cU.imageUrl,
             radius: 50.0,
           ),
           Text(
-            user.firstName +" "+ user.lastName,
+            AuthService().cU.firstName + " " + AuthService().cU.lastName,
             style: Theme.of(context).textTheme.headline5,
           ),
           SizedBox(
