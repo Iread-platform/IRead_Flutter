@@ -1,3 +1,4 @@
+import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,7 +8,6 @@ import 'package:iread_flutter/bloc/base/base_bloc.dart';
 import 'package:iread_flutter/bloc/text_selection_provider.dart';
 import 'package:iread_flutter/utils/i_read_icons.dart';
 import 'package:iread_flutter/views/widgets/highlight_text.dart';
-import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:iread_flutter/views/widgets/shared/request_handler.dart';
 import 'package:provider/provider.dart';
 
@@ -40,13 +40,15 @@ class _StoryScreenState extends State<StoryScreen> {
     h = MediaQuery.of(context).size.height;
 
     bloc = BlocProvider.of<StoryscreenBloc>(context, listen: false);
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          header(), // HomeButton - backArrow - ImageStory
-          textStory(), // Selectable text Story
-          player(), // progress - playPauseButton
-        ],
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            header(), // HomeButton - backArrow - ImageStory
+            textStory(), // Selectable text Story
+            player(), // progress - playPauseButton
+          ],
+        ),
       ),
     );
   }

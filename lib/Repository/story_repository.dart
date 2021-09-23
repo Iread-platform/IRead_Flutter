@@ -1,9 +1,9 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:iread_flutter/models/Data.dart';
 import 'package:iread_flutter/models/story_model.dart';
 import 'package:iread_flutter/services/api_service.dart';
-import 'dart:convert';
 
 class StoryRepository {
   ApiService apiService;
@@ -33,9 +33,8 @@ class StoryRepository {
 
   Future<Data<StoryModel>> fetchStoryPage(int id) async {
     try {
-      
-      final url = "http://217.182.250.236:5010/api/Story/getStoryToListen/" +
-          id.toString();
+      final url = "Story/getStoryToListen/" + id.toString();
+      print(url);
       final jsonText =
           await apiService.request(requestType: RequestType.GET, endPoint: url);
       final json = jsonDecode(jsonText);
@@ -45,6 +44,4 @@ class StoryRepository {
       return Data.faild(message: e.toString());
     }
   }
-
-  
 }

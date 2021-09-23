@@ -3,14 +3,23 @@ import 'package:flutter/material.dart';
 class UserAvatar extends StatelessWidget {
   final _radius;
   final _imageUrl;
+  final _showShadow;
 
-  UserAvatar({radius, imageUrl})
+  UserAvatar({radius, imageUrl, showShadow})
       : _radius = radius,
-        _imageUrl = imageUrl;
+        _imageUrl = imageUrl,
+        _showShadow = showShadow ?? false;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return CustomPaint(
+      painter: _ClipShadowShadowPainter(
+        clipper: AvatarClipper(),
+        shadow: Shadow(
+          color: Color(0XAA7A07BB),
+          blurRadius: _showShadow? 5 : 0
+        )
+      ),
       child: ClipPath(
         clipper: AvatarClipper(),
         child: CircleAvatar(
@@ -40,6 +49,25 @@ class AvatarClipper extends CustomClipper<Path> {
 
   @override
   bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
+    return true;
+  }
+}
+
+class _ClipShadowShadowPainter extends CustomPainter {
+  final Shadow shadow;
+  final CustomClipper<Path> clipper;
+
+  _ClipShadowShadowPainter({@required this.shadow, @required this.clipper});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    var paint = shadow.toPaint();
+    var clipPath = clipper.getClip(size).shift(shadow.offset);
+    canvas.drawPath(clipPath, paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
     return true;
   }
 }

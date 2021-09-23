@@ -12,6 +12,7 @@ class AppConfigs {
   }*/
 
   GlobalKey navigationKey;
+  BuildContext appContext;
 
   State get appCurrentState => navigationKey.currentState;
 }
