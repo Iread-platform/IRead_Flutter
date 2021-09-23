@@ -27,7 +27,7 @@ class StoryEvaluation extends StatelessWidget {
             radius: 50.0,
           ),
           Text(
-            user.name,
+            user.firstName +" "+ user.lastName,
             style: Theme.of(context).textTheme.headline5,
           ),
           SizedBox(

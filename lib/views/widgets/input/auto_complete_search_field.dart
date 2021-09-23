@@ -158,7 +158,6 @@ class _AutoCompleteTextFieldState<T extends Model>
         CompositedTransformTarget(
             link: _layerLink,
             child: Container(
-                height: 50,
                 child: TextFormField(
                   controller: _textEditingController,
                   focusNode: _focusNode,
