@@ -5,7 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iread_flutter/bloc/StoryScreenBloc/storyscreen_bloc.dart';
 import 'package:iread_flutter/bloc/base/base_bloc.dart';
+import 'package:iread_flutter/bloc/comment_bloc/comment_bloc.dart';
 import 'package:iread_flutter/bloc/text_selection_provider.dart';
+import 'package:iread_flutter/services/auth_service.dart';
 import 'package:iread_flutter/utils/i_read_icons.dart';
 import 'package:iread_flutter/views/widgets/highlight_text.dart';
 import 'package:iread_flutter/views/widgets/shared/request_handler.dart';
@@ -28,6 +30,7 @@ class _StoryScreenState extends State<StoryScreen> {
   @override
   void initState() {
     super.initState();
+    
     BlocProvider.of<StoryscreenBloc>(context)
         .add(FetchStoryPage(stotyID: widget.storyId));
   }

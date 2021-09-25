@@ -107,4 +107,19 @@ class InteractionRepo {
     final jsonText = await _apiService.request(
         requestType: RequestType.DELETE, endPoint: url);
   }
+
+  addCommentWord(Map map) async {
+    final url = "Interaction/Comment/add";
+    final jsonText = await _apiService.request(
+        requestType: RequestType.POST, endPoint: url, parameter: map);
+    final json = jsonDecode(jsonText);
+    print(json);
+    return json["commentId"];
+  }
+
+  removeCommentWord(int id) async {
+    final url = "Interaction/Comment/" + id.toString() + "/delete";
+    final jsonText = await _apiService.request(
+        requestType: RequestType.DELETE, endPoint: url);
+  }
 }

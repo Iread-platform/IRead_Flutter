@@ -47,6 +47,10 @@ void main() {
           BlocProvider(
             create: (context) => InteractionsBloc(),
           ),
+          BlocProvider(
+            create: (context) => CommentBloc(InitialState()),
+          ),
+          
         ],
         child: ChangeNotifierProvider(
           create: (context) => TextSelectionProvider(),
