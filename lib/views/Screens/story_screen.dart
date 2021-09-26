@@ -26,11 +26,12 @@ class _StoryScreenState extends State<StoryScreen> {
   var h;
   var bloc;
   GlobalKey stoyryKey = GlobalKey();
+
   //============== Fetch Story Data =========================
   @override
   void initState() {
     super.initState();
-    
+
     BlocProvider.of<StoryscreenBloc>(context)
         .add(FetchStoryPage(stotyID: widget.storyId));
   }
@@ -38,7 +39,6 @@ class _StoryScreenState extends State<StoryScreen> {
   //=============== Build screen (Header - textStory - player) ===================
   @override
   Widget build(BuildContext context) {
-    print("re build");
     w = MediaQuery.of(context).size.width;
     h = MediaQuery.of(context).size.height;
 
@@ -208,7 +208,7 @@ class _StoryScreenState extends State<StoryScreen> {
                   return Container();
                 } else {
                   return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       // ========= progress =============
                       Container(
@@ -245,6 +245,157 @@ class _StoryScreenState extends State<StoryScreen> {
                             }
                           },
                         ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          InkWell(
+                            child: Icon(Icons.list, size: 30),
+                            onTap: () async {
+                              var comments = BlocProvider.of<StoryscreenBloc>(
+                                      context)
+                                  .storyPageData
+                                  .data
+                                  .pages[
+                                      BlocProvider.of<StoryscreenBloc>(context)
+                                          .pageController
+                                          .page
+                                          .toInt()]
+                                  .comments;
+                              return showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    insetPadding: EdgeInsets.all(20),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(40)),
+                                    title: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          "Vocabulary",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline3,
+                                        ),
+                                        InkWell(
+                                          child: Icon(
+                                            Icons.close,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
+                                            size: 30,
+                                          ),
+                                          onTap: () {
+                                            Navigator.pop(context);
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                    content: Container(
+                                      height: h * 0.4,
+                                      width: w * 0.9,
+                                      child: ListView.builder(
+                                        shrinkWrap: true,
+                                        itemCount: comments.length,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          return Container(
+                                            margin: EdgeInsets.all(5),
+                                            child: Card(
+                                              child: Container(
+                                                height: 120,
+                                                margin: EdgeInsets.all(10),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    SingleChildScrollView(
+                                                      child: Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceEvenly,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Text(
+                                                            comments[index]
+                                                                .word,
+                                                            style: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .headline6,
+                                                          ),
+                                                          Text("Word Class",
+                                                              style: Theme.of(
+                                                                      context)
+                                                                  .textTheme
+                                                                  .bodyText1),
+                                                          Text(
+                                                            "        " +
+                                                                comments[index]
+                                                                    .classOFWord,
+                                                            style: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .bodyText2,
+                                                          ),
+                                                          Text(
+                                                            "Example",
+                                                            style: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .bodyText1,
+                                                          ),
+                                                          Text(
+                                                            "        " +
+                                                                comments[index]
+                                                                    .exampleOfWord,
+                                                            style: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .bodyText2,
+                                                          ),
+                                                          Text(
+                                                            "Definition",
+                                                            style: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .bodyText1,
+                                                          ),
+                                                          Text(
+                                                            "        " +
+                                                                comments[index]
+                                                                    .definitionOfWord,
+                                                            style: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .bodyText2,
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    Icon(IReadIcons.delete,color: Theme.of(context).colorScheme.primary,)
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                          Icon(Icons.mic, size: 30),
+                          Icon(Icons.comment, size: 30),
+                        ],
                       )
                     ],
                   );

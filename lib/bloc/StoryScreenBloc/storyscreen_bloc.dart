@@ -45,7 +45,14 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
                   (word.startIndex <= highLight.endWordIndex)) {
                 word.isHighLighted = true;
                 word.highLightID = highLight.highLightId;
-                print(" this is highlightID : ${word.highLightID}");
+              }
+            }
+          }
+          for (var comment in storyPageData.data.pages[i].comments) {
+            for (var word in storyPageData.data.pages[i].words) {
+              if (word.content == comment.word) {
+                word.isComment = true;
+                word.commentId = comment.commentId;
               }
             }
           }

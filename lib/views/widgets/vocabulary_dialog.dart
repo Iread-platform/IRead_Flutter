@@ -12,6 +12,7 @@ class VocabularyDialog {
   static TextEditingController def = TextEditingController();
   static TextEditingController example = TextEditingController();
   static Future vocDialog({@required context}) async {
+    
     var w = MediaQuery.of(context).size.width;
     var h = MediaQuery.of(context).size.height;
     return showDialog(
@@ -109,6 +110,9 @@ class VocabularyDialog {
                               size: 30,
                               color: Theme.of(context).colorScheme.primary,
                             ),
+                            onTap: () {
+                              
+                            },
                           ),
                           Container(
                             width: w * 0.3,
@@ -118,8 +122,8 @@ class VocabularyDialog {
                                   print(classOFWord);
                                   print(def.text);
                                   print(example.text);
-                                  BlocProvider.of<CommentBloc>(context,
-                                          listen: false)
+
+                                  BlocProvider.of<CommentBloc>(context)
                                       .addCommentWord({
                                     "interaction": {
                                       "storyId": 23,
@@ -147,6 +151,27 @@ class VocabularyDialog {
                                     "definitionOfWord": def.text,
                                     "exampleOfWord": example.text
                                   });
+                                  for (var word
+                                      in BlocProvider.of<StoryscreenBloc>(
+                                              context,
+                                              listen: false)
+                                          .storyPageData
+                                          .data
+                                          .pages[
+                                              BlocProvider.of<StoryscreenBloc>(
+                                                      context,
+                                                      listen: false)
+                                                  .pageController
+                                                  .page
+                                                  .toInt()]
+                                          .words) {
+                                    if (word.content ==
+                                        Provider.of<TextSelectionProvider>(
+                                                context,
+                                                listen: false)
+                                            .wordSelection) {}
+                                  }
+                                  Navigator.pop(context);
                                 },
                                 child: Text("Save")),
                           ),

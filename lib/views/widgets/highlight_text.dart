@@ -51,7 +51,13 @@ class _HighlighTextState extends State<HighlighText> {
                         fontSize: 40,
                         backgroundColor: widget.words[i].isHighLighted
                             ? Colors.yellow
-                            : Colors.transparent),
+                            : Colors.transparent,
+                        decoration: widget.words[i].isComment
+                            ? TextDecoration.underline
+                            : TextDecoration.none,
+                        decorationStyle: TextDecorationStyle.dashed,
+                        decorationColor: Colors.orange
+                      ),
               )
           ],
         ),

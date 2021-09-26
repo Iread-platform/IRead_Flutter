@@ -76,6 +76,8 @@ class Pages {
   int pageId;
   String content;
   List<HighLights> highLights;
+  List<Comment> comments;
+
   List<Word> words;
   double startPageTime = 0;
   double endPageTime = 0;
@@ -90,6 +92,13 @@ class Pages {
       highLights = <HighLights>[];
       jsonhighLights.forEach((v) {
         highLights.add(new HighLights.fromJson(v));
+      });
+    }
+    var jsoncomments = json['comments'];
+    if (jsoncomments != null) {
+      comments = <Comment>[];
+      jsoncomments.forEach((v) {
+        comments.add(new Comment.fromJson(v));
       });
     }
     var jsonWord = JSON.jsonDecode(json['words']);
@@ -145,6 +154,39 @@ class HighLights {
   }
 }
 
+class Comment {
+  int commentId;
+  String word;
+  String classOFWord;
+  String definitionOfWord;
+  String exampleOfWord;
+
+  Comment(
+      {this.commentId,
+      this.word,
+      this.classOFWord,
+      this.definitionOfWord,
+      this.exampleOfWord});
+
+  Comment.fromJson(Map<String, dynamic> json) {
+    commentId = json['commentId'];
+    word = json['word'];
+    classOFWord = json['classOFWord'];
+    definitionOfWord = json['definitionOfWord'];
+    exampleOfWord = json['exampleOfWord'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['commentId'] = this.commentId;
+    data['word'] = this.word;
+    data['classOFWord'] = this.classOFWord;
+    data['definitionOfWord'] = this.definitionOfWord;
+    data['exampleOfWord'] = this.exampleOfWord;
+    return data;
+  }
+}
+
 class Word {
   String id;
   String content;
@@ -157,6 +199,8 @@ class Word {
   double timeEnd;
   bool isHighLighted = false;
   int highLightID = -1;
+  bool isComment = false;
+  int commentId = -1;
   int startIndex;
   bool newLine = false;
   double scrollHight = 0;
