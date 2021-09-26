@@ -63,15 +63,15 @@ class UserRepo {
   }
 
   Future<Data<Profile>> fetchProfile() async {
-    if (fetchProfile != null) {
+    if (profile != null) {
       return Data.success(profile);
     }
 
-    try {
-      final json = _fetchProfileJson(AuthService().cU.token);
-      profile = Profile.fromJson(json);
-      return Data.success(profile);
-    } catch (e) {
+    final json = await _fetchProfileJson(AuthService().cU.token);
+    profile = Profile.fromJson(json);
+    return Data.success(profile);
+
+    try {} catch (e) {
       return Data.handleException(e);
     }
   }

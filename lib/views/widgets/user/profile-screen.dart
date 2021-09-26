@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iread_flutter/bloc/profile_bloc/profile_bloc.dart';
 import 'package:iread_flutter/bloc/profile_bloc/profile_states.dart';
-import 'package:iread_flutter/models/user/user.dart';
-import 'package:iread_flutter/utils/data_generator.dart';
+import 'package:iread_flutter/models/user/profile.dart';
 import 'package:iread_flutter/utils/i_read_icons.dart';
 import 'package:iread_flutter/views/widgets/Image_picker_dialog.dart';
 import 'package:iread_flutter/views/widgets/opened_library/stories_section.dart';
@@ -23,7 +22,7 @@ class ProfileScreen extends StatelessWidget {
             ),
           ),
           onSuccess: (context, state) {
-            User user = state.data.data as User;
+            Profile user = state.data.data as Profile;
 
             print('Profile data fetched');
             return Container(
@@ -34,13 +33,13 @@ class ProfileScreen extends StatelessWidget {
                   userDetailsRow(
                     context,
                     '${user.firstName} ${user.lastName}',
-                    'Class Name',
-                    'School Name',
+                    user.schoolMember.classes[0].title,
+                    user.schoolMember.schoolTitle,
                     'https://thumbs.dreamstime.com/b/man-hipster-avatar-cartoon-guy-black-hair-flat-icon-blue-background-user-person-character-vector-illustration-185480506.jpg',
                   ),
                   StoriesSection(
                     title: 'Read Stories',
-                    storiesList: DataGenerator.storyList(5),
+                    storiesList: user.viewStories,
                     storyWidth: 100,
                   )
                 ],

@@ -42,12 +42,21 @@ class StoriesSection extends StatelessWidget {
         ),
         SizedBox(
           height: _sectionHeight,
-          child: ListView(
-            padding: EdgeInsets.symmetric(horizontal: _horizontalPadding),
-            shrinkWrap: true,
-            scrollDirection: Axis.horizontal,
-            children: _storiesWidgets(context),
-          ),
+          child: _stories != null && _stories.length > 0
+              ? ListView(
+                  padding: EdgeInsets.symmetric(horizontal: _horizontalPadding),
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  children: _storiesWidgets(context),
+                )
+              : Padding(
+                  padding: EdgeInsets.symmetric(horizontal: _horizontalPadding),
+                  child: Text(
+                    'There are no stories yet.',
+                    style: Theme.of(context).textTheme.headline6.copyWith(
+                        color: Theme.of(context).colorScheme.secondary),
+                  ),
+                ),
         )
       ],
     );

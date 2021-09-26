@@ -62,7 +62,7 @@ class Profile {
     _customPhotoAttachment = customPhotoAttachment;
   }
 
-  Profile.fromJson(dynamic json) {
+  Profile.fromJson(Map<String, dynamic> json) {
     _schoolMember = json["schoolMember"] != null
         ? SchoolMember.fromJson(json["schoolMember"])
         : null;
