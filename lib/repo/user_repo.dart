@@ -64,6 +64,8 @@ class UserRepo {
   }
 
   Data<User> profile() {
+    final response = _apiService.request(
+        requestType: RequestType.GET, endPoint: myProfileEndPoint);
     return Data.success(AuthService().cU);
   }
 }
