@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:iread_flutter/models/user/profile.dart';
 import 'package:iread_flutter/models/user/user.dart';
 import 'package:iread_flutter/services/api_service.dart';
 import 'package:iread_flutter/services/auth_service.dart';
@@ -9,6 +10,8 @@ class UserRepo {
   static final UserRepo _instance = UserRepo._internal();
 
   final ApiService _apiService = ApiService();
+
+  Profile profile;
 
   final loginEndPoint = "connect/token";
   final myProfileEndPoint = "identity/myProfile";
@@ -36,13 +39,9 @@ class UserRepo {
       final jsonResponse = json.decode(jsonText);
       print(jsonResponse['access_token']);
 
-      String userText = await _apiService.request(
-          convertParametersToJson: false,
-          requestType: RequestType.GET,
-          endPoint: myProfileEndPoint,
-          externalToken: "Bearer " + jsonResponse['access_token']);
-
-      final userResponse = json.decode(userText.toString());
+      final userResponse =
+          _fetchProfileJson("Bearer " + jsonResponse['access_token']);
+      this.profile = Profile.fromJson(userResponse);
 
       User user = User(
         token: "Bearer " + jsonResponse['access_token'],
@@ -63,9 +62,27 @@ class UserRepo {
     }
   }
 
-  Data<User> profile() {
-    final response = _apiService.request(
-        requestType: RequestType.GET, endPoint: myProfileEndPoint);
-    return Data.success(AuthService().cU);
+  Future<Data<Profile>> fetchProfile() async {
+    if (fetchProfile != null) {
+      return Data.success(profile);
+    }
+
+    try {
+      final json = _fetchProfileJson(AuthService().cU.token);
+      profile = Profile.fromJson(json);
+      return Data.success(profile);
+    } catch (e) {
+      return Data.handleException(e);
+    }
+  }
+
+  _fetchProfileJson(String accessToken) async {
+    String userText = await _apiService.request(
+        convertParametersToJson: false,
+        requestType: RequestType.GET,
+        endPoint: myProfileEndPoint,
+        externalToken: accessToken);
+
+    return json.decode(userText.toString());
   }
 }

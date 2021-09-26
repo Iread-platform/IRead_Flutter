@@ -18,7 +18,7 @@ class ProfileBloc extends Bloc<BlocEvent, BlocState> {
   }
 
   Future<ProfileDataFetched> fetchUserProfile() async {
-    final data = _mainRepo.fetchUserProfile();
+    final data = await _mainRepo.fetchUserProfile();
     return ProfileDataFetched(profileData: data);
   }
 }

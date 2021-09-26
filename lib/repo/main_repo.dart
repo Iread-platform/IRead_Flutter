@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:iread_flutter/models/attachment/attachment.dart';
 import 'package:iread_flutter/models/draw/polygon.dart';
-import 'package:iread_flutter/models/user/user.dart';
+import 'package:iread_flutter/models/user/profile.dart';
 import 'package:iread_flutter/repo/attachment_repo.dart';
 import 'package:iread_flutter/repo/interaction_repo.dart';
 import 'package:iread_flutter/repo/user_repo.dart';
@@ -70,7 +70,7 @@ class MainRepo {
     return uploadingFileData.stream;
   }
 
-  Data<User> fetchUserProfile() {
-    return _userRepo.profile();
+  Future<Data<Profile>> fetchUserProfile() async {
+    return await _userRepo.fetchProfile();
   }
 }
