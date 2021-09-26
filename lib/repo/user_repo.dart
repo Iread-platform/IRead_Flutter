@@ -67,11 +67,11 @@ class UserRepo {
       return Data.success(profile);
     }
 
-    final json = await _fetchProfileJson(AuthService().cU.token);
-    profile = Profile.fromJson(json);
-    return Data.success(profile);
-
-    try {} catch (e) {
+    try {
+      final json = await _fetchProfileJson(AuthService().cU.token);
+      profile = Profile.fromJson(json);
+      return Data.success(profile);
+    } catch (e) {
       return Data.handleException(e);
     }
   }
