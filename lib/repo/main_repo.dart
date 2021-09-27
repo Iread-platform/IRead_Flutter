@@ -73,4 +73,8 @@ class MainRepo {
   Future<Data<Profile>> fetchUserProfile() async {
     return await _userRepo.fetchProfile();
   }
+
+  Future<Data<List<Attachment>>> fetchUserAvatars() {
+    return _userRepo.fetchUserAvatars();
+  }
 }

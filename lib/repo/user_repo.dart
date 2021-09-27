@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:iread_flutter/models/attachment/attachment.dart';
 import 'package:iread_flutter/models/user/profile.dart';
 import 'package:iread_flutter/models/user/user.dart';
 import 'package:iread_flutter/services/api_service.dart';
@@ -15,6 +16,7 @@ class UserRepo {
 
   final loginEndPoint = "connect/token";
   final myProfileEndPoint = "identity/myProfile";
+  final avatarsEndPoint = "Avatar/all";
 
   factory UserRepo() => _instance;
   UserRepo._internal();
@@ -74,6 +76,19 @@ class UserRepo {
     } catch (e) {
       return Data.handleException(e);
     }
+  }
+
+  Future<Data<List<Attachment>>> fetchUserAvatars() async {
+    final response = await _apiService.request(
+        requestType: RequestType.GET, endPoint: avatarsEndPoint);
+    final json = jsonDecode(response);
+    final List<Attachment> avatars = [];
+
+    for (final avatarJson in json) {
+      avatars.add(Attachment.fromJson(avatarJson));
+    }
+
+    return Data.success(avatars);
   }
 
   _fetchProfileJson(String accessToken) async {
