@@ -24,7 +24,6 @@ class ProfileScreen extends StatelessWidget {
           onSuccess: (context, state) {
             Profile user = state.data.data as Profile;
 
-            print('Profile data fetched');
             return Container(
               padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 70),
               color: Theme.of(context).colorScheme.surface,
