@@ -29,15 +29,4 @@ class ProfileBloc extends Bloc<BlocEvent, BlocState> {
       return FailState(message: data.message);
     }
   }
-
-  Future<BlocState> fetchAvatars() async {
-    final data = await _mainRepo.fetchUserAvatars();
-
-    if (data.state == DataState.Success) {
-      return ProfileAvatarsDataFetchedState(
-          avatars: data.data, profile: profile);
-    } else {
-      return FailState(message: data.message);
-    }
-  }
 }
