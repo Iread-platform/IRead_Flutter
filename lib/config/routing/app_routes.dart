@@ -1,6 +1,8 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:iread_flutter/bloc/avatars_bloc/avatar_events.dart';
+import 'package:iread_flutter/bloc/avatars_bloc/avatars_bloc.dart';
 import 'package:iread_flutter/bloc/base/base_bloc.dart';
 import 'package:iread_flutter/bloc/profile_bloc/profile_bloc.dart';
 import 'package:iread_flutter/bloc/profile_bloc/profile_events.dart';
@@ -57,9 +59,16 @@ class AppRoutes {
       );
     })),
     AppRoute('/profile', Handler(handlerFunc: (context, params) {
-      return BlocProvider(
-        create: (context) =>
-            ProfileBloc(InitialState())..add(FetchUserProfileEvent()),
+      return MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) =>
+                ProfileBloc(InitialState())..add(FetchUserProfileEvent()),
+          ),
+          BlocProvider(
+              create: (context) =>
+                  AvatarsBloc(InitialState())..add(FetchAvatarDataEvent()))
+        ],
         child: ProfileScreen(),
       );
     }))
