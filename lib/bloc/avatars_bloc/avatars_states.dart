@@ -6,3 +6,5 @@ class AvatarState extends BlocState {}
 class AvatarFetchedState extends SuccessState {
   AvatarFetchedState({List<Attachment> avatars}) : super(data: avatars);
 }
+
+class AvatarUpdatedState extends SuccessState {}

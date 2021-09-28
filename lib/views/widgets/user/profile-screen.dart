@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:iread_flutter/bloc/avatars_bloc/avatar_events.dart';
+import 'package:iread_flutter/bloc/avatars_bloc/avatars_bloc.dart';
+import 'package:iread_flutter/bloc/base/base_bloc.dart';
 import 'package:iread_flutter/bloc/profile_bloc/profile_bloc.dart';
 import 'package:iread_flutter/bloc/profile_bloc/profile_states.dart';
 import 'package:iread_flutter/models/user/profile.dart';
@@ -95,7 +99,10 @@ class ProfileScreen extends StatelessWidget {
                       showDialog(
                           context: context,
                           builder: (context) {
-                            return ImagePickerDialog();
+                            return BlocProvider(
+                                create: (context) => AvatarsBloc(InitialState())
+                                  ..add(FetchAvatarDataEvent()),
+                                child: ImagePickerDialog());
                           });
                     },
                   ))

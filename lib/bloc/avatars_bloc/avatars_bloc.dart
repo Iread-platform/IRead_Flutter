@@ -15,6 +15,9 @@ class AvatarsBloc extends Bloc<BlocEvent, BlocState> {
     switch (event.runtimeType) {
       case FetchAvatarDataEvent:
         yield await fetchAvatars();
+        break;
+      case UpdateUserAvatarEvent:
+        yield InitialState();
     }
   }
 
@@ -27,4 +30,6 @@ class AvatarsBloc extends Bloc<BlocEvent, BlocState> {
       return FailState(message: data.message);
     }
   }
+
+  Future<BlocState> updateAvatar(String url) async {}
 }

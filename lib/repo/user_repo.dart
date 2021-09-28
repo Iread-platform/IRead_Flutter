@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:iread_flutter/models/attachment/attachment.dart';
 import 'package:iread_flutter/models/user/profile.dart';
 import 'package:iread_flutter/models/user/user.dart';
+import 'package:iread_flutter/models/user/user_update.dart';
 import 'package:iread_flutter/services/api_service.dart';
 import 'package:iread_flutter/services/auth_service.dart';
 import 'package:iread_flutter/utils/data.dart';
@@ -17,6 +18,7 @@ class UserRepo {
   final loginEndPoint = "connect/token";
   final myProfileEndPoint = "identity/myProfile";
   final avatarsEndPoint = "Avatar/all";
+  final userUpdateEndPoint = "Identity/UpdateStudentInfo/";
 
   factory UserRepo() => _instance;
   UserRepo._internal();
@@ -99,5 +101,31 @@ class UserRepo {
         externalToken: accessToken);
 
     return json.decode(userText.toString());
+  }
+
+  Future<Data<Profile>> updateUserAvatar(int id,
+      {bool isPersonal = false}) async {
+    UserUpdate data = UserUpdate(
+        firstName: profile.firstName,
+        lastName: profile.lastName,
+        avatarId: isPersonal ? 0 : id,
+        birthDay: profile.birthDay,
+        customPhotoId: isPersonal ? id : 0,
+        email: profile.email,
+        level: profile.level);
+
+    return updateUser(data);
+  }
+
+  Future<Data<Profile>> updateUser(UserUpdate data) async {
+    final response = await _apiService.request(
+      requestType: RequestType.POST,
+      endPoint: userUpdateEndPoint,
+      parameter: data,
+    );
+
+    final json = jsonDecode(response);
+
+    return Data.success(Profile());
   }
 }
