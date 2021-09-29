@@ -44,8 +44,8 @@ class UserRepo {
       print(jsonResponse['access_token']);
 
       final userResponse =
-          _fetchProfileJson("Bearer " + jsonResponse['access_token']);
-      this.profile = Profile.fromJson(userResponse);
+          await _fetchProfileJson("Bearer " + jsonResponse['access_token']);
+      // this.profile = Profile.fromJson(userResponse);
 
       User user = User(
         token: "Bearer " + jsonResponse['access_token'],
@@ -119,8 +119,8 @@ class UserRepo {
 
   Future<Data<Profile>> updateUser(UserUpdate data) async {
     final response = await _apiService.request(
-      requestType: RequestType.POST,
-      endPoint: userUpdateEndPoint,
+      requestType: RequestType.PUT,
+      endPoint: userUpdateEndPoint + AuthService().cU.id,
       parameter: data,
     );
 

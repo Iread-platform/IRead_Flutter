@@ -124,7 +124,7 @@ class _ImagePickerDialogState extends State<ImagePickerDialog> {
                                 ),
                                 onTap: () {
                                   updateExistingAvatar(
-                                      avatarsAttachment[i - 1].downloadUrl);
+                                      avatarsAttachment[i - 1].id);
                                   setState(() {
                                     indexAvatar = i;
                                   });
@@ -154,8 +154,8 @@ class _ImagePickerDialogState extends State<ImagePickerDialog> {
     );
   }
 
-  updateExistingAvatar(String url) {
-    _bloc.add(UpdateUserAvatarEvent(url));
+  updateExistingAvatar(int id) {
+    _bloc.add(UpdateUserAvatarEvent(id));
   }
 
   get assetImagePath => "assets/AvatarImages/$indexAvatar.png";

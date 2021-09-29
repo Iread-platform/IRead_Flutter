@@ -5,6 +5,6 @@ class AvatarEvent extends BlocEvent {}
 class FetchAvatarDataEvent extends AvatarEvent {}
 
 class UpdateUserAvatarEvent extends AvatarEvent {
-  String avatarUrl;
-  UpdateUserAvatarEvent(this.avatarUrl);
+  int id;
+  UpdateUserAvatarEvent(this.id);
 }
