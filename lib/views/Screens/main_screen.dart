@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:iread_flutter/bloc/base/base_bloc.dart';
 import 'package:iread_flutter/bloc/main_screen/main_screen_bloc.dart';
+import 'package:iread_flutter/models/stories_section_model.dart';
 import 'package:iread_flutter/models/story.dart';
 import 'package:iread_flutter/utils/data_generator.dart';
 import 'package:iread_flutter/utils/i_read_icons.dart';
@@ -23,6 +24,7 @@ class MainScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return RequestHandler<SuccessState, MainScreenBloc>(
       onSuccess: (context, state) {
+        final storiesSections = state.data as List<StoriesSectionModel>;
         return ListView(
           padding: const EdgeInsets.only(bottom: 24),
           children: [
@@ -47,20 +49,7 @@ class MainScreen extends StatelessWidget {
                     },
                   ),
                 )),
-            StoriesSection(
-              title: "Continue reading",
-              storiesList: DataGenerator.storyList(10),
-              storyWidth: 100,
-            ),
-            SizedBox(
-              height: 25,
-            ),
-            StoriesSection(
-              title: "Continue reading",
-              storiesList: DataGenerator.storyList(10),
-              storyWidth: 100,
-            )
-          ],
+          ]..addAll(_buildStoriesSections(context, storiesSections)),
         );
       },
       main: Container(),
@@ -91,4 +80,24 @@ class MainScreen extends StatelessWidget {
         borderSide:
             BorderSide(width: width ?? 0, color: color ?? Colors.transparent),
       );
+
+  List<Widget> _buildStoriesSections(
+      BuildContext context, List<StoriesSectionModel> storiesSections) {
+    List<Widget> widgets = [];
+
+    for (final section in storiesSections) {
+      widgets.add(StoriesSection(
+        title: section.title,
+        storiesList: section.stories,
+        storyWidth: 100,
+      ));
+
+      widgets.add(SizedBox(
+        height: 25,
+      ));
+    }
+
+    widgets.removeLast();
+    return widgets;
+  }
 }

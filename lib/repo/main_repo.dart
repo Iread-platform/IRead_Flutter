@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:iread_flutter/models/attachment/attachment.dart';
 import 'package:iread_flutter/models/draw/polygon.dart';
+import 'package:iread_flutter/models/stories_section_model.dart';
 import 'package:iread_flutter/repo/attachment_repo.dart';
 import 'package:iread_flutter/repo/interaction_repo.dart';
 import 'package:iread_flutter/repo/story_repo.dart';
@@ -69,7 +70,7 @@ class MainRepo {
     return uploadingFileData.stream;
   }
 
-  Future<Data> fetchMainScreenData() {
+  Future<Data<List<StoriesSectionModel>>> fetchMainScreenData() {
     return _storyRepo.fetchMainScreenData();
   }
 }

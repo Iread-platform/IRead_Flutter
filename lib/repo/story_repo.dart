@@ -131,15 +131,20 @@ class StoryRepo {
     }
   }
 
-  Future<Data> fetchMainScreenData() async {
+  Future<Data<List<StoriesSectionModel>>> fetchMainScreenData() async {
     print('Fetching main screen data');
     final response = await _apiService.request(
         requestType: RequestType.GET, endPoint: this.mainScreenEndpoint);
 
     final json = jsonDecode(response);
-    print("Main screen data is \n" + response);
 
-    return Data.success(json);
+    List<StoriesSectionModel> storySections = [];
+
+    for (final storiesSectionJson in json) {
+      storySections.add(StoriesSectionModel.fromApiJson(storiesSectionJson));
+    }
+
+    return Data.success(storySections);
     try {} catch (e) {
       return Data.handleException(e);
     }
