@@ -18,12 +18,20 @@ class StoriesSectionModel extends Model {
     }
   }
   StoriesSectionModel.fromApiJson(Map<String, dynamic> json) {
-    title = json['sectionTitle'];
+    title = _HandleTitle(json['sectionTitle']);
     final stories = json['stories'];
 
     this.stories = [];
     for (int i = 0; i < stories.length; i++) {
       this.stories.add(Story.fromJson(stories[i]));
+    }
+  }
+
+  String _HandleTitle(String title) {
+    if (title == "AppropriatedLevel") {
+      return "Level";
+    } else {
+      return "Not read yet";
     }
   }
 }
