@@ -18,7 +18,7 @@ class StoriesSectionModel extends Model {
     }
   }
   StoriesSectionModel.fromApiJson(Map<String, dynamic> json) {
-    title = _HandleTitle(json['sectionTitle']);
+    title = _handleTitle(json['sectionTitle']);
     final stories = json['stories'];
 
     this.stories = [];
@@ -27,7 +27,7 @@ class StoriesSectionModel extends Model {
     }
   }
 
-  String _HandleTitle(String title) {
+  String _handleTitle(String title) {
     if (title == "AppropriatedLevel") {
       return "Level";
     } else {
