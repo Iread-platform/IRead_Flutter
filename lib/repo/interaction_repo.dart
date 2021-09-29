@@ -112,9 +112,9 @@ class InteractionRepo {
     final url = "Interaction/Comment/add";
     final jsonText = await _apiService.request(
         requestType: RequestType.POST, endPoint: url, parameter: map);
-    final json = jsonDecode(jsonText);
-    print(json);
-    return json["commentId"];
+    print(jsonText);
+    Map<String, dynamic> json = jsonDecode(jsonText);
+    return json;
   }
 
   removeCommentWord(int id) async {

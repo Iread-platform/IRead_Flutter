@@ -251,7 +251,6 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
     words[0].newLine = true;
     words[0].scrollHight = 0.0;
     int startIndex = 0;
-    print("pageeeeeeeeeeeeeeeeeeeeeeeeeeeee");
     for (int i = 0; i < words.length; i++) {
       //========= calculate start index of word =============
 
@@ -263,7 +262,6 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
         words[i].newLine = true;
         scrollValue = scrollValue + size.height.toInt();
         words[i].scrollHight = scrollValue;
-        print(words[i].scrollHight);
         size = Size(0, 0);
         currentString = " ";
         i--;

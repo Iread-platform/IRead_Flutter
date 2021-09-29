@@ -7,7 +7,7 @@ import 'package:iread_flutter/bloc/StoryScreenBloc/storyscreen_bloc.dart';
 import 'package:iread_flutter/bloc/base/base_bloc.dart';
 import 'package:iread_flutter/bloc/comment_bloc/comment_bloc.dart';
 import 'package:iread_flutter/bloc/text_selection_provider.dart';
-import 'package:iread_flutter/services/auth_service.dart';
+import 'package:iread_flutter/models/story_model.dart';
 import 'package:iread_flutter/utils/i_read_icons.dart';
 import 'package:iread_flutter/views/widgets/highlight_text.dart';
 import 'package:iread_flutter/views/widgets/shared/request_handler.dart';
@@ -117,7 +117,7 @@ class _StoryScreenState extends State<StoryScreen> {
       height: h * 0.30,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           // ========= arrow Icon to go previous page =============
           Container(
@@ -252,145 +252,7 @@ class _StoryScreenState extends State<StoryScreen> {
                           InkWell(
                             child: Icon(Icons.list, size: 30),
                             onTap: () async {
-                              var comments = BlocProvider.of<StoryscreenBloc>(
-                                      context)
-                                  .storyPageData
-                                  .data
-                                  .pages[
-                                      BlocProvider.of<StoryscreenBloc>(context)
-                                          .pageController
-                                          .page
-                                          .toInt()]
-                                  .comments;
-                              return showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    insetPadding: EdgeInsets.all(20),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(40)),
-                                    title: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          "Vocabulary",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline3,
-                                        ),
-                                        InkWell(
-                                          child: Icon(
-                                            Icons.close,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .primary,
-                                            size: 30,
-                                          ),
-                                          onTap: () {
-                                            Navigator.pop(context);
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                    content: Container(
-                                      height: h * 0.4,
-                                      width: w * 0.9,
-                                      child: ListView.builder(
-                                        shrinkWrap: true,
-                                        itemCount: comments.length,
-                                        itemBuilder:
-                                            (BuildContext context, int index) {
-                                          return Container(
-                                            margin: EdgeInsets.all(5),
-                                            child: Card(
-                                              child: Container(
-                                                height: 120,
-                                                margin: EdgeInsets.all(10),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    SingleChildScrollView(
-                                                      child: Column(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceEvenly,
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Text(
-                                                            comments[index]
-                                                                .word,
-                                                            style: Theme.of(
-                                                                    context)
-                                                                .textTheme
-                                                                .headline6,
-                                                          ),
-                                                          Text("Word Class",
-                                                              style: Theme.of(
-                                                                      context)
-                                                                  .textTheme
-                                                                  .bodyText1),
-                                                          Text(
-                                                            "        " +
-                                                                comments[index]
-                                                                    .classOFWord,
-                                                            style: Theme.of(
-                                                                    context)
-                                                                .textTheme
-                                                                .bodyText2,
-                                                          ),
-                                                          Text(
-                                                            "Example",
-                                                            style: Theme.of(
-                                                                    context)
-                                                                .textTheme
-                                                                .bodyText1,
-                                                          ),
-                                                          Text(
-                                                            "        " +
-                                                                comments[index]
-                                                                    .exampleOfWord,
-                                                            style: Theme.of(
-                                                                    context)
-                                                                .textTheme
-                                                                .bodyText2,
-                                                          ),
-                                                          Text(
-                                                            "Definition",
-                                                            style: Theme.of(
-                                                                    context)
-                                                                .textTheme
-                                                                .bodyText1,
-                                                          ),
-                                                          Text(
-                                                            "        " +
-                                                                comments[index]
-                                                                    .definitionOfWord,
-                                                            style: Theme.of(
-                                                                    context)
-                                                                .textTheme
-                                                                .bodyText2,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    Icon(IReadIcons.delete,color: Theme.of(context).colorScheme.primary,)
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                  );
-                                },
-                              );
+                              return vocabularyDialog();
                             },
                           ),
                           Icon(Icons.mic, size: 30),
@@ -404,6 +266,150 @@ class _StoryScreenState extends State<StoryScreen> {
             ),
           ],
         ));
+  }
+
+  Future vocabularyDialog() {
+    var comments = BlocProvider.of<StoryscreenBloc>(context)
+        .storyPageData
+        .data
+        .pages[BlocProvider.of<StoryscreenBloc>(context)
+            .pageController
+            .page
+            .toInt()]
+        .comments;
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          insetPadding: EdgeInsets.all(20),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Vocabulary",
+                style: Theme.of(context).textTheme.headline3,
+              ),
+              InkWell(
+                child: Icon(
+                  Icons.close,
+                  color: Theme.of(context).colorScheme.primary,
+                  size: 30,
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+          content: Container(
+            height: h * 0.4,
+            width: w * 0.9,
+            child: StatefulBuilder(
+              builder: (context, setStateList) {
+                return ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: comments.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Container(
+                      margin: EdgeInsets.all(5),
+                      child: Card(
+                        child: Container(
+                          height: 140,
+                          margin: EdgeInsets.all(10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SingleChildScrollView(
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      comments[index].word,
+                                      style:
+                                          Theme.of(context).textTheme.headline6,
+                                    ),
+                                    Text("Word Class",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1),
+                                    Text(
+                                      "        " + comments[index].classOFWord,
+                                      style:
+                                          Theme.of(context).textTheme.bodyText2,
+                                    ),
+                                    Text(
+                                      "Example",
+                                      style:
+                                          Theme.of(context).textTheme.bodyText1,
+                                    ),
+                                    Text(
+                                      "        " +
+                                          comments[index].exampleOfWord,
+                                      style:
+                                          Theme.of(context).textTheme.bodyText2,
+                                    ),
+                                    Text(
+                                      "Definition",
+                                      style:
+                                          Theme.of(context).textTheme.bodyText1,
+                                    ),
+                                    Text(
+                                      "        " +
+                                          comments[index].definitionOfWord,
+                                      style:
+                                          Theme.of(context).textTheme.bodyText2,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              InkWell(
+                                child: Icon(
+                                  IReadIcons.delete,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                                onTap: () {
+                                  var page = BlocProvider.of<StoryscreenBloc>(
+                                          context,
+                                          listen: false)
+                                      .storyPageData
+                                      .data
+                                      .pages[BlocProvider.of<StoryscreenBloc>(
+                                          context,
+                                          listen: false)
+                                      .pageController
+                                      .page
+                                      .toInt()];
+                                  setStateList(() {
+                                    BlocProvider.of<CommentBloc>(context)
+                                        .removeCommentWord(
+                                            comments[index].commentId);
+                                    for (Word word in page.words) {
+                                      if (word.content ==
+                                          comments[index].word) {
+                                        word.isComment = false;
+                                      }
+                                    }
+                                    comments.removeAt(index);
+                                  });
+                                },
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+        );
+      },
+    );
   }
 
   Widget progress() {

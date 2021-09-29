@@ -6,15 +6,18 @@ import 'package:iread_flutter/bloc/text_selection_provider.dart';
 import 'package:iread_flutter/services/auth_service.dart';
 import 'package:iread_flutter/utils/i_read_icons.dart';
 import 'package:provider/provider.dart';
+import 'package:iread_flutter/models/story_model.dart';
 
 class VocabularyDialog {
   static String classOFWord = "";
   static TextEditingController def = TextEditingController();
   static TextEditingController example = TextEditingController();
   static Future vocDialog({@required context}) async {
-    
     var w = MediaQuery.of(context).size.width;
     var h = MediaQuery.of(context).size.height;
+    classOFWord = "";
+    example.text = "";
+    def.text = "";
     return showDialog(
       context: context,
       builder: (context) {
@@ -110,38 +113,36 @@ class VocabularyDialog {
                               size: 30,
                               color: Theme.of(context).colorScheme.primary,
                             ),
-                            onTap: () {
-                              
-                            },
+                            onTap: () {},
                           ),
                           Container(
                             width: w * 0.3,
                             height: 30,
                             child: ElevatedButton(
-                                onPressed: () {
+                                onPressed: () async {
                                   print(classOFWord);
                                   print(def.text);
                                   print(example.text);
-
-                                  BlocProvider.of<CommentBloc>(context)
-                                      .addCommentWord({
+                                  print(
+                                      "=======================sdfsdf===========sdfsdf============");
+                                  print(AuthService().cU.id.toString());
+                                  var page = BlocProvider.of<StoryscreenBloc>(
+                                          context,
+                                          listen: false)
+                                      .storyPageData
+                                      .data
+                                      .pages[BlocProvider.of<StoryscreenBloc>(
+                                          context,
+                                          listen: false)
+                                      .pageController
+                                      .page
+                                      .toInt()];
+                                  Map<String, dynamic> newVoc = {
                                     "interaction": {
                                       "storyId": 23,
                                       "studentId":
                                           AuthService().cU.id.toString(),
-                                      "pageId": BlocProvider.of<
-                                                  StoryscreenBloc>(context,
-                                              listen: false)
-                                          .storyPageData
-                                          .data
-                                          .pages[
-                                              BlocProvider.of<StoryscreenBloc>(
-                                                      context,
-                                                      listen: false)
-                                                  .pageController
-                                                  .page
-                                                  .toInt()]
-                                          .pageId
+                                      "pageId": page.pageId
                                     },
                                     "word": Provider.of<TextSelectionProvider>(
                                             context,
@@ -150,27 +151,26 @@ class VocabularyDialog {
                                     "classOFWord": classOFWord,
                                     "definitionOfWord": def.text,
                                     "exampleOfWord": example.text
-                                  });
-                                  for (var word
-                                      in BlocProvider.of<StoryscreenBloc>(
-                                              context,
-                                              listen: false)
-                                          .storyPageData
-                                          .data
-                                          .pages[
-                                              BlocProvider.of<StoryscreenBloc>(
-                                                      context,
-                                                      listen: false)
-                                                  .pageController
-                                                  .page
-                                                  .toInt()]
-                                          .words) {
+                                  };
+                                  //add interaction to server
+                                  var json = await BlocProvider.of<CommentBloc>(
+                                          context)
+                                      .addCommentWord(newVoc);
+                                  // add interaction to local page vocabulary
+                                  page.comments.add(
+                                    Comment.fromJson(json),
+                                  );
+                                  // MAKE WORD IS_VOCABULARY = TURE
+                                  for (Word word in page.words) {
                                     if (word.content ==
                                         Provider.of<TextSelectionProvider>(
                                                 context,
                                                 listen: false)
-                                            .wordSelection) {}
+                                            .wordSelection) {
+                                      word.isComment = true;
+                                    }
                                   }
+
                                   Navigator.pop(context);
                                 },
                                 child: Text("Save")),
@@ -196,29 +196,31 @@ class VocabularyDialog {
   }
 
   static Widget customBtn({String text, setState}) {
-    return Expanded(
-      child: Container(
-        height: 20,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15.0),
-            border: classOFWord == text
-                ? Border.all(color: Colors.red, width: 3)
-                : Border.all(color: Colors.transparent, width: 3)),
-        child: ElevatedButton(
-          child: Text(text),
-          style: ButtonStyle(
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15.0),
-              ),
+    return Container(
+      height: 30,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15.0),
+          border: classOFWord == text
+              ? Border.all(color: Colors.red, width: 3)
+              : Border.all(color: Colors.transparent, width: 3)),
+      child: ElevatedButton(
+        child: FittedBox(
+          child: Text(
+            text,
+          ),
+        ),
+        style: ButtonStyle(
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
             ),
           ),
-          onPressed: () {
-            setState(() {
-              classOFWord = text;
-            });
-          },
         ),
+        onPressed: () {
+          setState(() {
+            classOFWord = text;
+          });
+        },
       ),
     );
   }

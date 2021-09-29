@@ -10,8 +10,8 @@ class CommentBloc extends Bloc<BlocEvent, BlocState> {
     yield InitialState();
   }
 
-  Future<int> addCommentWord(Map map) async {
-    int data = await InteractionRepo().addCommentWord(map);
+  Future<Map<String, dynamic>> addCommentWord(Map map) async {
+    Map<String, dynamic> data = await InteractionRepo().addCommentWord(map);
     print(data);
     return data;
   }

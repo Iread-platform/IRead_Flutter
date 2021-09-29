@@ -17,18 +17,6 @@ class StoryModel {
       });
     }
   }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.audio != null) {
-      data['audio'] = this.audio.toJson();
-    }
-    data['pagesCount'] = this.pagesCount;
-    if (this.pages != null) {
-      data['pages'] = this.pages.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
 }
 
 class Audio {
@@ -77,6 +65,7 @@ class Pages {
   String content;
   List<HighLights> highLights;
   List<Comment> comments;
+  String imageURL;
 
   List<Word> words;
   double startPageTime = 0;
@@ -86,7 +75,7 @@ class Pages {
   Pages.fromJson(Map<String, dynamic> json) {
     pageId = json['pageId'];
     content = json['content'];
-
+    imageURL = json["image"]["downloadUrl"];
     var jsonhighLights = json['highLights'];
     if (jsonhighLights != null) {
       highLights = <HighLights>[];
@@ -111,14 +100,6 @@ class Pages {
       endPageTime = words[words.length - 1].timeEnd;
     }
   }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['pageId'] = this.pageId;
-    data['content'] = this.content;
-    data['words'] = this.words;
-    return data;
-  }
 }
 
 class HighLights {
@@ -142,16 +123,6 @@ class HighLights {
     firstWord = json['firstWord'];
     endWord = json['endWord'];
   }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['highLightId'] = this.highLightId;
-    data['firstWordIndex'] = this.firstWordIndex;
-    data['endWordIndex'] = this.endWordIndex;
-    data['firstWord'] = this.firstWord;
-    data['endWord'] = this.endWord;
-    return data;
-  }
 }
 
 class Comment {
@@ -174,16 +145,6 @@ class Comment {
     classOFWord = json['classOFWord'];
     definitionOfWord = json['definitionOfWord'];
     exampleOfWord = json['exampleOfWord'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['commentId'] = this.commentId;
-    data['word'] = this.word;
-    data['classOFWord'] = this.classOFWord;
-    data['definitionOfWord'] = this.definitionOfWord;
-    data['exampleOfWord'] = this.exampleOfWord;
-    return data;
   }
 }
 
@@ -226,19 +187,5 @@ class Word {
     elementError = json['ElementError'];
     timeStart = json['TimeStart'];
     timeEnd = json['TimeEnd'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['Id'] = this.id;
-    data['Content'] = this.content;
-    data['InputStart'] = this.inputStart;
-    data['InputEnd'] = this.inputEnd;
-    data['RegionStart'] = this.regionStart;
-    data['RegionEnd'] = this.regionEnd;
-    data['ElementError'] = this.elementError;
-    data['TimeStart'] = this.timeStart;
-    data['TimeEnd'] = this.timeEnd;
-    return data;
   }
 }
