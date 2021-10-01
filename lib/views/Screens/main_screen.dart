@@ -49,6 +49,9 @@ class MainScreen extends StatelessWidget {
                     },
                   ),
                 )),
+            SizedBox(
+              height: 12,
+            )
           ]..addAll(_buildStoriesSections(context, storiesSections)),
         );
       },
@@ -86,10 +89,14 @@ class MainScreen extends StatelessWidget {
     List<Widget> widgets = [];
 
     for (final section in storiesSections) {
-      widgets.add(StoriesSection(
-        title: section.title,
-        storiesList: section.stories,
-        storyWidth: 100,
+      widgets.add(Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: StoriesSection(
+          title: section.title,
+          storiesList: section.stories,
+          storyWidth: 100,
+          sectionHeight: 300,
+        ),
       ));
 
       widgets.add(SizedBox(

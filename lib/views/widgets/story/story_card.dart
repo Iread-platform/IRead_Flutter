@@ -49,7 +49,7 @@ class StoryCard extends StatelessWidget {
     }
 
     return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
         child: ProgressBar(
           borderRadius: storyBorderRadius,
           color: _color,
@@ -63,6 +63,12 @@ class StoryCard extends StatelessWidget {
         ));
   }
 
-  Widget _storyTitle(BuildContext context) => Text(_title,
-      style: Theme.of(context).textTheme.subtitle1.copyWith(color: colorScheme.primary));
+  Widget _storyTitle(BuildContext context) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
+        child: Text(_title,
+            style: Theme.of(context)
+                .textTheme
+                .subtitle1
+                .copyWith(color: colorScheme.primary)),
+      );
 }
