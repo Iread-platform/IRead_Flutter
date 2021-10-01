@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iread_flutter/models/story.dart';
+import 'package:iread_flutter/utils/i_read_icons.dart';
 import 'package:iread_flutter/views/widgets/story/story_card.dart';
 
 class StoriesSection extends StatelessWidget {
@@ -9,6 +10,7 @@ class StoriesSection extends StatelessWidget {
   final double _storyWidth;
   final double _sectionHeight;
   final double _horizontalPadding;
+  final bool _showFirst10;
 
   StoriesSection(
       {storiesList,
@@ -16,13 +18,15 @@ class StoriesSection extends StatelessWidget {
       double storyWidth,
       double titleBottomSpacing,
       double sectionHeight,
+      bool showFirst10 = false,
       double horizontalPadding})
       : _stories = storiesList,
         _title = title,
         _storyWidth = storyWidth ?? 150,
         _titleBottomSpacing = titleBottomSpacing ?? 20,
         _sectionHeight = sectionHeight ?? 250,
-        _horizontalPadding = horizontalPadding ?? 12;
+        _horizontalPadding = horizontalPadding ?? 12,
+        _showFirst10 = showFirst10;
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +63,9 @@ class StoriesSection extends StatelessWidget {
     }
 
     List<Widget> stories = [];
-    _stories.forEach((element) {
+    final storiesToShow = _showFirst10 && _stories.length > 10 ? 10 : stories.length;
+   for (int i = 0; i < storiesToShow; i++) {
+     final element = _stories[i];
       final story = Container(
         margin: EdgeInsets.only(right: 12),
         width: _storyWidth,
@@ -72,7 +78,11 @@ class StoriesSection extends StatelessWidget {
       );
 
       stories.add(story);
-    });
+    }
+   
+   if (storiesToShow < 10) {
+     stories.add(IconButton(icon: Icon(Icons.more), onPressed: onPressed))
+   }
 
     return stories;
   }
