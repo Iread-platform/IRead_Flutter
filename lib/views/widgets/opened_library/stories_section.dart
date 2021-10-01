@@ -33,6 +33,7 @@ class StoriesSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisAlignment: MainAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
         Padding(
@@ -72,11 +73,11 @@ class StoriesSection extends StatelessWidget {
         margin: EdgeInsets.only(right: 12),
         width: _storyWidth,
         child: StoryCard(
-          title: element.title,
-          imageUrl: element.imageUrl,
-          color: element.color,
-          progress: element.progress,
-        ),
+            title: element.title,
+            imageUrl: element.imageUrl,
+            color: element.color,
+            progress: element.progress,
+            id: element.id),
       );
 
       stories.add(story);
