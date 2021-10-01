@@ -63,12 +63,18 @@ class StoryCard extends StatelessWidget {
         ));
   }
 
-  Widget _storyTitle(BuildContext context) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
-        child: Text(_title,
-            style: Theme.of(context)
-                .textTheme
-                .subtitle1
-                .copyWith(color: colorScheme.primary)),
+  Widget _storyTitle(BuildContext context) => Flexible(
+        child: Container(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
+            child: Text(
+              _title,
+              style: Theme.of(context).textTheme.subtitle1.copyWith(
+                  color: colorScheme.primary, fontWeight: FontWeight.w300),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 2,
+            ),
+          ),
+        ),
       );
 }

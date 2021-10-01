@@ -95,16 +95,10 @@ class MainScreen extends StatelessWidget {
           title: section.title,
           storiesList: section.stories,
           storyWidth: 100,
-          sectionHeight: 300,
+          sectionHeight: 250,
         ),
       ));
-
-      widgets.add(SizedBox(
-        height: 25,
-      ));
     }
-
-    widgets.removeLast();
     return widgets;
   }
 }
