@@ -8,12 +8,15 @@ import 'package:iread_flutter/views/widgets/story/profile_story_card.dart';
 class StoriesList extends StatelessWidget {
   final GlobalKey<AnimatedListState> _listKey;
   final StoriesSectionModel _stories;
+  final int _initialCount;
   StoriesList(
       {Key key,
       GlobalKey<AnimatedListState> listKey,
-      StoriesSectionModel stories})
+      StoriesSectionModel stories,
+      int initialCount})
       : _listKey = listKey ?? GlobalKey(),
         _stories = stories,
+        _initialCount = initialCount ?? 0,
         super(key: key);
 
   @override
@@ -29,7 +32,7 @@ class StoriesList extends StatelessWidget {
             child: AnimatedList(
                 key: _listKey,
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 18, vertical: 24),
+                    const EdgeInsets.symmetric(horizontal: 18, vertical: 42),
                 itemBuilder: (context, int index, animation) {
                   if (index == 0) {
                     return ScaleTransition(
@@ -62,7 +65,7 @@ class StoriesList extends StatelessWidget {
                       position: animation.drive(Tween<Offset>(
                           begin: const Offset(-1, 0), end: const Offset(0, 0))),
                       child: Padding(
-                        padding: const EdgeInsets.only(bottom: 12),
+                        padding: const EdgeInsets.only(bottom: 24),
                         child: ProfileStoryCard(
                           story: story,
                         ),
@@ -72,7 +75,7 @@ class StoriesList extends StatelessWidget {
 
                   return Container();
                 },
-                initialItemCount: 0))
+                initialItemCount: _initialCount))
       ],
     );
   }
