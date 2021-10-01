@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:iread_flutter/models/stories_section_model.dart';
 import 'package:iread_flutter/models/story.dart';
-import 'package:iread_flutter/utils/i_read_icons.dart';
+import 'package:iread_flutter/views/widgets/story/stories_list.dart';
 import 'package:iread_flutter/views/widgets/story/story_card.dart';
 
 class StoriesSection extends StatelessWidget {
@@ -63,9 +64,10 @@ class StoriesSection extends StatelessWidget {
     }
 
     List<Widget> stories = [];
-    final storiesToShow = _showFirst10 && _stories.length > 10 ? 10 : stories.length;
-   for (int i = 0; i < storiesToShow; i++) {
-     final element = _stories[i];
+    final storiesToShow =
+        _showFirst10 && _stories.length > 10 ? 10 : stories.length;
+    for (int i = 0; i < storiesToShow; i++) {
+      final element = _stories[i];
       final story = Container(
         margin: EdgeInsets.only(right: 12),
         width: _storyWidth,
@@ -79,10 +81,17 @@ class StoriesSection extends StatelessWidget {
 
       stories.add(story);
     }
-   
-   if (storiesToShow < 10) {
-     stories.add(IconButton(icon: Icon(Icons.more), onPressed: onPressed))
-   }
+
+    if (storiesToShow < 10) {
+      stories.add(IconButton(
+          icon: Icon(Icons.more),
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return StoriesList(
+                  stories: new StoriesSectionModel(_title, _stories));
+            }));
+          }));
+    }
 
     return stories;
   }
