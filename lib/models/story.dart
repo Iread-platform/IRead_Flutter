@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iread_flutter/models/attachment/attachment.dart';
 import 'package:iread_flutter/models/tag.dart';
 
 import 'model.dart';
@@ -17,6 +18,7 @@ class Story extends Model {
   double _readingTime;
   double _rating;
   List<Tag> _tags;
+  Attachment _storyCover;
 
   Story(
       {@required String title,
@@ -32,7 +34,8 @@ class Story extends Model {
       List<Tag> tags,
       double rating,
       int pages,
-      int id})
+      int id,
+      Attachment storyCover})
       : _title = title,
         _color = color,
         _releaseDate = releaseDate,
@@ -46,6 +49,7 @@ class Story extends Model {
         _rating = rating,
         _pages = pages,
         _tags = tags,
+        _storyCover = storyCover,
         super(id: id);
 
   Story.fromJson(Map<String, dynamic> json) : super(id: json['storyId']) {
@@ -64,6 +68,9 @@ class Story extends Model {
     _readingTime = json['readingTime'];
     _progress = json['progress'];
     _pages = json['pages'];
+    if (storyCover != null) {
+      _storyCover = Attachment.fromJson(json['storyCover']);
+    }
 
     if (json['keyWords'] != null) {
       _tags = [];
@@ -101,6 +108,8 @@ class Story extends Model {
   get level => _storyLevel;
 
   get writer => _writer;
+
+  Attachment get storyCover => _storyCover;
 
   get rating => _rating;
 
