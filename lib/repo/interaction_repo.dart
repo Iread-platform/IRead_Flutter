@@ -80,10 +80,11 @@ class InteractionRepo {
       "points": jsonEncode(polygon.pointsToJson()),
       "interaction": interaction.json,
       "comment": polygon.comment,
-      "maxX": polygon.maxX.round(),
-      "minX": polygon.minX.round(),
-      "maxY": polygon.maxY.round(),
-      "minY": polygon.minY.round(),
+      "maxX": polygon.maxX,
+      "minX": polygon.minX,
+      "maxY": polygon.maxY,
+      "minY": polygon.minY,
+      "color": polygon.color.value.toRadixString(16)
     };
 
     if (polygon.audioId != null) {
@@ -91,5 +92,35 @@ class InteractionRepo {
     }
 
     return json;
+  }
+
+  Future<int> addHighLightWord(Map map) async {
+    final url = "Interaction/HighLight/add";
+    final jsonText = await _apiService.request(
+        requestType: RequestType.POST, endPoint: url, parameter: map);
+    final json = jsonDecode(jsonText);
+    print(json);
+    return json["highLightId"];
+  }
+
+  removeHighLightWord(int id) async {
+    final url = "Interaction/HighLight/" + id.toString() + "/delete";
+    final jsonText = await _apiService.request(
+        requestType: RequestType.DELETE, endPoint: url);
+  }
+
+  addCommentWord(Map map) async {
+    final url = "Interaction/Comment/add";
+    final jsonText = await _apiService.request(
+        requestType: RequestType.POST, endPoint: url, parameter: map);
+    print(jsonText);
+    Map<String, dynamic> json = jsonDecode(jsonText);
+    return json;
+  }
+
+  removeCommentWord(int id) async {
+    final url = "Interaction/Comment/" + id.toString() + "/delete";
+    final jsonText = await _apiService.request(
+        requestType: RequestType.DELETE, endPoint: url);
   }
 }

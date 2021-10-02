@@ -19,10 +19,14 @@ import 'package:iread_flutter/views/widgets/drawer_widget.dart';
 import 'package:provider/provider.dart';
 
 import 'bloc/base/base_bloc.dart';
+import 'bloc/comment_bloc/comment_bloc.dart';
+import 'bloc/drawing_bloc/drawing_bloc.dart';
+import 'bloc/drawing_bloc/drawing_states.dart';
+import 'bloc/interactions_bloc/interactions_bloc.dart';
+import 'bloc/record_bloc/record_bloc.dart';
 import 'config/app_config.dart';
 import 'config/http/httpOverrides.dart';
 import 'config/themes/theme.dart';
-import 'models/user/user.dart';
 
 Future<void> initApp() async {
   await AppRouter().init();
@@ -41,6 +45,12 @@ void main() {
           BlocProvider(
             create: (context) => StoryscreenBloc(),
           ),
+          BlocProvider(
+            create: (context) => InteractionsBloc(),
+          ),
+          BlocProvider(
+            create: (context) => CommentBloc(InitialState()),
+          ),
         ],
         child: ChangeNotifierProvider(
           create: (context) => TextSelectionProvider(),
@@ -51,6 +61,7 @@ void main() {
   );
 }
 
+// ignore: must_be_immutable
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -81,20 +92,17 @@ class IReadApp extends StatelessWidget {
     BlocProvider.of<StoryscreenBloc>(context, listen: false).deviceWidth = w;
     BlocProvider.of<StoryscreenBloc>(context, listen: false).deviceHight = h;
     return Scaffold(
-      drawer: DrawerWidget(),
-      body: Center(
-        child: MultiProvider(providers: [
-          Provider(
-            create: (context) =>
-                MainScreenBloc(InitialState())..add(FetchMainScreenDataEvent()),
-          )
-        ], child: MainScreen()),
-      ),
-    );
+        drawer: DrawerWidget(),
+        body: Center(
+          child: MultiProvider(providers: [
+            Provider(
+              create: (context) => MainScreenBloc(InitialState())
+                ..add(FetchMainScreenDataEvent()),
+            ),
+            Provider(create: (context) => DrawingBloc(NoPolygonState())),
+            Provider(create: (context) => RecordBloc(InitialState())),
+            Provider(create: (context) => CommentBloc(InitialState()))
+          ], child: MainScreen()),
+        ));
   }
 }
-
-User user = User(
-    firstName: 'Motasem',
-    lastName: 'Ghozlan',
-    imageUrl: 'https://picsum.photos/200/300');
