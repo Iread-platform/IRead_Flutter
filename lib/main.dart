@@ -18,8 +18,7 @@ import 'bloc/drawing_bloc/drawing_states.dart';
 import 'bloc/record_bloc/record_bloc.dart';
 import 'config/app_config.dart';
 import 'config/http/httpOverrides.dart';
-import 'config/themes/theme.dart';
-import 'models/story.dart';
+import 'config/themes/theme;
 import 'models/user.dart';
 
 void main() {
