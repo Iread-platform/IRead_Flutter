@@ -43,13 +43,6 @@ class UserRepo {
       final jsonResponse = json.decode(jsonText);
       print(jsonResponse['access_token']);
 
-      String userText = await _apiService.request(
-          convertParametersToJson: false,
-          requestType: RequestType.GET,
-          endPoint: myProfileEndPoint,
-          externalToken: "Bearer " + jsonResponse['access_token']);
-
-      final userResponse = json.decode(userText.toString());
       final userResponse =
           await _fetchProfileJson("Bearer " + jsonResponse['access_token']);
       // this.profile = Profile.fromJson(userResponse);
