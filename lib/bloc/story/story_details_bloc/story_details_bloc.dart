@@ -25,4 +25,8 @@ class StoryDetailsBloc extends Bloc<BlocEvent, BlocState> {
 
     return StoryDataFetchedState(data.data);
   }
+
+  Future<BlocState> _submitReview(int rate) async {
+    return ReviewSubmittedState();
+  }
 }
