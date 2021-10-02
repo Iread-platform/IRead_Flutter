@@ -49,6 +49,7 @@ dependencies:
   progress_state_button: "^1.0.3"
   restart_app: ^1.0.3
   flutter_colorpicker: ^0.4.0
+  path_provider: ^1.5.1
 
 dev_dependencies:
   flutter_test:

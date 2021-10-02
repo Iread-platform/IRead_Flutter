@@ -1,4 +1,5 @@
 import 'package:iread_flutter/bloc/base/base_bloc.dart';
+import 'package:iread_flutter/models/attachment/attachment.dart';
 
 abstract class DrawEvents extends BlocEvent {}
 
@@ -14,7 +15,11 @@ class FetchPolygonEvent extends DrawEvents {
 
 class SavePolygonEvent extends DrawSyncEvents {}
 
-class RecordSavedEvent extends DrawEvents {}
+class RecordSavedEvent extends DrawEvents {
+  Attachment attachment;
+
+  RecordSavedEvent(this.attachment);
+}
 
 class PolygonSavedEvent extends DrawEvents {}
 

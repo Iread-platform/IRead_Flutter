@@ -14,11 +14,12 @@ import 'package:iread_flutter/models/draw/polygon.dart';
 import 'package:iread_flutter/repo/main_repo.dart';
 import 'package:iread_flutter/utils/data.dart';
 import 'package:iread_flutter/utils/extensions.dart';
+import 'package:iread_flutter/utils/file_utils.dart';
 
 class DrawingBloc extends Bloc<BlocEvent, BlocState> {
   // ignore: todo
   // TODO replace dummy story id;
-  int storyId = 1;
+  int storyId = 4;
   MainRepo _mainRepo = MainRepo();
   List<Polygon> _polygons = [];
   List<Polygon> _polygonsToDraw = [];
@@ -52,6 +53,7 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
         yield _savePolygon(selectedPolygon);
         break;
       case RecordSavedEvent:
+        selectedPolygon.record = (event as RecordSavedEvent).attachment;
         showSuccessToast("Your record has been stored");
         yield PolygonRecordSaved();
         break;
@@ -114,7 +116,7 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
           add(PolygonSavedEvent());
         }
       } else if (item.data is Attachment) {
-        add(RecordSavedEvent());
+        add(RecordSavedEvent(item.data));
       } else {
         selectedPolygon.saved = true;
         add(PolygonSavedEvent());
@@ -146,7 +148,7 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
       add(PolygonSyncEvent());
       _mainRepo.savePolygonRecord(selectedPolygon, storyId).listen((event) {
         if (event.data is Attachment) {
-          add(RecordSavedEvent());
+          add(RecordSavedEvent(event.data));
         } else {
           selectedPolygon.saved = true;
           add(PolygonSavedEvent());
@@ -169,8 +171,8 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
 
     final deleteState = await _mainRepo.deletePolygon(selectedPolygon);
     // Delete associated record
-    final polygonPath = selectedPolygon.localRecordPath;
-    recordBloc.add(DeleteRecordEvent(polygonPath));
+    final polygonRecordPath = selectedPolygon.localRecordPath;
+    recordBloc.add(DeleteRecordEvent(polygonRecordPath));
     // Make user able to paint
     closed = false;
 
@@ -185,9 +187,10 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
 
   Future<BlocState> fetchPolygon(int id) async {
     final polygonData = await _mainRepo.fetchPolygon(id);
+    final polygon = polygonData.data;
 
     if (polygonData.state == DataState.Fail) {
-      return throwFailState(polygonData.message);
+      return FailState(message: polygonData.message);
     }
     // Close draw area
     closed = true;
@@ -196,6 +199,14 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
     _polygons.add(polygonData.data);
     _polygonsToDraw.add(polygonData.data);
     _selectedPolygonIndex = 0;
+
+    // Check if there is a record
+    if (polygon.audioId != null && polygon.audioId > 0) {
+      final recordPath = await FileUtils.localPath + polygon.record.title;
+      polygon.localRecordPath = recordPath;
+      recordBloc.add(PlayRecordEvent(polygon.record, recordPath));
+    }
+
     return DrawPolygonState();
   }
 

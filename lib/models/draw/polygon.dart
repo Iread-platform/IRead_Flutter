@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:iread_flutter/models/attachment/attachment.dart';
 import 'package:iread_flutter/models/model.dart';
 
 class Polygon extends Model {
@@ -10,10 +11,11 @@ class Polygon extends Model {
   bool saved = false;
   bool recordSaved = false;
   bool needToUpdate = false;
-  int audioId;
   String localRecordPath;
   String comment;
   Color color;
+  int audioId;
+  Attachment record;
 
   Polygon(
       {@required List<Offset> points,
@@ -40,6 +42,12 @@ class Polygon extends Model {
     comment = json['comment'];
     audioId = json['audioId'].runtimeType == int ? json['audioId'] : null;
     color = Color(int.parse(json['color'], radix: 16)) ?? color;
+
+    if (json['audio'] != null) {
+      record = Attachment.fromJson(json['audio']);
+      audioId = record.id;
+      recordSaved = true;
+    }
 
     saved = true;
   }

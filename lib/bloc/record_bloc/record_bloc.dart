@@ -7,6 +7,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:iread_flutter/bloc/base/base_bloc.dart';
 import 'package:iread_flutter/bloc/record_bloc/record_events.dart';
 import 'package:iread_flutter/bloc/record_bloc/record_state.dart';
+import 'package:iread_flutter/models/attachment/attachment.dart';
+import 'package:iread_flutter/utils/file_utils.dart';
 import 'package:path_provider/path_provider.dart';
 
 class RecordBloc extends Bloc<BlocEvent, BlocState> {
@@ -44,8 +46,9 @@ class RecordBloc extends Bloc<BlocEvent, BlocState> {
       case PlayRecordEvent:
         {
           PlayRecordEvent playRecordEvent = event as PlayRecordEvent;
-          playRecord(playRecordEvent.recordPath);
-          yield PlayingRecordState(playRecordEvent.recordPath);
+          playRecord(playRecordEvent.record, playRecordEvent.localPath);
+          yield PlayingRecordState(
+              playRecordEvent.localPath, playRecordEvent.record);
         }
         break;
       case PauseRecordPlayingEvent:
@@ -90,7 +93,7 @@ class RecordBloc extends Bloc<BlocEvent, BlocState> {
     }
     _audioPlayer.stop();
 
-    if (path != null) {
+    if (path != null && await FileUtils.checkIfFileExist(path)) {
       io.File recordFile = io.File(path);
       await recordFile.delete();
     }
@@ -98,9 +101,15 @@ class RecordBloc extends Bloc<BlocEvent, BlocState> {
     return InitialState();
   }
 
-  void playRecord(String path) async {
+  void playRecord(Attachment record, String localPath) async {
     Fluttertoast.showToast(msg: "Playing your record");
-    _audioPlayer.play(path, isLocal: true);
+
+    if (await FileUtils.checkIfFileExist(localPath)) {
+      _audioPlayer.play(localPath, isLocal: true);
+    } else {
+      _audioPlayer.play(record.downloadUrl);
+    }
+
     _audioPlayer.resume();
     _audioPlayer.onPlayerCompletion.listen((event) {
       this.add(PauseRecordPlayingEvent());
@@ -109,7 +118,7 @@ class RecordBloc extends Bloc<BlocEvent, BlocState> {
 
   StopRecordingState pauseRecordPlaying() {
     _audioPlayer.pause();
-    return StopRecordingState(_current.path);
+    return StopRecordingState(null);
   }
 
   void dispose() {
