@@ -48,7 +48,7 @@ class StoriesSection extends StatelessWidget {
         ),
         SizedBox(
           height: _sectionHeight,
-          child: _stories.length > 0
+          child: _stories != null && _stories.length > 0
               ? ListView(
                   padding: EdgeInsets.symmetric(horizontal: _horizontalPadding),
                   shrinkWrap: true,
@@ -58,8 +58,9 @@ class StoriesSection extends StatelessWidget {
               : Padding(
                   padding: EdgeInsets.symmetric(horizontal: _horizontalPadding),
                   child: Text(
-                    "There are no stories",
-                    style: Theme.of(context).textTheme.subtitle2,
+                    'There are no stories yet.',
+                    style: Theme.of(context).textTheme.headline6.copyWith(
+                        color: Theme.of(context).colorScheme.secondary),
                   ),
                 ),
         )
