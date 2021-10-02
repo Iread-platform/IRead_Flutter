@@ -51,7 +51,6 @@ void main() {
           BlocProvider(
             create: (context) => CommentBloc(InitialState()),
           ),
-
         ],
         child: ChangeNotifierProvider(
           create: (context) => TextSelectionProvider(),
@@ -62,6 +61,7 @@ void main() {
   );
 }
 
+// ignore: must_be_immutable
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -92,18 +92,17 @@ class IReadApp extends StatelessWidget {
     BlocProvider.of<StoryscreenBloc>(context, listen: false).deviceWidth = w;
     BlocProvider.of<StoryscreenBloc>(context, listen: false).deviceHight = h;
     return Scaffold(
-      drawer: DrawerWidget(),
-      body: Center(
-        child: MultiProvider(providers: [
-          Provider(
-            create: (context) =>
-                MainScreenBloc(InitialState())..add(FetchMainScreenDataEvent()),
-          ),
-          Provider(create: (context) => DrawingBloc(NoPolygonState())),
-          Provider(create: (context) => RecordBloc(InitialState())),
-          Provider(create: (context) => CommentBloc(InitialState()))
-
-        ], child: MainScreen()),
-    ));
+        drawer: DrawerWidget(),
+        body: Center(
+          child: MultiProvider(providers: [
+            Provider(
+              create: (context) => MainScreenBloc(InitialState())
+                ..add(FetchMainScreenDataEvent()),
+            ),
+            Provider(create: (context) => DrawingBloc(NoPolygonState())),
+            Provider(create: (context) => RecordBloc(InitialState())),
+            Provider(create: (context) => CommentBloc(InitialState()))
+          ], child: MainScreen()),
+        ));
   }
 }
