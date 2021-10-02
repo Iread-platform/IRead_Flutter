@@ -7,4 +7,7 @@ class InteractionsInitial extends InteractionsState {}
 
 class LoadingState extends InteractionsState {}
 
-class DoneState extends InteractionsState {}
+class DoneState extends InteractionsState {
+  Data<int> data;
+  DoneState({this.data});
+}
