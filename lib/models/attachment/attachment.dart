@@ -16,16 +16,4 @@ class Attachment extends Model {
     size = json['size'].toDouble();
     uploadDate = DateTime.parse(json['uploadDate']);
   }
-
-  DateTime get uploadDate => _uploadDate;
-
-  double get size => _size;
-
-  String get extension => _extension;
-
-  String get type => _type;
-
-  String get downloadUrl => _downloadUrl;
-
-  String get title => _title;
 }

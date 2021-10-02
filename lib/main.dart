@@ -4,7 +4,6 @@ import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iread_flutter/bloc/StoryScreenBloc/storyscreen_bloc.dart';
-import 'package:iread_flutter/bloc/drawing_bloc/drawing_events.dart';
 import 'package:iread_flutter/bloc/login_bloc/login_bloc.dart';
 import 'package:iread_flutter/bloc/main_screen/main_screen_bloc.dart';
 import 'package:iread_flutter/bloc/main_screen/main_screen_bloc_events.dart';
@@ -14,7 +13,6 @@ import 'package:iread_flutter/config/themes/theme.dart';
 import 'package:iread_flutter/services/action_track_service.dart';
 import 'package:iread_flutter/services/auth_service.dart';
 import 'package:iread_flutter/services/permissions_service.dart';
-import 'package:iread_flutter/views/widgets/story/drawing_widget.dart';
 import 'package:iread_flutter/views/Screens/login_screen.dart';
 import 'package:iread_flutter/views/Screens/main_screen.dart';
 import 'package:iread_flutter/views/widgets/drawer_widget.dart';
@@ -53,7 +51,6 @@ void main() {
           BlocProvider(
             create: (context) => CommentBloc(InitialState()),
           ),
-
         ],
         child: ChangeNotifierProvider(
           create: (context) => TextSelectionProvider(),
@@ -95,18 +92,17 @@ class IReadApp extends StatelessWidget {
     BlocProvider.of<StoryscreenBloc>(context, listen: false).deviceWidth = w;
     BlocProvider.of<StoryscreenBloc>(context, listen: false).deviceHight = h;
     return Scaffold(
-      drawer: DrawerWidget(),
-      body: Center(
-        child: MultiProvider(providers: [
-          Provider(
-            create: (context) =>
-                MainScreenBloc(InitialState())..add(FetchMainScreenDataEvent()),
-          ),
-          Provider(create: (context) => DrawingBloc(NoPolygonState())),
-          Provider(create: (context) => RecordBloc(InitialState())),
-          Provider(create: (context) => CommentBloc(InitialState()))
-
-        ], child: MainScreen()),
-    ));
+        drawer: DrawerWidget(),
+        body: Center(
+          child: MultiProvider(providers: [
+            Provider(
+              create: (context) => MainScreenBloc(InitialState())
+                ..add(FetchMainScreenDataEvent()),
+            ),
+            Provider(create: (context) => DrawingBloc(NoPolygonState())),
+            Provider(create: (context) => RecordBloc(InitialState())),
+            Provider(create: (context) => CommentBloc(InitialState()))
+          ], child: MainScreen()),
+        ));
   }
 }
