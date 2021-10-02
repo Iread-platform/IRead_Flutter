@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:iread_flutter/bloc/base/base_bloc.dart';
 import 'package:iread_flutter/bloc/comment_bloc/comment_bloc.dart';
@@ -24,8 +25,11 @@ import 'package:iread_flutter/views/widgets/shared/request_handler.dart';
 
 class DrawingWidget extends StatefulWidget {
   final TextEditingController _comment = new TextEditingController();
+  final String _imageUrl;
 
-  DrawingWidget({Key key}) : super(key: key);
+  DrawingWidget({Key key, @required String imageUrl})
+      : _imageUrl = imageUrl,
+        super(key: key);
 
   @override
   _DrawingWidgetState createState() => _DrawingWidgetState();
@@ -57,12 +61,17 @@ class _DrawingWidgetState extends State<DrawingWidget> {
 
   @override
   Widget build(BuildContext context) {
+    _drawBloc.screenWidth = MediaQuery.of(context).size.width;
+    _drawBloc.screenHeight = MediaQuery.of(context).size.height;
+
     return RequestHandler(
         bloc: _drawBloc,
         isDismissible: true,
         main: Container(
-          height: double.infinity,
-          width: double.infinity,
+          child: Image.network(
+            widget._imageUrl,
+            fit: BoxFit.contain,
+          ),
         ),
         onSuccess: (context, state) {
           if (state is PolygonSavingState) {
@@ -71,15 +80,26 @@ class _DrawingWidgetState extends State<DrawingWidget> {
             _drawBloc.canInteract = true;
           }
 
-          return Stack(
-            children: [
-              _customPaint(),
-              _gestureDetector(),
-              _drawBloc.polygons.length > 0 ||
-                      state.runtimeType == DrawPolygonState
-                  ? _drawActions(context, _drawBloc.selectedPolygon, 0, state)
-                  : SizedBox()
-            ],
+          // Update color
+          paint.color = _drawBloc.selectedPolygon?.color ?? _drawBloc.color;
+
+          return Container(
+            child: Stack(
+              clipBehavior: Clip.none,
+              alignment: Alignment.center,
+              children: [
+                Positioned.fill(child: _customPaint()),
+                Positioned.fill(child: _gestureDetector()),
+                _drawBloc.polygons.length < 1
+                    ? _colorPickerButton()
+                    : SizedBox(),
+                _drawBloc.polygons.length > 0 ||
+                        state.runtimeType == DrawPolygonState
+                    ? _drawActions(
+                        context, _drawBloc.selectedPolygonForDraw, 0, state)
+                    : SizedBox()
+              ],
+            ),
           );
         });
   }
@@ -128,7 +148,8 @@ class _DrawingWidgetState extends State<DrawingWidget> {
                 maxY: maxY,
                 minY: minY,
                 maxX: maxX,
-                minX: minX));
+                minX: minX,
+                color: _drawBloc.color));
             points.clear();
           });
         },
@@ -534,6 +555,39 @@ class _DrawingWidgetState extends State<DrawingWidget> {
       );
     }
   }
+
+  _colorPickerButton() => Positioned(
+        bottom: 24,
+        right: 24,
+        child: Tooltip(
+          message: 'Pick a color',
+          child: ElevatedButton(
+            onPressed: () {
+              _showColorPicker(context);
+            },
+            child: Container(
+              color: _drawBloc.color,
+              child: Center(
+                child: Icon(Icons.palette_outlined),
+              ),
+            ),
+            style: ElevatedButton.styleFrom(
+                primary: _drawBloc.color, shape: CircleBorder(), elevation: 20),
+          ),
+        ),
+      );
+
+  _showColorPicker(BuildContext context) => showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+            title: Text('Pick a draw color'),
+            content: SingleChildScrollView(
+              child: ColorPicker(
+                pickerColor: _drawBloc.color,
+                onColorChanged: _drawBloc.changeColor,
+              ),
+            ),
+          ));
 }
 
 class FingerPainter extends CustomPainter {
@@ -550,11 +604,12 @@ class FingerPainter extends CustomPainter {
       bool closed})
       : _polygons = polygons,
         pointsList = points,
-        paintData = paint ?? Paint()
-          ..style = PaintingStyle.fill
-          ..strokeCap = StrokeCap.butt
-          ..isAntiAlias = true
-          ..color = Colors.black12.withOpacity(0.5),
+        paintData = paint ??
+            (Paint()
+              ..style = PaintingStyle.fill
+              ..strokeCap = StrokeCap.butt
+              ..isAntiAlias = true
+              ..color = Colors.black12.withOpacity(0.5)),
         closed = closed;
 
   @override
@@ -601,6 +656,7 @@ class FingerPainter extends CustomPainter {
     _polygons.forEach((element) {
       path.addPolygon(element.points, true);
     });
+
     canvas.drawPath(path, paintData);
   }
 

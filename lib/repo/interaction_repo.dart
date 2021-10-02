@@ -80,10 +80,11 @@ class InteractionRepo {
       "points": jsonEncode(polygon.pointsToJson()),
       "interaction": interaction.json,
       "comment": polygon.comment,
-      "maxX": polygon.maxX.round(),
-      "minX": polygon.minX.round(),
-      "maxY": polygon.maxY.round(),
-      "minY": polygon.minY.round(),
+      "maxX": polygon.maxX,
+      "minX": polygon.minX,
+      "maxY": polygon.maxY,
+      "minY": polygon.minY,
+      "color": polygon.color.value.toRadixString(16)
     };
 
     if (polygon.audioId != null) {
