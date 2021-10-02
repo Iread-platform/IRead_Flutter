@@ -39,23 +39,39 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
         for (var i = 0; i < storyPageData.data.pages.length; i++) {
           storyPageData.data.pages[i].words =
               initWordEndLine(storyPageData.data.pages[i].words);
-          for (var highLight in storyPageData.data.pages[i].highLights) {
-            for (var word in storyPageData.data.pages[i].words) {
+          for (var word in storyPageData.data.pages[i].words) {
+            for (var highLight in storyPageData.data.pages[i].highLights) {
               if ((word.startIndex >= highLight.firstWordIndex) &&
                   (word.startIndex <= highLight.endWordIndex)) {
                 word.isHighLighted = true;
                 word.highLightID = highLight.highLightId;
               }
             }
-          }
-          for (var comment in storyPageData.data.pages[i].comments) {
-            for (var word in storyPageData.data.pages[i].words) {
+            for (var comment in storyPageData.data.pages[i].comments) {
               if (word.content == comment.word) {
                 word.isComment = true;
                 word.commentId = comment.commentId;
               }
             }
           }
+
+          // for (var highLight in storyPageData.data.pages[i].highLights) {
+          //   for (var word in storyPageData.data.pages[i].words) {
+          //     if ((word.startIndex >= highLight.firstWordIndex) &&
+          //         (word.startIndex <= highLight.endWordIndex)) {
+          //       word.isHighLighted = true;
+          //       word.highLightID = highLight.highLightId;
+          //     }
+          //   }
+          // }
+          // for (var comment in storyPageData.data.pages[i].comments) {
+          //   for (var word in storyPageData.data.pages[i].words) {
+          //     if (word.content == comment.word) {
+          //       word.isComment = true;
+          //       word.commentId = comment.commentId;
+          //     }
+          //   }
+          // }
         }
         yield LoadedState(data: storyPageData);
         play(storyPageData.data.audio.downloadUrl);
