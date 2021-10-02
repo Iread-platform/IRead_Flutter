@@ -7,6 +7,7 @@ import 'package:iread_flutter/models/user/profile.dart';
 import 'package:iread_flutter/repo/attachment_repo.dart';
 import 'package:iread_flutter/repo/interaction_repo.dart';
 import 'package:iread_flutter/repo/story_repo.dart';
+import 'package:iread_flutter/repo/user_repo.dart';
 import 'package:iread_flutter/utils/data.dart';
 
 class MainRepo {

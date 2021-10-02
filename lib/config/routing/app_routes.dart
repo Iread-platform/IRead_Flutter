@@ -51,9 +51,11 @@ class AppRoutes {
       return BlocProvider(
         create: (context) => StoryDetailsBloc(InitialState())
           ..add(FetchStoryDetailsEvent(int.parse(id))),
-        child: Container(
-            color: Theme.of(context).colorScheme.surface,
-            child: StoryDetails()),
+        child: Material(
+          child: Container(
+              color: Theme.of(context).colorScheme.surface,
+              child: StoryDetails()),
+        ),
       );
     })),
     AppRoute('/profile', Handler(handlerFunc: (context, params) {
