@@ -104,6 +104,6 @@ class IReadApp extends StatelessWidget {
           Provider(create: (context) => CommentBloc(InitialState()))
 
         ], child: MainScreen()),
-    );
+    ));
   }
 }
