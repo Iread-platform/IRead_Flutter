@@ -26,12 +26,17 @@ class StoryRelatedTags extends StatelessWidget {
           SizedBox(
             height: 12,
           ),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            clipBehavior: Clip.antiAlias,
-            children: _buildTags(context),
-          )
+          _tags.length > 0
+              ? Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  clipBehavior: Clip.antiAlias,
+                  children: _buildTags(context),
+                )
+              : Text(
+                  'There are not tags',
+                  style: Theme.of(context).textTheme.subtitle2,
+                )
         ],
       ),
     );

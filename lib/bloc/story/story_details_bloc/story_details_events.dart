@@ -11,7 +11,4 @@ class FetchStoryDetailsEvent extends StoryDetailsEvent {
   get id => _id;
 }
 
-class SubmitReviewEvent extends ReviewEvent {
-  int rate;
-  SubmitReviewEvent(this.rate);
-}
+class SubmitReviewEvent extends ReviewEvent {}

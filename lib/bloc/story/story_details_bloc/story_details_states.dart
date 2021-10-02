@@ -3,7 +3,10 @@ import 'package:iread_flutter/models/story.dart';
 
 abstract class StoryDetailsState extends BlocState {}
 
-abstract class ReviewState extends BlocState {}
+abstract class ReviewState extends SuccessState<Story> {
+  ReviewState(Story story) : super(data: story);
+  get story => this.data;
+}
 
 class StoryDataFetchedState extends SuccessState<Story> {
   StoryDataFetchedState(Story story) : super(data: story);
@@ -11,4 +14,10 @@ class StoryDataFetchedState extends SuccessState<Story> {
   get story => this.data;
 }
 
-class ReviewSubmittedState extends ReviewState {}
+class ReviewIsSubmitting extends ReviewState {
+  ReviewIsSubmitting(Story story) : super(story);
+}
+
+class ReviewSubmittedState extends ReviewState {
+  ReviewSubmittedState(Story story) : super(story);
+}

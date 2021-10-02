@@ -13,7 +13,11 @@ class ReviewSubmit {
     _rate = json['rate'];
   }
 
-  String get userId => userId;
+  Map<String, dynamic> toJson() {
+    return {'userId': "$_userId", 'storyId': _storyId, 'rate': _rate};
+  }
+
+  String get userId => _userId;
   int get storyId => _storyId;
   int get rate => _rate;
 }

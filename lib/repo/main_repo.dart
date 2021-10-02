@@ -2,10 +2,12 @@ import 'dart:convert';
 
 import 'package:iread_flutter/models/attachment/attachment.dart';
 import 'package:iread_flutter/models/draw/polygon.dart';
+import 'package:iread_flutter/models/review/review_submit.dart';
 import 'package:iread_flutter/models/stories_section_model.dart';
 import 'package:iread_flutter/models/user/profile.dart';
 import 'package:iread_flutter/repo/attachment_repo.dart';
 import 'package:iread_flutter/repo/interaction_repo.dart';
+import 'package:iread_flutter/repo/review_repo.dart';
 import 'package:iread_flutter/repo/story_repo.dart';
 import 'package:iread_flutter/repo/user_repo.dart';
 import 'package:iread_flutter/utils/data.dart';
@@ -20,6 +22,7 @@ class MainRepo {
   final AttachmentRepo _attachmentRepo = AttachmentRepo();
   final UserRepo _userRepo = UserRepo();
   final StoryRepo _storyRepo = StoryRepo();
+  final ReviewRepo _reviewRepo = ReviewRepo();
 
   /// Save a polygon with attachments.
   Stream<Data> savePolygon(Polygon polygon, int storyId) async* {
@@ -87,5 +90,9 @@ class MainRepo {
 
   Future<Data<Profile>> updateAvatar(int id, {bool isPersonal = false}) {
     return _userRepo.updateUserAvatar(id, isPersonal: isPersonal);
+  }
+
+  Future<Data> submitReview(ReviewSubmit reviewSubmit) {
+    return _reviewRepo.submitReview(reviewSubmit);
   }
 }
