@@ -12,4 +12,8 @@ class Review {
     _storyId = json['storyId'];
     _rate = json['rate'];
   }
+
+  String get userId => userId;
+  int get storyId => _storyId;
+  int get rate => _rate;
 }
