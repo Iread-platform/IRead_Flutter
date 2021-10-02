@@ -1,20 +1,20 @@
 import 'package:iread_flutter/models/model.dart';
 
 class Attachment extends Model {
-  String _title;
-  String _downloadUrl;
-  String _type;
-  String _extension;
-  double _size;
-  DateTime _uploadDate;
+  String title;
+  String downloadUrl;
+  String type;
+  String extension;
+  double size;
+  DateTime uploadDate;
 
   Attachment.fromJson(Map<String, dynamic> json) : super(id: json['id']) {
-    _title = json['name'];
-    _downloadUrl = json['downloadUrl'];
-    _type = json['type'];
-    _extension = json['extension'];
-    _size = json['size'].toDouble();
-    _uploadDate = DateTime.parse(json['uploadDate']);
+    title = json['name'];
+    downloadUrl = json['downloadUrl'];
+    type = json['type'];
+    extension = json['extension'];
+    size = json['size'].toDouble();
+    uploadDate = DateTime.parse(json['uploadDate']);
   }
 
   DateTime get uploadDate => _uploadDate;

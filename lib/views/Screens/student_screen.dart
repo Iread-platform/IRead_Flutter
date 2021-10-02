@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:iread_flutter/utils/i_read_icons.dart';
+import 'package:iread_flutter/views/widgets/shared/app_bar.dart';
 import 'package:iread_flutter/views/widgets/story/story_image.dart';
-import 'package:iread_flutter/views/widgets/user/ranking.dart';
 
 class StudentScreen extends StatefulWidget {
   @override
@@ -27,68 +25,14 @@ class _StudentScreenState extends State<StudentScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var h = MediaQuery.of(context).size.height;
-    var w = MediaQuery.of(context).size.width;
     return ListView(
       shrinkWrap: true,
       children: [
-        Container(
-          height: h * 0.25,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: w * 0.2,
-                height: h * 0.3 * 0.8,
-                alignment: Alignment.centerLeft,
-                padding: EdgeInsets.all(20),
-                child: Icon(
-                  IReadIcons.list,
-                  color: Theme.of(context).primaryColor,
-                  size: 30,
-                ),
-              ),
-              Container(
-                height: h * 0.25,
-                width: w * 0.8,
-                child: Stack(
-                  alignment: Alignment.topRight,
-                  children: [
-                    Transform.translate(
-                      offset: Offset(w * 0.1, -h * 0.05),
-                      child: Transform.scale(
-                        scale: 1.25,
-                        child: SvgPicture.asset(
-                          "assets/images/shared/curve_top_right.svg",
-                          color: Colors.orangeAccent,
-                          alignment: Alignment.topRight,
-                        ),
-                      ),
-                    ),
-                    Directionality(
-                      textDirection: TextDirection.rtl,
-                      child: Container(
-                        margin: EdgeInsets.only(right: 20),
-                        alignment: Alignment.center,
-                        child: Ranking(
-                          name: "Mohamad",
-                          progress: 5.0,
-                          rank: 16,
-                        )
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
+        IreadAppBar(),
         Container(
           margin: EdgeInsets.all(20),
           child: Text("Level 5", style: Theme.of(context).textTheme.headline3),
         ),
-        
         for (int i = 0; i < _items.length; i++)
           Container(
             margin: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
@@ -114,13 +58,8 @@ class _StudentScreenState extends State<StudentScreen> {
           child: GridView.builder(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
-            
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              mainAxisExtent: 180
-              
-              
-            ),
+                crossAxisCount: 3, mainAxisExtent: 180),
             itemCount: 12,
             itemBuilder: (BuildContext context, int index) {
               return Container(

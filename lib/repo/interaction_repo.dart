@@ -93,4 +93,34 @@ class InteractionRepo {
 
     return json;
   }
+
+  Future<int> addHighLightWord(Map map) async {
+    final url = "Interaction/HighLight/add";
+    final jsonText = await _apiService.request(
+        requestType: RequestType.POST, endPoint: url, parameter: map);
+    final json = jsonDecode(jsonText);
+    print(json);
+    return json["highLightId"];
+  }
+
+  removeHighLightWord(int id) async {
+    final url = "Interaction/HighLight/" + id.toString() + "/delete";
+    final jsonText = await _apiService.request(
+        requestType: RequestType.DELETE, endPoint: url);
+  }
+
+  addCommentWord(Map map) async {
+    final url = "Interaction/Comment/add";
+    final jsonText = await _apiService.request(
+        requestType: RequestType.POST, endPoint: url, parameter: map);
+    print(jsonText);
+    Map<String, dynamic> json = jsonDecode(jsonText);
+    return json;
+  }
+
+  removeCommentWord(int id) async {
+    final url = "Interaction/Comment/" + id.toString() + "/delete";
+    final jsonText = await _apiService.request(
+        requestType: RequestType.DELETE, endPoint: url);
+  }
 }

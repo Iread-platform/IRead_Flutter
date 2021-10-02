@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iread_flutter/bloc/StoryScreenBloc/storyscreen_bloc.dart';
+import 'package:iread_flutter/bloc/interactions_bloc/interactions_bloc.dart';
 import 'package:iread_flutter/bloc/text_selection_provider.dart';
 import 'package:iread_flutter/utils/i_read_icons.dart';
 import 'package:iread_flutter/views/widgets/vocabulary_dialog.dart';
@@ -45,13 +46,14 @@ class MyTextSelectionControls extends TextSelectionControls {
           x = Provider.of<TextSelectionProvider>(context, listen: false)
               .scrollController
               .offset;
+          print("xxxxxxxxxxxx : $x");
         } catch (e) {}
+
         return TextSelectionToolbar(
             anchorAbove:
                 Offset(position.dx + marginX, position.dy + marginY - x),
             anchorBelow: Offset(-140, -140),
             toolbarBuilder: (context, _) {
-              print(position.dy);
               return FittedBox(
                 child: Container(
                   decoration: BoxDecoration(
@@ -112,12 +114,75 @@ class MyTextSelectionControls extends TextSelectionControls {
       return [
         TextSelectionToolbarTextButton(
           padding: EdgeInsets.symmetric(horizontal: 10),
+          child: Icon(
+            Icons.remove_circle,
+            color: Colors.purple,
+            size: 25,
+          ),
+          onPressed: () {
+            removeHighlightWord(context);
+            BlocProvider.of<StoryscreenBloc>(context).add(ResumeEvent());
+
+            delegate.hideToolbar();
+          },
+        ),
+        TextSelectionToolbarTextButton(
+          padding: EdgeInsets.symmetric(horizontal: 10),
           child: Text(
             "Shading",
             style: TextStyle(color: Colors.purple, fontWeight: FontWeight.bold),
           ),
-          onPressed: () {
+          onPressed: () async {
+            Map map = {
+              "interaction": {
+                "storyId": 23,
+                "studentId": "d6d896bd-6d99-41ca-bd9f-3bf3a29db7f7",
+                "pageId": BlocProvider.of<StoryscreenBloc>(context)
+                    .storyPageData
+                    .data
+                    .pages[BlocProvider.of<StoryscreenBloc>(context)
+                        .pageController
+                        .page
+                        .toInt()]
+                    .pageId
+              },
+              "firstWordIndex":
+                  Provider.of<TextSelectionProvider>(context, listen: false)
+                      .selection
+                      .start,
+              "endWordIndex":
+                  Provider.of<TextSelectionProvider>(context, listen: false)
+                      .selection
+                      .end,
+              "firstWord": "Bright",
+              "endWord": "Charlotte"
+            };
+            int highLightID = await BlocProvider.of<InteractionsBloc>(context)
+                .addHightLightWord(map);
+
+            for (var word in BlocProvider.of<StoryscreenBloc>(context)
+                .storyPageData
+                .data
+                .pages[BlocProvider.of<StoryscreenBloc>(context)
+                    .pageController
+                    .page
+                    .toInt()]
+                .words) {
+              if ((word.startIndex >=
+                      Provider.of<TextSelectionProvider>(context, listen: false)
+                          .selection
+                          .start) &&
+                  (word.startIndex <=
+                      Provider.of<TextSelectionProvider>(context, listen: false)
+                          .selection
+                          .end)) {
+                word.isHighLighted = true;
+                word.highLightID = highLightID;
+              }
+            }
+
             delegate.hideToolbar();
+            BlocProvider.of<StoryscreenBloc>(context).add(ResumeEvent());
           },
         ),
         TextSelectionToolbarTextButton(
@@ -128,7 +193,7 @@ class MyTextSelectionControls extends TextSelectionControls {
           ),
           onPressed: () {
             delegate.hideToolbar();
-            return VocabularyDialog.VocDialog(context: context);
+            return VocabularyDialog.vocDialog(context: context);
           },
         ),
         TextSelectionToolbarTextButton(
@@ -158,7 +223,12 @@ class MyTextSelectionControls extends TextSelectionControls {
             color: Colors.purple,
             size: 25,
           ),
-          onPressed: () {},
+          onPressed: () {
+            removeHighlightWord(context);
+            BlocProvider.of<StoryscreenBloc>(context).add(ResumeEvent());
+
+            delegate.hideToolbar();
+          },
         ),
         TextSelectionToolbarTextButton(
           padding: EdgeInsets.symmetric(horizontal: 10),
@@ -168,7 +238,7 @@ class MyTextSelectionControls extends TextSelectionControls {
           ),
           onPressed: () {
             delegate.hideToolbar();
-            return VocabularyDialog.VocDialog(context: context);
+            return VocabularyDialog.vocDialog(context: context);
           },
         ),
         TextSelectionToolbarTextButton(
@@ -193,12 +263,75 @@ class MyTextSelectionControls extends TextSelectionControls {
       return [
         TextSelectionToolbarTextButton(
           padding: EdgeInsets.symmetric(horizontal: 10),
+          child: Icon(
+            Icons.remove_circle,
+            color: Colors.purple,
+            size: 25,
+          ),
+          onPressed: () {
+            removeHighlightWord(context);
+            BlocProvider.of<StoryscreenBloc>(context).add(ResumeEvent());
+
+            delegate.hideToolbar();
+          },
+        ),
+        TextSelectionToolbarTextButton(
+          padding: EdgeInsets.symmetric(horizontal: 10),
           child: Text(
             "Shading",
             style: TextStyle(color: Colors.purple, fontWeight: FontWeight.bold),
           ),
-          onPressed: () {
+          onPressed: () async {
+            Map map = {
+              "interaction": {
+                "storyId": 23,
+                "studentId": "d6d896bd-6d99-41ca-bd9f-3bf3a29db7f7",
+                "pageId": BlocProvider.of<StoryscreenBloc>(context)
+                    .storyPageData
+                    .data
+                    .pages[BlocProvider.of<StoryscreenBloc>(context)
+                        .pageController
+                        .page
+                        .toInt()]
+                    .pageId
+              },
+              "firstWordIndex":
+                  Provider.of<TextSelectionProvider>(context, listen: false)
+                      .selection
+                      .start,
+              "endWordIndex":
+                  Provider.of<TextSelectionProvider>(context, listen: false)
+                      .selection
+                      .end,
+              "firstWord": "Bright",
+              "endWord": "Charlotte"
+            };
+            int highLightID = await BlocProvider.of<InteractionsBloc>(context)
+                .addHightLightWord(map);
+
+            for (var word in BlocProvider.of<StoryscreenBloc>(context)
+                .storyPageData
+                .data
+                .pages[BlocProvider.of<StoryscreenBloc>(context)
+                    .pageController
+                    .page
+                    .toInt()]
+                .words) {
+              if ((word.startIndex >=
+                      Provider.of<TextSelectionProvider>(context, listen: false)
+                          .selection
+                          .start) &&
+                  (word.startIndex <=
+                      Provider.of<TextSelectionProvider>(context, listen: false)
+                          .selection
+                          .end)) {
+                word.isHighLighted = true;
+                word.highLightID = highLightID;
+              }
+            }
+
             delegate.hideToolbar();
+            BlocProvider.of<StoryscreenBloc>(context).add(ResumeEvent());
           },
         ),
         TextSelectionToolbarTextButton(
@@ -208,6 +341,9 @@ class MyTextSelectionControls extends TextSelectionControls {
             color: Colors.purple,
           ),
           onPressed: () {
+            print(Provider.of<TextSelectionProvider>(context, listen: false)
+                .selection
+                .start);
             BlocProvider.of<StoryscreenBloc>(context).add(SeekToWordEvent(
                 index:
                     Provider.of<TextSelectionProvider>(context, listen: false)
@@ -228,7 +364,12 @@ class MyTextSelectionControls extends TextSelectionControls {
             color: Colors.purple,
             size: 25,
           ),
-          onPressed: () {},
+          onPressed: () {
+            removeHighlightWord(context);
+            BlocProvider.of<StoryscreenBloc>(context).add(ResumeEvent());
+
+            delegate.hideToolbar();
+          },
         ),
         TextSelectionToolbarTextButton(
           padding: EdgeInsets.symmetric(horizontal: 10),
@@ -237,6 +378,9 @@ class MyTextSelectionControls extends TextSelectionControls {
             color: Colors.purple,
           ),
           onPressed: () {
+            print(Provider.of<TextSelectionProvider>(context, listen: false)
+                .selection
+                .start);
             BlocProvider.of<StoryscreenBloc>(context).add(SeekToWordEvent(
                 index:
                     Provider.of<TextSelectionProvider>(context, listen: false)
@@ -248,5 +392,45 @@ class MyTextSelectionControls extends TextSelectionControls {
       ];
     }
     return null;
+  }
+
+  removeHighlightWord(context) {
+    int start = Provider.of<TextSelectionProvider>(context, listen: false)
+        .selection
+        .start;
+    int end = Provider.of<TextSelectionProvider>(context, listen: false)
+        .selection
+        .end;
+    int id = -2;
+    for (var word in BlocProvider.of<StoryscreenBloc>(context)
+        .storyPageData
+        .data
+        .pages[BlocProvider.of<StoryscreenBloc>(context)
+            .pageController
+            .page
+            .toInt()]
+        .words) {
+      if (word.isHighLighted &&
+          word.startIndex >= start &&
+          word.startIndex <= end) {
+        BlocProvider.of<InteractionsBloc>(context)
+            .removeHighLightWord(word.highLightID);
+        id = word.highLightID;
+        break;
+      }
+    }
+    for (var word in BlocProvider.of<StoryscreenBloc>(context)
+        .storyPageData
+        .data
+        .pages[BlocProvider.of<StoryscreenBloc>(context)
+            .pageController
+            .page
+            .toInt()]
+        .words) {
+      if (word.highLightID == id) {
+        word.highLightID = -1;
+        word.isHighLighted = false;
+      }
+    }
   }
 }
