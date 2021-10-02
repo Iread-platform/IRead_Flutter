@@ -55,7 +55,7 @@ class UserRepo {
       );
       //print(user.toJson().toString());
       AuthService().saveUser(user);
-      
+
       return Data.success(true);
     } catch (e) {
       throw e;
