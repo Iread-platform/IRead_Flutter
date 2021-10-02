@@ -187,6 +187,7 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
 
   Future<BlocState> fetchPolygon(int id) async {
     final polygonData = await _mainRepo.fetchPolygon(id);
+    final polygon = polygonData.data;
 
     if (polygonData.state == DataState.Fail) {
       return FailState(message: polygonData.message);

@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
-import 'package:iread_flutter/models/attachment/attachment.dart';
 import 'package:flutter/material.dart';
+import 'package:iread_flutter/models/attachment/attachment.dart';
 import 'package:iread_flutter/models/model.dart';
 
 class Polygon extends Model {
