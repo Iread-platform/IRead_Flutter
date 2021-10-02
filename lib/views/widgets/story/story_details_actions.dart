@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iread_flutter/config/routing/app_router.dart';
 import 'package:iread_flutter/config/themes/border_radius.dart';
 import 'package:iread_flutter/models/story.dart';
 import 'package:iread_flutter/views/widgets/review/rating_bar.dart';
@@ -42,7 +43,9 @@ class StoryDetailsActions extends StatelessWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(right: 32),
-                  child: _elevatedButton(context, _buttons[0], () {}),
+                  child: _elevatedButton(context, _buttons[0], () {
+                    AppRouter().navigate(context, '/storyscreen/${_story.id}');
+                  }),
                 ),
                 SizedBox(
                   height: 12,

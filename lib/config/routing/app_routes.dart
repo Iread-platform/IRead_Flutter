@@ -12,6 +12,7 @@ import 'package:iread_flutter/utils/data_generator.dart';
 import 'package:iread_flutter/views/Screens/login_screen.dart';
 import 'package:iread_flutter/views/Screens/stories_search_list.dart';
 import 'package:iread_flutter/views/Screens/story_details.dart';
+import 'package:iread_flutter/views/Screens/story_screen.dart';
 import 'package:iread_flutter/views/widgets/story/story_assignment_card.dart';
 
 class AppRoutes {
@@ -51,6 +52,14 @@ class AppRoutes {
         child: Container(
             color: Theme.of(context).colorScheme.surface,
             child: StoryDetails()),
+      );
+    })),
+    AppRoute('/storyscreen/:id ', Handler(
+        handlerFunc: (BuildContext context, Map<String, dynamic> params) {
+      print(params);
+      var id = params.entries.elementAt(0).value[0];
+      return StoryScreen(
+        storyId: int.parse(id),
       );
     }))
   ];
