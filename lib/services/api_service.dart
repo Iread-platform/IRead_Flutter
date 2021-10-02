@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:iread_flutter/services/auth_service.dart';
 import 'package:iread_flutter/utils/exception.dart';
 
 import 'settings.dart' as appSettings;
@@ -10,7 +11,7 @@ enum RequestType { GET, POST, PUT, DELETE }
 
 class ApiService {
   static final ApiService _instance = ApiService._internal();
-  final String baseUrl = "https://192.168.1.118:5020/api/iread";
+  final String baseUrl = "http://217.182.250.236:5014/api/iread";
 
   factory ApiService() => _instance;
 
@@ -23,25 +24,46 @@ class ApiService {
   Future<String> request(
       {@required RequestType requestType,
       @required String endPoint,
-      dynamic parameter}) async {
+      dynamic parameter,
+      String contentType,
+      bool convertParametersToJson = true,
+      String externalToken}) async {
     Uri url = Uri.parse("$baseUrl/$endPoint");
+    print("url is: $url");
+    print("external token is: $externalToken");
+
     switch (requestType) {
       case RequestType.GET:
-        return await _processResponse(await _client.get(url));
+        return await _processResponse(await _client.get(
+          url,
+          headers: {
+            "Accept": "application/json",
+            "Content-Type": contentType ?? "application/json",
+            "Authorization":
+                externalToken ?? AuthService().cU?.token ?? testAuthKey
+          },
+        ));
       case RequestType.POST:
+        print("Post");
         return await _processResponse(await _client.post(url,
             headers: {
-              "Content-Type": "application/json",
-              "Authorization": testAuthKey
+              "Accept": "application/json",
+              "Content-Type": contentType ?? "application/json",
+              "Authorization":
+                  externalToken ?? AuthService().cU?.token ?? testAuthKey
             },
-            body: json.encode(parameter)));
+            body: convertParametersToJson ? json.encode(parameter) : parameter,
+            encoding: Encoding.getByName("utf-8")));
       case RequestType.PUT:
         return await _processResponse(await _client.put(url,
             headers: {
-              "Content-Type": "application/json",
-              "Authorization": testAuthKey
+              "Accept": "application/json",
+              "Content-Type": contentType ?? "application/json",
+              "Authorization":
+                  externalToken ?? AuthService().cU?.token ?? testAuthKey
             },
-            body: json.encode(parameter)));
+            body: convertParametersToJson ? json.encode(parameter) : parameter,
+            encoding: Encoding.getByName("utf-8")));
       case RequestType.DELETE:
         return await _processResponse(await _client.delete(url));
       default:

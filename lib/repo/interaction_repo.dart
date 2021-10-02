@@ -36,7 +36,7 @@ class InteractionRepo {
       final json = _constructPolygonData(polygon, storyId);
       final url =
           '$baseEndpoint/${updatePolygonEndpoint.replaceAll('@id', polygon.id.toString())}';
-      final response = await _apiService.request(
+      await _apiService.request(
           requestType: RequestType.PUT, endPoint: url, parameter: json);
 
       return Data.success(true);
@@ -49,8 +49,7 @@ class InteractionRepo {
     try {
       final url =
           '$baseEndpoint/${deletePolygonEndpoint.replaceAll('@id', polygon.id.toString())}';
-      final response = await _apiService.request(
-          requestType: RequestType.DELETE, endPoint: url);
+      await _apiService.request(requestType: RequestType.DELETE, endPoint: url);
 
       return Data.success(true);
     } catch (e) {
@@ -92,5 +91,35 @@ class InteractionRepo {
     }
 
     return json;
+  }
+
+  Future<int> addHighLightWord(Map map) async {
+    final url = "Interaction/HighLight/add";
+    final jsonText = await _apiService.request(
+        requestType: RequestType.POST, endPoint: url, parameter: map);
+    final json = jsonDecode(jsonText);
+    print(json);
+    return json["highLightId"];
+  }
+
+  removeHighLightWord(int id) async {
+    final url = "Interaction/HighLight/" + id.toString() + "/delete";
+    final jsonText = await _apiService.request(
+        requestType: RequestType.DELETE, endPoint: url);
+  }
+
+  addCommentWord(Map map) async {
+    final url = "Interaction/Comment/add";
+    final jsonText = await _apiService.request(
+        requestType: RequestType.POST, endPoint: url, parameter: map);
+    print(jsonText);
+    Map<String, dynamic> json = jsonDecode(jsonText);
+    return json;
+  }
+
+  removeCommentWord(int id) async {
+    final url = "Interaction/Comment/" + id.toString() + "/delete";
+    final jsonText = await _apiService.request(
+        requestType: RequestType.DELETE, endPoint: url);
   }
 }

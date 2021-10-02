@@ -17,6 +17,7 @@ import 'package:iread_flutter/utils/extensions.dart';
 import 'package:iread_flutter/utils/file_utils.dart';
 
 class DrawingBloc extends Bloc<BlocEvent, BlocState> {
+  // ignore: todo
   // TODO replace dummy story id;
   int storyId = 4;
   MainRepo _mainRepo = MainRepo();
