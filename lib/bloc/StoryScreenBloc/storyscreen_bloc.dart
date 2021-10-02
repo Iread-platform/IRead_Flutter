@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iread_flutter/Repository/story_repository.dart';
 import 'package:iread_flutter/bloc/base/base_bloc.dart';
 import 'package:iread_flutter/models/Data.dart';
-import 'package:iread_flutter/models/story_page_model.dart';
+import 'package:iread_flutter/models/story_model.dart';
 
 part 'storyscreen_event.dart';
 part 'storyscreen_state.dart';
@@ -18,7 +18,7 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
   double deviceWidth = 0.0, deviceHight = 0.0;
   int wordProgressIndex = 0;
   AudioPlayerState audioPlayerState;
-  Data<StoryPage> storyPageData;
+  Data<StoryModel> storyPageData;
   StoryRepository storyRepository;
   PageController pageController = PageController();
   StoryscreenBloc() : super(InitialState()) {
@@ -35,13 +35,52 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
     if (event is FetchStoryPage) {
       yield LoadingState();
       storyPageData = await storyRepository.fetchStoryPage(event.stotyID);
-      storyPageData.data.words = initWordEndLine(storyPageData.data.words);
-      yield LoadedState(data: storyPageData);
-      play(storyPageData.data.audioURL);
-      yield PlayerState(AudioPlayerState.PLAYING);
+      try {
+        for (var i = 0; i < storyPageData.data.pages.length; i++) {
+          storyPageData.data.pages[i].words =
+              initWordEndLine(storyPageData.data.pages[i].words);
+          for (var word in storyPageData.data.pages[i].words) {
+            for (var highLight in storyPageData.data.pages[i].highLights) {
+              if ((word.startIndex >= highLight.firstWordIndex) &&
+                  (word.startIndex <= highLight.endWordIndex)) {
+                word.isHighLighted = true;
+                word.highLightID = highLight.highLightId;
+              }
+            }
+            for (var comment in storyPageData.data.pages[i].comments) {
+              if (word.content == comment.word) {
+                word.isComment = true;
+                word.commentId = comment.commentId;
+              }
+            }
+          }
+
+          // for (var highLight in storyPageData.data.pages[i].highLights) {
+          //   for (var word in storyPageData.data.pages[i].words) {
+          //     if ((word.startIndex >= highLight.firstWordIndex) &&
+          //         (word.startIndex <= highLight.endWordIndex)) {
+          //       word.isHighLighted = true;
+          //       word.highLightID = highLight.highLightId;
+          //     }
+          //   }
+          // }
+          // for (var comment in storyPageData.data.pages[i].comments) {
+          //   for (var word in storyPageData.data.pages[i].words) {
+          //     if (word.content == comment.word) {
+          //       word.isComment = true;
+          //       word.commentId = comment.commentId;
+          //     }
+          //   }
+          // }
+        }
+        yield LoadedState(data: storyPageData);
+        play(storyPageData.data.audio.downloadUrl);
+
+        yield PlayerState(AudioPlayerState.PLAYING);
+      } catch (e) {}
     }
 
-    //==========  player Controller ==============
+    // ==========  player Controller ==============
     else {
       //======== Play ==========
       if (event is PlayEvent) {
@@ -69,7 +108,25 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
       }
       //======== Seek ==========
       else if (event is SeekEvent) {
+        if (event.duration.inMilliseconds <
+            storyPageData.data.pages[0].startPageTime) {
+          pageController.animateToPage(0,
+              duration: Duration(milliseconds: 1000), curve: Curves.linear);
+        } else {
+          for (int i = 0; i < storyPageData.data.pages.length; i++) {
+            if (event.duration.inMilliseconds >=
+                    storyPageData.data.pages[i].startPageTime &&
+                event.duration.inMilliseconds <=
+                    storyPageData.data.pages[i].endPageTime) {
+              pageController.animateToPage(i,
+                  duration: Duration(milliseconds: 1000), curve: Curves.linear);
+              break;
+            }
+          }
+        }
+
         seek(event.duration);
+
         resume();
         audioPlayerState = AudioPlayerState.PLAYING;
         yield PlayerState(AudioPlayerState.PLAYING);
@@ -77,12 +134,19 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
       //======== Seek to word ==========
 
       else if (event is SeekToWordEvent) {
-        for (int i = 0; i < storyPageData.data.words.length; i++) {
-          if (storyPageData.data.words[i].startIndex >= event.index) {
+        for (int i = 0;
+            i <
+                storyPageData
+                    .data.pages[pageController.page.toInt()].words.length;
+            i++) {
+          if (storyPageData.data.pages[pageController.page.toInt()].words[i]
+                  .startIndex >=
+              event.index) {
             seek(Duration(
-                milliseconds: storyPageData
-                    .data.words[i - 1 >= 0 ? i - 1 : i].time
-                    .toInt()));
+                milliseconds: storyPageData.data
+                        .pages[pageController.page.toInt()].words[i].timeStart
+                        .toInt() +
+                    5));
             resume();
             audioPlayerState = AudioPlayerState.PLAYING;
             yield PlayerState(AudioPlayerState.PLAYING);
@@ -121,19 +185,30 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
     });
     audioPlayer.onAudioPositionChanged.listen((event) {
       progress = event;
-      for (int i = 0; i < storyPageData.data.words.length; i++) {
-        if (storyPageData.data.words[i].time > progress.inMilliseconds) {
+      var wordsTemp =
+          storyPageData.data.pages[pageController.page.toInt()].words;
+      for (int i = 0; i < wordsTemp.length; i++) {
+        if (wordsTemp[i].timeStart >= progress.inMilliseconds) {
           int x = i - 1 < 0 ? 0 : i - 1;
           highLightIndex = x.toString();
+          if (int.parse(highLightIndex) >=
+              storyPageData
+                      .data.pages[pageController.page.toInt()].words.length -
+                  1) {
+            this.add(NextPageEvent());
 
+            highLightIndex = "0";
+          }
           break;
         }
+        if (i ==
+            storyPageData.data.pages[pageController.page.toInt()].words.length -
+                1) {
+          highLightIndex = i.toString();
+          this.add(NextPageEvent());
+        }
       }
-      // 25 is tha last index of word // replace it
-      if (int.parse(highLightIndex) == 25) {
-        highLightIndex = "0";
-        this.add(NextPageEvent());
-      }
+      // 25 is tha last index of word // replace it;
 
       this.add(ChangeProgressEvent(progress));
     });
@@ -188,22 +263,31 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
     Size size = Size(0, 0);
     double scrollValue = 0;
     String currentString = "";
+    String wordQueue = "";
     words[0].newLine = true;
     words[0].scrollHight = 0.0;
+    int startIndex = 0;
     for (int i = 0; i < words.length; i++) {
-      currentString = currentString + words[i].word + " ";
-      size = calcTextSize(currentString, TextStyle(fontSize: 20));
-      // print("${size.width} >= ${deviceWidth * 0.7}");
-      // 0.7 is text continer width
+      //========= calculate start index of word =============
+
+      //=====================================================
+      currentString = currentString + words[i].content + " ";
+      size = calcTextSize(currentString, TextStyle(fontSize: 40));
+
       if (size.width >= (deviceWidth * 0.7)) {
-        words[i - 1].newLine = true;
+        words[i].newLine = true;
         scrollValue = scrollValue + size.height.toInt();
-        words[i - 1].scrollHight = scrollValue;
+        words[i].scrollHight = scrollValue;
         size = Size(0, 0);
         currentString = " ";
         i--;
+      } else {
+        words[i].startIndex = startIndex;
+        wordQueue = wordQueue + words[i].content + " ";
+        startIndex = wordQueue.length;
       }
     }
+
     return words;
   }
 }

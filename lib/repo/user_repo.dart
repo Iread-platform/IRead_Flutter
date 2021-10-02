@@ -43,7 +43,6 @@ class UserRepo {
           externalToken: "Bearer " + jsonResponse['access_token']);
 
       final userResponse = json.decode(userText.toString());
-
       User user = User(
         token: "Bearer " + jsonResponse['access_token'],
         firstName: userResponse['firstName'],
@@ -56,7 +55,7 @@ class UserRepo {
       );
       //print(user.toJson().toString());
       AuthService().saveUser(user);
-
+      
       return Data.success(true);
     } catch (e) {
       throw e;

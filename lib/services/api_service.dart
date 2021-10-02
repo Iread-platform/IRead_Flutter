@@ -22,49 +22,45 @@ class ApiService {
       "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0Iiwicm9sZSI6IkJpZGRlciIsImp0aSI6ImE0ZDAzNzc1LWU3YmUtNDM0YS04NjRmLWJkNzRhNDY1ODhkZiIsImV4cCI6MTYxNjUwNTAzMywiaXNzIjoiaHR0cHMvL2xvY2FsaG9zdDo0NDMzOC8iLCJhdWQiOiJodHRwcy8vbG9jYWxob3N0OjQ0MzM4LyJ9.wlSMq8ldhDdfAWsyUPd035m0gTJYIXTbN6mNNBDo1C4";
 
   Future<String> request(
-      {
-        @required RequestType requestType,
-        @required String endPoint,
-        dynamic parameter,
-        String contentType,
-        bool convertParametersToJson = true,
-        String externalToken
-      }) async {
-
-
+      {@required RequestType requestType,
+      @required String endPoint,
+      dynamic parameter,
+      String contentType,
+      bool convertParametersToJson = true,
+      String externalToken}) async {
     Uri url = Uri.parse("$baseUrl/$endPoint");
     print("url is: $url");
     print("external token is: $externalToken");
 
     switch (requestType) {
       case RequestType.GET:
-        return await _processResponse(
-            await _client.get(
-              url,
-              headers: {
-                "Accept": "application/json",
-                "Content-Type": contentType ?? "application/json",
-                "Authorization": externalToken ?? AuthService().cU?.token ?? testAuthKey
-              },
-            )
-        );
+        return await _processResponse(await _client.get(
+          url,
+          headers: {
+            "Accept": "application/json",
+            "Content-Type": contentType ?? "application/json",
+            "Authorization":
+                externalToken ?? AuthService().cU?.token ?? testAuthKey
+          },
+        ));
       case RequestType.POST:
         print("Post");
         return await _processResponse(await _client.post(url,
             headers: {
               "Accept": "application/json",
               "Content-Type": contentType ?? "application/json",
-              "Authorization": externalToken ?? AuthService().cU?.token ?? testAuthKey
+              "Authorization":
+                  externalToken ?? AuthService().cU?.token ?? testAuthKey
             },
             body: convertParametersToJson ? json.encode(parameter) : parameter,
-          encoding: Encoding.getByName("utf-8")
-        ));
+            encoding: Encoding.getByName("utf-8")));
       case RequestType.PUT:
         return await _processResponse(await _client.put(url,
             headers: {
               "Accept": "application/json",
               "Content-Type": contentType ?? "application/json",
-              "Authorization": externalToken ?? AuthService().cU?.token ?? testAuthKey
+              "Authorization":
+                  externalToken ?? AuthService().cU?.token ?? testAuthKey
             },
             body: convertParametersToJson ? json.encode(parameter) : parameter,
             encoding: Encoding.getByName("utf-8")));
