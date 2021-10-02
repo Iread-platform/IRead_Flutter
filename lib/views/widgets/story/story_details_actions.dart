@@ -44,7 +44,7 @@ class StoryDetailsActions extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(right: 32),
                   child: _elevatedButton(context, _buttons[0], () {
-                    AppRouter().navigate(context, '/storyscreen/23');
+                    AppRouter().navigate(context, '/storyscreen/${_story.id}');
                   }),
                 ),
                 SizedBox(
