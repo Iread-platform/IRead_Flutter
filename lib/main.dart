@@ -18,7 +18,8 @@ import 'bloc/drawing_bloc/drawing_states.dart';
 import 'bloc/record_bloc/record_bloc.dart';
 import 'config/app_config.dart';
 import 'config/http/httpOverrides.dart';
-import 'config/themes/theme;
+import 'config/themes/theme.dart';
+import 'models/story.dart';
 import 'models/user.dart';
 
 void main() {
@@ -77,3 +78,18 @@ class IReadApp extends StatelessWidget {
     );
   }
 }
+
+Story story = Story(
+    title: 'Wood, Wire, Wings',
+    color: Colors.black38,
+    imageUrl: 'https://picsum.photos/200/300',
+    description:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sit amet lacus tincidunt, consequat lorem ac, consectetur ligula. Sed non nunc vehicula, pretium arcu a, faucibus eros. Cras lacinia magna sed enim malesuada finibus. Nulla et varius neque. Etiam dolor erat, dictum sodales facilisis ac, cursus vehicula lacus. Vestibulum et ante lorem. Pellentesque pretium arcu felis, nec efficitur lacus ultricies quis. Morbi eu tortor facilisis, porta elit quis, varius diam.',
+    writer: 'Motasem Ghozlan',
+    pages: 1300,
+    progress: 0.45,
+    flippedPages: 53,
+    readingTime: 127.25);
+
+User user =
+    User(name: 'Motasem Ghozlan', imageUrl: 'https://picsum.photos/200/300');
