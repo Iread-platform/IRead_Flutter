@@ -15,16 +15,16 @@ class ReviewRepo {
   final String _submitReviewEndPoint = 'review/add';
 
   Future<Data> submitReview(ReviewSubmit reviewSubmit) async {
-    print(jsonEncode(reviewSubmit));
-    final response = await _apiService.request(
-        requestType: RequestType.POST,
-        endPoint: _submitReviewEndPoint,
-        parameter: reviewSubmit);
-    print(response);
-    final json = jsonDecode(response);
+    try {
+      final response = await _apiService.request(
+          requestType: RequestType.POST,
+          endPoint: _submitReviewEndPoint,
+          parameter: reviewSubmit);
+      print(response);
+      final json = jsonDecode(response);
 
-    return Data.success(json);
-    try {} catch (e) {
+      return Data.success(json);
+    } catch (e) {
       return Data.handleException(e);
     }
   }
