@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iread_flutter/models/attachment/attachment.dart';
+import 'package:iread_flutter/models/story/rating.dart';
 import 'package:iread_flutter/models/tag.dart';
 
 import 'model.dart';
@@ -16,7 +17,7 @@ class Story extends Model {
   Color _color;
   int _flippedPages;
   double _readingTime;
-  double _rating;
+  Rating _rating;
   List<Tag> _tags;
   Attachment _storyCover;
 
@@ -32,7 +33,7 @@ class Story extends Model {
       int flippedPages,
       double readingTime,
       List<Tag> tags,
-      double rating,
+      Rating rating,
       int pages,
       int id,
       Attachment storyCover})
@@ -58,7 +59,10 @@ class Story extends Model {
     _description = json['description'];
     _storyLevel = json['storyLevel'];
     _writer = json['writer'];
-    _rating = json['rating']?.toDouble();
+
+    if (json['rating'] != null) {
+      _rating = Rating.fromJson(json['rating']);
+    }
     _color = json['color'] != null
         ? Color(int.parse(json['color'], radix: 16))
         : Colors.lightGreenAccent;
@@ -111,7 +115,7 @@ class Story extends Model {
 
   Attachment get storyCover => _storyCover;
 
-  get rating => _rating;
+  Rating get rating => _rating;
 
   get tags => _tags;
 }
