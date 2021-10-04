@@ -14,18 +14,24 @@ import 'package:iread_flutter/models/draw/polygon.dart';
 import 'package:iread_flutter/repo/main_repo.dart';
 import 'package:iread_flutter/utils/data.dart';
 import 'package:iread_flutter/utils/extensions.dart';
+import 'package:iread_flutter/utils/file_utils.dart';
 
 class DrawingBloc extends Bloc<BlocEvent, BlocState> {
   // ignore: todo
   // TODO replace dummy story id;
-  int storyId = 1;
+  int storyId = 4;
   MainRepo _mainRepo = MainRepo();
   List<Polygon> _polygons = [];
+  List<Polygon> _polygonsToDraw = [];
+
   int _selectedPolygonIndex = 0;
   bool closed = false;
   RecordBloc recordBloc;
   BlocEvent lastEvent;
   bool canInteract = true;
+  Color color = Colors.black87.withOpacity(0.5);
+  double screenWidth;
+  double screenHeight;
 
   DrawingBloc(BlocState initialState) : super(initialState);
 
@@ -47,6 +53,7 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
         yield _savePolygon(selectedPolygon);
         break;
       case RecordSavedEvent:
+        selectedPolygon.record = (event as RecordSavedEvent).attachment;
         showSuccessToast("Your record has been stored");
         yield PolygonRecordSaved();
         break;
@@ -91,6 +98,9 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
       case PolygonRecordDeleteEvent:
         yield* deleteRecordFromPolygon(storyId);
         break;
+      case ColorUpdateEvent:
+        yield NoPolygonState();
+        break;
     }
   }
 
@@ -106,7 +116,7 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
           add(PolygonSavedEvent());
         }
       } else if (item.data is Attachment) {
-        add(RecordSavedEvent());
+        add(RecordSavedEvent(item.data));
       } else {
         selectedPolygon.saved = true;
         add(PolygonSavedEvent());
@@ -124,7 +134,10 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
     return PolygonSavingState();
   }
 
-  void addPolygon(Polygon polygon) => _polygons.add(polygon);
+  void addPolygon(Polygon polygon) {
+    _polygons.add(polygon);
+    _polygonsToDraw.add(polygon);
+  }
 
   void updateRecord(String path) async {
     showSuccessToast("Your record has been saved locally");
@@ -135,7 +148,7 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
       add(PolygonSyncEvent());
       _mainRepo.savePolygonRecord(selectedPolygon, storyId).listen((event) {
         if (event.data is Attachment) {
-          add(RecordSavedEvent());
+          add(RecordSavedEvent(event.data));
         } else {
           selectedPolygon.saved = true;
           add(PolygonSavedEvent());
@@ -150,21 +163,23 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
   Future<PolygonDeletedState> deletePolygon() async {
     if (!selectedPolygon.saved) {
       _polygons.removeAt(_selectedPolygonIndex);
+      _polygonsToDraw.removeAt(_selectedPolygonIndex);
       closed = false;
       showSuccessToast("Your draw has been deleted, you can draw another one");
-      return PolygonDeletedState(true);
+      return PolygonDeletedState();
     }
 
     final deleteState = await _mainRepo.deletePolygon(selectedPolygon);
     // Delete associated record
-    final polygonPath = selectedPolygon.localRecordPath;
-    recordBloc.add(DeleteRecordEvent(polygonPath));
+    final polygonRecordPath = selectedPolygon.localRecordPath;
+    recordBloc.add(DeleteRecordEvent(polygonRecordPath));
     // Make user able to paint
     closed = false;
 
-    final state = PolygonDeletedState(deleteState)..polygon = selectedPolygon;
+    final state = PolygonDeletedState()..polygon = selectedPolygon;
     if (deleteState) {
       _polygons.removeAt(_selectedPolygonIndex);
+      _polygonsToDraw.removeAt(_selectedPolygonIndex);
     }
 
     return state;
@@ -172,15 +187,26 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
 
   Future<BlocState> fetchPolygon(int id) async {
     final polygonData = await _mainRepo.fetchPolygon(id);
+    final polygon = polygonData.data;
 
     if (polygonData.state == DataState.Fail) {
-      return throwFailState(polygonData.message);
+      return FailState(message: polygonData.message);
     }
     // Close draw area
     closed = true;
 
+    color = polygonData.data.color;
     _polygons.add(polygonData.data);
+    _polygonsToDraw.add(polygonData.data);
     _selectedPolygonIndex = 0;
+
+    // Check if there is a record
+    if (polygon.audioId != null && polygon.audioId > 0) {
+      final recordPath = await FileUtils.localPath + polygon.record.title;
+      polygon.localRecordPath = recordPath;
+      recordBloc.add(PlayRecordEvent(polygon.record, recordPath));
+    }
+
     return DrawPolygonState();
   }
 
@@ -216,10 +242,13 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
     }
   }
 
-  List<Polygon> get polygons => _polygons;
+  List<Polygon> get polygons => _polygonsToDraw;
 
   Polygon get selectedPolygon =>
       _polygons.length > 0 ? _polygons[_selectedPolygonIndex] : null;
+
+  Polygon get selectedPolygonForDraw =>
+      _polygons.length > 0 ? _polygonsToDraw[_selectedPolygonIndex] : null;
 
   get selectedPolygonIndex => _selectedPolygonIndex;
 
@@ -263,5 +292,10 @@ class DrawingBloc extends Bloc<BlocEvent, BlocState> {
     } else {
       yield throwFailState("Can not delete the record right now.");
     }
+  }
+
+  void changeColor(Color value) {
+    color = value;
+    add(ColorUpdateEvent());
   }
 }

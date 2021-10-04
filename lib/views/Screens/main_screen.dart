@@ -96,6 +96,7 @@ class MainScreen extends StatelessWidget {
           storiesList: section.stories,
           storyWidth: 100,
           sectionHeight: 250,
+          showFirst: 10,
         ),
       ));
     }

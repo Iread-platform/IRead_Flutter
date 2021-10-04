@@ -1,4 +1,5 @@
 import 'package:iread_flutter/bloc/base/base_bloc.dart';
+import 'package:iread_flutter/models/attachment/attachment.dart';
 
 class RecordState extends BlocState {
   String _recordPath;
@@ -17,5 +18,6 @@ class StopRecordingState extends RecordState {
 }
 
 class PlayingRecordState extends RecordState {
-  PlayingRecordState(String recordPath) : super(recordPath);
+  Attachment record;
+  PlayingRecordState(String recordPath, this.record) : super(recordPath);
 }

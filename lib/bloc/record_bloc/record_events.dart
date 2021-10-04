@@ -1,14 +1,16 @@
 import 'package:iread_flutter/bloc/base/base_bloc.dart';
+import 'package:iread_flutter/models/attachment/attachment.dart';
 
 class RecordEvent extends BlocEvent {}
 
 class StopRecordingEvent extends BlocEvent {}
 
 class PlayRecordEvent extends BlocEvent {
-  String _recordPath;
-  PlayRecordEvent(this._recordPath);
+  Attachment _record;
+  String localPath;
+  PlayRecordEvent(this._record, this.localPath);
 
-  get recordPath => _recordPath;
+  Attachment get record => _record;
 }
 
 class PauseRecordPlayingEvent extends BlocEvent {}

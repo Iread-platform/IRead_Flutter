@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iread_flutter/config/routing/app_router.dart';
 
 class UserAvatar extends StatelessWidget {
   final _radius;
@@ -14,19 +15,19 @@ class UserAvatar extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomPaint(
       painter: _ClipShadowShadowPainter(
-        clipper: AvatarClipper(),
-        shadow: Shadow(
-          color: Color(0XAA7A07BB),
-          blurRadius: _showShadow? 5 : 0
-        )
-      ),
+          clipper: AvatarClipper(),
+          shadow: Shadow(
+              color: Color(0XAA7A07BB), blurRadius: _showShadow ? 5 : 0)),
       child: ClipPath(
         clipper: AvatarClipper(),
-        child: CircleAvatar(
-          radius: _radius,
-          backgroundImage: NetworkImage(
-            _imageUrl,
+        child: InkWell(
+          child: CircleAvatar(
+            radius: _radius,
+            backgroundImage: NetworkImage(
+              _imageUrl,
+            ),
           ),
+          onTap: () => AppRouter().navigate(context, 'profile'),
         ),
       ),
     );
