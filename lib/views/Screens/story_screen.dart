@@ -133,13 +133,17 @@ class _StoryScreenState extends State<StoryScreen> {
                 bloc.pageController.previousPage(
                     duration: Duration(milliseconds: 500),
                     curve: Curves.linear);
-                bloc.add(SeekEvent(Duration(
-                    milliseconds: bloc
-                        .storyPageData
-                        .data
-                        .pages[bloc.pageController.page.toInt() - 1]
-                        .startPageTime
-                        .toInt())));
+                if (bloc.pageController.page.toInt() - 2 <= 0) {
+                  bloc.add(SeekEvent(Duration(milliseconds: 0)));
+                } else {
+                  bloc.add(SeekEvent(Duration(
+                      milliseconds: bloc
+                          .storyPageData
+                          .data
+                          .pages[bloc.pageController.page.toInt() - 2]
+                          .endPageTime
+                          .toInt())));
+                }
               },
             ),
           ),
@@ -168,11 +172,8 @@ class _StoryScreenState extends State<StoryScreen> {
                     duration: Duration(milliseconds: 500),
                     curve: Curves.linear);
                 bloc.add(SeekEvent(Duration(
-                    milliseconds: bloc
-                        .storyPageData
-                        .data
-                        .pages[bloc.pageController.page.toInt() + 1]
-                        .startPageTime
+                    milliseconds: bloc.storyPageData.data
+                        .pages[bloc.pageController.page.toInt()].endPageTime
                         .toInt())));
               },
             ),
@@ -336,9 +337,6 @@ class _StoryScreenState extends State<StoryScreen> {
         onPageChanged: (value) {
           bloc.pageController.animateToPage(value,
               duration: Duration(milliseconds: 1000), curve: Curves.linear);
-          bloc.add(SeekEvent(Duration(
-              milliseconds:
-                  bloc.storyPageData.data.pages[value].startPageTime.toInt())));
         },
         children: [
           for (var i = 0; i < bloc.storyPageData.data.pages.length; i++)

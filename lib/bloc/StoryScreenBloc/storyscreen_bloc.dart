@@ -37,9 +37,10 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
       storyPageData = await storyRepository.fetchStoryPage(event.stotyID);
       try {
         for (var i = 0; i < storyPageData.data.pages.length; i++) {
-          storyPageData.data.pages[i].words =
-              initWordEndLine(storyPageData.data.pages[i].words);
+          // Calculate the last word of each line
+          initWordEndLine(storyPageData.data.pages[i].words);
           for (var word in storyPageData.data.pages[i].words) {
+            // link highlight interactions with word
             for (var highLight in storyPageData.data.pages[i].highLights) {
               if ((word.startIndex >= highLight.firstWordIndex) &&
                   (word.startIndex <= highLight.endWordIndex)) {
@@ -47,6 +48,7 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
                 word.highLightID = highLight.highLightId;
               }
             }
+            // link comment interactions with word
             for (var comment in storyPageData.data.pages[i].comments) {
               if (word.content == comment.word) {
                 word.isComment = true;
@@ -177,7 +179,6 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
           this.add(NextPageEvent());
         }
       }
-      // 25 is tha last index of word // replace it;
 
       this.add(ChangeProgressEvent(progress));
     });
