@@ -157,6 +157,7 @@ class Word {
   String content;
   String inputStart;
   String inputEnd;
+  String suffix;
   double regionStart;
   double regionEnd;
   bool elementError;

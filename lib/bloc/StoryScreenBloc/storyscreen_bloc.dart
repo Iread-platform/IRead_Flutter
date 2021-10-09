@@ -41,6 +41,15 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
           initWordEndLine(storyPageData.data.pages[i].words);
           for (var word in storyPageData.data.pages[i].words) {
             // link highlight interactions with word
+
+            if(word.content.endsWith('.')){
+              word.content = word.content.substring(0,word.content.length - 1);
+              word.suffix = '.';
+            }
+            else if(word.content.endsWith(',')){
+              word.content = word.content.substring(0,word.content.length - 1);
+              word.suffix = ',';
+            }else word.suffix = '';
             for (var highLight in storyPageData.data.pages[i].highLights) {
               if ((word.startIndex >= highLight.firstWordIndex) &&
                   (word.startIndex <= highLight.endWordIndex)) {
