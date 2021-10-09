@@ -12,12 +12,33 @@ class VocabularyDialog {
   static String classOFWord = "";
   static TextEditingController def = TextEditingController();
   static TextEditingController example = TextEditingController();
+  static String word = "";
   static Future vocDialog({@required context}) async {
     var w = MediaQuery.of(context).size.width;
     var h = MediaQuery.of(context).size.height;
     classOFWord = "";
     example.text = "";
     def.text = "";
+    var startIndex = Provider.of<TextSelectionProvider>(context, listen: false)
+        .selection
+        .start;
+    var endIndex = Provider.of<TextSelectionProvider>(context, listen: false)
+        .selection
+        .end;
+    String pageContent = BlocProvider.of<StoryscreenBloc>(context)
+        .storyPageData
+        .data
+        .pages[BlocProvider.of<StoryscreenBloc>(context)
+            .pageController
+            .page
+            .toInt()]
+        .content;
+    print(pageContent[endIndex]);
+    bool temp = pageContent[endIndex] == "," ||
+        pageContent[endIndex] == "." ||
+        pageContent[endIndex] == "?" ||
+        pageContent[endIndex] == "!";
+    word = pageContent.substring(startIndex, temp ? endIndex + 1 : endIndex);
     // =========================== dialog =================================
     return showDialog(
       context: context,
@@ -236,11 +257,11 @@ class VocabularyDialog {
                 "studentId": AuthService().cU.id.toString(),
                 "pageId": page.pageId
               },
-              "word": Provider.of<TextSelectionProvider>(context, listen: false)
-                  .wordSelection,
+              "word": word,
               "classOFWord": classOFWord,
               "definitionOfWord": def.text,
-              "exampleOfWord": example.text
+              "exampleOfWord": example.text,
+              "wordIndex": 0
             };
             //add interaction to server
             var json = await BlocProvider.of<CommentBloc>(context)
@@ -250,11 +271,9 @@ class VocabularyDialog {
               Comment.fromJson(json),
             );
             // MAKE WORD IS_VOCABULARY = TURE
-            for (Word word in page.words) {
-              if (word.content ==
-                  Provider.of<TextSelectionProvider>(context, listen: false)
-                      .wordSelection) {
-                word.isComment = true;
+            for (Word word1 in page.words) {
+              if (word1.content == word) {
+                word1.isComment = true;
               }
             }
 
@@ -299,7 +318,7 @@ class VocabularyDialog {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          Provider.of<TextSelectionProvider>(context).wordSelection,
+          word,
           style: Theme.of(context).textTheme.headline3,
         ),
         InkWell(

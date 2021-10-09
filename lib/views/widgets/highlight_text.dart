@@ -66,7 +66,7 @@ class _HighlighTextState extends State<HighlighText> {
           marginX: widget.marginX,
           marginY: widget.marginY,
         ),
-
+        
         style: Theme.of(context).textTheme.headline6,
         // scrollPhysics: ScrollPhysics(parent: ScrollPhysics()),
         textAlign: TextAlign.center,

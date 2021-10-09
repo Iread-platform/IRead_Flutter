@@ -216,7 +216,9 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
 
   void init(String story) {
     storyString = story;
-    wordsStory = storyString.split(" ");
+    wordsStory = storyString.split(RegExp("[ ,.?!]"));
+    // wordsStory = storyString.split(".");
+    print(wordsStory);
   }
 
   Size calcTextSize(String text, TextStyle style) {
