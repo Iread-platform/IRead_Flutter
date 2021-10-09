@@ -337,6 +337,17 @@ class _StoryScreenState extends State<StoryScreen> {
         onPageChanged: (value) {
           bloc.pageController.animateToPage(value,
               duration: Duration(milliseconds: 1000), curve: Curves.linear);
+          if (value == 0) {
+                  bloc.add(SeekEvent(Duration(milliseconds: 0)));
+                } else {
+                  bloc.add(SeekEvent(Duration(
+                      milliseconds: bloc
+                          .storyPageData
+                          .data
+                          .pages[value - 1]
+                          .endPageTime
+                          .toInt())));
+                }
         },
         children: [
           for (var i = 0; i < bloc.storyPageData.data.pages.length; i++)
