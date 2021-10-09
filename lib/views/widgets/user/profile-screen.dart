@@ -87,6 +87,7 @@ class ProfileScreen extends StatelessWidget {
                 imageUrl: imageUrl,
                 radius: 60.0,
                 showShadow: true,
+                canNavigateToProfile: false,
               ),
               Positioned(
                   top: 30,
