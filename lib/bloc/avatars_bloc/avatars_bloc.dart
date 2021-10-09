@@ -2,6 +2,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iread_flutter/bloc/avatars_bloc/avatar_events.dart';
 import 'package:iread_flutter/bloc/avatars_bloc/avatars_states.dart';
 import 'package:iread_flutter/bloc/base/base_bloc.dart';
+import 'package:iread_flutter/bloc/profile_bloc/profile_bloc.dart';
+import 'package:iread_flutter/bloc/profile_bloc/profile_events.dart';
 import 'package:iread_flutter/models/attachment/attachment.dart';
 import 'package:iread_flutter/repo/main_repo.dart';
 import 'package:iread_flutter/utils/data.dart';
@@ -9,6 +11,7 @@ import 'package:iread_flutter/utils/data.dart';
 class AvatarsBloc extends Bloc<BlocEvent, BlocState> {
   final _mainRepo = MainRepo();
   List<Attachment> avatars;
+  ProfileBloc _profileBloc;
 
   AvatarsBloc(BlocState initialState) : super(initialState);
 
@@ -38,6 +41,17 @@ class AvatarsBloc extends Bloc<BlocEvent, BlocState> {
 
   Future<BlocState> updateAvatar(int id, {bool isProfile = true}) async {
     final data = await _mainRepo.updateAvatar(id);
-    return AvatarFetchedState(avatars: avatars);
+
+    if (data.state == DataState.Success) {
+      _profileBloc
+          .add(UpdateProfilePhotoEvent(imagePath: avatars[id].downloadUrl));
+      return AvatarFetchedState(avatars: avatars);
+    } else {
+      return FailState(message: data.message);
+    }
+  }
+
+  void setProfileBloc(ProfileBloc profileBloc) {
+    _profileBloc = profileBloc;
   }
 }

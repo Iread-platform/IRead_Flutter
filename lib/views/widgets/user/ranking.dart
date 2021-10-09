@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:iread_flutter/config/themes/border_radius.dart';
+import 'package:iread_flutter/services/auth_service.dart';
 import 'package:iread_flutter/views/widgets/shared/progress_bar.dart';
 import 'package:iread_flutter/views/widgets/user/avatar.dart';
 
@@ -27,8 +28,7 @@ class Ranking extends StatelessWidget {
             alignment: Alignment.bottomCenter,
             child: UserAvatar(
               showShadow: true,
-              imageUrl:
-                  'https://thumbs.dreamstime.com/b/man-hipster-avatar-cartoon-guy-black-hair-flat-icon-blue-background-user-person-character-vector-illustration-185480506.jpg',
+              imageUrl: AuthService().cU.imageUrl,
               radius: 45.0,
             ),
           ),

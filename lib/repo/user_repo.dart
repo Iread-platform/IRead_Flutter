@@ -57,7 +57,7 @@ class UserRepo {
         userRole: UserRole.values.firstWhere((element) =>
             element.toString() == "UserRole." + userResponse['role']),
         email: userResponse['email'],
-        imageUrl: userResponse['email'],
+        imageUrl: userResponse['avatarAttachment']['downloadUrl'],
       );
       //print(user.toJson().toString());
       AuthService().saveUser(user);

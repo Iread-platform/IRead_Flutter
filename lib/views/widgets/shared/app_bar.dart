@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:iread_flutter/services/auth_service.dart';
 import 'package:iread_flutter/utils/colors_utils.dart';
 import 'package:iread_flutter/utils/i_read_icons.dart';
@@ -45,8 +44,8 @@ class _IreadAppBarState extends State<IreadAppBar> {
                   left: w * 0.25,
                   child: Transform.scale(
                     scale: 1.25,
-                    child: SvgPicture.asset(
-                      "assets/images/shared/curve_top_right.svg",
+                    child: Image.network(
+                      AuthService().cU.imageUrl,
                       color: AppColors.IReadOrangeAccent,
                       alignment: Alignment.topRight,
                     ),

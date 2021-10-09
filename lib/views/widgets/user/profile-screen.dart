@@ -98,10 +98,15 @@ class ProfileScreen extends StatelessWidget {
                       showDialog(
                           context: context,
                           builder: (context) {
-                            return BlocProvider(
-                                create: (context) => AvatarsBloc(InitialState())
-                                  ..add(FetchAvatarDataEvent()),
-                                child: ImagePickerDialog());
+                            return MultiBlocProvider(
+                              providers: [
+                                BlocProvider(
+                                    create: (context) =>
+                                        AvatarsBloc(InitialState())
+                                          ..add(FetchAvatarDataEvent())),
+                              ],
+                              child: ImagePickerDialog(),
+                            );
                           });
                     },
                   ))

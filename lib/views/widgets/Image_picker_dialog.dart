@@ -5,7 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:iread_flutter/bloc/avatars_bloc/avatar_events.dart';
 import 'package:iread_flutter/bloc/avatars_bloc/avatars_bloc.dart';
 import 'package:iread_flutter/bloc/base/base_bloc.dart';
-import 'package:iread_flutter/bloc/profile_bloc/profile_events.dart';
+import 'package:iread_flutter/bloc/profile_bloc/profile_bloc.dart';
 import 'package:iread_flutter/models/attachment/attachment.dart';
 import 'package:iread_flutter/views/widgets/shared/request_handler.dart';
 import 'package:provider/provider.dart';
@@ -39,6 +39,7 @@ class _ImagePickerDialogState extends State<ImagePickerDialog> {
   @override
   void initState() {
     _bloc = context.read<AvatarsBloc>();
+    _bloc.setProfileBloc(context.read<ProfileBloc>());
     super.initState();
   }
 
@@ -123,8 +124,6 @@ class _ImagePickerDialogState extends State<ImagePickerDialog> {
                                   ),
                                 ),
                                 onTap: () {
-                                  updateExistingAvatar(
-                                      avatarsAttachment[i - 1].id);
                                   setState(() {
                                     indexAvatar = i;
                                   });
@@ -140,10 +139,9 @@ class _ImagePickerDialogState extends State<ImagePickerDialog> {
                                 primary: Colors.purple),
                             onPressed: () {
                               image != null
-                                  ? _bloc.add(
-                                      UpdateProfilePhotoEvent(image: image))
-                                  : _bloc.add(UpdateProfilePhotoEvent(
-                                      imageAssetPath: assetImagePath));
+                                  ? _bloc // todo implement on personal image
+                                  : updateExistingAvatar(
+                                      avatarsAttachment[indexAvatar - 1].id);
                               Navigator.pop(context);
                             }))
                   ],
