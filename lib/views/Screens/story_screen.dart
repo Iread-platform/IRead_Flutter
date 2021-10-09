@@ -74,19 +74,7 @@ class _StoryScreenState extends State<StoryScreen> {
         alignment: Alignment.bottomCenter,
         children: [
           // ========= Story Image ==============
-          Container(
-            alignment: Alignment.bottomCenter,
-            height: h * 0.45,
-            child: ClipRRect(
-              borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(10),
-                  bottomRight: Radius.circular(10)),
-              child: FadeInImage.assetNetwork(
-                placeholder: 'assets\\AvatarImages\\1.png',
-                image: url,
-              ),
-            ),
-          ),
+          
           // ========== curve_top_right ==============
           Transform.translate(
             offset: Offset(w * 0.3, -h * 0.2),
@@ -120,7 +108,20 @@ class _StoryScreenState extends State<StoryScreen> {
               color: Theme.of(context).colorScheme.primary,
               size: 60,
             ),
-          )
+          ),
+          Container(
+            alignment: Alignment.bottomCenter,
+            height: h * 0.45,
+            child: ClipRRect(
+              borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(10),
+                  bottomRight: Radius.circular(10)),
+              child: FadeInImage.assetNetwork(
+                placeholder: 'assets\\AvatarImages\\1.png',
+                image: url,
+              ),
+            ),
+          ),
         ],
       ),
     );
