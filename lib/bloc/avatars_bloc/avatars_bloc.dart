@@ -37,7 +37,7 @@ class AvatarsBloc extends Bloc<BlocEvent, BlocState> {
   }
 
   Future<BlocState> updateAvatar(int id, {bool isProfile = true}) async {
-    final data = _mainRepo.updateAvatar(id);
+    final data = await _mainRepo.updateAvatar(id);
     return AvatarFetchedState(avatars: avatars);
   }
 }

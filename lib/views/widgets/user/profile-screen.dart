@@ -34,12 +34,11 @@ class ProfileScreen extends StatelessWidget {
               child: ListView(
                 children: [
                   userDetailsRow(
-                    context,
-                    '${user.firstName} ${user.lastName}',
-                    user.schoolMember.classes[0].title,
-                    user.schoolMember.schoolTitle,
-                    'https://thumbs.dreamstime.com/b/man-hipster-avatar-cartoon-guy-black-hair-flat-icon-blue-background-user-person-character-vector-illustration-185480506.jpg',
-                  ),
+                      context,
+                      '${user.firstName} ${user.lastName}',
+                      user.schoolMember.classes[0].title,
+                      user.schoolMember.schoolTitle,
+                      user.avatarAttachment.downloadUrl),
                   StoriesSection(
                     title: 'Read Stories',
                     storiesList: user.viewStories,

@@ -85,7 +85,7 @@ class MainRepo {
     return _userRepo.fetchUserAvatars();
   }
 
-  Future<Data<Profile>> updateAvatar(int id, {bool isPersonal = false}) {
+  Future<Data> updateAvatar(int id, {bool isPersonal = false}) {
     return _userRepo.updateUserAvatar(id, isPersonal: isPersonal);
   }
 }

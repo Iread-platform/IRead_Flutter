@@ -1,3 +1,4 @@
+import 'package:iread_flutter/models/attachment/attachment.dart';
 import 'package:iread_flutter/models/school/SchoolMember.dart';
 
 /// schoolMember : {"schoolId":6,"schoolTitle":"Hello","schoolMembershipType":"SchoolManager","classes":[{"classId":-1,"title":"","archived":false}]}
@@ -22,7 +23,7 @@ class Profile {
   String _email;
   int _level;
   String _birthDay;
-  dynamic _avatarAttachment;
+  Attachment _avatarAttachment;
   dynamic _customPhotoAttachment;
 
   SchoolMember get schoolMember => _schoolMember;
@@ -34,7 +35,7 @@ class Profile {
   String get email => _email;
   int get level => _level;
   String get birthDay => _birthDay;
-  dynamic get avatarAttachment => _avatarAttachment;
+  Attachment get avatarAttachment => _avatarAttachment;
   dynamic get customPhotoAttachment => _customPhotoAttachment;
 
   Profile(
@@ -47,7 +48,7 @@ class Profile {
       String email,
       int level,
       String birthDay,
-      dynamic avatarAttachment,
+      Attachment avatarAttachment,
       dynamic customPhotoAttachment}) {
     _schoolMember = schoolMember;
     _viewStories = viewStories;
@@ -74,7 +75,7 @@ class Profile {
     _email = json["email"];
     _level = json["level"];
     _birthDay = json["birthDay"];
-    _avatarAttachment = json["avatarAttachment"];
+    _avatarAttachment = Attachment.fromJson(json["avatarAttachment"]);
     _customPhotoAttachment = json["customPhotoAttachment"];
   }
 
