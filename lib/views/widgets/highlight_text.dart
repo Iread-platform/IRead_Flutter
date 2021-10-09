@@ -39,7 +39,7 @@ class _HighlighTextState extends State<HighlighText> {
           children: [
             for (int i = 0; i < widget.words.length; i++)
               TextSpan(
-                text: widget.words[i].content + " ",
+                text: widget.words[i].content + widget.words[i].suffix + " ",
                 style: BlocProvider.of<StoryscreenBloc>(context, listen: false)
                             .highLightIndex
                             .toString() ==
