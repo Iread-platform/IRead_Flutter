@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iread_flutter/bloc/StoryScreenBloc/storyscreen_bloc.dart';
@@ -56,15 +57,16 @@ class _HighlighTextState extends State<HighlighText> {
                             ? TextDecoration.underline
                             : TextDecoration.none,
                         decorationStyle: TextDecorationStyle.dashed,
-                        decorationColor: Colors.orange
-                      ),
+                        decorationColor: Colors.orange),
               )
           ],
         ),
+
         selectionControls: MyTextSelectionControls(
           marginX: widget.marginX,
           marginY: widget.marginY,
         ),
+        
         style: Theme.of(context).textTheme.headline6,
         // scrollPhysics: ScrollPhysics(parent: ScrollPhysics()),
         textAlign: TextAlign.center,

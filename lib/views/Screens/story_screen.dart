@@ -11,6 +11,7 @@ import 'package:iread_flutter/models/story_model.dart';
 import 'package:iread_flutter/utils/i_read_icons.dart';
 import 'package:iread_flutter/views/widgets/highlight_text.dart';
 import 'package:iread_flutter/views/widgets/shared/request_handler.dart';
+import 'package:iread_flutter/views/widgets/vocabulary_dialog.dart';
 import 'package:provider/provider.dart';
 
 class StoryScreen extends StatefulWidget {
@@ -132,13 +133,17 @@ class _StoryScreenState extends State<StoryScreen> {
                 bloc.pageController.previousPage(
                     duration: Duration(milliseconds: 500),
                     curve: Curves.linear);
-                bloc.add(SeekEvent(Duration(
-                    milliseconds: bloc
-                        .storyPageData
-                        .data
-                        .pages[bloc.pageController.page.toInt() - 1]
-                        .startPageTime
-                        .toInt())));
+                if (bloc.pageController.page.toInt() - 2 <= 0) {
+                  bloc.add(SeekEvent(Duration(milliseconds: 0)));
+                } else {
+                  bloc.add(SeekEvent(Duration(
+                      milliseconds: bloc
+                          .storyPageData
+                          .data
+                          .pages[bloc.pageController.page.toInt() - 2]
+                          .endPageTime
+                          .toInt())));
+                }
               },
             ),
           ),
@@ -167,11 +172,8 @@ class _StoryScreenState extends State<StoryScreen> {
                     duration: Duration(milliseconds: 500),
                     curve: Curves.linear);
                 bloc.add(SeekEvent(Duration(
-                    milliseconds: bloc
-                        .storyPageData
-                        .data
-                        .pages[bloc.pageController.page.toInt() + 1]
-                        .startPageTime
+                    milliseconds: bloc.storyPageData.data
+                        .pages[bloc.pageController.page.toInt()].endPageTime
                         .toInt())));
               },
             ),
@@ -252,7 +254,8 @@ class _StoryScreenState extends State<StoryScreen> {
                           InkWell(
                             child: Icon(Icons.list, size: 30),
                             onTap: () async {
-                              return vocabularyDialog();
+                              return VocabularyDialog.vocabularyList(
+                                  context: context);
                             },
                           ),
                           Icon(Icons.mic, size: 30),
@@ -266,150 +269,6 @@ class _StoryScreenState extends State<StoryScreen> {
             ),
           ],
         ));
-  }
-
-  Future vocabularyDialog() {
-    var comments = BlocProvider.of<StoryscreenBloc>(context)
-        .storyPageData
-        .data
-        .pages[BlocProvider.of<StoryscreenBloc>(context)
-            .pageController
-            .page
-            .toInt()]
-        .comments;
-    return showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          insetPadding: EdgeInsets.all(20),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "Vocabulary",
-                style: Theme.of(context).textTheme.headline3,
-              ),
-              InkWell(
-                child: Icon(
-                  Icons.close,
-                  color: Theme.of(context).colorScheme.primary,
-                  size: 30,
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          ),
-          content: Container(
-            height: h * 0.4,
-            width: w * 0.9,
-            child: StatefulBuilder(
-              builder: (context, setStateList) {
-                return ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: comments.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                      margin: EdgeInsets.all(5),
-                      child: Card(
-                        child: Container(
-                          height: 140,
-                          margin: EdgeInsets.all(10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              SingleChildScrollView(
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      comments[index].word,
-                                      style:
-                                          Theme.of(context).textTheme.headline6,
-                                    ),
-                                    Text("Word Class",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1),
-                                    Text(
-                                      "        " + comments[index].classOFWord,
-                                      style:
-                                          Theme.of(context).textTheme.bodyText2,
-                                    ),
-                                    Text(
-                                      "Example",
-                                      style:
-                                          Theme.of(context).textTheme.bodyText1,
-                                    ),
-                                    Text(
-                                      "        " +
-                                          comments[index].exampleOfWord,
-                                      style:
-                                          Theme.of(context).textTheme.bodyText2,
-                                    ),
-                                    Text(
-                                      "Definition",
-                                      style:
-                                          Theme.of(context).textTheme.bodyText1,
-                                    ),
-                                    Text(
-                                      "        " +
-                                          comments[index].definitionOfWord,
-                                      style:
-                                          Theme.of(context).textTheme.bodyText2,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              InkWell(
-                                child: Icon(
-                                  IReadIcons.delete,
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                                onTap: () {
-                                  var page = BlocProvider.of<StoryscreenBloc>(
-                                          context,
-                                          listen: false)
-                                      .storyPageData
-                                      .data
-                                      .pages[BlocProvider.of<StoryscreenBloc>(
-                                          context,
-                                          listen: false)
-                                      .pageController
-                                      .page
-                                      .toInt()];
-                                  setStateList(() {
-                                    BlocProvider.of<CommentBloc>(context)
-                                        .removeCommentWord(
-                                            comments[index].commentId);
-                                    for (Word word in page.words) {
-                                      if (word.content ==
-                                          comments[index].word) {
-                                        word.isComment = false;
-                                      }
-                                    }
-                                    comments.removeAt(index);
-                                  });
-                                },
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                );
-              },
-            ),
-          ),
-        );
-      },
-    );
   }
 
   Widget progress() {
@@ -478,9 +337,6 @@ class _StoryScreenState extends State<StoryScreen> {
         onPageChanged: (value) {
           bloc.pageController.animateToPage(value,
               duration: Duration(milliseconds: 1000), curve: Curves.linear);
-          bloc.add(SeekEvent(Duration(
-              milliseconds:
-                  bloc.storyPageData.data.pages[value].startPageTime.toInt())));
         },
         children: [
           for (var i = 0; i < bloc.storyPageData.data.pages.length; i++)
