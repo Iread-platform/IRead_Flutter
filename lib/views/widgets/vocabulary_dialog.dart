@@ -38,6 +38,7 @@ class VocabularyDialog {
         pageContent[endIndex] == "." ||
         pageContent[endIndex] == "?" ||
         pageContent[endIndex] == "!";
+    temp = false;
     word = pageContent.substring(startIndex, temp ? endIndex + 1 : endIndex);
     // =========================== dialog =================================
     return showDialog(

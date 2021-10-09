@@ -5,9 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iread_flutter/bloc/StoryScreenBloc/storyscreen_bloc.dart';
 import 'package:iread_flutter/bloc/base/base_bloc.dart';
-import 'package:iread_flutter/bloc/comment_bloc/comment_bloc.dart';
 import 'package:iread_flutter/bloc/text_selection_provider.dart';
-import 'package:iread_flutter/models/story_model.dart';
 import 'package:iread_flutter/utils/i_read_icons.dart';
 import 'package:iread_flutter/views/widgets/highlight_text.dart';
 import 'package:iread_flutter/views/widgets/shared/request_handler.dart';
@@ -59,6 +57,17 @@ class _StoryScreenState extends State<StoryScreen> {
 
   //============ header =============
   Widget header() {
+    var url = "";
+    try {
+      url = BlocProvider.of<StoryscreenBloc>(context, listen: true)
+          .storyPageData
+          .data
+          .pages[BlocProvider.of<StoryscreenBloc>(context)
+              .pageController
+              .page
+              .toInt()]
+          .imageURL;
+    } catch (e) {}
     return Container(
       height: h * 0.45,
       child: Stack(
@@ -67,10 +76,15 @@ class _StoryScreenState extends State<StoryScreen> {
           // ========= Story Image ==============
           Container(
             alignment: Alignment.bottomCenter,
-            height: (h * 0.45),
-            child: Image.network(
-              "https://www.jotform.com/blog/wp-content/uploads/2018/07/photos-with-story-featured-15.jpg",
-              alignment: Alignment.topLeft,
+            height: h * 0.45,
+            child: ClipRRect(
+              borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(10),
+                  bottomRight: Radius.circular(10)),
+              child: FadeInImage.assetNetwork(
+                placeholder: 'assets\\AvatarImages\\1.png',
+                image: url,
+              ),
             ),
           ),
           // ========== curve_top_right ==============
@@ -93,7 +107,7 @@ class _StoryScreenState extends State<StoryScreen> {
             child: Icon(
               IReadIcons.arrow,
               size: 40,
-              color: Colors.purple,
+              color: Theme.of(context).colorScheme.primary,
             ),
           ),
           // ========== home Icon ==============
@@ -103,7 +117,7 @@ class _StoryScreenState extends State<StoryScreen> {
             alignment: Alignment.topLeft,
             child: Icon(
               Icons.home,
-              color: Colors.purple,
+              color: Theme.of(context).colorScheme.primary,
               size: 60,
             ),
           )
@@ -126,7 +140,7 @@ class _StoryScreenState extends State<StoryScreen> {
             child: InkWell(
               child: Icon(
                 IReadIcons.arrow_back,
-                color: Colors.purple,
+                color: Theme.of(context).colorScheme.primary,
                 size: 40,
               ),
               onTap: () {
@@ -164,7 +178,7 @@ class _StoryScreenState extends State<StoryScreen> {
             child: InkWell(
               child: Icon(
                 IReadIcons.arrow,
-                color: Colors.purple,
+                color: Theme.of(context).colorScheme.primary,
                 size: 40,
               ),
               onTap: () {
@@ -227,13 +241,13 @@ class _StoryScreenState extends State<StoryScreen> {
                                 AudioPlayerState.PLAYING) {
                               return Icon(
                                 IReadIcons.play,
-                                color: Colors.purple,
+                                color: Theme.of(context).colorScheme.primary,
                                 size: 40,
                               );
                             } else {
                               return Icon(
                                 Icons.pause,
-                                color: Colors.purple,
+                                color: Theme.of(context).colorScheme.primary,
                                 size: 40,
                               );
                             }
@@ -252,14 +266,14 @@ class _StoryScreenState extends State<StoryScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           InkWell(
-                            child: Icon(Icons.list, size: 30),
+                            child: Icon(Icons.list, size: 30, color : Theme.of(context).colorScheme.primary),
                             onTap: () async {
                               return VocabularyDialog.vocabularyList(
                                   context: context);
                             },
                           ),
-                          Icon(Icons.mic, size: 30),
-                          Icon(Icons.comment, size: 30),
+                          Icon(Icons.mic, size: 30 , color : Theme.of(context).colorScheme.primary),
+                          Icon(Icons.comment, size: 30, color : Theme.of(context).colorScheme.primary),
                         ],
                       )
                     ],
@@ -276,10 +290,10 @@ class _StoryScreenState extends State<StoryScreen> {
       progress: bloc.progress ?? Duration(seconds: 0),
       total: bloc.duration ?? Duration(seconds: 0),
       buffered: Duration(seconds: 15),
-      progressBarColor: Colors.purple,
-      bufferedBarColor: Colors.purple.withOpacity(0.3),
-      baseBarColor: Colors.purple.withOpacity(0.2),
-      thumbColor: Colors.purple,
+      progressBarColor: Theme.of(context).colorScheme.primary,
+      bufferedBarColor: Theme.of(context).colorScheme.primary.withOpacity(0.3),
+      baseBarColor: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+      thumbColor: Theme.of(context).colorScheme.primary,
       barHeight: 20,
       onSeek: (duration) {
         bloc.add(
@@ -338,16 +352,13 @@ class _StoryScreenState extends State<StoryScreen> {
           bloc.pageController.animateToPage(value,
               duration: Duration(milliseconds: 1000), curve: Curves.linear);
           if (value == 0) {
-                  bloc.add(SeekEvent(Duration(milliseconds: 0)));
-                } else {
-                  bloc.add(SeekEvent(Duration(
-                      milliseconds: bloc
-                          .storyPageData
-                          .data
-                          .pages[value - 1]
-                          .endPageTime
-                          .toInt())));
-                }
+            bloc.add(SeekEvent(Duration(milliseconds: 0)));
+          } else {
+            bloc.add(SeekEvent(Duration(
+                milliseconds: bloc
+                    .storyPageData.data.pages[value - 1].endPageTime
+                    .toInt())));
+          }
         },
         children: [
           for (var i = 0; i < bloc.storyPageData.data.pages.length; i++)
