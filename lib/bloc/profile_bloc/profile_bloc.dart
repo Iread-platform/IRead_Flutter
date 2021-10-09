@@ -41,10 +41,9 @@ class ProfileBloc extends Bloc<BlocEvent, BlocState> {
     AuthService authService = AuthService();
 
     await authService.saveUser(user);
-    profile.avatarAttachment.downloadUrl = url;
+    profile.avatarAttachment?.downloadUrl = url;
+    profile.customPhotoAttachment?.downloadUrl = url;
 
     return ProfileDataFetched(profileData: Data.success(profile));
   }
-
-
 }

@@ -28,6 +28,7 @@ class AvatarsBloc extends Bloc<BlocEvent, BlocState> {
         yield InitialState();
         if (avatarEvent.image != null) {
           yield* uploadAvatar(avatarEvent.image);
+        } else {
           yield await updateAvatar(avatarEvent.id, isProfile: false);
         }
     }
@@ -64,7 +65,7 @@ class AvatarsBloc extends Bloc<BlocEvent, BlocState> {
       if (snapshot.state == DataState.Fail) {
         yield FailState(message: snapshot.data.message);
       }
-      if (!(snapshot.data is Attachment)) {
+      if (snapshot.data is Attachment) {
         avatars.add(snapshot.data);
         _profileBloc
             .add(UpdateProfilePhotoEvent(imagePath: snapshot.data.downloadUrl));
