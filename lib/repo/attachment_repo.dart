@@ -7,9 +7,9 @@ import 'package:path/path.dart';
 class AttachmentRepo {
   FlutterUploader _uploader = FlutterUploader();
 
-  final String baseUrl = 'http://192.168.1.118:5014/api/iread/Attachment/add';
+  final String baseUrl = 'http://217.182.250.236:5014/api/iread/Attachment/add';
   final String avatarAddEndPoint =
-      'http://192.168.1.118:5014/api/iread/Avatar/add';
+      'http://217.182.250.236:5014/api/iread/Avatar/add';
 
   /// Upload audio then store uploading data in the [UploadingFile] model.
   Future<UploadingFile> saveFile(String path, int storyId) async {

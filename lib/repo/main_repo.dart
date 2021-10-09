@@ -96,6 +96,7 @@ class MainRepo {
 
     await for (final snapshot in uploadTask.stream) {
       final response = jsonDecode(snapshot.response);
+      print(response);
       Attachment attachment = Attachment.fromJson(response);
       yield Data.success(attachment);
       yield await updateAvatar(attachment.id, isPersonal: true);

@@ -39,7 +39,8 @@ class ProfileScreen extends StatelessWidget {
                       '${user.firstName} ${user.lastName}',
                       user.schoolMember.classes[0].title,
                       user.schoolMember.schoolTitle,
-                      user.avatarAttachment.downloadUrl),
+                      user.avatarAttachment?.downloadUrl ??
+                          user.customPhotoAttachment.downloadUrl),
                   StoriesSection(
                     title: 'Read Stories',
                     storiesList: user.viewStories,

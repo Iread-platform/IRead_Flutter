@@ -24,7 +24,7 @@ class Profile {
   int _level;
   String _birthDay;
   Attachment _avatarAttachment;
-  dynamic _customPhotoAttachment;
+  Attachment _customPhotoAttachment;
 
   SchoolMember get schoolMember => _schoolMember;
   dynamic get viewStories => _viewStories;
@@ -36,7 +36,7 @@ class Profile {
   int get level => _level;
   String get birthDay => _birthDay;
   Attachment get avatarAttachment => _avatarAttachment;
-  dynamic get customPhotoAttachment => _customPhotoAttachment;
+  Attachment get customPhotoAttachment => _customPhotoAttachment;
 
   Profile(
       {SchoolMember schoolMember,
@@ -75,8 +75,15 @@ class Profile {
     _email = json["email"];
     _level = json["level"];
     _birthDay = json["birthDay"];
-    _avatarAttachment = Attachment.fromJson(json["avatarAttachment"]);
-    _customPhotoAttachment = json["customPhotoAttachment"];
+
+    if (json["avatarAttachment"] != null) {
+      _avatarAttachment = Attachment.fromJson(json["avatarAttachment"]);
+    }
+
+    if (json["customPhotoAttachment"] != null) {
+      _customPhotoAttachment =
+          Attachment.fromJson(json["customPhotoAttachment"]);
+    }
   }
 
   Map<String, dynamic> toJson() {

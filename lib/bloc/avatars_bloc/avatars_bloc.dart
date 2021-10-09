@@ -26,9 +26,10 @@ class AvatarsBloc extends Bloc<BlocEvent, BlocState> {
       case UpdateUserAvatarEvent:
         UpdateUserAvatarEvent avatarEvent = event;
         yield InitialState();
-        yield avatarEvent.image != null
-            ? await uploadAvatar(avatarEvent.image)
-            : await updateAvatar(avatarEvent.id, isProfile: false);
+        if (avatarEvent.image != null) {
+          yield* uploadAvatar(avatarEvent.image);
+          yield await updateAvatar(avatarEvent.id, isProfile: false);
+        }
     }
   }
 
@@ -60,14 +61,15 @@ class AvatarsBloc extends Bloc<BlocEvent, BlocState> {
     final stream = _mainRepo.uploadUserAvatar(image);
 
     await for (final snapshot in stream) {
-      if (snapshot.data.state == DataState.Fail) {
+      if (snapshot.state == DataState.Fail) {
         yield FailState(message: snapshot.data.message);
       }
-      if (!snapshot.data is Attachment) {
+      if (!(snapshot.data is Attachment)) {
         avatars.add(snapshot.data);
         _profileBloc
             .add(UpdateProfilePhotoEvent(imagePath: snapshot.data.downloadUrl));
         yield AvatarFetchedState(avatars: avatars);
+        break;
       }
     }
   }
