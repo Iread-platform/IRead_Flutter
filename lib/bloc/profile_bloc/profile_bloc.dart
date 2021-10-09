@@ -45,4 +45,6 @@ class ProfileBloc extends Bloc<BlocEvent, BlocState> {
 
     return ProfileDataFetched(profileData: Data.success(profile));
   }
+
+
 }

@@ -139,7 +139,7 @@ class _ImagePickerDialogState extends State<ImagePickerDialog> {
                                 primary: Colors.purple),
                             onPressed: () {
                               image != null
-                                  ? _bloc // todo implement on personal image
+                                  ? uploadAvatar()
                                   : updateExistingAvatar(
                                       avatarsAttachment[indexAvatar - 1].id);
                               Navigator.pop(context);
@@ -153,7 +153,11 @@ class _ImagePickerDialogState extends State<ImagePickerDialog> {
   }
 
   updateExistingAvatar(int id) {
-    _bloc.add(UpdateUserAvatarEvent(id));
+    _bloc.add(UpdateUserAvatarEvent(id: id));
+  }
+
+  uploadAvatar() {
+    _bloc.add(UpdateUserAvatarEvent(image: image));
   }
 
   get assetImagePath => "assets/AvatarImages/$indexAvatar.png";

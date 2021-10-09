@@ -11,6 +11,7 @@ import 'package:iread_flutter/views/widgets/Image_picker_dialog.dart';
 import 'package:iread_flutter/views/widgets/opened_library/stories_section.dart';
 import 'package:iread_flutter/views/widgets/shared/request_handler.dart';
 import 'package:iread_flutter/views/widgets/user/avatar.dart';
+import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key key}) : super(key: key);
@@ -95,6 +96,8 @@ class ProfileScreen extends StatelessWidget {
                       color: Theme.of(context).colorScheme.primary,
                     ),
                     onPressed: () {
+                      ProfileBloc profileBloc =
+                          Provider.of<ProfileBloc>(context, listen: false);
                       showDialog(
                           context: context,
                           builder: (context) {
@@ -104,6 +107,7 @@ class ProfileScreen extends StatelessWidget {
                                     create: (context) =>
                                         AvatarsBloc(InitialState())
                                           ..add(FetchAvatarDataEvent())),
+                                BlocProvider.value(value: profileBloc),
                               ],
                               child: ImagePickerDialog(),
                             );

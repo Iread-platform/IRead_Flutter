@@ -8,6 +8,8 @@ class AttachmentRepo {
   FlutterUploader _uploader = FlutterUploader();
 
   final String baseUrl = 'http://192.168.1.118:5014/api/iread/Attachment/add';
+  final String avatarAddEndPoint =
+      'http://192.168.1.118:5014/api/iread/Avatar/add';
 
   /// Upload audio then store uploading data in the [UploadingFile] model.
   Future<UploadingFile> saveFile(String path, int storyId) async {
@@ -23,6 +25,26 @@ class AttachmentRepo {
             fieldname: 'file'),
       ],
       data: {"storyId": storyId.toString()},
+      showNotification: true,
+      method: UploadMethod.POST,
+    );
+
+    return UploadingFile(taskId, _uploader.result);
+  }
+
+  Future<UploadingFile> uploadAvatar(
+      File file, String title, String gender) async {
+    print('Upload a file url is $avatarAddEndPoint');
+
+    final taskId = await _uploader.enqueue(
+      url: avatarAddEndPoint,
+      files: [
+        FileItem(
+            savedDir: file.parent.path,
+            filename: basename(file.path),
+            fieldname: 'file'),
+      ],
+      data: {"title": title, "gender": gender},
       showNotification: true,
       method: UploadMethod.POST,
     );
