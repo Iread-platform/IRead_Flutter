@@ -46,7 +46,7 @@ class StoryDetailsBloc extends Bloc<BlocEvent, BlocState> {
     if (data.state == DataState.Success) {
       return ReviewSubmittedState(_story);
     } else {
-      return FailState(message: data.message);
+      return ReviewErrorState(_story, data.message);
     }
   }
 }

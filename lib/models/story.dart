@@ -72,7 +72,7 @@ class Story extends Model {
     _readingTime = json['readingTime'];
     _progress = json['progress'];
     _pages = json['pages'];
-    if (storyCover != null) {
+    if (json['storyCover'] != null) {
       _storyCover = Attachment.fromJson(json['storyCover']);
     }
 

@@ -21,3 +21,8 @@ class ReviewIsSubmitting extends ReviewState {
 class ReviewSubmittedState extends ReviewState {
   ReviewSubmittedState(Story story) : super(story);
 }
+
+class ReviewErrorState extends ReviewState {
+  String errorMessage;
+  ReviewErrorState(Story story, this.errorMessage) : super(story);
+}

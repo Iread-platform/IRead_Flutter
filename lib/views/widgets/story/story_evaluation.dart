@@ -6,6 +6,7 @@ import 'package:iread_flutter/bloc/story/story_details_bloc/story_details_bloc.d
 import 'package:iread_flutter/bloc/story/story_details_bloc/story_details_events.dart';
 import 'package:iread_flutter/bloc/story/story_details_bloc/story_details_states.dart';
 import 'package:iread_flutter/config/themes/border_radius.dart';
+import 'package:iread_flutter/models/story/review.dart';
 import 'package:iread_flutter/services/auth_service.dart';
 import 'package:iread_flutter/utils/i_read_icons.dart';
 import 'package:iread_flutter/views/widgets/review/review_list.dart';
@@ -15,8 +16,11 @@ import 'package:provider/provider.dart';
 class StoryEvaluation extends StatefulWidget {
   final String _evaluationHeader = 'Evaluation';
   final String _evaluateLabel = 'Evaluate';
+  final List<Review> _reviews;
 
-  const StoryEvaluation({Key key}) : super(key: key);
+  StoryEvaluation({List<Review> reviews, Key key})
+      : _reviews = reviews ?? [],
+        super(key: key);
 
   @override
   _StoryEvaluationState createState() => _StoryEvaluationState();
@@ -81,13 +85,17 @@ class _StoryEvaluationState extends State<StoryEvaluation> {
             return current is ReviewState || current is InitialState;
           }, builder: (context, state) {
             return ElevatedButton(
-              onPressed: state is ReviewIsSubmitting
+              onPressed: state is ReviewState
                   ? null
                   : () => {_bloc.add(SubmitReviewEvent())},
               child: Text(
                 state is ReviewIsSubmitting
                     ? 'Evaluating'
-                    : state is ReviewSubmittedState ? 'Re-Evaluate' : widget._evaluateLabel,
+                    : state is ReviewErrorState
+                        ? state.errorMessage
+                        : state is ReviewSubmittedState
+                            ? 'Evaluated'
+                            : widget._evaluateLabel,
                 style: Theme.of(context)
                     .textTheme
                     .subtitle2
@@ -103,7 +111,9 @@ class _StoryEvaluationState extends State<StoryEvaluation> {
           SizedBox(
             height: 24,
           ),
-          ReviewList()
+          ReviewList(
+            reviews: widget._reviews,
+          )
         ],
       ),
     );

@@ -48,7 +48,7 @@ class StoryDetails extends StatelessWidget {
               SizedBox(
                 height: _verticalSpacing,
               ),
-              StoryEvaluation(),
+              StoryEvaluation(reviews: story.rating.reviews),
               SizedBox(
                 height: _verticalSpacing,
               )
