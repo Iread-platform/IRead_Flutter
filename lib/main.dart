@@ -15,6 +15,7 @@ import 'package:iread_flutter/services/auth_service.dart';
 import 'package:iread_flutter/services/permissions_service.dart';
 import 'package:iread_flutter/views/Screens/login_screen.dart';
 import 'package:iread_flutter/views/Screens/main_screen.dart';
+import 'package:iread_flutter/views/Screens/story_screen.dart';
 import 'package:iread_flutter/views/widgets/drawer_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -102,7 +103,7 @@ class IReadApp extends StatelessWidget {
             Provider(create: (context) => DrawingBloc(NoPolygonState())),
             Provider(create: (context) => RecordBloc(InitialState())),
             Provider(create: (context) => CommentBloc(InitialState()))
-          ], child: MainScreen()),
+          ], child: StoryScreen(storyId: 23,)),
         ));
   }
 }

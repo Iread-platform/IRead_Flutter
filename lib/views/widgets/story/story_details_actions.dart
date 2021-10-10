@@ -28,7 +28,9 @@ class StoryDetailsActions extends StatelessWidget {
                 child: Column(
                   children: [
                     RatingBar(
-                        rating: _story.rating == null ? 0 : _story.rating),
+                        rating: _story.rating?.averageOfRates == null
+                            ? 0.0
+                            : _story.rating.averageOfRates.toDouble()),
                     StoryImage(
                         imageUrl: _story.storyCover?.downloadUrl == null
                             ? ''
