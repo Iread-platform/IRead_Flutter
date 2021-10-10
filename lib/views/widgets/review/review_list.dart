@@ -1,29 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:iread_flutter/models/story/review.dart';
 import 'package:iread_flutter/views/widgets/review/rating_bar.dart';
 import 'package:iread_flutter/views/widgets/user/avatar.dart';
 
 class ReviewList extends StatelessWidget {
-  const ReviewList({Key key}) : super(key: key);
+  final List<Review> _reviews;
+
+  ReviewList({List<Review> reviews, Key key})
+      : _reviews = reviews ?? [],
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        _review(context, 'https://picsum.photos/200/300', 3.5),
-        SizedBox(
-          height: 12,
-        ),
-        _review(context, 'https://picsum.photos/200/300', 4.2),
-        SizedBox(
-          height: 12,
-        ),
-        _review(context, 'https://picsum.photos/200/300', 2.8),
-      ],
-    );
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: _reviews
+            .map((e) => _review(context, e.userImage?.downloadUrl, e.rate,
+                '${e.firstName} ${e.lastName}'))
+            .toList()
+            .sublist(0, _reviews.length > 3 ? 3 : _reviews.length));
   }
 
-  Widget _review(BuildContext context, String imageUrl, double rating) => Row(
+  Widget _review(
+          BuildContext context, String imageUrl, double rating, String name) =>
+      Row(
         children: [
           Column(
             children: [
@@ -32,11 +32,14 @@ class ReviewList extends StatelessWidget {
                 radius: 40.0,
               ),
               Text(
-                'User',
+                name,
                 style: Theme.of(context)
                     .textTheme
                     .subtitle2
                     .copyWith(color: Theme.of(context).colorScheme.primary),
+              ),
+              SizedBox(
+                height: 12,
               )
             ],
           ),
