@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iread_flutter/bloc/avatars_bloc/avatar_events.dart';
 import 'package:iread_flutter/bloc/avatars_bloc/avatars_states.dart';
 import 'package:iread_flutter/bloc/base/base_bloc.dart';
+import 'package:iread_flutter/bloc/profile_bloc/profile_bloc.dart';
+import 'package:iread_flutter/bloc/profile_bloc/profile_events.dart';
 import 'package:iread_flutter/models/attachment/attachment.dart';
 import 'package:iread_flutter/repo/main_repo.dart';
 import 'package:iread_flutter/utils/data.dart';
@@ -9,6 +13,7 @@ import 'package:iread_flutter/utils/data.dart';
 class AvatarsBloc extends Bloc<BlocEvent, BlocState> {
   final _mainRepo = MainRepo();
   List<Attachment> avatars;
+  ProfileBloc _profileBloc;
 
   AvatarsBloc(BlocState initialState) : super(initialState);
 
@@ -19,9 +24,13 @@ class AvatarsBloc extends Bloc<BlocEvent, BlocState> {
         yield await fetchAvatars();
         break;
       case UpdateUserAvatarEvent:
+        UpdateUserAvatarEvent avatarEvent = event;
         yield InitialState();
-        yield await updateAvatar((event as UpdateUserAvatarEvent).id,
-            isProfile: false);
+        if (avatarEvent.image != null) {
+          yield* uploadAvatar(avatarEvent.image);
+        } else {
+          yield await updateAvatar(avatarEvent.id, isProfile: false);
+        }
     }
   }
 
@@ -37,7 +46,36 @@ class AvatarsBloc extends Bloc<BlocEvent, BlocState> {
   }
 
   Future<BlocState> updateAvatar(int id, {bool isProfile = true}) async {
-    final data = _mainRepo.updateAvatar(id);
-    return AvatarFetchedState(avatars: avatars);
+    final data = await _mainRepo.updateAvatar(id);
+
+    if (data.state == DataState.Success) {
+      _profileBloc.add(UpdateProfilePhotoEvent(
+          imagePath:
+              avatars.firstWhere((element) => element.id == id).downloadUrl));
+      return AvatarFetchedState(avatars: avatars);
+    } else {
+      return FailState(message: data.message);
+    }
+  }
+
+  Stream<BlocState> uploadAvatar(File image) async* {
+    final stream = _mainRepo.uploadUserAvatar(image);
+
+    await for (final snapshot in stream) {
+      if (snapshot.state == DataState.Fail) {
+        yield FailState(message: snapshot.data.message);
+      }
+      if (snapshot.data is Attachment) {
+        avatars.add(snapshot.data);
+        _profileBloc
+            .add(UpdateProfilePhotoEvent(imagePath: snapshot.data.downloadUrl));
+        yield AvatarFetchedState(avatars: avatars);
+        break;
+      }
+    }
+  }
+
+  void setProfileBloc(ProfileBloc profileBloc) {
+    _profileBloc = profileBloc;
   }
 }

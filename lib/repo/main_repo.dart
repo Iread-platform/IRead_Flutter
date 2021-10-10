@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:iread_flutter/models/attachment/attachment.dart';
 import 'package:iread_flutter/models/draw/polygon.dart';
@@ -88,8 +89,21 @@ class MainRepo {
     return _userRepo.fetchUserAvatars();
   }
 
-  Future<Data<Profile>> updateAvatar(int id, {bool isPersonal = false}) {
+  Future<Data> updateAvatar(int id, {bool isPersonal = false}) {
     return _userRepo.updateUserAvatar(id, isPersonal: isPersonal);
+  }
+
+  Stream<Data> uploadUserAvatar(File file) async* {
+    final uploadTask =
+        await _attachmentRepo.uploadAvatar(file, file.path, "Male");
+
+    await for (final snapshot in uploadTask.stream) {
+      final response = jsonDecode(snapshot.response);
+      print(response);
+      Attachment attachment = Attachment.fromJson(response);
+      yield Data.success(attachment);
+      yield await updateAvatar(attachment.id, isPersonal: true);
+    }
   }
 
   Future<Data> submitReview(ReviewSubmit reviewSubmit) {

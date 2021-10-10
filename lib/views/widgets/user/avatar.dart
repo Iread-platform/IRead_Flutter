@@ -5,11 +5,13 @@ class UserAvatar extends StatelessWidget {
   final _radius;
   final _imageUrl;
   final _showShadow;
+  final _canNavigateToProfile;
 
-  UserAvatar({radius, imageUrl, showShadow})
+  UserAvatar({radius, imageUrl, showShadow, canNavigateToProfile = true})
       : _radius = radius,
         _imageUrl = imageUrl,
-        _showShadow = showShadow ?? false;
+        _showShadow = showShadow ?? false,
+        _canNavigateToProfile = canNavigateToProfile;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +29,9 @@ class UserAvatar extends StatelessWidget {
               _imageUrl,
             ),
           ),
-          onTap: () => AppRouter().navigate(context, 'profile'),
+          onTap: _canNavigateToProfile
+              ? () => AppRouter().navigate(context, 'profile')
+              : null,
         ),
       ),
     );

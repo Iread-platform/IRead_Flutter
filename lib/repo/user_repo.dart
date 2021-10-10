@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:iread_flutter/models/attachment/attachment.dart';
 import 'package:iread_flutter/models/user/profile.dart';
+import 'package:iread_flutter/models/user/update_avatar.dart';
 import 'package:iread_flutter/models/user/user.dart';
 import 'package:iread_flutter/models/user/user_update.dart';
 import 'package:iread_flutter/services/api_service.dart';
@@ -19,6 +20,7 @@ class UserRepo {
   final myProfileEndPoint = "identity/myProfile";
   final avatarsEndPoint = "Avatar/all";
   final userUpdateEndPoint = "Identity/UpdateStudentInfo/";
+  final updateAvatarEndPoint = 'Identity/update-my-image';
 
   factory UserRepo() => _instance;
   UserRepo._internal();
@@ -55,7 +57,9 @@ class UserRepo {
         userRole: UserRole.values.firstWhere((element) =>
             element.toString() == "UserRole." + userResponse['role']),
         email: userResponse['email'],
-        imageUrl: userResponse['email'],
+        imageUrl: userResponse['avatarAttachment'] != null
+            ? userResponse['avatarAttachment']['downloadUrl']
+            : userResponse['customPhotoAttachment']['downloadUrl'],
       );
       //print(user.toJson().toString());
       AuthService().saveUser(user);
@@ -103,18 +107,18 @@ class UserRepo {
     return json.decode(userText.toString());
   }
 
-  Future<Data<Profile>> updateUserAvatar(int id,
-      {bool isPersonal = false}) async {
-    UserUpdate data = UserUpdate(
-        firstName: profile.firstName,
-        lastName: profile.lastName,
-        avatarId: isPersonal ? 0 : id,
-        birthDay: profile.birthDay,
-        customPhotoId: isPersonal ? id : 0,
-        email: profile.email,
-        level: profile.level);
+  Future<Data> updateUserAvatar(int id, {bool isPersonal = false}) async {
+    UpdateAvatar updateAvatar = UpdateAvatar(id, !isPersonal);
 
-    return updateUser(data);
+    try {
+      final response = await _apiService.request(
+          requestType: RequestType.PUT,
+          endPoint:
+              '$updateAvatarEndPoint?attachmentId=$id&isAvatar=${!isPersonal}');
+      return Data.success(response);
+    } catch (e) {
+      return Data.handleException(e);
+    }
   }
 
   Future<Data<Profile>> updateUser(UserUpdate data) async {

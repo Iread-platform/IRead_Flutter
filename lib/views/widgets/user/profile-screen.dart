@@ -11,6 +11,7 @@ import 'package:iread_flutter/views/widgets/Image_picker_dialog.dart';
 import 'package:iread_flutter/views/widgets/opened_library/stories_section.dart';
 import 'package:iread_flutter/views/widgets/shared/request_handler.dart';
 import 'package:iread_flutter/views/widgets/user/avatar.dart';
+import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key key}) : super(key: key);
@@ -34,12 +35,12 @@ class ProfileScreen extends StatelessWidget {
               child: ListView(
                 children: [
                   userDetailsRow(
-                    context,
-                    '${user.firstName} ${user.lastName}',
-                    user.schoolMember.classes[0].title,
-                    user.schoolMember.schoolTitle,
-                    'https://thumbs.dreamstime.com/b/man-hipster-avatar-cartoon-guy-black-hair-flat-icon-blue-background-user-person-character-vector-illustration-185480506.jpg',
-                  ),
+                      context,
+                      '${user.firstName} ${user.lastName}',
+                      user.schoolMember.classes[0].title,
+                      user.schoolMember.schoolTitle,
+                      user.avatarAttachment?.downloadUrl ??
+                          user.customPhotoAttachment.downloadUrl),
                   StoriesSection(
                     title: 'Read Stories',
                     storiesList: user.viewStories,
@@ -86,6 +87,7 @@ class ProfileScreen extends StatelessWidget {
                 imageUrl: imageUrl,
                 radius: 60.0,
                 showShadow: true,
+                canNavigateToProfile: false,
               ),
               Positioned(
                   top: 30,
@@ -96,13 +98,21 @@ class ProfileScreen extends StatelessWidget {
                       color: Theme.of(context).colorScheme.primary,
                     ),
                     onPressed: () {
+                      ProfileBloc profileBloc =
+                          Provider.of<ProfileBloc>(context, listen: false);
                       showDialog(
                           context: context,
                           builder: (context) {
-                            return BlocProvider(
-                                create: (context) => AvatarsBloc(InitialState())
-                                  ..add(FetchAvatarDataEvent()),
-                                child: ImagePickerDialog());
+                            return MultiBlocProvider(
+                              providers: [
+                                BlocProvider(
+                                    create: (context) =>
+                                        AvatarsBloc(InitialState())
+                                          ..add(FetchAvatarDataEvent())),
+                                BlocProvider.value(value: profileBloc),
+                              ],
+                              child: ImagePickerDialog(),
+                            );
                           });
                     },
                   ))
