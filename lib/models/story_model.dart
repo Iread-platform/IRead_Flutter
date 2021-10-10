@@ -4,7 +4,7 @@ class StoryModel {
   Audio audio;
   int pagesCount;
   List<Pages> pages;
-
+  
   StoryModel({this.audio, this.pagesCount, this.pages});
 
   StoryModel.fromJson(Map<String, dynamic> json) {
@@ -131,17 +131,21 @@ class Comment {
   String classOFWord;
   String definitionOfWord;
   String exampleOfWord;
+  int wordIndex;
 
   Comment(
       {this.commentId,
       this.word,
       this.classOFWord,
       this.definitionOfWord,
-      this.exampleOfWord});
+      this.exampleOfWord,
+      this.wordIndex});
 
   Comment.fromJson(Map<String, dynamic> json) {
     commentId = json['commentId'];
     word = json['word'];
+    wordIndex = json['wordIndex'];
+
     classOFWord = json['classOFWord'];
     definitionOfWord = json['definitionOfWord'];
     exampleOfWord = json['exampleOfWord'];
@@ -153,6 +157,7 @@ class Word {
   String content;
   String inputStart;
   String inputEnd;
+  String suffix;
   double regionStart;
   double regionEnd;
   bool elementError;
