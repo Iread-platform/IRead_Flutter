@@ -1,17 +1,22 @@
+import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iread_flutter/bloc/StoryScreenBloc/storyscreen_bloc.dart';
 import 'package:iread_flutter/bloc/base/base_bloc.dart';
+import 'package:iread_flutter/bloc/comment_bloc/comment_bloc.dart';
 import 'package:iread_flutter/bloc/text_selection_provider.dart';
+import 'package:iread_flutter/models/story_model.dart';
 import 'package:iread_flutter/utils/i_read_icons.dart';
 import 'package:iread_flutter/views/widgets/highlight_text.dart';
-import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:iread_flutter/views/widgets/shared/request_handler.dart';
+import 'package:iread_flutter/views/widgets/vocabulary_dialog.dart';
 import 'package:provider/provider.dart';
 
 class StoryScreen extends StatefulWidget {
+  int storyId;
+  StoryScreen({this.storyId});
   @override
   _StoryScreenState createState() => _StoryScreenState();
 }
@@ -22,28 +27,32 @@ class _StoryScreenState extends State<StoryScreen> {
   var h;
   var bloc;
   GlobalKey stoyryKey = GlobalKey();
+
   //============== Fetch Story Data =========================
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<StoryscreenBloc>(context).add(FetchStoryPage(stotyID: 0));
+
+    BlocProvider.of<StoryscreenBloc>(context)
+        .add(FetchStoryPage(stotyID: widget.storyId));
   }
 
   //=============== Build screen (Header - textStory - player) ===================
   @override
   Widget build(BuildContext context) {
-    print("re build");
     w = MediaQuery.of(context).size.width;
     h = MediaQuery.of(context).size.height;
 
     bloc = BlocProvider.of<StoryscreenBloc>(context, listen: false);
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          header(), // HomeButton - backArrow - ImageStory
-          textStory(), // Selectable text Story
-          player(), // progress - playPauseButton
-        ],
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            header(), // HomeButton - backArrow - ImageStory
+            textStory(), // Selectable text Story
+            player(), // progress - playPauseButton
+          ],
+        ),
       ),
     );
   }
@@ -109,7 +118,7 @@ class _StoryScreenState extends State<StoryScreen> {
       height: h * 0.30,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           // ========= arrow Icon to go previous page =============
           Container(
@@ -124,6 +133,17 @@ class _StoryScreenState extends State<StoryScreen> {
                 bloc.pageController.previousPage(
                     duration: Duration(milliseconds: 500),
                     curve: Curves.linear);
+                if (bloc.pageController.page.toInt() - 2 <= 0) {
+                  bloc.add(SeekEvent(Duration(milliseconds: 0)));
+                } else {
+                  bloc.add(SeekEvent(Duration(
+                      milliseconds: bloc
+                          .storyPageData
+                          .data
+                          .pages[bloc.pageController.page.toInt() - 2]
+                          .endPageTime
+                          .toInt())));
+                }
               },
             ),
           ),
@@ -133,6 +153,7 @@ class _StoryScreenState extends State<StoryScreen> {
             child: BlocBuilder<StoryscreenBloc, BlocState>(
               builder: (context, state) {
                 scroll();
+
                 return requsetHandlerStory();
               },
             ),
@@ -150,6 +171,10 @@ class _StoryScreenState extends State<StoryScreen> {
                 bloc.pageController.nextPage(
                     duration: Duration(milliseconds: 500),
                     curve: Curves.linear);
+                bloc.add(SeekEvent(Duration(
+                    milliseconds: bloc.storyPageData.data
+                        .pages[bloc.pageController.page.toInt()].endPageTime
+                        .toInt())));
               },
             ),
           ),
@@ -185,7 +210,7 @@ class _StoryScreenState extends State<StoryScreen> {
                   return Container();
                 } else {
                   return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       // ========= progress =============
                       Container(
@@ -222,6 +247,20 @@ class _StoryScreenState extends State<StoryScreen> {
                             }
                           },
                         ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          InkWell(
+                            child: Icon(Icons.list, size: 30),
+                            onTap: () async {
+                              return VocabularyDialog.vocabularyList(
+                                  context: context);
+                            },
+                          ),
+                          Icon(Icons.mic, size: 30),
+                          Icon(Icons.comment, size: 30),
+                        ],
                       )
                     ],
                   );
@@ -252,8 +291,8 @@ class _StoryScreenState extends State<StoryScreen> {
         Provider.of<TextSelectionProvider>(context, listen: false)
             .scrollController
             .animateTo(
-                bloc.storyPageData.data.words[int.parse(bloc.highLightIndex)]
-                    .scrollHight,
+                bloc.storyPageData.data.pages[bloc.pageController.page.toInt()]
+                    .words[int.parse(bloc.highLightIndex)].scrollHight,
                 duration: Duration(milliseconds: 500),
                 curve: Curves.linear);
       },
@@ -263,14 +302,16 @@ class _StoryScreenState extends State<StoryScreen> {
   // this funcation call every 200 millisecound if word is hideen => scroll
   void scroll() {
     try {
-      if (bloc
-          .storyPageData.data.words[int.parse(bloc.highLightIndex)].newLine) {
+      if (bloc.storyPageData.data.pages[bloc.pageController.page.toInt()]
+              .words[int.parse(bloc.highLightIndex)].newLine &&
+          BlocProvider.of<StoryscreenBloc>(context).audioPlayer.state ==
+              AudioPlayerState.PLAYING) {
         Provider.of<TextSelectionProvider>(context, listen: false)
             .scrollController
             .animateTo(
-                bloc.storyPageData.data.words[int.parse(bloc.highLightIndex)]
-                    .scrollHight,
-                duration: Duration(milliseconds: 500),
+                bloc.storyPageData.data.pages[bloc.pageController.page.toInt()]
+                    .words[int.parse(bloc.highLightIndex)].scrollHight,
+                duration: Duration(milliseconds: 400),
                 curve: Curves.linear);
       }
     } catch (e) {
@@ -293,22 +334,28 @@ class _StoryScreenState extends State<StoryScreen> {
       alignment: Alignment.topLeft,
       child: PageView(
         controller: bloc.pageController,
+        onPageChanged: (value) {
+          bloc.pageController.animateToPage(value,
+              duration: Duration(milliseconds: 1000), curve: Curves.linear);
+          if (value == 0) {
+                  bloc.add(SeekEvent(Duration(milliseconds: 0)));
+                } else {
+                  bloc.add(SeekEvent(Duration(
+                      milliseconds: bloc
+                          .storyPageData
+                          .data
+                          .pages[value - 1]
+                          .endPageTime
+                          .toInt())));
+                }
+        },
         children: [
-          HighlighText(
-              storyString: bloc.storyPageData.data.story ?? "",
-              words: bloc.storyPageData.data.words ?? [],
-              marginX: w * 0.15,
-              marginY: h * 0.44),
-          HighlighText(
-              storyString: bloc.storyPageData.data.story ?? "",
-              words: bloc.storyPageData.data.words ?? [],
-              marginX: w * 0.15,
-              marginY: h * 0.44),
-          HighlighText(
-              storyString: bloc.storyPageData.data.story ?? "",
-              words: bloc.storyPageData.data.words ?? [],
-              marginX: w * 0.15,
-              marginY: h * 0.44),
+          for (var i = 0; i < bloc.storyPageData.data.pages.length; i++)
+            HighlighText(
+                storyString: bloc.storyPageData.data.pages[i].content ?? "",
+                words: bloc.storyPageData.data.pages[i].words ?? [],
+                marginX: w * 0.15,
+                marginY: h * 0.44),
         ],
       ),
     );

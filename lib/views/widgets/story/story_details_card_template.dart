@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iread_flutter/config/routing/app_router.dart';
 import 'package:iread_flutter/models/story.dart';
 import 'package:iread_flutter/views/widgets/layout/responsive_layout_builder.dart';
 import 'package:iread_flutter/views/widgets/story/story_image.dart';
@@ -21,7 +22,7 @@ class StoryDetailsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 200,
+      height: 175,
       child: Stack(
         alignment: Alignment.centerRight,
         clipBehavior: Clip.none,
@@ -37,8 +38,12 @@ class StoryDetailsCard extends StatelessWidget {
             children: [
               Flexible(
                   flex: 2,
-                  child: StoryImage(
-                      imageUrl: _story.imageUrl, color: _story.color)),
+                  child: GestureDetector(
+                    child: StoryImage(
+                        imageUrl: _story.imageUrl, color: _story.color),
+                    onTap: () =>
+                        {AppRouter().navigate(context, '/story/${_story.id}')},
+                  )),
               Flexible(flex: 3, child: Container())
             ],
           ),

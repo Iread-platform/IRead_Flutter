@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
-
 import 'package:iread_flutter/config/themes/border_radius.dart';
 import 'package:iread_flutter/views/widgets/shared/progress_bar.dart';
 import 'package:iread_flutter/views/widgets/user/avatar.dart';
@@ -29,7 +28,7 @@ class Ranking extends StatelessWidget {
             child: UserAvatar(
               showShadow: true,
               imageUrl:
-              'https://thumbs.dreamstime.com/b/man-hipster-avatar-cartoon-guy-black-hair-flat-icon-blue-background-user-person-character-vector-illustration-185480506.jpg',
+                  'https://thumbs.dreamstime.com/b/man-hipster-avatar-cartoon-guy-black-hair-flat-icon-blue-background-user-person-character-vector-illustration-185480506.jpg',
               radius: 45.0,
             ),
           ),
@@ -44,7 +43,7 @@ class Ranking extends StatelessWidget {
   }
 
   Widget _rankingBar(BuildContext context) {
-    final progressBarWidth = 150.0;
+    final progressBarWidth = 100.0;
     return Container(
       width: progressBarWidth + 40.0,
       child: Row(
@@ -65,7 +64,7 @@ class Ranking extends StatelessWidget {
                       style: Theme.of(context)
                           .textTheme
                           .headline6
-                          .copyWith(fontSize: 14,fontWeight: FontWeight.w500),
+                          .copyWith(fontSize: 14, fontWeight: FontWeight.w500),
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
@@ -73,32 +72,29 @@ class Ranking extends StatelessWidget {
                 Positioned(
                   top: 33,
                   left: 0,
-                  child: Stack(
-                    children: [
-                      RotationTransition(
-                        turns: AlwaysStoppedAnimation(-8 / 360),
-                        child: SvgPicture.asset("assets/images/shared/star.svg",
-                          width: 40,
-                        ),
+                  child: Stack(children: [
+                    RotationTransition(
+                      turns: AlwaysStoppedAnimation(-8 / 360),
+                      child: SvgPicture.asset(
+                        "assets/images/shared/star.svg",
+                        width: 40,
                       ),
-                      Container(
-                          width: 40,
-                          height: 40,
-                          child: Center(
-                              child: Text(_rank.toString(),
-                                  textAlign: TextAlign.center,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .subtitle2
-                                      .copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary,
-                                  fontSize: 15))
-                          )
-                      )
-                    ]
-                  ),
+                    ),
+                    Container(
+                        width: 40,
+                        height: 40,
+                        child: Center(
+                            child: Text(_rank.toString(),
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .subtitle2
+                                    .copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onPrimary,
+                                        fontSize: 15))))
+                  ]),
                 ),
                 Positioned(
                   top: 50,

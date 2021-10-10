@@ -12,92 +12,11 @@ class StoryRepo {
   final baseStoryPath = "story";
   final searchByTagEndPoint = "Story/GetStoriesByTagTitle";
   final getStoryByIdEndpoint = "story/get";
+  final mainScreenEndpoint =
+      'story/get-by-my-appropriated-level-and-not-read-yet';
 
   factory StoryRepo() => _instance;
   StoryRepo._internal();
-
-  final storySectionJson = {
-    "title": "Title",
-    "stories": [
-      {
-        "storyId": 1,
-        "title": "Story title",
-        "releaseDate": DateTime.now().toString(),
-        "description": "Story description",
-        "storyLevel": 0,
-        "keyWords": ["Learn", "Easy"],
-        "rating": 4.23,
-        "color": 'FF0000FF',
-        "imageUrl": 'https://picsum.photos/200/300'
-      },
-      {
-        "storyId": 1,
-        "title": "Story title",
-        "releaseDate": DateTime.now().toString(),
-        "description": "Story description",
-        "storyLevel": 0,
-        "keyWords": ["Learn", "Easy"],
-        "rating": 4.23,
-        "color": 'FF0000FF',
-        "imageUrl": 'https://picsum.photos/200/300'
-      },
-      {
-        "storyId": 1,
-        "title": "Story title",
-        "releaseDate": DateTime.now().toString(),
-        "description": "Story description",
-        "storyLevel": 0,
-        "keyWords": ["Learn", "Easy"],
-        "rating": 4.23,
-        "color": 'FF0000FF',
-        "imageUrl": 'https://picsum.photos/200/300'
-      },
-      {
-        "storyId": 1,
-        "title": "Story title",
-        "releaseDate": DateTime.now().toString(),
-        "description": "Story description",
-        "storyLevel": 0,
-        "keyWords": ["Learn", "Easy"],
-        "rating": 4.23,
-        "color": 'FF0000FF',
-        "imageUrl": 'https://picsum.photos/200/300'
-      },
-      {
-        "storyId": 1,
-        "title": "Story title",
-        "releaseDate": DateTime.now().toString(),
-        "description": "Story description",
-        "storyLevel": 0,
-        "keyWords": ["Learn", "Easy"],
-        "rating": 4.23,
-        "color": 'FF0000FF',
-        "imageUrl": 'https://picsum.photos/200/300'
-      },
-      {
-        "storyId": 1,
-        "title": "Story title",
-        "releaseDate": DateTime.now().toString(),
-        "description": "Story description",
-        "storyLevel": 0,
-        "keyWords": ["Learn", "Easy"],
-        "rating": 4.23,
-        "color": 'FF0000FF',
-        "imageUrl": 'https://picsum.photos/200/300'
-      },
-      {
-        "storyId": 1,
-        "title": "Story title",
-        "releaseDate": DateTime.now().toString(),
-        "description": "Story description",
-        "storyLevel": 0,
-        "keyWords": ["Learn", "Easy"],
-        "rating": 4.23,
-        "color": 'FF0000FF',
-        "imageUrl": 'https://picsum.photos/200/300'
-      }
-    ]
-  };
 
   Future<Data<StoriesSectionModel>> searchByTag(String tag) async {
     try {
@@ -124,6 +43,25 @@ class StoryRepo {
       final json = jsonDecode(jsonText);
 
       return Data.success(Story.fromJson(json));
+    } catch (e) {
+      return Data.handleException(e);
+    }
+  }
+
+  Future<Data<List<StoriesSectionModel>>> fetchMainScreenData() async {
+    try {
+      final response = await _apiService.request(
+          requestType: RequestType.GET, endPoint: this.mainScreenEndpoint);
+
+      final json = jsonDecode(response);
+
+      List<StoriesSectionModel> storySections = [];
+
+      for (final storiesSectionJson in json) {
+        storySections.add(StoriesSectionModel.fromApiJson(storiesSectionJson));
+      }
+
+      return Data.success(storySections);
     } catch (e) {
       return Data.handleException(e);
     }

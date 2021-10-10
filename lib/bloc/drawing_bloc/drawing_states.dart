@@ -6,8 +6,6 @@ class NoPolygonState extends SuccessState {}
 
 class PolygonDeletedState extends NoPolygonState {
   Polygon polygon;
-
-  PolygonDeletedState(bool isDone);
 }
 
 class PolygonState extends SuccessState<Data> {

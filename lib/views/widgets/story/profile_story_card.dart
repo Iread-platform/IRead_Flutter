@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iread_flutter/config/routing/app_router.dart';
 import 'package:iread_flutter/config/themes/border_radius.dart';
 import 'package:iread_flutter/models/story.dart';
 import 'package:iread_flutter/views/widgets/shared/progress_bar.dart';
@@ -19,10 +20,23 @@ class ProfileStoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StoryDetailsCard(
-      story: _story,
-      upperSection: _storyPagesAndTime(context, 28),
-      lowerSection: _storyProgress(context, 28),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TextButton(
+          child: Text(
+            _story.title,
+            style: Theme.of(context).textTheme.headline6,
+            overflow: TextOverflow.ellipsis,
+          ),
+          onPressed: () => {_navigateToStory(context)},
+        ),
+        StoryDetailsCard(
+          story: _story,
+          upperSection: _storyPagesAndTime(context, 28),
+          lowerSection: _storyProgress(context, 28),
+        ),
+      ],
     );
   }
 
@@ -116,5 +130,9 @@ class ProfileStoryCard extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void _navigateToStory(BuildContext context) {
+    AppRouter().navigate(context, '/story/${_story.id}');
   }
 }
