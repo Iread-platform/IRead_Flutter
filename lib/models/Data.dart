@@ -1,5 +1,3 @@
-import 'package:iread_flutter/models/story_model.dart';
-
 class Data<T> {
   T _data;
   String _message = "";
