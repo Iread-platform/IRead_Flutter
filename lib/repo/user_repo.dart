@@ -1,11 +1,13 @@
 import 'dart:convert';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:iread_flutter/models/attachment/attachment.dart';
 import 'package:iread_flutter/models/user/profile.dart';
 import 'package:iread_flutter/models/user/user.dart';
 import 'package:iread_flutter/models/user/user_update.dart';
 import 'package:iread_flutter/services/api_service.dart';
 import 'package:iread_flutter/services/auth_service.dart';
+import 'package:iread_flutter/services/firebase/firebase_messaging.dart';
 import 'package:iread_flutter/utils/data.dart';
 
 class UserRepo {
@@ -19,6 +21,7 @@ class UserRepo {
   final myProfileEndPoint = "identity/myProfile";
   final avatarsEndPoint = "Avatar/all";
   final userUpdateEndPoint = "Identity/UpdateStudentInfo/";
+  final addNotificationUserEndpoint = "User/Add/";
 
   factory UserRepo() => _instance;
   UserRepo._internal();
@@ -59,7 +62,32 @@ class UserRepo {
       );
       //print(user.toJson().toString());
       AuthService().saveUser(user);
+      String deviceToken =
+          await FirebaseMessagingService.instance().getDeviceToken();
+      if (user.id != null && deviceToken != null) {
+        registerUserForNotifications(deviceToken, user.id);
+      }
 
+      return Data.success(true);
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future<Data<bool>> registerUserForNotifications(
+      String token, String userId) async {
+    try {
+      final url = '$addNotificationUserEndpoint';
+      await _apiService.request(
+        convertParametersToJson: true,
+        requestType: RequestType.POST,
+        endPoint: url,
+        contentType: "application/json",
+        parameter: {
+          "userId": userId,
+          "token": token,
+        },
+      );
       return Data.success(true);
     } catch (e) {
       throw e;
