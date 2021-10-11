@@ -10,13 +10,14 @@ import 'package:iread_flutter/bloc/main_screen/main_screen_bloc_events.dart';
 import 'package:iread_flutter/bloc/text_selection_provider.dart';
 import 'package:iread_flutter/config/routing/app_router.dart';
 import 'package:iread_flutter/config/themes/theme.dart';
+import 'package:iread_flutter/repo/user_repo.dart';
 import 'package:iread_flutter/services/firebase/action_track_service.dart';
 import 'package:iread_flutter/services/auth_service.dart';
+import 'package:iread_flutter/services/firebase/firebase_messaging.dart';
 import 'package:iread_flutter/services/firebase/index.dart';
 import 'package:iread_flutter/services/notifications_manager_service.dart';
 import 'package:iread_flutter/services/permissions_service.dart';
 import 'package:iread_flutter/views/Screens/login_screen.dart';
-import 'package:iread_flutter/views/Screens/main_screen.dart';
 import 'package:iread_flutter/views/Screens/story_screen.dart';
 import 'package:iread_flutter/views/widgets/drawer_widget.dart';
 import 'package:provider/provider.dart';
@@ -36,6 +37,12 @@ Future<void> initApp() async {
   await FirebaseService().init();
   await NotificationsManagerService.instance().init();
   await AuthService().loadUser();
+
+  if (AuthService().cU != null) {
+    await UserRepo().registerUserForNotifications(
+        await FirebaseMessagingService.instance().getDeviceToken(),
+        AuthService().cU.id);
+  }
 }
 
 void main() {
@@ -99,15 +106,19 @@ class IReadApp extends StatelessWidget {
     return Scaffold(
         drawer: DrawerWidget(),
         body: Center(
-          child: MultiProvider(providers: [
-            Provider(
-              create: (context) => MainScreenBloc(InitialState())
-                ..add(FetchMainScreenDataEvent()),
-            ),
-            Provider(create: (context) => DrawingBloc(NoPolygonState())),
-            Provider(create: (context) => RecordBloc(InitialState())),
-            Provider(create: (context) => CommentBloc(InitialState()))
-          ], child: StoryScreen(storyId: 23,)),
+          child: MultiProvider(
+              providers: [
+                Provider(
+                  create: (context) => MainScreenBloc(InitialState())
+                    ..add(FetchMainScreenDataEvent()),
+                ),
+                Provider(create: (context) => DrawingBloc(NoPolygonState())),
+                Provider(create: (context) => RecordBloc(InitialState())),
+                Provider(create: (context) => CommentBloc(InitialState()))
+              ],
+              child: StoryScreen(
+                storyId: 23,
+              )),
         ));
   }
 }
