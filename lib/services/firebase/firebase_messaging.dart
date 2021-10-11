@@ -13,28 +13,20 @@ class FirebaseMessagingService extends FirebaseBaseService {
 
   FirebaseMessaging _messaging;
 
+  Future<String> getDeviceToken() async {
+    return await _messaging.getToken();
+  }
+
   @override
   Future<void> init() async {
     _messaging = FirebaseMessaging.instance;
     print(await _messaging.getToken());
     await _messaging.requestPermission();
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print('Got a message whilst in the foreground!');
-      print(
-          '1=========================================================================================');
-      print('Message data: ${message.data}');
-
       if (message.notification != null) {
         NotificationsManagerService.instance().showNotification();
         print('Message also contained a notification: ${message.notification}');
       }
     });
-
-    // FirebaseMessaging.onBackgroundMessage((message) {
-    //   print(
-    //       '2=========================================================================================');
-    //   print(message.data);
-    //   return;
-    // });
   }
 }
