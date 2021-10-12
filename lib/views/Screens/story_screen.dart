@@ -74,7 +74,7 @@ class _StoryScreenState extends State<StoryScreen> {
         alignment: Alignment.bottomCenter,
         children: [
           // ========= Story Image ==============
-          
+
           // ========== curve_top_right ==============
           Transform.translate(
             offset: Offset(w * 0.3, -h * 0.2),
@@ -113,9 +113,7 @@ class _StoryScreenState extends State<StoryScreen> {
             alignment: Alignment.bottomCenter,
             height: h * 0.45,
             child: ClipRRect(
-              borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(10),
-                  bottomRight: Radius.circular(10)),
+              borderRadius: BorderRadius.circular(20),
               child: FadeInImage.assetNetwork(
                 placeholder: 'assets/placholder.png',
                 image: url,
@@ -267,14 +265,20 @@ class _StoryScreenState extends State<StoryScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           InkWell(
-                            child: Icon(Icons.list, size: 30, color : Theme.of(context).colorScheme.primary),
+                            child: Icon(Icons.list,
+                                size: 30,
+                                color: Theme.of(context).colorScheme.primary),
                             onTap: () async {
                               return VocabularyDialog.vocabularyList(
                                   context: context);
                             },
                           ),
-                          Icon(Icons.mic, size: 30 , color : Theme.of(context).colorScheme.primary),
-                          Icon(Icons.comment, size: 30, color : Theme.of(context).colorScheme.primary),
+                          Icon(Icons.mic,
+                              size: 30,
+                              color: Theme.of(context).colorScheme.primary),
+                          Icon(Icons.comment,
+                              size: 30,
+                              color: Theme.of(context).colorScheme.primary),
                         ],
                       )
                     ],
