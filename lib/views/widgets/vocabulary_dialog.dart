@@ -7,6 +7,7 @@ import 'package:iread_flutter/bloc/text_selection_provider.dart';
 import 'package:iread_flutter/services/auth_service.dart';
 import 'package:iread_flutter/utils/data.dart';
 import 'package:iread_flutter/utils/i_read_icons.dart';
+import 'package:iread_flutter/utils/validator.dart';
 import 'package:provider/provider.dart';
 import 'package:iread_flutter/models/story_model.dart';
 
@@ -283,36 +284,7 @@ class VocabularyDialog {
             Data data = await BlocProvider.of<CommentBloc>(context)
                 .addCommentWord(newVoc);
 
-            var f = FToast();
-            f.init(context);
             bool done = data.state == DataState.Success ? true : false;
-            f.showToast(
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 24.0, vertical: 12.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(25.0),
-                  color: done ? Colors.green : Colors.red[800],
-                ),
-                child: Row(
-                  // mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(done ? Icons.check : Icons.error, color: Colors.white),
-                    Expanded(
-                      child: Text(
-                        done
-                            ? "it has been added to your vocabulary"
-                            : data.message,
-                        style: TextStyle(color: Colors.white),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              gravity: ToastGravity.BOTTOM,
-              toastDuration: Duration(seconds: 3),
-            );
 
             // add interaction to local page vocabulary
             if (done) {
@@ -328,6 +300,17 @@ class VocabularyDialog {
                 }
               }
               Navigator.pop(context);
+              Validator.showMessage(
+                  context: context,
+                  message: "it has been added to your vocabulary",
+                  icon: Icons.check,
+                  color: Colors.green);
+            } else {
+              Validator.showMessage(
+                  context: context,
+                  message: data.message,
+                  icon: Icons.error,
+                  color: Colors.red[800]);
             }
           },
           child: Text("Save")),

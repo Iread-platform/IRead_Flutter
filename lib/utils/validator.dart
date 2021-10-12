@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
 class Validator {
   // Return true if the value is not valid
   static bool isRequired(String value) {
@@ -46,6 +49,41 @@ class Validator {
     } else {
       return null;
     }
+  }
+
+  static Widget showMessage(
+      {@required context,
+      @required String message,
+      @required icon,
+      @required color,
+      durationSec = 3}) {
+    var f = FToast();
+    f.init(context);
+    f.showToast(
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(25.0), color: color),
+        child: Row(
+          // mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              icon,
+              color: Colors.white,
+            ),
+            Expanded(
+              child: Text(
+                message,
+                style: TextStyle(color: Colors.white),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
+        ),
+      ),
+      gravity: ToastGravity.BOTTOM,
+      toastDuration: Duration(seconds: durationSec),
+    );
   }
 //=============================================
 }

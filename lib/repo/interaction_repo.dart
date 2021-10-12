@@ -95,15 +95,28 @@ class InteractionRepo {
     }
 
     return json;
-    
   }
 
-  Future<int> addHighLightWord(Map map) async {
-    final url = "Interaction/HighLight/add";
-    final jsonText = await _apiService.request(
-        requestType: RequestType.POST, endPoint: url, parameter: map);
-    final json = jsonDecode(jsonText);
-    return json["highLightId"];
+  Future<Data> addHighLightWord(Map map) async {
+    try {
+      final url = "Interaction/HighLight/add";
+      final jsonText = await _apiService.request(
+          requestType: RequestType.POST, endPoint: url, parameter: map);
+      final json = jsonDecode(jsonText);
+      print(json);
+      return Data.success(json);
+    } catch (e) {
+      print(e);
+      if (e is NetworkException) {
+        return Data.fail(e.message);
+      } else if (e is SocketException) {
+        return Data.fail("No Enternet");
+      } else if (e is TimeoutException) {
+        return Data.fail("Time out Exception");
+      } else {
+        return Data.fail("something is not working");
+      }
+    }
   }
 
   removeHighLightWord(int id) async {

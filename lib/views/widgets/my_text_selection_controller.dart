@@ -2,10 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:iread_flutter/bloc/StoryScreenBloc/storyscreen_bloc.dart';
 import 'package:iread_flutter/bloc/interactions_bloc/interactions_bloc.dart';
 import 'package:iread_flutter/bloc/text_selection_provider.dart';
+import 'package:iread_flutter/utils/data.dart';
 import 'package:iread_flutter/utils/i_read_icons.dart';
+import 'package:iread_flutter/utils/validator.dart';
 import 'package:iread_flutter/views/widgets/vocabulary_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:speech_bubble/speech_bubble.dart';
@@ -46,7 +49,6 @@ class MyTextSelectionControls extends TextSelectionControls {
           x = Provider.of<TextSelectionProvider>(context, listen: false)
               .scrollController
               .offset;
-          print("xxxxxxxxxxxx : $x");
         } catch (e) {}
 
         return TextSelectionToolbar(
@@ -157,32 +159,44 @@ class MyTextSelectionControls extends TextSelectionControls {
               "firstWord": "Bright",
               "endWord": "Charlotte"
             };
-            int highLightID = await BlocProvider.of<InteractionsBloc>(context)
+            Data data = await BlocProvider.of<InteractionsBloc>(context)
                 .addHightLightWord(map);
+            bool done = data.state == DataState.Success ? true : false;
+           
+            if (done) {
+              delegate.hideToolbar();
 
-            for (var word in BlocProvider.of<StoryscreenBloc>(context)
-                .storyPageData
-                .data
-                .pages[BlocProvider.of<StoryscreenBloc>(context)
-                    .pageController
-                    .page
-                    .toInt()]
-                .words) {
-              if ((word.startIndex >=
-                      Provider.of<TextSelectionProvider>(context, listen: false)
-                          .selection
-                          .start) &&
-                  (word.startIndex <=
-                      Provider.of<TextSelectionProvider>(context, listen: false)
-                          .selection
-                          .end)) {
-                word.isHighLighted = true;
-                word.highLightID = highLightID;
+              for (var word in BlocProvider.of<StoryscreenBloc>(context)
+                  .storyPageData
+                  .data
+                  .pages[BlocProvider.of<StoryscreenBloc>(context)
+                      .pageController
+                      .page
+                      .toInt()]
+                  .words) {
+                if ((word.startIndex >=
+                        Provider.of<TextSelectionProvider>(context,
+                                listen: false)
+                            .selection
+                            .start) &&
+                    (word.startIndex <=
+                        Provider.of<TextSelectionProvider>(context,
+                                listen: false)
+                            .selection
+                            .end)) {
+                  word.isHighLighted = true;
+                  word.highLightID = data.data["highLightId"];
+                }
               }
-            }
 
-            delegate.hideToolbar();
-            BlocProvider.of<StoryscreenBloc>(context).add(ResumeEvent());
+              BlocProvider.of<StoryscreenBloc>(context).add(ResumeEvent());
+            } else {
+              Validator.showMessage(
+                  context: context,
+                  message: data.message,
+                  icon: Icons.error,
+                  color: Colors.red[800]);
+            }
           },
         ),
         TextSelectionToolbarTextButton(
@@ -306,7 +320,7 @@ class MyTextSelectionControls extends TextSelectionControls {
               "firstWord": "Bright",
               "endWord": "Charlotte"
             };
-            int highLightID = await BlocProvider.of<InteractionsBloc>(context)
+            Data data = await BlocProvider.of<InteractionsBloc>(context)
                 .addHightLightWord(map);
 
             for (var word in BlocProvider.of<StoryscreenBloc>(context)
@@ -326,7 +340,7 @@ class MyTextSelectionControls extends TextSelectionControls {
                           .selection
                           .end)) {
                 word.isHighLighted = true;
-                word.highLightID = highLightID;
+                word.highLightID = data.data["highLightId"];
               }
             }
 
@@ -341,9 +355,7 @@ class MyTextSelectionControls extends TextSelectionControls {
             color: Colors.purple,
           ),
           onPressed: () {
-            print(Provider.of<TextSelectionProvider>(context, listen: false)
-                .selection
-                .start);
+            
             BlocProvider.of<StoryscreenBloc>(context).add(SeekToWordEvent(
                 index:
                     Provider.of<TextSelectionProvider>(context, listen: false)
@@ -378,9 +390,7 @@ class MyTextSelectionControls extends TextSelectionControls {
             color: Colors.purple,
           ),
           onPressed: () {
-            print(Provider.of<TextSelectionProvider>(context, listen: false)
-                .selection
-                .start);
+            
             BlocProvider.of<StoryscreenBloc>(context).add(SeekToWordEvent(
                 index:
                     Provider.of<TextSelectionProvider>(context, listen: false)
