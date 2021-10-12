@@ -20,6 +20,7 @@ import 'package:iread_flutter/views/widgets/user/profile-screen.dart';
 
 class AppRoutes {
   static final List<AppRoute> appRoutes = [
+    // ignore: todo
     // TODO remove dummy route
     AppRoute(
       '/profileStory',

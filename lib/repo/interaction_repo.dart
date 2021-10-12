@@ -112,8 +112,7 @@ class InteractionRepo {
   Future<Data> removeHighLightWord(int id) async {
     try {
       final url = "Interaction/HighLight/" + id.toString() + "/delete";
-      final jsonText = await _apiService.request(
-          requestType: RequestType.DELETE, endPoint: url);
+      await _apiService.request(requestType: RequestType.DELETE, endPoint: url);
       Map<String, dynamic> json = jsonDecode("{}");
       return Data.success(json);
     } catch (e) {
@@ -136,8 +135,7 @@ class InteractionRepo {
   Future<Data> removeCommentWord(int id) async {
     final url = "Interaction/Comment/" + id.toString() + "/delete";
     try {
-      final jsonText = await _apiService.request(
-          requestType: RequestType.DELETE, endPoint: url);
+      await _apiService.request(requestType: RequestType.DELETE, endPoint: url);
       Map<String, dynamic> json = jsonDecode("{}");
       return Data.success(json);
     } catch (e) {

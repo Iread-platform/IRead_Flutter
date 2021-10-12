@@ -14,7 +14,6 @@ import 'package:iread_flutter/services/action_track_service.dart';
 import 'package:iread_flutter/services/auth_service.dart';
 import 'package:iread_flutter/services/permissions_service.dart';
 import 'package:iread_flutter/views/Screens/login_screen.dart';
-import 'package:iread_flutter/views/Screens/main_screen.dart';
 import 'package:iread_flutter/views/Screens/story_screen.dart';
 import 'package:iread_flutter/views/widgets/drawer_widget.dart';
 import 'package:provider/provider.dart';

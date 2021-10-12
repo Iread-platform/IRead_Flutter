@@ -124,115 +124,134 @@ class VocabularyDialog {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    comments[index].word,
-                                    style:
-                                        Theme.of(context).textTheme.headline6,
-                                  ),
-                                  Text("Word Class",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1),
-                                  Text(
-                                    "        " + comments[index].classOFWord,
-                                    style:
-                                        Theme.of(context).textTheme.bodyText2,
-                                  ),
-                                  Text(
-                                    "Example",
-                                    style:
-                                        Theme.of(context).textTheme.bodyText1,
-                                  ),
-                                  Text(
-                                    "        " + comments[index].exampleOfWord,
-                                    style:
-                                        Theme.of(context).textTheme.bodyText2,
-                                  ),
-                                  Text(
-                                    "Definition",
-                                    style:
-                                        Theme.of(context).textTheme.bodyText1,
-                                  ),
-                                  Text(
-                                    "        " +
-                                        comments[index].definitionOfWord,
-                                    style:
-                                        Theme.of(context).textTheme.bodyText2,
-                                  ),
-                                ],
-                              ),
-                              InkWell(
-                                child: Icon(
-                                  IReadIcons.delete,
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                                onTap: () async {
-                                  var page = BlocProvider.of<StoryscreenBloc>(
-                                          context,
-                                          listen: false)
-                                      .storyPageData
-                                      .data
-                                      .pages[BlocProvider.of<StoryscreenBloc>(
-                                          context,
-                                          listen: false)
-                                      .pageController
-                                      .page
-                                      .toInt()];
-                                  Data data =
-                                      await BlocProvider.of<CommentBloc>(
-                                              context)
-                                          .removeCommentWord(
-                                              comments[index].commentId);
-                                  var f = FToast();
-                                  f.init(context);
-                                  bool done = data.state == DataState.Success
-                                      ? true
-                                      : false;
-                                  if (done) {
-                                    for (Word word in page.words) {
-                                      if (word.content ==
-                                          comments[index].word) {
-                                        word.isComment = false;
-                                      }
-                                    }
-                                    comments.removeAt(index);
-                                    setStateList(() {});
-                                  } else {
-                                    f.showToast(
-                                      child: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 24.0, vertical: 12.0),
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(25.0),
-                                          color: Colors.red[800],
-                                        ),
-                                        child: Row(
-                                          // mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Icon(Icons.error,
-                                                color: Colors.white),
-                                            Expanded(
-                                              child: Text(
-                                                data.message,
-                                                style: TextStyle(
-                                                    color: Colors.white),
-                                                textAlign: TextAlign.center,
-                                              ),
-                                            ),
-                                          ],
+                              Expanded(
+                                flex: 4,
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      comments[index].word,
+                                      style:
+                                          Theme.of(context).textTheme.headline6,
+                                    ),
+                                    Text("Word Class",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1),
+                                    Text(
+                                      "        " + comments[index].classOFWord,
+                                      style:
+                                          Theme.of(context).textTheme.bodyText2,
+                                    ),
+                                    Text(
+                                      "Example",
+                                      style:
+                                          Theme.of(context).textTheme.bodyText1,
+                                    ),
+                                    Expanded(
+                                      child: SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        child: Text(
+                                          "        " +
+                                              comments[index].exampleOfWord,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText2,
                                         ),
                                       ),
-                                      gravity: ToastGravity.BOTTOM,
-                                      toastDuration: Duration(seconds: 3),
-                                    );
-                                  }
-                                },
+                                    ),
+                                    Text(
+                                      "Definition",
+                                      style:
+                                          Theme.of(context).textTheme.bodyText1,
+                                    ),
+                                    Expanded(
+                                      child: SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        child: Text(
+                                          "        " +
+                                              comments[index].definitionOfWord,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText2,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Expanded(
+                                child: InkWell(
+                                  child: Icon(
+                                    IReadIcons.delete,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                  ),
+                                  onTap: () async {
+                                    var page = BlocProvider.of<StoryscreenBloc>(
+                                            context,
+                                            listen: false)
+                                        .storyPageData
+                                        .data
+                                        .pages[BlocProvider.of<StoryscreenBloc>(
+                                            context,
+                                            listen: false)
+                                        .pageController
+                                        .page
+                                        .toInt()];
+                                    Data data =
+                                        await BlocProvider.of<CommentBloc>(
+                                                context)
+                                            .removeCommentWord(
+                                                comments[index].commentId);
+                                    var f = FToast();
+                                    f.init(context);
+                                    bool done = data.state == DataState.Success
+                                        ? true
+                                        : false;
+                                    if (done) {
+                                      for (Word word in page.words) {
+                                        if (word.content ==
+                                            comments[index].word) {
+                                          word.isComment = false;
+                                        }
+                                      }
+                                      comments.removeAt(index);
+                                      setStateList(() {});
+                                    } else {
+                                      f.showToast(
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 24.0, vertical: 12.0),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(25.0),
+                                            color: Colors.red[800],
+                                          ),
+                                          child: Row(
+                                            // mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Icon(Icons.error,
+                                                  color: Colors.white),
+                                              Expanded(
+                                                child: Text(
+                                                  data.message,
+                                                  style: TextStyle(
+                                                      color: Colors.white),
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        gravity: ToastGravity.BOTTOM,
+                                        toastDuration: Duration(seconds: 3),
+                                      );
+                                    }
+                                  },
+                                ),
                               )
                             ],
                           ),

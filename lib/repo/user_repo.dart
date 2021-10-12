@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:iread_flutter/models/attachment/attachment.dart';
 import 'package:iread_flutter/models/user/profile.dart';
-import 'package:iread_flutter/models/user/update_avatar.dart';
 import 'package:iread_flutter/models/user/user.dart';
 import 'package:iread_flutter/models/user/user_update.dart';
 import 'package:iread_flutter/services/api_service.dart';
@@ -108,7 +107,7 @@ class UserRepo {
   }
 
   Future<Data> updateUserAvatar(int id, {bool isPersonal = false}) async {
-    UpdateAvatar updateAvatar = UpdateAvatar(id, !isPersonal);
+    // UpdateAvatar updateAvatar = UpdateAvatar(id, !isPersonal);
 
     try {
       final response = await _apiService.request(
@@ -128,7 +127,7 @@ class UserRepo {
       parameter: data,
     );
 
-    final json = jsonDecode(response);
+    // final json = jsonDecode(response);
 
     return Data.success(Profile());
   }
