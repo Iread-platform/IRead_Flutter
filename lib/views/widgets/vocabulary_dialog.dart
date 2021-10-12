@@ -119,55 +119,52 @@ class VocabularyDialog {
                       margin: EdgeInsets.all(5),
                       child: Card(
                         child: Container(
-                          height: 140,
+                          height: 150,
                           margin: EdgeInsets.all(10),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              SingleChildScrollView(
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      comments[index].word,
-                                      style:
-                                          Theme.of(context).textTheme.headline6,
-                                    ),
-                                    Text("Word Class",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1),
-                                    Text(
-                                      "        " + comments[index].classOFWord,
-                                      style:
-                                          Theme.of(context).textTheme.bodyText2,
-                                    ),
-                                    Text(
-                                      "Example",
-                                      style:
-                                          Theme.of(context).textTheme.bodyText1,
-                                    ),
-                                    Text(
-                                      "        " +
-                                          comments[index].exampleOfWord,
-                                      style:
-                                          Theme.of(context).textTheme.bodyText2,
-                                    ),
-                                    Text(
-                                      "Definition",
-                                      style:
-                                          Theme.of(context).textTheme.bodyText1,
-                                    ),
-                                    Text(
-                                      "        " +
-                                          comments[index].definitionOfWord,
-                                      style:
-                                          Theme.of(context).textTheme.bodyText2,
-                                    ),
-                                  ],
-                                ),
+                              Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    comments[index].word,
+                                    style:
+                                        Theme.of(context).textTheme.headline6,
+                                  ),
+                                  Text("Word Class",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1),
+                                  Text(
+                                    "        " + comments[index].classOFWord,
+                                    style:
+                                        Theme.of(context).textTheme.bodyText2,
+                                  ),
+                                  Text(
+                                    "Example",
+                                    style:
+                                        Theme.of(context).textTheme.bodyText1,
+                                  ),
+                                  Text(
+                                    "        " + comments[index].exampleOfWord,
+                                    style:
+                                        Theme.of(context).textTheme.bodyText2,
+                                  ),
+                                  Text(
+                                    "Definition",
+                                    style:
+                                        Theme.of(context).textTheme.bodyText1,
+                                  ),
+                                  Text(
+                                    "        " +
+                                        comments[index].definitionOfWord,
+                                    style:
+                                        Theme.of(context).textTheme.bodyText2,
+                                  ),
+                                ],
                               ),
                               InkWell(
                                 child: Icon(

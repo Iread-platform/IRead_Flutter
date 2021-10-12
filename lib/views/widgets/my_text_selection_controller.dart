@@ -122,10 +122,7 @@ class MyTextSelectionControls extends TextSelectionControls {
             size: 25,
           ),
           onPressed: () {
-            removeHighlightWord(context);
-            BlocProvider.of<StoryscreenBloc>(context).add(ResumeEvent());
-
-            delegate.hideToolbar();
+            removeHighlightWord(context, delegate);
           },
         ),
         TextSelectionToolbarTextButton(
@@ -162,7 +159,7 @@ class MyTextSelectionControls extends TextSelectionControls {
             Data data = await BlocProvider.of<InteractionsBloc>(context)
                 .addHightLightWord(map);
             bool done = data.state == DataState.Success ? true : false;
-           
+
             if (done) {
               delegate.hideToolbar();
 
@@ -237,11 +234,8 @@ class MyTextSelectionControls extends TextSelectionControls {
             color: Colors.purple,
             size: 25,
           ),
-          onPressed: () {
-            removeHighlightWord(context);
-            BlocProvider.of<StoryscreenBloc>(context).add(ResumeEvent());
-
-            delegate.hideToolbar();
+          onPressed: () async {
+            removeHighlightWord(context, delegate);
           },
         ),
         TextSelectionToolbarTextButton(
@@ -283,10 +277,7 @@ class MyTextSelectionControls extends TextSelectionControls {
             size: 25,
           ),
           onPressed: () {
-            removeHighlightWord(context);
-            BlocProvider.of<StoryscreenBloc>(context).add(ResumeEvent());
-
-            delegate.hideToolbar();
+            removeHighlightWord(context, delegate);
           },
         ),
         TextSelectionToolbarTextButton(
@@ -355,7 +346,6 @@ class MyTextSelectionControls extends TextSelectionControls {
             color: Colors.purple,
           ),
           onPressed: () {
-            
             BlocProvider.of<StoryscreenBloc>(context).add(SeekToWordEvent(
                 index:
                     Provider.of<TextSelectionProvider>(context, listen: false)
@@ -377,10 +367,7 @@ class MyTextSelectionControls extends TextSelectionControls {
             size: 25,
           ),
           onPressed: () {
-            removeHighlightWord(context);
-            BlocProvider.of<StoryscreenBloc>(context).add(ResumeEvent());
-
-            delegate.hideToolbar();
+            removeHighlightWord(context, delegate);
           },
         ),
         TextSelectionToolbarTextButton(
@@ -390,7 +377,6 @@ class MyTextSelectionControls extends TextSelectionControls {
             color: Colors.purple,
           ),
           onPressed: () {
-            
             BlocProvider.of<StoryscreenBloc>(context).add(SeekToWordEvent(
                 index:
                     Provider.of<TextSelectionProvider>(context, listen: false)
@@ -404,7 +390,7 @@ class MyTextSelectionControls extends TextSelectionControls {
     return null;
   }
 
-  removeHighlightWord(context) {
+  removeHighlightWord(context, delegate) async {
     int start = Provider.of<TextSelectionProvider>(context, listen: false)
         .selection
         .start;
@@ -412,6 +398,7 @@ class MyTextSelectionControls extends TextSelectionControls {
         .selection
         .end;
     int id = -2;
+    Data data;
     for (var word in BlocProvider.of<StoryscreenBloc>(context)
         .storyPageData
         .data
@@ -423,23 +410,45 @@ class MyTextSelectionControls extends TextSelectionControls {
       if (word.isHighLighted &&
           word.startIndex >= start &&
           word.startIndex <= end) {
-        BlocProvider.of<InteractionsBloc>(context)
+        data = await BlocProvider.of<InteractionsBloc>(context)
             .removeHighLightWord(word.highLightID);
         id = word.highLightID;
         break;
       }
     }
-    for (var word in BlocProvider.of<StoryscreenBloc>(context)
-        .storyPageData
-        .data
-        .pages[BlocProvider.of<StoryscreenBloc>(context)
-            .pageController
-            .page
-            .toInt()]
-        .words) {
-      if (word.highLightID == id) {
-        word.highLightID = -1;
-        word.isHighLighted = false;
+    if (id == -2) {
+      Validator.showMessage(
+          context: context,
+          message: "You did not highlight this sentence",
+          icon: Icons.error,
+          color: Colors.red[800]);
+    }
+    if (data != null) {
+      bool done = data.state == DataState.Success ? true : false;
+      print("state  : " + done.toString());
+      if (done) {
+        for (var word in BlocProvider.of<StoryscreenBloc>(context)
+            .storyPageData
+            .data
+            .pages[BlocProvider.of<StoryscreenBloc>(context)
+                .pageController
+                .page
+                .toInt()]
+            .words) {
+          if (word.highLightID == id) {
+            word.highLightID = -1;
+            word.isHighLighted = false;
+          }
+        }
+        BlocProvider.of<StoryscreenBloc>(context).add(ResumeEvent());
+
+        delegate.hideToolbar();
+      } else {
+        Validator.showMessage(
+            context: context,
+            message: data.message,
+            icon: Icons.error,
+            color: Colors.red[800]);
       }
     }
   }

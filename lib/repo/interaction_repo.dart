@@ -103,26 +103,22 @@ class InteractionRepo {
       final jsonText = await _apiService.request(
           requestType: RequestType.POST, endPoint: url, parameter: map);
       final json = jsonDecode(jsonText);
-      print(json);
       return Data.success(json);
     } catch (e) {
-      print(e);
-      if (e is NetworkException) {
-        return Data.fail(e.message);
-      } else if (e is SocketException) {
-        return Data.fail("No Enternet");
-      } else if (e is TimeoutException) {
-        return Data.fail("Time out Exception");
-      } else {
-        return Data.fail("something is not working");
-      }
+      return processException(e);
     }
   }
 
-  removeHighLightWord(int id) async {
-    final url = "Interaction/HighLight/" + id.toString() + "/delete";
-    final jsonText = await _apiService.request(
-        requestType: RequestType.DELETE, endPoint: url);
+  Future<Data> removeHighLightWord(int id) async {
+    try {
+      final url = "Interaction/HighLight/" + id.toString() + "/delete";
+      final jsonText = await _apiService.request(
+          requestType: RequestType.DELETE, endPoint: url);
+      Map<String, dynamic> json = jsonDecode("{}");
+      return Data.success(json);
+    } catch (e) {
+      return processException(e);
+    }
   }
 
   Future<Data> addCommentWord(Map map) async {
@@ -133,15 +129,7 @@ class InteractionRepo {
       Map<String, dynamic> json = jsonDecode(jsonText);
       return Data.success(json);
     } catch (e) {
-      if (e is NetworkException) {
-        return Data.fail(e.message);
-      } else if (e is SocketException) {
-        return Data.fail("No Enternet");
-      } else if (e is TimeoutException) {
-        return Data.fail("Time out Exception");
-      } else {
-        return Data.fail("something is not working");
-      }
+      return processException(e);
     }
   }
 
@@ -153,15 +141,19 @@ class InteractionRepo {
       Map<String, dynamic> json = jsonDecode("{}");
       return Data.success(json);
     } catch (e) {
-      if (e is NetworkException) {
-        return Data.fail(e.message);
-      } else if (e is SocketException) {
-        return Data.fail("No Enternet");
-      } else if (e is TimeoutException) {
-        return Data.fail("Time out Exception");
-      } else {
-        return Data.fail("something is not working");
-      }
+      return processException(e);
+    }
+  }
+
+  Data processException(e) {
+    if (e is NetworkException) {
+      return Data.fail(e.message);
+    } else if (e is SocketException) {
+      return Data.fail("No Enternet");
+    } else if (e is TimeoutException) {
+      return Data.fail("Time out Exception");
+    } else {
+      return Data.fail("something is not working");
     }
   }
 }

@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iread_flutter/Repository/story_repository.dart';
 import 'package:iread_flutter/bloc/base/base_bloc.dart';
-import 'package:iread_flutter/models/Data.dart';
 import 'package:iread_flutter/models/story_model.dart';
+import 'package:iread_flutter/utils/data.dart';
 
 part 'storyscreen_event.dart';
 part 'storyscreen_state.dart';
@@ -18,7 +18,7 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
   double deviceWidth = 0.0, deviceHight = 0.0;
   int wordProgressIndex = 0;
   AudioPlayerState audioPlayerState;
-  Data<StoryModel> storyPageData;
+  Data storyPageData;
   StoryRepository storyRepository;
   PageController pageController = PageController();
   StoryscreenBloc() : super(InitialState()) {
@@ -225,8 +225,6 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
   List<TextSpan> spans = [];
   List<TextStyle> styles = [];
   List<String> wordsStory;
-
- 
 
   Size calcTextSize(String text, TextStyle style) {
     final TextPainter textPainter = TextPainter(

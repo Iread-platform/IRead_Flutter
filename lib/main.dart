@@ -95,15 +95,19 @@ class IReadApp extends StatelessWidget {
     return Scaffold(
         drawer: DrawerWidget(),
         body: Center(
-          child: MultiProvider(providers: [
-            Provider(
-              create: (context) => MainScreenBloc(InitialState())
-                ..add(FetchMainScreenDataEvent()),
-            ),
-            Provider(create: (context) => DrawingBloc(NoPolygonState())),
-            Provider(create: (context) => RecordBloc(InitialState())),
-            Provider(create: (context) => CommentBloc(InitialState()))
-          ], child: StoryScreen(storyId: 23,)),
+          child: MultiProvider(
+              providers: [
+                Provider(
+                  create: (context) => MainScreenBloc(InitialState())
+                    ..add(FetchMainScreenDataEvent()),
+                ),
+                Provider(create: (context) => DrawingBloc(NoPolygonState())),
+                Provider(create: (context) => RecordBloc(InitialState())),
+                Provider(create: (context) => CommentBloc(InitialState()))
+              ],
+              child: StoryScreen(
+                storyId: 23,
+              )),
         ));
   }
 }

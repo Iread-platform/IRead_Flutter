@@ -7,6 +7,7 @@ import 'package:iread_flutter/bloc/StoryScreenBloc/storyscreen_bloc.dart';
 import 'package:iread_flutter/bloc/base/base_bloc.dart';
 import 'package:iread_flutter/bloc/text_selection_provider.dart';
 import 'package:iread_flutter/utils/i_read_icons.dart';
+import 'package:iread_flutter/utils/validator.dart';
 import 'package:iread_flutter/views/widgets/highlight_text.dart';
 import 'package:iread_flutter/views/widgets/shared/request_handler.dart';
 import 'package:iread_flutter/views/widgets/vocabulary_dialog.dart';
@@ -166,7 +167,7 @@ class _StoryScreenState extends State<StoryScreen> {
             child: BlocBuilder<StoryscreenBloc, BlocState>(
               builder: (context, state) {
                 scroll();
-
+                
                 return requsetHandlerStory();
               },
             ),

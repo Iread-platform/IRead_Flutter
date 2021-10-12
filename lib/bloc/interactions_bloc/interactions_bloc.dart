@@ -25,8 +25,8 @@ class InteractionsBloc extends Bloc<InteractionsEvent, InteractionsState> {
     return data;
   }
 
-  Future<int> removeHighLightWord(int id) async {
-    int data = await InteractionRepo().removeHighLightWord(id);
+  Future<Data> removeHighLightWord(int id) async {
+    Data data = await InteractionRepo().removeHighLightWord(id);
     return data;
   }
 }
