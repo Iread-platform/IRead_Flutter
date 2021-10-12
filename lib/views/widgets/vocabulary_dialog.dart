@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:iread_flutter/bloc/StoryScreenBloc/storyscreen_bloc.dart';
 import 'package:iread_flutter/bloc/comment_bloc/comment_bloc.dart';
 import 'package:iread_flutter/bloc/text_selection_provider.dart';
 import 'package:iread_flutter/services/auth_service.dart';
+import 'package:iread_flutter/utils/data.dart';
 import 'package:iread_flutter/utils/i_read_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:iread_flutter/models/story_model.dart';
@@ -19,27 +21,6 @@ class VocabularyDialog {
     classOFWord = "";
     example.text = "";
     def.text = "";
-    var startIndex = Provider.of<TextSelectionProvider>(context, listen: false)
-        .selection
-        .start;
-    var endIndex = Provider.of<TextSelectionProvider>(context, listen: false)
-        .selection
-        .end;
-    String pageContent = BlocProvider.of<StoryscreenBloc>(context)
-        .storyPageData
-        .data
-        .pages[BlocProvider.of<StoryscreenBloc>(context)
-            .pageController
-            .page
-            .toInt()]
-        .content;
-    print(pageContent[endIndex]);
-    bool temp = pageContent[endIndex] == "," ||
-        pageContent[endIndex] == "." ||
-        pageContent[endIndex] == "?" ||
-        pageContent[endIndex] == "!";
-    temp = false;
-    word = pageContent.substring(startIndex, temp ? endIndex + 1 : endIndex);
     // =========================== dialog =================================
     return showDialog(
       context: context,
@@ -192,7 +173,7 @@ class VocabularyDialog {
                                   IReadIcons.delete,
                                   color: Theme.of(context).colorScheme.primary,
                                 ),
-                                onTap: () {
+                                onTap: () async {
                                   var page = BlocProvider.of<StoryscreenBloc>(
                                           context,
                                           listen: false)
@@ -204,10 +185,17 @@ class VocabularyDialog {
                                       .pageController
                                       .page
                                       .toInt()];
-                                  setStateList(() {
-                                    BlocProvider.of<CommentBloc>(context)
-                                        .removeCommentWord(
-                                            comments[index].commentId);
+                                  Data data =
+                                      await BlocProvider.of<CommentBloc>(
+                                              context)
+                                          .removeCommentWord(
+                                              comments[index].commentId);
+                                  var f = FToast();
+                                  f.init(context);
+                                  bool done = data.state == DataState.Success
+                                      ? true
+                                      : false;
+                                  if (done) {
                                     for (Word word in page.words) {
                                       if (word.content ==
                                           comments[index].word) {
@@ -215,7 +203,37 @@ class VocabularyDialog {
                                       }
                                     }
                                     comments.removeAt(index);
-                                  });
+                                    setStateList(() {});
+                                  } else {
+                                    f.showToast(
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 24.0, vertical: 12.0),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(25.0),
+                                          color: Colors.red[800],
+                                        ),
+                                        child: Row(
+                                          // mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Icon(Icons.error,
+                                                color: Colors.white),
+                                            Expanded(
+                                              child: Text(
+                                                data.message,
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      gravity: ToastGravity.BOTTOM,
+                                      toastDuration: Duration(seconds: 3),
+                                    );
+                                  }
                                 },
                               )
                             ],
@@ -240,10 +258,6 @@ class VocabularyDialog {
       height: 30,
       child: ElevatedButton(
           onPressed: () async {
-            print(classOFWord);
-            print(def.text);
-            print(example.text);
-
             var page = BlocProvider.of<StoryscreenBloc>(context, listen: false)
                     .storyPageData
                     .data
@@ -258,27 +272,63 @@ class VocabularyDialog {
                 "studentId": AuthService().cU.id.toString(),
                 "pageId": page.pageId
               },
-              "word": word,
+              "word": Provider.of<TextSelectionProvider>(context, listen: false)
+                  .wordSelection,
               "classOFWord": classOFWord,
               "definitionOfWord": def.text,
               "exampleOfWord": example.text,
               "wordIndex": 0
             };
             //add interaction to server
-            var json = await BlocProvider.of<CommentBloc>(context)
+            Data data = await BlocProvider.of<CommentBloc>(context)
                 .addCommentWord(newVoc);
-            // add interaction to local page vocabulary
-            page.comments.add(
-              Comment.fromJson(json),
-            );
-            // MAKE WORD IS_VOCABULARY = TURE
-            for (Word word1 in page.words) {
-              if (word1.content == word) {
-                word1.isComment = true;
-              }
-            }
 
-            Navigator.pop(context);
+            var f = FToast();
+            f.init(context);
+            bool done = data.state == DataState.Success ? true : false;
+            f.showToast(
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 24.0, vertical: 12.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(25.0),
+                  color: done ? Colors.green : Colors.red[800],
+                ),
+                child: Row(
+                  // mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(done ? Icons.check : Icons.error, color: Colors.white),
+                    Expanded(
+                      child: Text(
+                        done
+                            ? "it has been added to your vocabulary"
+                            : data.message,
+                        style: TextStyle(color: Colors.white),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              gravity: ToastGravity.BOTTOM,
+              toastDuration: Duration(seconds: 3),
+            );
+
+            // add interaction to local page vocabulary
+            if (done) {
+              page.comments.add(
+                Comment.fromJson(data.data),
+              );
+              // MAKE WORD IS_VOCABULARY = TURE
+              for (Word word1 in page.words) {
+                if (word1.content ==
+                    Provider.of<TextSelectionProvider>(context, listen: false)
+                        .wordSelection) {
+                  word1.isComment = true;
+                }
+              }
+              Navigator.pop(context);
+            }
           },
           child: Text("Save")),
     );
@@ -319,7 +369,8 @@ class VocabularyDialog {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          word,
+          Provider.of<TextSelectionProvider>(context, listen: false)
+              .wordSelection,
           style: Theme.of(context).textTheme.headline3,
         ),
         InkWell(

@@ -117,7 +117,7 @@ class _StoryScreenState extends State<StoryScreen> {
                   bottomLeft: Radius.circular(10),
                   bottomRight: Radius.circular(10)),
               child: FadeInImage.assetNetwork(
-                placeholder: 'assets\\AvatarImages\\1.png',
+                placeholder: 'assets/placholder.png',
                 image: url,
               ),
             ),

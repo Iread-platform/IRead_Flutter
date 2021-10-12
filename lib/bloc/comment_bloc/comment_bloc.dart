@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iread_flutter/bloc/base/base_bloc.dart';
 import 'package:iread_flutter/repo/interaction_repo.dart';
+import 'package:iread_flutter/utils/data.dart';
 
 class CommentBloc extends Bloc<BlocEvent, BlocState> {
   CommentBloc(BlocState initialState) : super(initialState);
@@ -10,14 +11,13 @@ class CommentBloc extends Bloc<BlocEvent, BlocState> {
     yield InitialState();
   }
 
-  Future<Map<String, dynamic>> addCommentWord(Map map) async {
-    Map<String, dynamic> data = await InteractionRepo().addCommentWord(map);
-    print(data);
+  Future<Data> addCommentWord(Map map) async {
+    Data data = await InteractionRepo().addCommentWord(map);
     return data;
   }
 
-  Future<int> removeCommentWord(int id) async {
-    int data = await InteractionRepo().removeCommentWord(id);
+  Future<Data> removeCommentWord(int id) async {
+    Data data = await InteractionRepo().removeCommentWord(id);
     return data;
   }
 }
