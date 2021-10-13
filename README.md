@@ -3,7 +3,6 @@
 A new Flutter project.
 
 ## Getting Started
-[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg)](https://www.youtube.com/watch?v=YOUTUBE_VIDEO_ID_HERE)
 This project is a starting point for a Flutter application.
 
 A few resources to get you started if this is your first Flutter project:
