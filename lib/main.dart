@@ -14,7 +14,6 @@ import 'package:iread_flutter/services/action_track_service.dart';
 import 'package:iread_flutter/services/auth_service.dart';
 import 'package:iread_flutter/services/permissions_service.dart';
 import 'package:iread_flutter/views/Screens/login_screen.dart';
-import 'package:iread_flutter/views/Screens/main_screen.dart';
 import 'package:iread_flutter/views/Screens/story_screen.dart';
 import 'package:iread_flutter/views/widgets/drawer_widget.dart';
 import 'package:provider/provider.dart';
@@ -72,6 +71,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         theme: mainTheme,
         title: 'Iread',
+        debugShowCheckedModeBanner: false,
         onGenerateRoute: AppRouter().appRouterGenerator,
         navigatorKey: AppConfigs.instance().navigationKey,
         navigatorObservers: [
@@ -95,15 +95,19 @@ class IReadApp extends StatelessWidget {
     return Scaffold(
         drawer: DrawerWidget(),
         body: Center(
-          child: MultiProvider(providers: [
-            Provider(
-              create: (context) => MainScreenBloc(InitialState())
-                ..add(FetchMainScreenDataEvent()),
-            ),
-            Provider(create: (context) => DrawingBloc(NoPolygonState())),
-            Provider(create: (context) => RecordBloc(InitialState())),
-            Provider(create: (context) => CommentBloc(InitialState()))
-          ], child: StoryScreen(storyId: 23,)),
+          child: MultiProvider(
+              providers: [
+                Provider(
+                  create: (context) => MainScreenBloc(InitialState())
+                    ..add(FetchMainScreenDataEvent()),
+                ),
+                Provider(create: (context) => DrawingBloc(NoPolygonState())),
+                Provider(create: (context) => RecordBloc(InitialState())),
+                Provider(create: (context) => CommentBloc(InitialState()))
+              ],
+              child: StoryScreen(
+                storyId: 23,
+              )),
         ));
   }
 }

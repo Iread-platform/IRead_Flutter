@@ -5,8 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iread_flutter/Repository/story_repository.dart';
 import 'package:iread_flutter/bloc/base/base_bloc.dart';
-import 'package:iread_flutter/models/Data.dart';
-import 'package:iread_flutter/models/story_model.dart';
+import 'package:iread_flutter/utils/data.dart';
 
 part 'storyscreen_event.dart';
 part 'storyscreen_state.dart';
@@ -18,7 +17,7 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
   double deviceWidth = 0.0, deviceHight = 0.0;
   int wordProgressIndex = 0;
   AudioPlayerState audioPlayerState;
-  Data<StoryModel> storyPageData;
+  Data storyPageData;
   StoryRepository storyRepository;
   PageController pageController = PageController();
   StoryscreenBloc() : super(InitialState()) {
@@ -42,14 +41,17 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
           for (var word in storyPageData.data.pages[i].words) {
             // link highlight interactions with word
 
-            if(word.content.endsWith('.')){
-              word.content = word.content.substring(0,word.content.length - 1);
+            if (word.content.endsWith('.')) {
+              word.content = word.content.substring(0, word.content.length - 1);
               word.suffix = '.';
-            }
-            else if(word.content.endsWith(',')){
-              word.content = word.content.substring(0,word.content.length - 1);
+            } else if (word.content.endsWith(',')) {
+              word.content = word.content.substring(0, word.content.length - 1);
               word.suffix = ',';
-            }else word.suffix = '';
+            } else if (word.content.endsWith('?')) {
+              word.content = word.content.substring(0, word.content.length - 1);
+              word.suffix = ',';
+            } else
+              word.suffix = '';
             for (var highLight in storyPageData.data.pages[i].highLights) {
               if ((word.startIndex >= highLight.firstWordIndex) &&
                   (word.startIndex <= highLight.endWordIndex)) {
@@ -68,7 +70,6 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
         }
         yield LoadedState(data: storyPageData);
         play(storyPageData.data.audio.downloadUrl);
-
         yield PlayerState(AudioPlayerState.PLAYING);
       } catch (e) {}
     }
@@ -223,13 +224,6 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
   List<TextStyle> styles = [];
   List<String> wordsStory;
 
-  void init(String story) {
-    storyString = story;
-    wordsStory = storyString.split(RegExp("[ ,.?!]"));
-    // wordsStory = storyString.split(".");
-    print(wordsStory);
-  }
-
   Size calcTextSize(String text, TextStyle style) {
     final TextPainter textPainter = TextPainter(
       text: TextSpan(text: text, style: style),
@@ -253,7 +247,7 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
 
       //=====================================================
       currentString = currentString + words[i].content + " ";
-      size = calcTextSize(currentString, TextStyle(fontSize: 40));
+      size = calcTextSize(currentString, TextStyle(fontSize: 20));
 
       if (size.width >= (deviceWidth * 0.7)) {
         words[i].newLine = true;

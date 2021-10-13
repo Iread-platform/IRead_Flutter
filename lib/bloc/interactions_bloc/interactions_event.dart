@@ -3,11 +3,13 @@ part of 'interactions_bloc.dart';
 @immutable
 abstract class InteractionsEvent {}
 
+// ignore: must_be_immutable
 class HightLightEvent extends InteractionsEvent {
   Map map;
   HightLightEvent({this.map});
 }
 
+// ignore: must_be_immutable
 class RemoveHighLightEvent extends InteractionsEvent {
   int highlightID;
   RemoveHighLightEvent({this.highlightID});

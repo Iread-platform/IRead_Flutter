@@ -40,7 +40,7 @@ class ProfileBloc extends Bloc<BlocEvent, BlocState> {
     User user = AuthService().cU..updateImagePath(url);
     AuthService authService = AuthService();
 
-    await authService.saveUser(user);
+    authService.saveUser(user);
     profile.avatarAttachment?.downloadUrl = url;
     profile.customPhotoAttachment?.downloadUrl = url;
 
