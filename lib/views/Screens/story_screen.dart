@@ -94,27 +94,19 @@ class _StoryScreenState extends State<StoryScreen> {
               Container(
                 margin:
                     EdgeInsets.only(top: 60, bottom: 50, left: 40, right: 40),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    // ========== home Icon ==============
-                    Container(
-                      alignment: Alignment.topLeft,
-                      child: Icon(
-                        Icons.home,
-                        color: Theme.of(context).colorScheme.primary,
-                        size: 40,
-                      ),
+                child: Container(
+                  alignment: Alignment.topRight,
+                  child: InkWell(
+                    child: Icon(
+                      IReadIcons.arrow,
+                      size: 30,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
-                    Container(
-                      alignment: Alignment.topRight,
-                      child: Icon(
-                        IReadIcons.arrow,
-                        size: 30,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                    ),
-                  ],
+                    onTap: () {
+                      BlocProvider.of<StoryscreenBloc>(context).stop();
+                      Navigator.pop(context);
+                    },
+                  ),
                 ),
               ),
               Container(

@@ -70,7 +70,6 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
         }
         yield LoadedState(data: storyPageData);
         play(storyPageData.data.audio.downloadUrl);
-
         yield PlayerState(AudioPlayerState.PLAYING);
       } catch (e) {}
     }
