@@ -7,7 +7,6 @@ import 'package:iread_flutter/bloc/StoryScreenBloc/storyscreen_bloc.dart';
 import 'package:iread_flutter/bloc/base/base_bloc.dart';
 import 'package:iread_flutter/bloc/text_selection_provider.dart';
 import 'package:iread_flutter/utils/i_read_icons.dart';
-import 'package:iread_flutter/utils/validator.dart';
 import 'package:iread_flutter/views/widgets/highlight_text.dart';
 import 'package:iread_flutter/views/widgets/shared/request_handler.dart';
 import 'package:iread_flutter/views/widgets/vocabulary_dialog.dart';
@@ -58,7 +57,7 @@ class _StoryScreenState extends State<StoryScreen> {
 
   //============ header =============
   Widget header() {
-    var url = "";
+    var url = null;
     try {
       url = BlocProvider.of<StoryscreenBloc>(context, listen: true)
           .storyPageData
@@ -70,9 +69,8 @@ class _StoryScreenState extends State<StoryScreen> {
           .imageURL;
     } catch (e) {}
     return Container(
-      height: h * 0.45,
+      margin: EdgeInsets.only(bottom: 20),
       child: Stack(
-        alignment: Alignment.bottomCenter,
         children: [
           // ========= Story Image ==============
 
@@ -88,39 +86,54 @@ class _StoryScreenState extends State<StoryScreen> {
               ),
             ),
           ),
-          // ========== arrow Icon ==============
-          Container(
-            height: h * 0.45,
-            margin: EdgeInsets.all(40),
-            alignment: Alignment.topRight,
-            child: Icon(
-              IReadIcons.arrow,
-              size: 40,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-          ),
-          // ========== home Icon ==============
-          Container(
-            height: h * 0.45,
-            margin: EdgeInsets.all(40),
-            alignment: Alignment.topLeft,
-            child: Icon(
-              Icons.home,
-              color: Theme.of(context).colorScheme.primary,
-              size: 60,
-            ),
-          ),
-          Container(
-            alignment: Alignment.bottomCenter,
-            height: h * 0.45,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: FadeInImage.assetNetwork(
-                placeholder: 'assets/placholder.png',
-                image: url,
+
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // ========== arrow Icon ==============
+              Container(
+                margin:
+                    EdgeInsets.only(top: 60, bottom: 50, left: 40, right: 40),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // ========== home Icon ==============
+                    Container(
+                      alignment: Alignment.topLeft,
+                      child: Icon(
+                        Icons.home,
+                        color: Theme.of(context).colorScheme.primary,
+                        size: 40,
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.topRight,
+                      child: Icon(
+                        IReadIcons.arrow,
+                        size: 30,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ),
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 20),
+                width: w,
+                height: 200,
+                child: url != null
+                    ? FadeInImage.assetNetwork(
+                        placeholder: 'assets/placholder.png',
+                        image: url,
+                        fit: BoxFit.cover,
+                      )
+                    : Image.asset(
+                        'assets/placholder.png',
+                        fit: BoxFit.cover,
+                      ),
+              ),
+            ],
+          )
         ],
       ),
     );
@@ -167,7 +180,7 @@ class _StoryScreenState extends State<StoryScreen> {
             child: BlocBuilder<StoryscreenBloc, BlocState>(
               builder: (context, state) {
                 scroll();
-                
+
                 return requsetHandlerStory();
               },
             ),
