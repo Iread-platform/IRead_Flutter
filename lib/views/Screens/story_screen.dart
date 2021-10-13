@@ -364,7 +364,6 @@ class _StoryScreenState extends State<StoryScreen> {
 
   Widget stoyryPages() {
     return Container(
-      alignment: Alignment.topLeft,
       child: PageView(
         controller: bloc.pageController,
         onPageChanged: (value) {

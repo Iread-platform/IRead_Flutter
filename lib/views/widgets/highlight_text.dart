@@ -22,8 +22,6 @@ class HighlighText extends StatefulWidget {
 }
 
 class _HighlighTextState extends State<HighlighText> {
-
-
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -40,11 +38,11 @@ class _HighlighTextState extends State<HighlighText> {
                             .toString() ==
                         i.toString()
                     ? TextStyle(
-                        fontSize: 40,
+                        fontSize: 20,
                         backgroundColor: Colors.red,
                         color: Colors.white)
                     : TextStyle(
-                        fontSize: 40,
+                        fontSize: 20,
                         backgroundColor: widget.words[i].isHighLighted
                             ? Colors.yellow
                             : Colors.transparent,
@@ -61,7 +59,7 @@ class _HighlighTextState extends State<HighlighText> {
           marginX: widget.marginX,
           marginY: widget.marginY,
         ),
-        
+
         style: Theme.of(context).textTheme.headline6,
         // scrollPhysics: ScrollPhysics(parent: ScrollPhysics()),
         textAlign: TextAlign.center,

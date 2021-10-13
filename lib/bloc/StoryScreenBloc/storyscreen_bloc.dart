@@ -248,7 +248,7 @@ class StoryscreenBloc extends Bloc<BlocEvent, BlocState> {
 
       //=====================================================
       currentString = currentString + words[i].content + " ";
-      size = calcTextSize(currentString, TextStyle(fontSize: 40));
+      size = calcTextSize(currentString, TextStyle(fontSize: 20));
 
       if (size.width >= (deviceWidth * 0.7)) {
         words[i].newLine = true;
