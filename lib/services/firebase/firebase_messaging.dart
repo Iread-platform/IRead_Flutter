@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:iread_flutter/services/notifications_manager_service.dart';
 
@@ -24,7 +26,9 @@ class FirebaseMessagingService extends FirebaseBaseService {
     await _messaging.requestPermission();
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       if (message.notification != null) {
-        NotificationsManagerService.instance().showNotification();
+        NotificationsManagerService.instance().showNotification(
+            message.notification.title, message.notification.body,
+            payload: jsonEncode(message.data));
         print('Message also contained a notification: ${message.notification}');
       }
     });
