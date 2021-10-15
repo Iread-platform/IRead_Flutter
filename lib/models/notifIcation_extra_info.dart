@@ -5,8 +5,8 @@ class NotificationExtraInfo {
   String _message;
 
   NotificationExtraInfo.fromJson(Map<String, dynamic> json) {
-    _route = json['goTo'];
-    _message = json['messsage'];
+    _route = json['GoTo'];
+    _message = json['Messsage'];
   }
 
   get route => _route;
