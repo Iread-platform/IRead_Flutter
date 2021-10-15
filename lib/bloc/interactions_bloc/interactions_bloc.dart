@@ -20,13 +20,13 @@ class InteractionsBloc extends Bloc<InteractionsEvent, InteractionsState> {
     } else {}
   }
 
-  Future<int> addHightLightWord(Map map) async {
-    int data = await InteractionRepo().addHighLightWord(map);
+  Future<Data> addHightLightWord(Map map) async {
+    Data data = await InteractionRepo().addHighLightWord(map);
     return data;
   }
 
-  Future<int> removeHighLightWord(int id) async {
-    int data = await InteractionRepo().removeHighLightWord(id);
+  Future<Data> removeHighLightWord(int id) async {
+    Data data = await InteractionRepo().removeHighLightWord(id);
     return data;
   }
 }

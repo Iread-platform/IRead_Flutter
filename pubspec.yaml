@@ -79,6 +79,7 @@ flutter:
     - assets/images/shared/star.png
     - assets/images/shared/star.svg
     - assets/images/shared/error.svg
+    - assets/placholder.png
     - lib/Repository/dummyData.json
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

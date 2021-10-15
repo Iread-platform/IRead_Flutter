@@ -53,6 +53,10 @@ class User {
     data['email'] = this._email;
     return data;
   }
+
+  void updateImagePath(String url) {
+    _imageUrl = url;
+  }
 }
 
 enum UserRole { Admin, Teacher, Student, SchoolManager }

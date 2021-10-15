@@ -30,7 +30,6 @@ class ApiService {
       String externalToken}) async {
     Uri url = Uri.parse("$baseUrl/$endPoint");
     print("url is: $url");
-    print("external token is: $externalToken");
 
     switch (requestType) {
       case RequestType.GET:

@@ -1,9 +1,12 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:iread_flutter/models/draw/polygon.dart';
 import 'package:iread_flutter/models/interaction/interaction.dart';
 import 'package:iread_flutter/services/api_service.dart';
 import 'package:iread_flutter/utils/data.dart';
+import 'package:iread_flutter/utils/exception.dart';
 
 class InteractionRepo {
   final ApiService _apiService = ApiService();
@@ -94,33 +97,61 @@ class InteractionRepo {
     return json;
   }
 
-  Future<int> addHighLightWord(Map map) async {
-    final url = "Interaction/HighLight/add";
-    final jsonText = await _apiService.request(
-        requestType: RequestType.POST, endPoint: url, parameter: map);
-    final json = jsonDecode(jsonText);
-    print(json);
-    return json["highLightId"];
+  Future<Data> addHighLightWord(Map map) async {
+    try {
+      final url = "Interaction/HighLight/add";
+      final jsonText = await _apiService.request(
+          requestType: RequestType.POST, endPoint: url, parameter: map);
+      final json = jsonDecode(jsonText);
+      return Data.success(json);
+    } catch (e) {
+      return processException(e);
+    }
   }
 
-  removeHighLightWord(int id) async {
-    final url = "Interaction/HighLight/" + id.toString() + "/delete";
-    final jsonText = await _apiService.request(
-        requestType: RequestType.DELETE, endPoint: url);
+  Future<Data> removeHighLightWord(int id) async {
+    try {
+      final url = "Interaction/HighLight/" + id.toString() + "/delete";
+      await _apiService.request(requestType: RequestType.DELETE, endPoint: url);
+      Map<String, dynamic> json = jsonDecode("{}");
+      return Data.success(json);
+    } catch (e) {
+      return processException(e);
+    }
   }
 
-  addCommentWord(Map map) async {
+  Future<Data> addCommentWord(Map map) async {
     final url = "Interaction/Comment/add";
-    final jsonText = await _apiService.request(
-        requestType: RequestType.POST, endPoint: url, parameter: map);
-    print(jsonText);
-    Map<String, dynamic> json = jsonDecode(jsonText);
-    return json;
+    try {
+      final jsonText = await _apiService.request(
+          requestType: RequestType.POST, endPoint: url, parameter: map);
+      Map<String, dynamic> json = jsonDecode(jsonText);
+      return Data.success(json);
+    } catch (e) {
+      return processException(e);
+    }
   }
 
-  removeCommentWord(int id) async {
+  Future<Data> removeCommentWord(int id) async {
     final url = "Interaction/Comment/" + id.toString() + "/delete";
-    final jsonText = await _apiService.request(
-        requestType: RequestType.DELETE, endPoint: url);
+    try {
+      await _apiService.request(requestType: RequestType.DELETE, endPoint: url);
+      Map<String, dynamic> json = jsonDecode("{}");
+      return Data.success(json);
+    } catch (e) {
+      return processException(e);
+    }
+  }
+
+  Data processException(e) {
+    if (e is NetworkException) {
+      return Data.fail(e.message);
+    } else if (e is SocketException) {
+      return Data.fail("No Enternet");
+    } else if (e is TimeoutException) {
+      return Data.fail("Time out Exception");
+    } else {
+      return Data.fail("something is not working");
+    }
   }
 }

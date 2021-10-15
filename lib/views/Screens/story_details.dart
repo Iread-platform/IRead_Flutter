@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:iread_flutter/bloc/base/base_bloc.dart';
 import 'package:iread_flutter/bloc/story/story_details_bloc/story_details_bloc.dart';
-import 'package:iread_flutter/bloc/story/story_details_bloc/story_details_states.dart';
 import 'package:iread_flutter/models/story.dart';
 import 'package:iread_flutter/views/widgets/shared/request_handler.dart';
 import 'package:iread_flutter/views/widgets/story/story_description.dart';
@@ -17,12 +17,12 @@ class StoryDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RequestHandler<StoryDataFetchedState, StoryDetailsBloc>(
+    return RequestHandler<SuccessState, StoryDetailsBloc>(
       main: Container(
         color: Theme.of(context).colorScheme.surface,
       ),
       onSuccess: (context, state) {
-        final story = state.story;
+        final story = state.data;
         return Container(
           child: ListView(
             padding: const EdgeInsets.only(left: 24, right: 24, top: 50),
@@ -48,7 +48,7 @@ class StoryDetails extends StatelessWidget {
               SizedBox(
                 height: _verticalSpacing,
               ),
-              StoryEvaluation(),
+              StoryEvaluation(reviews: story.rating.reviews),
               SizedBox(
                 height: _verticalSpacing,
               )

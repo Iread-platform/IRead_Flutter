@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
-import 'package:iread_flutter/models/Data.dart';
 import 'package:iread_flutter/models/story_model.dart';
 import 'package:iread_flutter/services/api_service.dart';
+import 'package:iread_flutter/utils/data.dart';
+import 'package:iread_flutter/utils/exception.dart';
 
 class StoryRepository {
   ApiService apiService;
@@ -31,17 +33,23 @@ class StoryRepository {
   }
   */
 
-  Future<Data<StoryModel>> fetchStoryPage(int id) async {
+  Future<Data> fetchStoryPage(int id) async {
     try {
       final url = "Story/getStoryToListen/" + id.toString();
-      print(url);
       final jsonText =
           await apiService.request(requestType: RequestType.GET, endPoint: url);
       final json = jsonDecode(jsonText);
-      Data<StoryModel> data = Data.succeed(data: StoryModel.fromJson(json));
-      return data;
+      return Data.success(StoryModel.fromJson(json));
     } catch (e) {
-      return Data.faild(message: e.toString());
+      if (e is NetworkException) {
+        return Data.fail(e.message);
+      } else if (e is SocketException) {
+        return Data.fail("No Enternet");
+      } else if (e is TimeoutException) {
+        return Data.fail("Time out Exception");
+      } else {
+        return Data.fail("something is not working");
+      }
     }
   }
 }

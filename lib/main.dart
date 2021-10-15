@@ -83,6 +83,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         theme: mainTheme,
         title: 'Iread',
+        debugShowCheckedModeBanner: false,
         onGenerateRoute: AppRouter().appRouterGenerator,
         navigatorKey: AppConfigs.instance().navigationKey,
         navigatorObservers: [
