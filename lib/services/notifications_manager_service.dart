@@ -13,10 +13,10 @@ class NotificationsManagerService {
 
   NotificationDetails _platformChannelSpecifics;
 
-  Future<void> init(
-      {Future<dynamic> Function(String) onSelectNotification}) async {
+  Future<void> init() async {
     _localNotifications.initialize(
-        InitializationSettings(AndroidInitializationSettings("app_Icon"),
+        InitializationSettings(
+            AndroidInitializationSettings("@mipmap/ic_launcher"),
             IOSInitializationSettings()),
         onSelectNotification: onSelectNotification);
 
@@ -29,8 +29,14 @@ class NotificationsManagerService {
         androidPlatformChannelSpecifics, iosPlatformChannelSpecifics);
   }
 
-  Future<void> showNotification() async {
-    _localNotifications.show(0, "notification title", "notification body",
-        _platformChannelSpecifics);
+  static Future<dynamic> onSelectNotification(String data) async {
+    print("data with notification ======================" + data);
+    return data;
+  }
+
+  Future<void> showNotification(String title, String body,
+      {String payload}) async {
+    _localNotifications.show(0, title, body, _platformChannelSpecifics,
+        payload: payload);
   }
 }
