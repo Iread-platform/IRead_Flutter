@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:iread_flutter/models/attachment/attachment.dart';
 import 'package:iread_flutter/models/user/profile.dart';
 import 'package:iread_flutter/models/user/user.dart';
