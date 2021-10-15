@@ -1,4 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:iread_flutter/config/app_config.dart';
+import 'package:iread_flutter/config/routing/app_router.dart';
+import 'package:iread_flutter/models/notifIcation_extra_info.dart';
 
 class NotificationsManagerService {
   static NotificationsManagerService _instance =
@@ -30,8 +35,14 @@ class NotificationsManagerService {
   }
 
   static Future<dynamic> onSelectNotification(String data) async {
-    print("data with notification ======================" + data);
-    return data;
+    if (data != null) {
+      Map<String, dynamic> notificationsInfo = jsonDecode(data);
+      NotificationExtraInfo notificationExtraInfo =
+          NotificationExtraInfo.fromJson(notificationsInfo);
+
+      AppRouter().navigate(
+          AppConfigs.instance().appContext, notificationExtraInfo.route);
+    }
   }
 
   Future<void> showNotification(String title, String body,
